@@ -6,6 +6,7 @@ import { httpBatchLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { type AppRouter } from "@/server/trpc/app";
 import { makeQueryClient } from "@/server/trpc/query-client";
+import { environment } from "@/server/environment";
 
 export const apiClient = createTRPCReact<AppRouter>();
 
@@ -21,7 +22,7 @@ const getQueryClient = (): QueryClient => {
 
 const getBaseUrl = () => {
     // Server: localhost with app's port.
-    if (typeof window === "undefined") return `http://localhost:${process.env.PORT ?? 3000}`;
+    if (typeof window === "undefined") return `http://localhost:${environment.port ?? 3000}`;
     // Browser: tab URL.
     return window.location.origin;
 };
