@@ -1,0 +1,19 @@
+@use "./constants.module.scss" as constants;
+
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: constants.$background;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10;
+}
+
+.text {
+    color: constants.$text;
+}

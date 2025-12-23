@@ -1,0 +1,34 @@
+name: "Checks"
+on:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  eslint-check:
+    name: 🤔 ESLint Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/env-setup
+
+      - name: Run ESLint
+        run: yarn lint
+
+  build-check:
+    name: 🗿 Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/env-setup
+
+      - name: Build
+        run: yarn build

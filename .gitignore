@@ -1,0 +1,12 @@
+/node_modules
+
+/.next/
+
+.yarn
+yarn-debug.log*
+yarn-error.log*
+
+.env*
+!.env.example
+
+next-env.d.ts
