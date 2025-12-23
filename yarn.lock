@@ -950,18 +950,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/server@npm:^11.8.1":
+"@trpc/react-query@npm:^11.8.1":
   version: 11.8.1
-  resolution: "@trpc/server@npm:11.8.1"
-  peerDependencies:
-    typescript: ">=5.7.2"
-  checksum: 10c0/82099e2230f25ea9253c3d54f1c216930d688db47c73a4141b7ec4f439e1fd53c3e8e5e47684c0bfa4e576c7b1df0820f28a85f48797d8cee7b570dc46035402
-  languageName: node
-  linkType: hard
-
-"@trpc/tanstack-react-query@npm:^11.8.1":
-  version: 11.8.1
-  resolution: "@trpc/tanstack-react-query@npm:11.8.1"
+  resolution: "@trpc/react-query@npm:11.8.1"
   peerDependencies:
     "@tanstack/react-query": ^5.80.3
     "@trpc/client": 11.8.1
@@ -969,7 +960,16 @@ __metadata:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
     typescript: ">=5.7.2"
-  checksum: 10c0/320a234d36e7f7f52ac97e93e606e479aadeed3ef165b04a2500e1abb6d4a223bfbbe73562326d7426464f8ee00a11315e0646053bbd1d163ccaa3abdd3e0559
+  checksum: 10c0/316be1cae71caeb43e4543f0a3230ece7cee2ed797a9a5fa0dbd6b32d6c8bfe32912db9fc7d6b89cdc658d96a1133e79294dea162ba93c456c526298b2aa3296
+  languageName: node
+  linkType: hard
+
+"@trpc/server@npm:^11.8.1":
+  version: 11.8.1
+  resolution: "@trpc/server@npm:11.8.1"
+  peerDependencies:
+    typescript: ">=5.7.2"
+  checksum: 10c0/82099e2230f25ea9253c3d54f1c216930d688db47c73a4141b7ec4f439e1fd53c3e8e5e47684c0bfa4e576c7b1df0820f28a85f48797d8cee7b570dc46035402
   languageName: node
   linkType: hard
 
@@ -3741,8 +3741,8 @@ __metadata:
   dependencies:
     "@tanstack/react-query": "npm:^5.90.12"
     "@trpc/client": "npm:^11.8.1"
+    "@trpc/react-query": "npm:^11.8.1"
     "@trpc/server": "npm:^11.8.1"
-    "@trpc/tanstack-react-query": "npm:^11.8.1"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
@@ -3753,6 +3753,7 @@ __metadata:
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
     sass: "npm:^1.97.1"
+    server-only: "npm:^0.0.1"
     typescript: "npm:^5"
     zod: "npm:^4.2.1"
   languageName: unknown
@@ -4031,6 +4032,13 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/4afe5c986567db82f44c8c6faef8fe9df2a9b1d98098fc1721f57c696c4c21cebd572f297fc21002f81889492345b8470473bc6f4aff5fb032a6ea59ea2bc45e
+  languageName: node
+  linkType: hard
+
+"server-only@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "server-only@npm:0.0.1"
+  checksum: 10c0/4704f0ef85da0be981af6d4ed8e739d39bcfd265b9c246a684060acda5642d0fdc6daffc2308e71e2682c5f508090978802eae0a77623c9b90a49f9ae68048d6
   languageName: node
   linkType: hard
 
