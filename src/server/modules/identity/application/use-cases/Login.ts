@@ -25,9 +25,8 @@ export class Login {
         if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);
 
         if (user.twoFactorAuthenticationEnabled) {
-            return {
-                authenticationId: this.authenticationManager.setupTwoFactorAuthenticationSessionIDForUser(user)
-            };
+            const authenticationSession = this.authenticationManager.setupTwoFactorAuthenticationSessionForUser(user);
+            return { authenticationId: authenticationSession.id.value };
         } else {
             return {
                 authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)

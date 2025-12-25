@@ -8,6 +8,8 @@ export const authenticationTokenResponseDTOSchema = z.object({
     authenticationToken: z.string(),
 });
 
+export type AuthenticationTokenResponseDTO = z.infer<typeof authenticationTokenResponseDTOSchema>;
+
 export const loginResponseDTOSchema = z.union([
     twoFactorAuthenticationResponseDTOSchema,
     authenticationTokenResponseDTOSchema,
