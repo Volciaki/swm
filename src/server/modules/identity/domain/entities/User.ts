@@ -8,6 +8,7 @@ export class User {
         private _id: UUID,
         private _name: string,
         private _isAdmin: boolean,
+        private _twoFactorAuthenticationEnabled: boolean,
     ) {}
 
     static create(
@@ -16,7 +17,19 @@ export class User {
         id: UUID,
         name: string,
         isAdmin: boolean,
+        twoFactorAuthenticationEnabled: boolean,
     ) {
-        return new User(email, passwordHash, id, name, isAdmin);
+        return new User(
+            email,
+            passwordHash,
+            id,
+            name,
+            isAdmin,
+            twoFactorAuthenticationEnabled,
+        );
     }
+
+    get isAdmin() { return this._isAdmin };
+    get passwordHash() { return this._passwordHash };
+    get twoFactorAuthenticationEnabled() { return this._twoFactorAuthenticationEnabled };
 }

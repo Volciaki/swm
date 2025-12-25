@@ -5,6 +5,7 @@ export const createUserDTOSchema = z.object({
     email: z.string(),
     passwordRaw: z.string(),
     isAdmin: z.boolean(),
+    twoFactorAuthenticationEnabled: z.boolean(),
 });
 
 export type CreateUserDTO = z.infer<typeof createUserDTOSchema>;

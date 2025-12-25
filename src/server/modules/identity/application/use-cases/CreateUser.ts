@@ -1,3 +1,4 @@
+import { UnauthorizedError } from "@/server/utils/unauthorized/error";
 import { UUIDManager } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { User } from "../../domain/entities/User";
@@ -12,13 +13,16 @@ export class CreateUser {
         private readonly uuidManager: UUIDManager,
     ) {}
 
-    async execute(dto: CreateUserDTO): Promise<User> {
+    async execute(dto: CreateUserDTO, currentUser?: User): Promise<User> {
+        if (!currentUser?.isAdmin) throw new UnauthorizedError();
+
         const user = User.create(
             Email.fromString(dto.email),
             this.stringHasher.hash(dto.passwordRaw),
             this.uuidManager.generate(),
             dto.name,
             dto.isAdmin,
+            dto.twoFactorAuthenticationEnabled,
         );
         await this.userRepository.create(user);
         return user;
