@@ -1,14 +1,13 @@
+import { environment } from "@/server/environment";
 import { AuthenticationManager } from "../../application/services/AuthenticationManager";
 import { User } from "../../domain/entities/User";
 import { SignOptions, Secret, sign } from "jsonwebtoken";
 
 export class NodeAuthenticationManager implements AuthenticationManager {
     generateAuthenticationTokenForUser(user: User): string {
-        // TODO: replace this via `environment`.
-        const secret: Secret = "...";
+        const secret: Secret = environment.authentication.secret;
         const options: SignOptions = {
-            // TODO: allow passing this via `environment` too.
-            expiresIn: "30m",
+            expiresIn: environment.authentication.cookie.expiresIn as unknown as number,
         };
         const payload = { userId: user.id.value };
 

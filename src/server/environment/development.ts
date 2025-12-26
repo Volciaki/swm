@@ -10,4 +10,11 @@ export const developmentEnvironment: Environment = {
         password: process.env.DATABASE_PASSWORD ?? "development-password",
         name: process.env.DATABASE_NAME ?? "db",
     },
+    authentication: {
+        secret: process.env.AUTHENTICATION_SECRET ?? "development-authentication-secret",
+        cookie: {
+            name: process.env.AUTHENTICATION_COOKIE_NAME ?? "development-authentication-cookie",
+            expiresIn: process.env.AUTHENTICATION_COOKIE_EXPIRES_IN ?? "5h",
+        },
+    },
 }

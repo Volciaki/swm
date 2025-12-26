@@ -10,4 +10,11 @@ export const productionEnvironment: Environment = {
         password: process.env.DATABASE_PASSWORD!,
         name: process.env.DATABASE_NAME!,
     },
+    authentication: {
+        secret: process.env.AUTHENTICATION_SECRET!,
+        cookie: {
+            name: process.env.AUTHENTICATION_COOKIE_NAME!,
+            expiresIn: process.env.AUTHENTICATION_COOKIE_EXPIRES_IN!,
+        },
+    },
 }

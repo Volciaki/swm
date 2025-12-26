@@ -13,4 +13,11 @@ export type Environment = {
         password: string;
         name: string;
     };
+    authentication: {
+        secret: string;
+        cookie: {
+            expiresIn: string;
+            name: string;
+        };
+    };
 };
