@@ -32,4 +32,7 @@ export class User {
     get isAdmin() { return this._isAdmin };
     get passwordHash() { return this._passwordHash };
     get twoFactorAuthenticationEnabled() { return this._twoFactorAuthenticationEnabled };
+    get email() { return this._email };
+    get id() { return this._id };
+    get name() { return this._name };
 }

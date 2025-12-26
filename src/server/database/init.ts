@@ -5,6 +5,7 @@ import { EnvironmentType } from "../environment/type";
 import { environment } from "../environment";
 import { entities } from "./entities";
 import { migrations } from "./migrations";
+import { logger } from "../logger";
 
 export const appDataSource = new DataSource({
     type: "postgres",
@@ -23,6 +24,5 @@ export const initializeDatabase = async () => {
     if (appDataSource.isInitialized) return;
 
     await appDataSource.initialize();
-    // TODO: write a logger interface
-    console.log("Database connection initialized!");
+    logger.log("Database connection initialized!")
 };
