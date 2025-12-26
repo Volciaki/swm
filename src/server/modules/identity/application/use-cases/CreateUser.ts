@@ -18,7 +18,7 @@ export class CreateUser {
 
         const user = User.create(
             Email.fromString(dto.email),
-            this.stringHasher.hash(dto.passwordRaw),
+            await this.stringHasher.hash(dto.passwordRaw),
             this.uuidManager.generate(),
             dto.name,
             dto.isAdmin,

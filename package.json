@@ -13,7 +13,9 @@
     "@trpc/client": "^11.8.1",
     "@trpc/react-query": "^11.8.1",
     "@trpc/server": "^11.8.1",
+    "bcryptjs": "^3.0.3",
     "chalk": "^5.6.2",
+    "jsonwebtoken": "^9.0.3",
     "next": "16.1.1",
     "pg": "^8.16.3",
     "react": "19.2.3",
@@ -24,6 +26,8 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/jsonwebtoken": "^9",
     "@types/node": "^20",
     "@types/pg": "^8",
     "@types/react": "^19",

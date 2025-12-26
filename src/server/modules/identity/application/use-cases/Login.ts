@@ -5,6 +5,7 @@ import { WrongPasswordError } from "../../domain/errors/WrongPasswordError";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { LoginDTO } from "../dto/LoginDTO";
 import { LoginResponseDTO } from "../dto/LoginResponseDTO";
+import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { AuthenticationManager } from "../services/AuthenticationManager";
 import { StringHasher } from "../services/StringHasher";
 
@@ -13,7 +14,7 @@ export class Login {
         private readonly userRepository: UserRepository,
         private readonly stringHasher: StringHasher,
         private readonly authenticationManager: AuthenticationManager,
-    ) {}
+    ) { }
 
     async execute(dto: LoginDTO, currentUser?: User): Promise<LoginResponseDTO> {
         if (currentUser) throw new AlreadyLoggedInError();
@@ -21,16 +22,18 @@ export class Login {
         const email = Email.fromString(dto.email);
         const user = await this.userRepository.getByEmail(email);
 
-        const passwordMatches = this.stringHasher.verify(dto.passwordRaw, user.passwordHash);
+        if (!user) throw new UserNotFoundError("mail", dto.email);
+
+        const passwordMatches = await this.stringHasher.verify(dto.passwordRaw, user.passwordHash);
         if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);
 
         if (user.twoFactorAuthenticationEnabled) {
             const authenticationSession = this.authenticationManager.setupTwoFactorAuthenticationSessionForUser(user);
             return { authenticationId: authenticationSession.id.value };
-        } else {
-            return {
-                authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)
-            };
+        }
+
+        return {
+            authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)
         };
     }
 }
