@@ -1,18 +1,17 @@
-import { UUID } from "@/server/utils";
 import { AuthenticationManager } from "../../application/services/AuthenticationManager";
-import { TwoFactorAuthenticationSession } from "../../domain/entities/TwoFactorAuthenticationSession";
 import { User } from "../../domain/entities/User";
+import { SignOptions, Secret, sign } from "jsonwebtoken";
 
 export class NodeAuthenticationManager implements AuthenticationManager {
     generateAuthenticationTokenForUser(user: User): string {
-        
-    }
+        // TODO: replace this via `environment`.
+        const secret: Secret = "...";
+        const options: SignOptions = {
+            // TODO: allow passing this via `environment` too.
+            expiresIn: "30m",
+        };
+        const payload = { userId: user.id.value };
 
-    getTwoFactorAuthenticationSessionByID(id: UUID): TwoFactorAuthenticationSession {
-        
-    }
-
-    setupTwoFactorAuthenticationSessionForUser(user: User): TwoFactorAuthenticationSession {
-        
+        return sign(payload, secret, options);
     }
 }
