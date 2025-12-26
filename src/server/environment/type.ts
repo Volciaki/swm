@@ -6,4 +6,11 @@ export enum EnvironmentType {
 export type Environment = {
     type: EnvironmentType,
     port: number,
+    database: {
+        host: string;
+        port: number;
+        username: string;
+        password: string;
+        name: string;
+    };
 };
