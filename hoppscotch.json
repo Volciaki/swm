@@ -1,0 +1,133 @@
+{
+  "v": 7,
+  "name": "primus-inter-pares-2026",
+  "folders": [
+    {
+      "v": 7,
+      "name": "identity",
+      "folders": [],
+      "requests": [
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/identity.listUsers",
+          "name": "listUsers",
+          "params": [],
+          "headers": [],
+          "method": "GET",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/identity.login",
+          "name": "login",
+          "params": [],
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "active": true,
+              "description": ""
+            }
+          ],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"user@example.com\",\n  \"passwordRaw\": \"secret\"\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/identity.twoFactorAuthentication",
+          "name": "twoFactorAuthentication",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"authenticationId\": \"...\",\n  \"value\": \"...\"\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/identity.deleteUser",
+          "name": "deleteUser",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"id\": \"...\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/identity.createUser",
+          "name": "createUser",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"...\",\n  \"email\": \"...\",\n  \"passwordRaw\": \"...\",\n  \"isAdmin\": false,\n  \"twoFactorAuthenticationEnabled\": false\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_mjqaybls_26378ec2-d093-4a17-a0ad-b3db6406c9ad"
+    }
+  ],
+  "requests": [],
+  "headers": [],
+  "auth": {
+    "authType": "none",
+    "authActive": true
+  },
+  "_ref_id": "coll_mjqak81p_09a9a4e1-898a-47ac-a756-88672300ceaa"
+}
