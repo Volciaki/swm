@@ -2,6 +2,7 @@ import { UUID } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { User } from "../../domain/entities/User";
 import { DBUser } from "../entities/DBUser";
+import { UserDTO } from "../../application/dto/shared/UserDTO";
 
 export class UserMapper {
     static fromDBUserToUser(dbUser: DBUser): User {
@@ -27,5 +28,16 @@ export class UserMapper {
         dbUser.name = user.name;
 
         return dbUser;
+    }
+
+    static fromUserToUserDTO(user: User): UserDTO {
+        return {
+            email: user.email.value,
+            id: user.id.value,
+            name: user.name,
+            isAdmin: user.isAdmin,
+            passwordHash: user.passwordHash,
+            twoFactorAuthenticationEnabled: user.twoFactorAuthenticationEnabled,
+        };
     }
 }

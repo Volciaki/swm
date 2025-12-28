@@ -5,6 +5,7 @@ import { User } from "../../domain/entities/User";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { CreateUserDTO } from "../dto/CreateUserDTO";
 import { StringHasher } from "../services/StringHasher";
+import { UserMapper } from "../../infrastructure/mappers/UserMapper";
 
 export class CreateUser {
     constructor(
@@ -13,7 +14,7 @@ export class CreateUser {
         private readonly uuidManager: UUIDManager,
     ) {}
 
-    async execute(dto: CreateUserDTO, currentUser?: User): Promise<User> {
+    async execute(dto: CreateUserDTO, currentUser?: User) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
         const user = User.create(
@@ -25,6 +26,6 @@ export class CreateUser {
             dto.twoFactorAuthenticationEnabled,
         );
         await this.userRepository.create(user);
-        return user;
+        return UserMapper.fromUserToUserDTO(user);
     }
 }

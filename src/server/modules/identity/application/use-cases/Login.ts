@@ -6,7 +6,6 @@ import { WrongPasswordError } from "../../domain/errors/WrongPasswordError";
 import { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { LoginDTO } from "../dto/LoginDTO";
-import { LoginResponseDTO } from "../dto/LoginResponseDTO";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { AuthenticationManager } from "../services/AuthenticationManager";
 import { StringHasher } from "../services/StringHasher";
@@ -22,7 +21,7 @@ export class Login {
         private readonly twoFactorAuthenticationValueManager: TwoFactorAuthenticationValueManager,
     ) {}
 
-    async execute(dto: LoginDTO, currentUser?: User): Promise<LoginResponseDTO> {
+    async execute(dto: LoginDTO, currentUser?: User) {
         if (currentUser) throw new AlreadyLoggedInError();
 
         const email = Email.fromString(dto.email);

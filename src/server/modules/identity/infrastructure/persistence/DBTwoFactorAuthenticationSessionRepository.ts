@@ -4,6 +4,7 @@ import { User } from "../../domain/entities/User";
 import { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
 import { DBTwoFactorAuthenticationSession } from "../entities/DBTwoFactorAuthenticationSession";
 import { TwoFactorAuthenticationSessionMapper } from "../mappers/TwoFactorAuthenticationSessionMapper";
+import { TwoFactorAuthenticationSession } from "../../domain/entities/TwoFactorAuthenticationSession";
 
 export class DBTwoFactorAuthenticationSessionRepository implements TwoFactorAuthenticationSessionRepository {
     constructor(private readonly db: Repository<DBTwoFactorAuthenticationSession>) {}
@@ -25,5 +26,13 @@ export class DBTwoFactorAuthenticationSessionRepository implements TwoFactorAuth
 
         await this.db.save(dbObject);
         return TwoFactorAuthenticationSessionMapper.fromDB(dbObject);
+    }
+
+    async delete(session: TwoFactorAuthenticationSession) {
+        const dbSession = await this.db.findOneBy({ id: session.id.value });
+
+        if (dbSession === null) return;
+
+        await this.db.remove(dbSession);
     }
 }

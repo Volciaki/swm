@@ -18,7 +18,7 @@ export type APIContext = {
  * @see: https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (): Promise<APIContext> => {
-    initializeDatabase();
+    await initializeDatabase();
 
     const cookieStore = await cookies();
     const authCookie = cookieStore.get(environment.authentication.cookie.name);

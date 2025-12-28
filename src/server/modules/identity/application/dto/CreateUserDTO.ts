@@ -1,11 +1,8 @@
 import { z } from "zod";
+import { userDTOSchema } from "./shared/UserDTO";
 
-export const createUserDTOSchema = z.object({
-    name: z.string(),
-    email: z.string(),
-    passwordRaw: z.string(),
-    isAdmin: z.boolean(),
-    twoFactorAuthenticationEnabled: z.boolean(),
-});
+export const createUserDTOSchema = userDTOSchema
+    .omit({ id: true, passwordHash: true })
+    .extend({ passwordRaw: z.string() });
 
 export type CreateUserDTO = z.infer<typeof createUserDTOSchema>;
