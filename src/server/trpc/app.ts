@@ -2,6 +2,7 @@ import { z } from "zod";
 import { procedure, createRouter, createCallerFactory } from "./init";
 
 export const appRouter = createRouter({
+    // TODO: Dawid, remove this when you're ready xD
     hello: procedure
         .input(
             z.object({
