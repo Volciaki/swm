@@ -29,7 +29,10 @@ After finishing the setup, you'll be able to use numerous commands, for example:
 Running the first command will cause the following ports to become responsive:
 
 - [localhost:3000](http://localhost:3000) - App,
+- _localhost:5432_ - Database ([PostgreSQL](https://github.com/postgres/postgres)),
 - [localhost:3001](http://localhost:3001) - Database UI ([Adminer](https://github.com/vrana/adminer)),
+- _localhost:25_ - Mail Server ([MailHog](https://github.com/mailhog/MailHog)),
+- [localhost:3002](http://localhost:3002) - Mail Server UI ([MailHog](https://github.com/mailhog/MailHog)),
 
 I've also left a [Hoppscotch](https://github.com/hoppscotch/hoppscotch) collection in `hoppscotch.json`. You may find it useful if you wish to play around with the API.
 
