@@ -9,7 +9,7 @@ import { LoginDTO } from "../dto/LoginDTO";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { AuthenticationManager } from "../services/AuthenticationManager";
 import { StringHasher } from "../services/StringHasher";
-import { TwoFactorAuthenticationValueManager } from "../services/TwoFactorAuthenticationValueManager";
+import { TwoFactorAuthenticationValueGenerator } from "../services/TwoFactorAuthenticationValueGenerator";
 
 export class Login {
     constructor(
@@ -18,7 +18,7 @@ export class Login {
         private readonly stringHasher: StringHasher,
         private readonly authenticationManager: AuthenticationManager,
         private readonly uuidManager: UUIDManager,
-        private readonly twoFactorAuthenticationValueManager: TwoFactorAuthenticationValueManager,
+        private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
     ) {}
 
     async execute(dto: LoginDTO, currentUser?: User) {
@@ -32,11 +32,15 @@ export class Login {
         if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);
 
         if (user.twoFactorAuthenticationEnabled) {
+            const twoFactorAuthenticationValue = this.twoFactorAuthenticationValueGenerator.generate();
             const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
                 user,
                 this.uuidManager.generate(),
-                this.twoFactorAuthenticationValueManager.generate(),
+                twoFactorAuthenticationValue,
             );
+
+            // TODO: deliver the 2FA value to user here...
+
             return { authenticationId: authenticationSession.id.value };
         }
 

@@ -44,7 +44,7 @@ export const identityRouter = createRouter({
         const stringHasher = services.utils.stringHasher.node;
         const authenticationManager = services.utils.authenticationManager.node;
         const uuidManager = services.utils.uuidManager.node;
-        const twoFactorAuthenticationValueManager = services.utils.twoFactorAuthenticationValueManager.node;
+        const twoFactorAuthenticationValueGenerator = services.utils.twoFactorAuthenticationValueGenerator.node;
 
         const action = new Login(
             userRepository,
@@ -52,7 +52,7 @@ export const identityRouter = createRouter({
             stringHasher,
             authenticationManager,
             uuidManager,
-            twoFactorAuthenticationValueManager,
+            twoFactorAuthenticationValueGenerator,
         );
         return await action.execute(input, ctx.user ?? undefined);
     }),
