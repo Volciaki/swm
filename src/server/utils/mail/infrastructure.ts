@@ -23,7 +23,7 @@ export class DefaultEmailManager implements EmailManager {
             to: message.to.value,
             subject: message.subject,
             html: message.html,
-            text: message.body,
+            text: message.text,
         });
     }
 }
