@@ -7,7 +7,6 @@ import nodemailer from "nodemailer";
 export class DefaultEmailManager implements EmailManager {
     async send(message: EmailMessage): Promise<void> {
         const transporter = nodemailer.createTransport({
-            // TODO: add all those values to the environment interface.
             host: environment.mail.host,
             port: environment.mail.port,
             secure: environment.mail.sslEnabled,
