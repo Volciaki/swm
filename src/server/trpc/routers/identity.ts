@@ -18,7 +18,7 @@ export const identityRouter = createRouter({
         const services = getServices(ctx);
         const userRepository = services.repositories.user.db;
         const stringHasher = services.utils.stringHasher.node;
-        const uuidManager = services.utils.uuidManager.node;
+        const uuidManager = services.utils.uuidManager.default;
 
         const action = new CreateUser(userRepository, stringHasher, uuidManager);
         return await action.execute(input, ctx.user ?? undefined);
@@ -43,8 +43,9 @@ export const identityRouter = createRouter({
         const twoFactorAuthenticationSessionRepository = services.repositories.twoFactorAuthenticationSession.db;
         const stringHasher = services.utils.stringHasher.node;
         const authenticationManager = services.utils.authenticationManager.node;
-        const uuidManager = services.utils.uuidManager.node;
+        const uuidManager = services.utils.uuidManager.default;
         const twoFactorAuthenticationValueGenerator = services.utils.twoFactorAuthenticationValueGenerator.node;
+        const twoFactorAuthenticationValueSender = services.utils.twoFactorAuthenticationValueSender.mail;
 
         const action = new Login(
             userRepository,
@@ -53,6 +54,7 @@ export const identityRouter = createRouter({
             authenticationManager,
             uuidManager,
             twoFactorAuthenticationValueGenerator,
+            twoFactorAuthenticationValueSender,
         );
         return await action.execute(input, ctx.user ?? undefined);
     }),

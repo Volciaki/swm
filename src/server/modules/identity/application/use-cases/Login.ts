@@ -20,7 +20,7 @@ export class Login {
         private readonly authenticationManager: AuthenticationManager,
         private readonly uuidManager: UUIDManager,
         private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
-        private readonly twoFactorAuthenticationValueSender: TwoFactorAuthenticationValueSender,
+        private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender,
     ) {}
 
     async execute(dto: LoginDTO, currentUser?: User) {
@@ -41,7 +41,8 @@ export class Login {
                 twoFactorAuthenticationValue,
             );
 
-            await this.twoFactorAuthenticationValueSender.deliverToUser(user, authenticationSession);
+            if (this.twoFactorAuthenticationValueSender)
+                await this.twoFactorAuthenticationValueSender.deliverToUser(user, authenticationSession);
 
             return { authenticationId: authenticationSession.id.value };
         }
