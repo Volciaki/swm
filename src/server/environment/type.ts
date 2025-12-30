@@ -20,4 +20,13 @@ export type Environment = {
             name: string;
         };
     };
+    mail: {
+        host: string;
+        port: number;
+        sslEnabled: boolean;
+        user: {
+            name: string;
+            password: string;
+        },
+    },
 };

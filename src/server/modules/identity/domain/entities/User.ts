@@ -35,4 +35,6 @@ export class User {
     get email() { return this._email };
     get id() { return this._id };
     get name() { return this._name };
+
+    set passwordHash(value: string) { this._passwordHash = value };
 }
