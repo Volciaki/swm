@@ -10,6 +10,7 @@ import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { AuthenticationManager } from "../services/AuthenticationManager";
 import { StringHasher } from "../services/StringHasher";
 import { TwoFactorAuthenticationValueGenerator } from "../services/TwoFactorAuthenticationValueGenerator";
+import { TwoFactorAuthenticationValueSender } from "../services/TwoFactorAuthenticationValueSender";
 
 export class Login {
     constructor(
@@ -19,6 +20,7 @@ export class Login {
         private readonly authenticationManager: AuthenticationManager,
         private readonly uuidManager: UUIDManager,
         private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
+        private readonly twoFactorAuthenticationValueSender: TwoFactorAuthenticationValueSender,
     ) {}
 
     async execute(dto: LoginDTO, currentUser?: User) {
@@ -39,7 +41,7 @@ export class Login {
                 twoFactorAuthenticationValue,
             );
 
-            // TODO: deliver the 2FA value to user here...
+            await this.twoFactorAuthenticationValueSender.deliverToUser(user, authenticationSession);
 
             return { authenticationId: authenticationSession.id.value };
         }
