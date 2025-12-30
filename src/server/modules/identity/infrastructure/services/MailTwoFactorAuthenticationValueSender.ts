@@ -9,7 +9,13 @@ export class MailTwoFactorAuthenticationValueSender implements TwoFactorAuthenti
         const message = EmailMessage.create(
             user.email,
             "Your 2FA Code - Volciaki Magazyn",
-            `Your 2FA code is:\n\n${authenticationSession.value}\n\nYou may use it to finish logging in, or reset your password.`
+            `
+                <div style="display: flex; justify-content: center; align-items:center; flex-direction: column">
+                    <p style="font-size: 3rem">${authenticationSession.value}</p>
+                    <p>You may use it to finish logging in, or reset your password.</p>
+                </div>
+            `,
+            `Your 2FA code is:\n\n${authenticationSession.value}\n\nYou may use it to finish logging in, or reset your password.`,
         );
         await mailManager.send(message);
     }

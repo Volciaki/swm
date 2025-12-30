@@ -17,4 +17,13 @@ export const developmentEnvironment: Environment = {
             expiresIn: process.env.AUTHENTICATION_COOKIE_EXPIRES_IN ?? "5h",
         },
     },
+    mail: {
+        host: process.env.MAIL_HOST ?? "localhost",
+        port: Number(process.env.MAIL_PORT ?? 25),
+        sslEnabled: Boolean(process.env.MAIL_SSL_ENABLED ?? false),
+        user: {
+            name: process.env.MAIL_USER_NAME ?? "development-mail-user",
+            password: process.env.MAIL_USER_PASSWORD ?? "development-mail-password",
+        },
+    },
 }

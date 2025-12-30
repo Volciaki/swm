@@ -4,14 +4,17 @@ export class EmailMessage {
     private constructor(
         private readonly _to: Email,
         private readonly _subject: string,
-        private readonly _body: string,
+        private readonly _html: string,
+        // Fallback if HTML isn't supported.
+        private readonly _text: string,
     ) {}
 
-    static create(to: Email, subject: string, body: string) {
-        return new EmailMessage(to, subject, body);
+    static create(to: Email, subject: string, html: string, text: string) {
+        return new EmailMessage(to, subject, html, text);
     }
 
     get to() { return this._to };
     get subject() { return this._subject };
-    get body() { return this._body };
+    get html() { return this._html };
+    get text() { return this._text };
 }
