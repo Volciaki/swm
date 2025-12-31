@@ -5,8 +5,8 @@ type TemperatureRange = { minimal: CelsiusDegrees, maximum: CelsiusDegrees };
 
 export class Shelf {
     private constructor(
-        private readonly _name: string,
         private readonly _id: UUID,
+        private readonly _name: string,
         private readonly _comment: string,
         private readonly _rows: Cell[],
         private readonly _columns: Cell[],

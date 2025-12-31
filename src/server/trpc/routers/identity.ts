@@ -12,10 +12,10 @@ import { createUserDTOSchema } from "@/server/modules/identity/application/dto/C
 import { deleteUserDTOSchema } from "@/server/modules/identity/application/dto/DeleteUserDTO";
 import { loginDTOSchema } from "@/server/modules/identity/application/dto/LoginDTO";
 import { twoFactorAuthenticationDTOSchema } from "@/server/modules/identity/application/dto/TwoFactorAuthenticationDTO";
-import { createRouter, procedure } from "../init";
-import { getServices } from "../services";
 import { requestPasswordResetDTOSchema } from "@/server/modules/identity/application/dto/RequestPasswordResetDTO";
 import { passwordResetDTOSchema } from "@/server/modules/identity/application/dto/PasswordResetDTO";
+import { createRouter, procedure } from "../init";
+import { getServices } from "../services";
 
 export const identityRouter = createRouter({
     createUser: procedure.input(createUserDTOSchema).mutation<UserDTO>(async ({ input, ctx }) => {

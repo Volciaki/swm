@@ -4,7 +4,6 @@ export class Cell {
     private constructor(
         id: UUID,
         shelfId: UUID,
-        // TODO: ???
         assortmentId: UUID,
     ) {}
 
