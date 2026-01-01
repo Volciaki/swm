@@ -1,6 +1,8 @@
-import { DimensionsMapper, TemperatureRangeMapper, UUID, Weight } from "@/server/utils";
+import { CelsiusDegrees, Dimensions, DimensionsMapper, Distance, TemperatureRangeMapper, UUID, Weight } from "@/server/utils";
 import { ShelfDTO } from "../../application/dto/shared/ShelfDTO";
 import { Shelf } from "../../domain/entities/Shelf";
+import { DBShelf } from "../entities/DBShelf";
+import { DBCell } from "../entities/DBCell";
 import { CellMapper } from "./CellMapper";
 
 export class ShelfMapper {
@@ -37,5 +39,54 @@ export class ShelfMapper {
             comment,
             name,
         };
+    }
+
+    static fromShelfToDBShelf(shelf: Shelf): DBShelf {
+        const dbShelf = new DBShelf();
+        const {
+            id,
+            name,
+            comment,
+            temperatureRange,
+            columns,
+            rows,
+            maxWeight,
+            maxAssortmentSize,
+        } = shelf;
+
+        dbShelf.id = id.value;
+        dbShelf.maxWeightKg = maxWeight.kilograms;
+        dbShelf.rowIds = rows.map((row) => row.id.value);
+        dbShelf.columnIds = columns.map((column) => column.id.value);
+        dbShelf.temperatureRangeMax = temperatureRange.maximal.value;
+        dbShelf.temperatureRangeMin = temperatureRange.minimal.value;
+        dbShelf.name = name;
+        dbShelf.comment = comment;
+        dbShelf.maxAssortmentSizeWidthMillimeters = maxAssortmentSize.width.millimeters;
+        dbShelf.maxAssortmentSizeHeightMillimeters = maxAssortmentSize.height.millimeters;
+        dbShelf.maxAssortmentSizeLengthMillimeters = maxAssortmentSize.length.millimeters;
+
+        return dbShelf;
+    }
+
+    static fromDBShelfToShelf(dbShelf: DBShelf, dbRows: DBCell[], dbColumns: DBCell[]): Shelf {
+        const maxAssortmentSize = Dimensions.create(
+            Distance.fromMillimeters(dbShelf.maxAssortmentSizeWidthMillimeters),
+            Distance.fromMillimeters(dbShelf.maxAssortmentSizeHeightMillimeters),
+            Distance.fromMillimeters(dbShelf.maxAssortmentSizeLengthMillimeters),
+        );
+        return Shelf.create(
+            UUID.fromString(dbShelf.id),
+            dbShelf.name,
+            dbShelf.comment,
+            dbRows.map((row) => CellMapper.fromDBCellToCell(row)),
+            dbColumns.map((column) => CellMapper.fromDBCellToCell(column)),
+            {
+                maximal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMax),
+                minimal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMin),
+            },
+            Weight.fromKilograms(dbShelf.maxWeightKg),
+            maxAssortmentSize,
+        );
     }
 }

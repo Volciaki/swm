@@ -8,6 +8,6 @@ export class DBCell {
     @Column({ name: "shelf_id" })
     shelfId!: string;
 
-    @Column({ name: "assortment_id" })
-    assortmentId!: string;
+    @Column({ name: "assortment_id", type: "varchar", nullable: true })
+    assortmentId!: string | null;
 }

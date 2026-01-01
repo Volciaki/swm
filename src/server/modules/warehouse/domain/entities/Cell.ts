@@ -1,5 +1,7 @@
 import { UUID } from "@/server/utils";
 
+// Represents a single slot for storing Assortment on a Shelf.
+// This is fully owned by Shelf, and does not have its own repository.
 export class Cell {
     private constructor(
         private _id: UUID,

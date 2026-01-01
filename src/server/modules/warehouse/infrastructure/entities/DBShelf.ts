@@ -15,7 +15,7 @@ export class DBShelf {
     rowIds!: string[];
 
     @Column({ name: "column_ids", type: "varchar", array: true })
-    columnIds!: number[];
+    columnIds!: string[];
 
     @Column({ name: "temperature_range_max", type: "float" })
     temperatureRangeMax!: number;
