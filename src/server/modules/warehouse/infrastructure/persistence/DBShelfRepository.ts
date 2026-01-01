@@ -11,7 +11,7 @@ export class DBShelfRepository implements ShelfRepository {
     constructor(
         private readonly db: Repository<DBShelf>,
         private readonly cells: Repository<DBCell>,
-    ) { }
+    ) {}
 
     async create(shelf: Shelf) {
         const dbShelf = ShelfMapper.fromShelfToDBShelf(shelf);

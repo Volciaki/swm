@@ -1,6 +1,5 @@
 import { UnauthorizedError } from "@/server/utils/unauthorized/error";
 import { UserDTO, UUID } from "@/server/utils";
-import { User } from "../../domain/entities/User";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { DeleteUserDTO } from "../dto/DeleteUserDTO";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
