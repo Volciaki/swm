@@ -10,14 +10,14 @@ import { Cell } from "./Cell";
 
 export class Shelf {
     private constructor(
-        private readonly _id: UUID,
-        private readonly _name: string,
-        private readonly _comment: string,
-        private readonly _rows: Cell[],
-        private readonly _columns: Cell[],
-        private readonly _temperatureRange: TemperatureRange,
-        private readonly _maxWeight: Weight,
-        private readonly _maxAssortmentSize: Dimensions,
+        private _id: UUID,
+        private _name: string,
+        private _comment: string,
+        private _rows: Cell[],
+        private _columns: Cell[],
+        private _temperatureRange: TemperatureRange,
+        private _maxWeight: Weight,
+        private _maxAssortmentSize: Dimensions,
     ) {}
 
     get id() { return this._id };
@@ -29,6 +29,14 @@ export class Shelf {
     get comment() { return this._comment };
     get name() { return this._name };
     get cells() { return [...this.rows, ...this.columns] };
+
+    set name(value: string) { this._name = value };
+    set comment(value: string) { this._comment = value };
+    set columns(value: Cell[]) { this._columns = value };
+    set rows(value: Cell[]) { this._rows = value };
+    set maxAssortmentSize(value: Dimensions) { this._maxAssortmentSize = value };
+    set maxWeight(value: Weight) { this._maxWeight = value };
+    set temperatureRange(value: TemperatureRange) { this._temperatureRange = value };
 
     static create(
         id: UUID,

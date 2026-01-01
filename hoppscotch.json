@@ -175,7 +175,7 @@
           "testScript": "",
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"name\": \"...\",\n  \"comment\": \"...\",\n  \"temperatureRange\": {\n    \"minimalCelsius\": 13.1,\n    \"maximalCelsius\": 43.6\n  },\n  \"maxWeightKg\": 20.1,\n  \"maxAssortmentSize\": {\n    \"widthMillimeters\": 40.2,\n    \"heightMillimeters\": 30.5,\n    \"lengthMillimeters\": 40.9\n  },\n  \"rows\": [\n    { \"assortmentId\": null }\n  ],\n  \"columns\": [\n    { \"assortmentId\": null }\n  ]\n}"
+            "body": "{\n  \"name\": \"Test Shelf\",\n  \"comment\": \"a shelf to test updating\",\n  \"temperatureRange\": {\n    \"minimalCelsius\": 13.1,\n    \"maximalCelsius\": 43.6\n  },\n  \"maxWeightKg\": 20.1,\n  \"maxAssortmentSize\": {\n    \"widthMillimeters\": 40.2,\n    \"heightMillimeters\": 30.5,\n    \"lengthMillimeters\": 40.9\n  },\n  \"rows\": [\n    { \"assortmentId\": null }\n  ],\n  \"columns\": [\n    { \"assortmentId\": null }\n  ]\n}"
           },
           "requestVariables": [],
           "responses": {}
@@ -196,6 +196,26 @@
           "body": {
             "contentType": "application/json",
             "body": "{\n  \"id\": \"...\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/warehouse.updateShelf",
+          "name": "updateShelf",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"id\": \"...\",\n  \"newData\": {\n    \"name\": \"...\",\n    \"comment\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": 13.1,\n      \"maximalCelsius\": 43.6\n    },\n    \"maxWeightKg\": 20.1,\n    \"maxAssortmentSize\": {\n      \"widthMillimeters\": 40.2,\n      \"heightMillimeters\": 30.5,\n      \"lengthMillimeters\": 40.9\n    },\n    \"rows\": [\n      { \"id\": \"...\", \"assortmentId\": null }\n    ],\n    \"columns\": [\n      { \"id\": \"...\", \"assortmentId\": null }\n    ]\n  }\n}\n"
           },
           "requestVariables": [],
           "responses": {}
