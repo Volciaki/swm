@@ -1,5 +1,4 @@
-import { UUID, UUIDManager } from "@/server/utils";
-import { User } from "../../domain/entities/User";
+import { UserDTO, UUID, UUIDManager } from "@/server/utils";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { RequestPasswordResetDTO } from "../dto/RequestPasswordResetDTO";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
@@ -17,7 +16,7 @@ export class RequestPasswordReset {
         private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender,
     ) {}
 
-    async execute(dto: RequestPasswordResetDTO, currentUser?: User) {
+    async execute(dto: RequestPasswordResetDTO, currentUser?: UserDTO) {
         if (currentUser) throw new AlreadyLoggedInError();
 
         const userId = UUID.fromString(dto.userId);

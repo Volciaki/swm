@@ -1,5 +1,5 @@
 import { UnauthorizedError } from "@/server/utils/unauthorized/error";
-import { UUID } from "@/server/utils";
+import { UserDTO, UUID } from "@/server/utils";
 import { User } from "../../domain/entities/User";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { DeleteUserDTO } from "../dto/DeleteUserDTO";
@@ -8,7 +8,7 @@ import { UserNotFoundError } from "../errors/UserNotFoundError";
 export class DeleteUser {
     constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(dto: DeleteUserDTO, currentUser?: User) {
+    async execute(dto: DeleteUserDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
         const userId = UUID.fromString(dto.id);

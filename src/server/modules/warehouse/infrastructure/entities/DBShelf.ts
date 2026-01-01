@@ -17,7 +17,6 @@ export class DBShelf {
     @Column({ name: "column_ids", type: "varchar", array: true })
     columnIds!: number[];
 
-    // TODO: will this be a float?
     @Column({ name: "temperature_range_max", type: "float" })
     temperatureRangeMax!: number;
 

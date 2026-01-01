@@ -6,3 +6,4 @@ export * from "./temperature";
 export * from "./weight";
 export * from "./dimensions";
 export * from "./distance";
+export * from "./identity";

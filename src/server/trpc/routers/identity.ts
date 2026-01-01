@@ -7,13 +7,13 @@ import { RequestPasswordReset } from "@/server/modules/identity/application/use-
 import { PasswordReset } from "@/server/modules/identity/application/use-cases/PasswordReset";
 import { ListUsersResponseDTO } from "@/server/modules/identity/application/dto/ListUsersResponseDTO";
 import { AuthenticationTokenResponseDTO, LoginResponseDTO, TwoFactorAuthenticationResponseDTO } from "@/server/modules/identity/application/dto/LoginResponseDTO";
-import { UserDTO } from "@/server/modules/identity/application/dto/shared/UserDTO";
 import { createUserDTOSchema } from "@/server/modules/identity/application/dto/CreateUserDTO";
 import { deleteUserDTOSchema } from "@/server/modules/identity/application/dto/DeleteUserDTO";
 import { loginDTOSchema } from "@/server/modules/identity/application/dto/LoginDTO";
 import { twoFactorAuthenticationDTOSchema } from "@/server/modules/identity/application/dto/TwoFactorAuthenticationDTO";
 import { requestPasswordResetDTOSchema } from "@/server/modules/identity/application/dto/RequestPasswordResetDTO";
 import { passwordResetDTOSchema } from "@/server/modules/identity/application/dto/PasswordResetDTO";
+import { UserDTO } from "@/server/utils";
 import { createRouter, procedure } from "../init";
 import { getServices } from "../services";
 

@@ -1,3 +1,4 @@
+import { temperatureRangeDTOSchema } from "@/server/utils";
 import { z } from "zod";
 
 export const assortmentDTOSchema = z.object({
@@ -6,10 +7,7 @@ export const assortmentDTOSchema = z.object({
     // TODO: ???
     // qrCode: z.string(),
     // image: z.string(),
-    temperatureRange: z.object({
-        minimalCelsius: z.number(),
-        maximalCelsius: z.number(),
-    }),
+    temperatureRange: temperatureRangeDTOSchema,
     weightKg: z.number(),
     dimensions: z.object({
         widthMillimeters: z.number(),

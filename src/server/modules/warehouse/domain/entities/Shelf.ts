@@ -1,4 +1,4 @@
-import { UUID, CelsiusDegrees, Weight, Dimensions, Distance } from "@/server/utils";
+import { UUID, CelsiusDegrees, Weight, Dimensions, Distance, TemperatureRange } from "@/server/utils";
 import { ShelfFullError } from "../errors/ShelfFullError";
 import { AssortmentTooWideError } from "../errors/AssortmentTooWideError";
 import { AssortmentTooTallError } from "../errors/AssortmentTooTallError";
@@ -7,8 +7,6 @@ import { ShelfTooColdForAssortmentError } from "../errors/ShelfTooColdForAssortm
 import { ShelfTooHotForAssortmentError } from "../errors/ShelfTooHotForAssortmentError";
 import { type AssortmentDTO } from "../dto/AssortmentDTO";
 import { Cell } from "./Cell";
-
-type TemperatureRange = { minimal: CelsiusDegrees, maximal: CelsiusDegrees };
 
 export class Shelf {
     private constructor(
@@ -23,13 +21,18 @@ export class Shelf {
     ) {}
 
     get id() { return this._id };
-    get cells() { return [...this._rows, ...this._columns] };
     get maxAssortmentSize() { return this._maxAssortmentSize };
     get temperatureRange() { return this._temperatureRange };
+    get maxWeight() { return this._maxWeight };
+    get columns() { return this._columns };
+    get rows() { return this._rows };
+    get comment() { return this._comment };
+    get name() { return this._name };
+    get cells() { return [...this.rows, ...this.columns] };
 
     static create(
-        name: string,
         id: UUID,
+        name: string,
         comment: string,
         rows: Cell[],
         columns: Cell[],

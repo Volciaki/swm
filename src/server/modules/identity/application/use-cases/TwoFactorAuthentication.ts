@@ -1,9 +1,8 @@
-import { UUID } from "@/server/utils";
+import { UserDTO, UUID } from "@/server/utils";
 import { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
 import { WrongTwoFactorAuthenticationValueError } from "../../domain/errors/WrongTwoFactorAuthenticationValue";
 import { AlreadyLoggedInError } from "../../domain/errors/AlreadyLoggedInError";
 import { UserRepository } from "../../domain/repositories/UserRepository";
-import { User } from "../../domain/entities/User";
 import { InvalidTwoFactorAuthenticationSessionError } from "../errors/InvalidTwoFactorAuthenticationSessionError";
 import { TwoFactorAuthenticationDTO } from "../dto/TwoFactorAuthenticationDTO";
 import { AuthenticationManager } from "../services/AuthenticationManager";
@@ -16,7 +15,7 @@ export class TwoFactorAuthentication {
         private readonly authenticationManager: AuthenticationManager,
     ) {}
 
-    async execute(dto: TwoFactorAuthenticationDTO, currentUser?: User) {
+    async execute(dto: TwoFactorAuthenticationDTO, currentUser?: UserDTO) {
         if (currentUser) throw new AlreadyLoggedInError();
 
         const authenticationID = UUID.fromString(dto.authenticationId);
