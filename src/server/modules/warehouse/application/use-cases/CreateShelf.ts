@@ -16,12 +16,12 @@ export class CreateShelf {
         const shelfRowCellDTOs = dto.rows.map((shelfRowCellCreateDTO) => ({
             id: this.uuidManager.generate().value,
             shelfId: shelfId.value,
-            assortmentId: shelfRowCellCreateDTO.assortmentId,
+            assortment: shelfRowCellCreateDTO.assortment,
         }));
         const shelfColumnCellDTOs = dto.columns.map((shelfColumnCellCreateDTO) => ({
             id: this.uuidManager.generate().value,
             shelfId: shelfId.value,
-            assortmentId: shelfColumnCellCreateDTO.assortmentId,
+            assortment: shelfColumnCellCreateDTO.assortment,
         }));
 
         const shelf = ShelfMapper.fromShelfDTOToShelf({

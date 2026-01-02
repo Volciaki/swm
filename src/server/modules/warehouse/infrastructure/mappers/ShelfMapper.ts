@@ -7,7 +7,7 @@ import { CellMapper } from "./CellMapper";
 
 export class ShelfMapper {
     static fromShelfDTOToShelf(shelfDTO: ShelfDTO): Shelf {
-        const { id, name, comment, rows, columns, temperatureRange, maxWeightKg, maxAssortmentSize } = shelfDTO;
+        const { id, name, comment, rows, columns, temperatureRange, maxWeightKg, maxAssortmentSize, supportsHazardous } = shelfDTO;
         return Shelf.create(
             UUID.fromString(id),
             name,
@@ -17,11 +17,12 @@ export class ShelfMapper {
             TemperatureRangeMapper.fromDTO(temperatureRange),
             Weight.fromKilograms(maxWeightKg),
             DimensionsMapper.fromDTO(maxAssortmentSize),
+            supportsHazardous,
         );
     }
 
     static fromShelfToShelfDTO(shelf: Shelf): ShelfDTO {
-        const { id, temperatureRange, maxAssortmentSize, maxWeight, columns, rows, comment, name } = shelf;
+        const { id, temperatureRange, maxAssortmentSize, maxWeight, columns, rows, comment, name, supportsHazardous } = shelf;
         return {
             id: id.value,
             temperatureRange: {
@@ -38,6 +39,7 @@ export class ShelfMapper {
             rows: rows.map((row) => CellMapper.fromCellToCellDTO(row)),
             comment,
             name,
+            supportsHazardous,
         };
     }
 
@@ -52,6 +54,7 @@ export class ShelfMapper {
             rows,
             maxWeight,
             maxAssortmentSize,
+            supportsHazardous,
         } = shelf;
 
         dbShelf.id = id.value;
@@ -62,6 +65,7 @@ export class ShelfMapper {
         dbShelf.temperatureRangeMin = temperatureRange.minimal.value;
         dbShelf.name = name;
         dbShelf.comment = comment;
+        dbShelf.supportsHazardous = supportsHazardous;
         dbShelf.maxAssortmentSizeWidthMillimeters = maxAssortmentSize.width.millimeters;
         dbShelf.maxAssortmentSizeHeightMillimeters = maxAssortmentSize.height.millimeters;
         dbShelf.maxAssortmentSizeLengthMillimeters = maxAssortmentSize.length.millimeters;
@@ -88,6 +92,7 @@ export class ShelfMapper {
             },
             Weight.fromKilograms(dbShelf.maxWeightKg),
             maxAssortmentSize,
+            dbShelf.supportsHazardous,
         );
     }
 }

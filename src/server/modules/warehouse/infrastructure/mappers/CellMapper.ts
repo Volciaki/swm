@@ -2,7 +2,7 @@ import { UUID } from "@/server/utils";
 import { CellDTO } from "../../application/dto/shared/CellDTO";
 import { Cell } from "../../domain/entities/Cell";
 import { DBCell } from "../entities/DBCell";
-import { AssortmentVO } from "../../domain/vo/AssortmentDTO";
+import { AssortmentVO } from "../../domain/vo/AssortmentVO";
 
 export class CellMapper {
     static fromCellDTOToCell(cellDTO: CellDTO): Cell {

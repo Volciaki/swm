@@ -1,5 +1,5 @@
 import { UUID } from "@/server/utils";
-import { AssortmentVO } from "../vo/AssortmentDTO";
+import { AssortmentVO } from "../vo/AssortmentVO";
 
 // Represents a single slot for storing Assortment on a Shelf.
 // This is fully owned by Shelf, and does not have its own repository.

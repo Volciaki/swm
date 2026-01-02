@@ -15,9 +15,7 @@ const getNewCellsAfterUpdate = (cells: Cell[], updatedCells: UpdateCellDTO[]): C
         const newCell = Cell.create(
             cell.id,
             cell.shelfId,
-            cellInUpdateDTO.assortmentId === null
-                ? cellInUpdateDTO.assortmentId
-                : UUID.fromString(cellInUpdateDTO.assortmentId)
+            cellInUpdateDTO.assortment,
         );
         return newCell;
     });

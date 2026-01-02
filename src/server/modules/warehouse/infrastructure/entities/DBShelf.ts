@@ -34,4 +34,7 @@ export class DBShelf {
 
     @Column({ name: "max_assortment_size_length_mm", type: "float" })
     maxAssortmentSizeLengthMillimeters!: number;
+
+    @Column({ name: "supports_hazardous" })
+    supportsHazardous!: boolean;
 }

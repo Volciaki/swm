@@ -3,10 +3,11 @@ import { ShelfFullError } from "../errors/ShelfFullError";
 import { AssortmentTooWideError } from "../errors/AssortmentTooWideError";
 import { AssortmentTooTallError } from "../errors/AssortmentTooTallError";
 import { AssortmentTooLongError } from "../errors/AssortmentTooLongError";
+import { AssortmentIsHazardousError } from "../errors/AssortmentIsHazardousError";
 import { ShelfTooColdForAssortmentError } from "../errors/ShelfTooColdForAssortmentError";
 import { ShelfTooHotForAssortmentError } from "../errors/ShelfTooHotForAssortmentError";
 import { ShelfOverloadedError } from "../errors/ShelfOverloadedError";
-import { AssortmentVO } from "../vo/AssortmentDTO";
+import { AssortmentVO } from "../vo/AssortmentVO";
 import { Cell } from "./Cell";
 
 export class Shelf {
@@ -19,6 +20,7 @@ export class Shelf {
         private _temperatureRange: TemperatureRange,
         private _maxWeight: Weight,
         private _maxAssortmentSize: Dimensions,
+        private _supportsHazardous: boolean,
     ) {}
 
     get id() { return this._id };
@@ -29,6 +31,7 @@ export class Shelf {
     get rows() { return this._rows };
     get comment() { return this._comment };
     get name() { return this._name };
+    get supportsHazardous() { return this._supportsHazardous };
 
     set name(value: string) { this._name = value };
     set comment(value: string) { this._comment = value };
@@ -47,6 +50,7 @@ export class Shelf {
         temperatureRange: TemperatureRange,
         maxWeight: Weight,
         maxAssortmentSize: Dimensions,
+        supportsHazardous: boolean,
     ) {
         return new Shelf(
             id,
@@ -57,6 +61,7 @@ export class Shelf {
             temperatureRange,
             maxWeight,
             maxAssortmentSize,
+            supportsHazardous,
         );
     }
 
@@ -105,7 +110,7 @@ export class Shelf {
         if (newTotalWeightKg > this.maxWeight.kilograms)
             throw new ShelfOverloadedError(this.id, this.maxWeight, Weight.fromKilograms(newTotalWeightKg));
 
-        // TODO: check if shelf supports hazardous assortment.
+        if (assortment.isHazardous && !this.supportsHazardous) throw new AssortmentIsHazardousError(this.id);
 
         emptyCell.assortment = assortment;
     }

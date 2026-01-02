@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { assortmentDTOSchema } from "../../../domain/dto/AssortmentDTO";
+import { assortmentVOSchema } from "../../../domain/vo/AssortmentVO";
 
 export const cellDTOSchema = z.object({
     id: z.string(),
     shelfId: z.string(),
-    assortment: z.union([assortmentDTOSchema, z.null()]),
+    assortment: z.union([assortmentVOSchema, z.null()]),
 });
 
 export type CellDTO = z.infer<typeof cellDTOSchema>;
