@@ -2,32 +2,33 @@ import { UUID } from "@/server/utils";
 import { CellDTO } from "../../application/dto/shared/CellDTO";
 import { Cell } from "../../domain/entities/Cell";
 import { DBCell } from "../entities/DBCell";
+import { AssortmentVO } from "../../domain/vo/AssortmentDTO";
 
 export class CellMapper {
     static fromCellDTOToCell(cellDTO: CellDTO): Cell {
-        const { id, shelfId, assortmentId } = cellDTO;
+        const { id, shelfId, assortment } = cellDTO;
         return Cell.create(
             UUID.fromString(id),
             UUID.fromString(shelfId),
-            assortmentId === null ? null : UUID.fromString(assortmentId),
+            assortment,
         );
     }
 
     static fromCellToCellDTO(cell: Cell): CellDTO {
-        const { id, shelfId, assortmentId } = cell;
+        const { id, shelfId, assortment } = cell;
         return {
             id: id.value,
             shelfId: shelfId.value,
-            assortmentId: assortmentId === null ? null : assortmentId.value,
+            assortment,
         };
     }
 
-    static fromDBCellToCell(dbCell: DBCell): Cell {
-        const { id, shelfId, assortmentId } = dbCell;
+    static fromDBCellToCell(dbCell: DBCell, assortment: AssortmentVO | null): Cell {
+        const { id, shelfId } = dbCell;
         return Cell.create(
             UUID.fromString(id),
             UUID.fromString(shelfId),
-            assortmentId === null ? null : UUID.fromString(assortmentId),
+            assortment,
         );
     }
 
@@ -36,7 +37,7 @@ export class CellMapper {
 
         dbCell.id = cell.id.value;
         dbCell.shelfId = cell.shelfId.value;
-        dbCell.assortmentId = cell.assortmentId === null ? null : cell.assortmentId.value;
+        dbCell.assortmentId = cell.assortment === null ? null : cell.assortment.id;
 
         return dbCell;
     }

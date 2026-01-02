@@ -79,8 +79,9 @@ export class ShelfMapper {
             UUID.fromString(dbShelf.id),
             dbShelf.name,
             dbShelf.comment,
-            dbRows.map((row) => CellMapper.fromDBCellToCell(row)),
-            dbColumns.map((column) => CellMapper.fromDBCellToCell(column)),
+            // TODO: get the assortment here.
+            dbRows.map((row) => CellMapper.fromDBCellToCell(row, null)),
+            dbColumns.map((column) => CellMapper.fromDBCellToCell(column, null)),
             {
                 maximal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMax),
                 minimal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMin),

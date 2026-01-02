@@ -5,7 +5,8 @@ import { AssortmentTooTallError } from "../errors/AssortmentTooTallError";
 import { AssortmentTooLongError } from "../errors/AssortmentTooLongError";
 import { ShelfTooColdForAssortmentError } from "../errors/ShelfTooColdForAssortmentError";
 import { ShelfTooHotForAssortmentError } from "../errors/ShelfTooHotForAssortmentError";
-import { type AssortmentDTO } from "../dto/AssortmentDTO";
+import { ShelfOverloadedError } from "../errors/ShelfOverloadedError";
+import { AssortmentVO } from "../vo/AssortmentDTO";
 import { Cell } from "./Cell";
 
 export class Shelf {
@@ -28,7 +29,6 @@ export class Shelf {
     get rows() { return this._rows };
     get comment() { return this._comment };
     get name() { return this._name };
-    get cells() { return [...this.rows, ...this.columns] };
 
     set name(value: string) { this._name = value };
     set comment(value: string) { this._comment = value };
@@ -60,15 +60,30 @@ export class Shelf {
         );
     }
 
-    public storeAssortment(assortment: AssortmentDTO) {
-        const emptyCell = this.cells.find((cell) => cell.assortmentId === null);
+    public getCells(): Cell[] {
+        return [...this.rows, ...this.columns];
+    }
+
+    public getTotalWeigth(): Weight {
+        const cells = this.getCells();
+        let totalWeightKg = 0;
+
+        for (const cell of cells) {
+            if (!cell.assortment) continue;
+            totalWeightKg += cell.assortment.weightKg;
+        }
+
+        return Weight.fromKilograms(totalWeightKg);
+    }
+
+    public storeAssortment(assortment: AssortmentVO) {
+        const emptyCell = this.getCells().find((cell) => cell.assortment === null);
         if (!emptyCell) throw new ShelfFullError(this.id);
 
         const { widthMillimeters, heightMillimeters, lengthMillimeters } = assortment.dimensions
         const assortmentWidth = Distance.fromMillimeters(widthMillimeters);
         const assortmentHeight = Distance.fromMillimeters(heightMillimeters);
         const assortmentLength = Distance.fromMillimeters(lengthMillimeters);
-        // TODO: ???
         if (assortmentWidth > this.maxAssortmentSize.width)
             throw new AssortmentTooWideError(assortmentWidth, this.maxAssortmentSize.width);
         if (assortmentHeight > this.maxAssortmentSize.height)
@@ -79,16 +94,19 @@ export class Shelf {
         const { minimalCelsius, maximalCelsius } = assortment.temperatureRange;
         const assortmentMinimalTemperature = CelsiusDegrees.fromNumber(minimalCelsius);
         const assortmentMaximalTemperature = CelsiusDegrees.fromNumber(maximalCelsius);
-        // TODO: ???
         if (assortmentMinimalTemperature > this.temperatureRange.maximal)
             throw new ShelfTooColdForAssortmentError(assortmentMinimalTemperature, this.temperatureRange.maximal);
         if (assortmentMaximalTemperature < this.temperatureRange.minimal)
             throw new ShelfTooHotForAssortmentError(assortmentMaximalTemperature, this.temperatureRange.minimal);
 
-        // TODO: check if shelf has enough weight left to support this assortment.
-        // const assortmentWeight = Weight.fromKilograms(assortment.weightKg);
+        const totalWeight = this.getTotalWeigth();
+        const assortmentWeight = Weight.fromKilograms(assortment.weightKg);
+        const newTotalWeightKg = totalWeight.kilograms + assortmentWeight.kilograms;
+        if (newTotalWeightKg > this.maxWeight.kilograms)
+            throw new ShelfOverloadedError(this.id, this.maxWeight, Weight.fromKilograms(newTotalWeightKg));
+
         // TODO: check if shelf supports hazardous assortment.
 
-        emptyCell.assortmentId = UUID.fromString(assortment.id);
+        emptyCell.assortment = assortment;
     }
 }

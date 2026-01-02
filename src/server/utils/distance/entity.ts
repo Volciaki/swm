@@ -11,12 +11,11 @@ export class Distance {
         return new Distance(value);
     }
 
-    // JS calls this by default to support comparison operators (`>`, `<`, etc.).
-    private valueOf() {
-        return this.millimeters;
-    }
-
     public toSringMillimeters() {
         return `${this.millimeters}mm`;
+    }
+
+    public valueOf() {
+        return this.millimeters;
     }
 }
