@@ -5,7 +5,6 @@
 .yarn
 yarn-debug.log*
 yarn-error.log*
-yarn.lock
 
 .env*
 !.env.example
