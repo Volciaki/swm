@@ -26,5 +26,4 @@ export const assortmentVOSchema = z.object({
     isHazardous: z.boolean(),
 });
 
-
 export type AssortmentVO = z.infer<typeof assortmentVOSchema>;

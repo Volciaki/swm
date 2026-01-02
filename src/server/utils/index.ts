@@ -7,3 +7,4 @@ export * from "./weight";
 export * from "./dimensions";
 export * from "./distance";
 export * from "./identity";
+export * from "./time-frame";
