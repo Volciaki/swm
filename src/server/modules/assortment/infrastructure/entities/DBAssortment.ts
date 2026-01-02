@@ -34,4 +34,7 @@ export class DBAssortment {
 
     @Column({ name: "expires_after_seconds" })
     expiresAfterSeconds!: number;
+
+    @Column({ name: "is_hazardous" })
+    isHazardous!: boolean;
 }

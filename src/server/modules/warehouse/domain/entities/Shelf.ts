@@ -81,11 +81,12 @@ export class Shelf {
         return Weight.fromKilograms(totalWeightKg);
     }
 
+    // TODO: use this in the application layer!!!
     public storeAssortment(assortment: AssortmentVO) {
         const emptyCell = this.getCells().find((cell) => cell.assortment === null);
         if (!emptyCell) throw new ShelfFullError(this.id);
 
-        const { widthMillimeters, heightMillimeters, lengthMillimeters } = assortment.dimensions
+        const { widthMillimeters, heightMillimeters, lengthMillimeters } = assortment.size;
         const assortmentWidth = Distance.fromMillimeters(widthMillimeters);
         const assortmentHeight = Distance.fromMillimeters(heightMillimeters);
         const assortmentLength = Distance.fromMillimeters(lengthMillimeters);

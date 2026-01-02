@@ -33,7 +33,6 @@ export class Assortment {
     set size(value: Dimensions) { this._size = value };
     set comment(value: string) { this._comment = value };
     set expiresAfter(value: TimeFrame) { this._expiresAfter = value };
-    set isHazardous(value: boolean) { this._isHazardous = value };
 
     static create(
         id: UUID,
