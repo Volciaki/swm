@@ -20,15 +20,17 @@ export const warehouseRouter = createRouter({
     deleteShelf: procedure.input(deleteShelfDTOSchema).mutation<void>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const shelfRepository = services.repositories.shelf.db;
+        const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
 
-        const action = new DeleteShelf(shelfRepository);
+        const action = new DeleteShelf(shelfHelper, shelfRepository);
         return await action.execute(input, ctx.user ?? undefined);
     }),
     updateShelf: procedure.input(updateShelfDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const shelfRepository = services.repositories.shelf.db;
+        const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
 
-        const action = new UpdateShelf(shelfRepository);
+        const action = new UpdateShelf(shelfHelper, shelfRepository);
         return await action.execute(input, ctx.user ?? undefined);
     }),
 });

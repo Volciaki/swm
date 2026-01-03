@@ -7,7 +7,7 @@ export interface ShelfHelper {
     getByIdStringOrThrow(id: string): Promise<Shelf>;
 };
 
-export class DefaultAssortmentHelper implements ShelfHelper {
+export class DefaultShelfHelper implements ShelfHelper {
     constructor(private readonly shelfRepository: ShelfRepository) {}
 
     async getByIdStringOrThrow(id: string) {

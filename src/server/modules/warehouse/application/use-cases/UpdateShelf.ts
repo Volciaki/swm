@@ -1,6 +1,7 @@
 import { UnauthorizedError, UserDTO, UUID } from "@/server/utils";
 import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
-import { UpdateCellDTO, UpdateShelfDTO } from "../dto/UpdateShelfDTO";
+import { UpdateShelfDTO } from "../dto/UpdateShelfDTO";
+import { UpdateCellDTO } from "../dto/UpdateShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
 import { Cell } from "../../domain/entities/Cell";
 import { CellMapper } from "../../infrastructure/mappers/CellMapper";
@@ -23,6 +24,9 @@ const getNewCellsAfterUpdate = (cells: Cell[][], updatedCells: UpdateCellDTO[][]
     }));
 };
 
+// TODO: split this up into multiple use cases?
+// I don't know how we'll handle that yet, but I feel like assigning assortment to cells and
+// modifying shelf's properties should be split into seperate use cases. This feels very messy.
 export class UpdateShelf {
     constructor(
         private readonly shelfHelper: ShelfHelper,
