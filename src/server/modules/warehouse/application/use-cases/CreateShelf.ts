@@ -13,22 +13,19 @@ export class CreateShelf {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
         const shelfId = this.uuidManager.generate();
-        const shelfRowCellDTOs = dto.rows.map((shelfRowCellCreateDTO) => ({
-            id: this.uuidManager.generate().value,
-            shelfId: shelfId.value,
-            assortment: shelfRowCellCreateDTO.assortment,
-        }));
-        const shelfColumnCellDTOs = dto.columns.map((shelfColumnCellCreateDTO) => ({
-            id: this.uuidManager.generate().value,
-            shelfId: shelfId.value,
-            assortment: shelfColumnCellCreateDTO.assortment,
-        }));
-
+        const shelfCellDTOs = dto.cells.map(
+            (row) => row.map(
+                (cell) => ({
+                    id: this.uuidManager.generate().value,
+                    shelfId: shelfId.value,
+                    assortment: cell.assortment,
+                }),
+            ),
+        );
         const shelf = ShelfMapper.fromShelfDTOToShelf({
             ...dto,
             id: shelfId.value,
-            rows: shelfRowCellDTOs,
-            columns: shelfColumnCellDTOs,
+            cells: shelfCellDTOs,
         });
         await this.shelfRepository.create(shelf);
         return ShelfMapper.fromShelfToShelfDTO(shelf);

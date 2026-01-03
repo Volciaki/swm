@@ -7,13 +7,12 @@ import { CellMapper } from "./CellMapper";
 
 export class ShelfMapper {
     static fromShelfDTOToShelf(shelfDTO: ShelfDTO): Shelf {
-        const { id, name, comment, rows, columns, temperatureRange, maxWeightKg, maxAssortmentSize, supportsHazardous } = shelfDTO;
+        const { id, name, comment, cells, temperatureRange, maxWeightKg, maxAssortmentSize, supportsHazardous } = shelfDTO;
         return Shelf.create(
             UUID.fromString(id),
             name,
             comment,
-            rows.map((row) => CellMapper.fromCellDTOToCell(row)),
-            columns.map((column) => CellMapper.fromCellDTOToCell(column)),
+            cells.map((row) => row.map((cell) => CellMapper.fromCellDTOToCell(cell))),
             TemperatureRangeMapper.fromDTO(temperatureRange),
             Weight.fromKilograms(maxWeightKg),
             DimensionsMapper.fromDTO(maxAssortmentSize),
@@ -22,7 +21,7 @@ export class ShelfMapper {
     }
 
     static fromShelfToShelfDTO(shelf: Shelf): ShelfDTO {
-        const { id, temperatureRange, maxAssortmentSize, maxWeight, columns, rows, comment, name, supportsHazardous } = shelf;
+        const { id, temperatureRange, maxAssortmentSize, maxWeight, cells, comment, name, supportsHazardous } = shelf;
         return {
             id: id.value,
             temperatureRange: {
@@ -35,8 +34,7 @@ export class ShelfMapper {
                 widthMillimeters: maxAssortmentSize.width.millimeters,
             },
             maxWeightKg: maxWeight.kilograms,
-            columns: columns.map((column) => CellMapper.fromCellToCellDTO(column)),
-            rows: rows.map((row) => CellMapper.fromCellToCellDTO(row)),
+            cells: cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
             comment,
             name,
             supportsHazardous,
@@ -50,8 +48,7 @@ export class ShelfMapper {
             name,
             comment,
             temperatureRange,
-            columns,
-            rows,
+            cells,
             maxWeight,
             maxAssortmentSize,
             supportsHazardous,
@@ -59,8 +56,7 @@ export class ShelfMapper {
 
         dbShelf.id = id.value;
         dbShelf.maxWeightKg = maxWeight.kilograms;
-        dbShelf.rowIds = rows.map((row) => row.id.value);
-        dbShelf.columnIds = columns.map((column) => column.id.value);
+        dbShelf.cellIds = cells.map((row) => row.map((cell) => cell.id.value));
         dbShelf.temperatureRangeMax = temperatureRange.maximal.value;
         dbShelf.temperatureRangeMin = temperatureRange.minimal.value;
         dbShelf.name = name;
@@ -73,7 +69,7 @@ export class ShelfMapper {
         return dbShelf;
     }
 
-    static fromDBShelfToShelf(dbShelf: DBShelf, dbRows: DBCell[], dbColumns: DBCell[]): Shelf {
+    static fromDBShelfToShelf(dbShelf: DBShelf, dbCells: DBCell[][]): Shelf {
         const maxAssortmentSize = Dimensions.create(
             Distance.fromMillimeters(dbShelf.maxAssortmentSizeWidthMillimeters),
             Distance.fromMillimeters(dbShelf.maxAssortmentSizeHeightMillimeters),
@@ -84,8 +80,7 @@ export class ShelfMapper {
             dbShelf.name,
             dbShelf.comment,
             // TODO: get the assortment here.
-            dbRows.map((row) => CellMapper.fromDBCellToCell(row, null)),
-            dbColumns.map((column) => CellMapper.fromDBCellToCell(column, null)),
+            dbCells.map((row) => row.map((cell) => CellMapper.fromDBCellToCell(cell, null))),
             {
                 maximal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMax),
                 minimal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMin),

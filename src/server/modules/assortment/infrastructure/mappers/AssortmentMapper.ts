@@ -7,8 +7,10 @@ export class AssortmentMapper {
     static fromAssortmentToDBAssortment(assortment: Assortment): DBAssortment {
         const dbAssortment = new DBAssortment();
 
-        const { id, name, size, weight, comment, storedAt, expiresAfter, temperatureRange, isHazardous } = assortment;
+        const { id, cellId, shelfId, name, size, weight, comment, storedAt, expiresAfter, temperatureRange, isHazardous } = assortment;
         dbAssortment.id = id.value;
+        dbAssortment.cellId = cellId.value;
+        dbAssortment.shelfId = shelfId.value;
         dbAssortment.name = name;
         dbAssortment.sizeWidthMillimeters = size.width.millimeters;
         dbAssortment.sizeHeightMillimeters = size.height.millimeters;
@@ -27,6 +29,8 @@ export class AssortmentMapper {
     static fromDBAssortmentToAssortment(dbAssortment: DBAssortment): Assortment {
         return Assortment.create(
             UUID.fromString(dbAssortment.id),
+            UUID.fromString(dbAssortment.cellId),
+            UUID.fromString(dbAssortment.shelfId),
             dbAssortment.name,
             {
                 minimal: CelsiusDegrees.fromNumber(dbAssortment.temperatureRangeMin),
@@ -48,6 +52,8 @@ export class AssortmentMapper {
     static fromAssortmentToAssortmentDTO(assortment: Assortment): AssortmentDTO {
         return {
             id: assortment.id.value,
+            cellId: assortment.cellId.value,
+            shelfId: assortment.shelfId.value,
             name: assortment.name,
             temperatureRange: {
                 maximalCelsius: assortment.temperatureRange.maximal.value,
@@ -69,6 +75,8 @@ export class AssortmentMapper {
     static fromAssortmentDTOToAssortment(assortmentDTO: AssortmentDTO): Assortment {
         return Assortment.create(
             UUID.fromString(assortmentDTO.id),
+            UUID.fromString(assortmentDTO.cellId),
+            UUID.fromString(assortmentDTO.shelfId),
             assortmentDTO.name,
             {
                 minimal: CelsiusDegrees.fromNumber(assortmentDTO.temperatureRange.minimalCelsius),

@@ -7,6 +7,7 @@ import { AssortmentIsHazardousError } from "../errors/AssortmentIsHazardousError
 import { ShelfTooColdForAssortmentError } from "../errors/ShelfTooColdForAssortmentError";
 import { ShelfTooHotForAssortmentError } from "../errors/ShelfTooHotForAssortmentError";
 import { ShelfOverloadedError } from "../errors/ShelfOverloadedError";
+import { ShelfUnevenError } from "../../application/errors/ShelfUnevenError";
 import { AssortmentVO } from "../vo/AssortmentVO";
 import { Cell } from "./Cell";
 
@@ -15,8 +16,7 @@ export class Shelf {
         private _id: UUID,
         private _name: string,
         private _comment: string,
-        private _rows: Cell[],
-        private _columns: Cell[],
+        private _cells: Cell[][],
         private _temperatureRange: TemperatureRange,
         private _maxWeight: Weight,
         private _maxAssortmentSize: Dimensions,
@@ -27,16 +27,14 @@ export class Shelf {
     get maxAssortmentSize() { return this._maxAssortmentSize };
     get temperatureRange() { return this._temperatureRange };
     get maxWeight() { return this._maxWeight };
-    get columns() { return this._columns };
-    get rows() { return this._rows };
+    get cells() { return this._cells };
     get comment() { return this._comment };
     get name() { return this._name };
     get supportsHazardous() { return this._supportsHazardous };
 
     set name(value: string) { this._name = value };
     set comment(value: string) { this._comment = value };
-    set columns(value: Cell[]) { this._columns = value };
-    set rows(value: Cell[]) { this._rows = value };
+    set cells(value: Cell[][]) { this._cells = value };
     set maxAssortmentSize(value: Dimensions) { this._maxAssortmentSize = value };
     set maxWeight(value: Weight) { this._maxWeight = value };
     set temperatureRange(value: TemperatureRange) { this._temperatureRange = value };
@@ -45,35 +43,45 @@ export class Shelf {
         id: UUID,
         name: string,
         comment: string,
-        rows: Cell[],
-        columns: Cell[],
+        cells: Cell[][],
         temperatureRange: TemperatureRange,
         maxWeight: Weight,
         maxAssortmentSize: Dimensions,
         supportsHazardous: boolean,
     ) {
-        return new Shelf(
+        const shelf = new Shelf(
             id,
             name,
             comment,
-            rows,
-            columns,
+            cells,
             temperatureRange,
             maxWeight,
             maxAssortmentSize,
             supportsHazardous,
         );
+
+        shelf.validateCells();
+
+        return shelf;
     }
 
-    public getCells(): Cell[] {
-        return [...this.rows, ...this.columns];
+    // All rows need to have the same length. 
+    private validateCells() {
+        const firstRowLength = this.cells[0].length;
+        for (const cellRow of this.cells) {
+            if (cellRow.length !== firstRowLength)
+                throw new ShelfUnevenError();
+        }
+    }
+
+    public flatCells() {
+        return this.cells.flat();
     }
 
     public getTotalWeigth(): Weight {
-        const cells = this.getCells();
         let totalWeightKg = 0;
 
-        for (const cell of cells) {
+        for (const cell of this.flatCells()) {
             if (!cell.assortment) continue;
             totalWeightKg += cell.assortment.weightKg;
         }
@@ -83,7 +91,7 @@ export class Shelf {
 
     // TODO: use this in the application layer!!!
     public storeAssortment(assortment: AssortmentVO) {
-        const emptyCell = this.getCells().find((cell) => cell.assortment === null);
+        const emptyCell = this.flatCells().find((cell) => cell.assortment === null);
         if (!emptyCell) throw new ShelfFullError(this.id);
 
         const { widthMillimeters, heightMillimeters, lengthMillimeters } = assortment.size;

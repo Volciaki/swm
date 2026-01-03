@@ -3,6 +3,8 @@ import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 
 export const assortmentDTOSchema = z.object({
     id: z.string(),
+    cellId: z.string(),
+    shelfId: z.string(),
     name: z.string(),
     // TODO: Think what to do about those.
     // qrCode: z.string(),

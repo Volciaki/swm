@@ -8,14 +8,7 @@ const createCellDTOSchema = cellDTOSchema.omit({
 });
 
 export const createShelfDTOSchema = shelfDTOSchema
-    .omit({
-        id: true,
-        rows: true,
-        columns: true,
-    })
-    .extend({
-        rows: z.array(createCellDTOSchema),
-        columns: z.array(createCellDTOSchema),
-    });
+    .omit({ id: true, cells: true })
+    .extend({ cells: createCellDTOSchema.array().array() });
 
 export type CreateShelfDTO = z.infer<typeof createShelfDTOSchema>;

@@ -4,7 +4,7 @@ import { AssortmentRepository } from "../../domain/repositories/AssortmentReposi
 import { CreateAssortmentDTO } from "../dto/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
 
-export class CreateUser {
+export class CreateAssortment {
     constructor(
         private readonly assortmentRepository: AssortmentRepository,
         private readonly uuidManager: UUIDManager,

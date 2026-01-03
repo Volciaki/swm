@@ -11,11 +11,8 @@ export class DBShelf {
     @Column()
     comment!: string;
 
-    @Column({ name: "row_ids", type: "varchar", array: true })
-    rowIds!: string[];
-
-    @Column({ name: "column_ids", type: "varchar", array: true })
-    columnIds!: string[];
+    @Column({ name: "cell_ids", type: "json" })
+    cellIds!: string[][];
 
     @Column({ name: "temperature_range_max", type: "float" })
     temperatureRangeMax!: number;

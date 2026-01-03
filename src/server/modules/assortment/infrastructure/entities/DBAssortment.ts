@@ -6,6 +6,12 @@ export class DBAssortment {
     id!: string;
 
     @Column()
+    cellId!: string;
+
+    @Column()
+    shelfId!: string;
+
+    @Column()
     name!: string;
 
     @Column()

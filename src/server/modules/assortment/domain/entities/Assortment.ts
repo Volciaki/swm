@@ -3,6 +3,8 @@ import { UUID, TemperatureRange, Weight, Dimensions, TimeFrame } from "@/server/
 export class Assortment {
     private constructor(
         private _id: UUID,
+        private _cellId: UUID,
+        private _shelfId: UUID,
         private _name: string,
         // TODO: Hm.. will it be easier to use a QR code or a line code here?
         // private qrCode: string,
@@ -18,6 +20,8 @@ export class Assortment {
     ) {}
 
     get id() { return this._id };
+    get cellId() { return this._cellId };
+    get shelfId() { return this._shelfId };
     get name() { return this._name };
     get temperatureRange() { return this._temperatureRange };
     get weight() { return this._weight };
@@ -37,6 +41,8 @@ export class Assortment {
 
     static create(
         id: UUID,
+        cellId: UUID,
+        shelfId: UUID,
         name: string,
         temperatureRange: TemperatureRange,
         weight: Weight,
@@ -48,6 +54,8 @@ export class Assortment {
     ) {
         return new Assortment(
             id,
+            cellId,
+            shelfId,
             name,
             temperatureRange,
             weight,
