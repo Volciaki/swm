@@ -29,16 +29,16 @@ import { createRouter, procedure } from "../init";
 import { getServices } from "../services";
 import { getAssortmentDTOSchema } from "@/server/modules/assortment/application/dto/GetAssortmentDTO";
 
-export const identityRouter = createRouter({
+export const storageRouter = createRouter({
     createShelf: procedure.input(createShelfDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const shelfRepository = services.repositories.shelf.db;
         const uuidManager = services.utils.uuidManager.default;
 
         const action = new CreateShelf(shelfRepository, uuidManager);
-        return await action.execute(input);
+        return await action.execute(input, ctx.user ?? undefined);
     }),
-    getShelf: procedure.input(getFullShelfDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
+    getShelf: procedure.input(getFullShelfDTOSchema).query<ShelfDTO>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const assortmentRepository = services.repositories.assortment.db;
         const shelfRepository = services.repositories.shelf.db;
@@ -84,16 +84,18 @@ export const identityRouter = createRouter({
         const uuidManager = services.utils.uuidManager.default;
 
         const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
+        const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
 
         const getAllAssortmentAction = new GetAllAssormtent(assortmentRepository);
         const createAssortmentAction = new CreateAssortment(assortmentRepository, uuidManager);
+        const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
         const fillCellAction = new FillCell(shelfRepository, shelfHelper);
         const getShelfAction = new GetShelf(shelfHelper);
 
-        const action = new PutUpAssortment(getAllAssortmentAction, createAssortmentAction, fillCellAction, getShelfAction);
+        const action = new PutUpAssortment(getAllAssortmentAction, createAssortmentAction, deleteAssortmentAction, fillCellAction, getShelfAction);
         return await action.execute(input, ctx.user ?? undefined);
     }),
-    getAssortment: procedure.input(getAssortmentDTOSchema).mutation<AssortmentDTO>(async ({ input, ctx }) => {
+    getAssortment: procedure.input(getAssortmentDTOSchema).query<AssortmentDTO>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const assortmentRepository = services.repositories.assortment.db;
 
@@ -102,7 +104,7 @@ export const identityRouter = createRouter({
         const action = new GetAssortment(assortmentHelper);
         return await action.execute(input);
     }),
-    updateAssortment: procedure.input(updateShelfAssortmentDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
+    updateAssortment: procedure.input(updateShelfAssortmentDTOSchema).mutation<AssortmentDTO>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const assortmentRepository = services.repositories.assortment.db;
         const shelfRepository = services.repositories.shelf.db;
@@ -117,7 +119,7 @@ export const identityRouter = createRouter({
         const action = new UpdateShelfAssortment(getAssortmentAction, updateAssortmentAction, validateShelfAction);
         return await action.execute(input, ctx.user ?? undefined);
     }),
-    deleteAssortment: procedure.input(takeDownAssortmentDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
+    deleteAssortment: procedure.input(takeDownAssortmentDTOSchema).mutation<void>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const assortmentRepository = services.repositories.assortment.db;
         const shelfRepository = services.repositories.shelf.db;

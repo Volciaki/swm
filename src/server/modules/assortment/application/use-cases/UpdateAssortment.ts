@@ -18,6 +18,8 @@ export class UpdateAssortment {
         const newAssortment = AssortmentMapper.fromAssortmentDTOToAssortment({
             ...dto.newData,
             id: dto.id,
+            cellId: assortment.cellId.value,
+            shelfId: assortment.shelfId.value,
             storedAtTimestamp: assortment.storedAt.getTime(),
         });
 

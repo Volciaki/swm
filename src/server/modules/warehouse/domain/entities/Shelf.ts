@@ -7,6 +7,7 @@ import { AssortmentIsHazardousError } from "../errors/AssortmentIsHazardousError
 import { ShelfTooColdForAssortmentError } from "../errors/ShelfTooColdForAssortmentError";
 import { ShelfTooHotForAssortmentError } from "../errors/ShelfTooHotForAssortmentError";
 import { ShelfOverloadedError } from "../errors/ShelfOverloadedError";
+import { CellNotFoundError } from "../errors/CellNotFoundError";
 import { ShelfUnevenError } from "../../application/errors/ShelfUnevenError";
 import { AssortmentVO } from "../vo/AssortmentVO";
 import { Cell } from "./Cell";
@@ -21,7 +22,7 @@ export class Shelf {
         private _maxWeight: Weight,
         private _maxAssortmentSize: Dimensions,
         private _supportsHazardous: boolean,
-    ) { }
+    ) {}
 
     get id() { return this._id };
     get maxAssortmentSize() { return this._maxAssortmentSize };
@@ -60,7 +61,7 @@ export class Shelf {
             supportsHazardous,
         );
 
-        shelf.validateCells();
+        shelf.validate();
 
         return shelf;
     }
@@ -112,6 +113,33 @@ export class Shelf {
         }
     }
 
+    private validateNewAssortment(assortment: AssortmentVO) {
+        const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
+        if (!emptyCell) throw new ShelfFullError(this.id);
+
+        this.validateAssortment(assortment);
+    }
+
+    public validate() {
+        this.validateCells();
+        this.validateAllAssortment();
+    }
+
+    public setCellsAssortmentById(id: UUID, newAssortment: AssortmentVO | null) {
+        if (newAssortment !== null) this.validateNewAssortment(newAssortment);
+
+        for (const row of this.cells) {
+            const cell = row.find((cell) => cell.id.value === id.value);
+            if (cell) {
+                cell.assortment = newAssortment;
+                this.validate();
+                return;
+            }
+        }
+
+        throw new CellNotFoundError(id);
+    }
+
     public getTotalWeight(): Weight {
         let totalWeightKg = 0;
 
@@ -121,19 +149,5 @@ export class Shelf {
         }
 
         return Weight.fromKilograms(totalWeightKg);
-    }
-
-    public storeAssortment(assortment: AssortmentVO) {
-        const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
-        if (!emptyCell) throw new ShelfFullError(this.id);
-
-        this.validateAssortment(assortment);
-
-        emptyCell.assortment = assortment;
-    }
-
-    public validate() {
-        this.validateCells();
-        this.validateAllAssortment();
     }
 }

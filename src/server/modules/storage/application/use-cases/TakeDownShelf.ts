@@ -13,6 +13,9 @@ export class TakeDownShelf {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
         const assortments = await this.getAllAssortment.execute();
-        await this.deleteShelfAction.execute({ id: dto.shelfId, assortmentContext: assortments });
+        await this.deleteShelfAction.execute(
+            { id: dto.id, assortmentContext: assortments },
+            currentUser
+        );
     }
 }

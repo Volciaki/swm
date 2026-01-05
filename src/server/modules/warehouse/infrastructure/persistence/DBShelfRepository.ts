@@ -55,7 +55,7 @@ export class DBShelfRepository implements ShelfRepository {
                 db: dbCell,
                 valueObject: assortmentContext === undefined
                     ? null
-                    : assortmentContext.find((valueObject) => valueObject.id === dbCell.id) ?? null,
+                    : assortmentContext.find((valueObject) => valueObject.id === dbCell.assortmentId) ?? null,
             }));
             cells.push(rowCells);
         }

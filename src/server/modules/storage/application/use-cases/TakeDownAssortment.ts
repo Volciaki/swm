@@ -20,7 +20,7 @@ export class TakeDownAssortment {
     async execute(dto: TakeDownAssortmentDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const assortment = await this.getAssortmentAction.execute({ id: dto.assortmentId });
+        const assortment = await this.getAssortmentAction.execute({ id: dto.id });
         const assortments = await this.getAllAssortmentAction.execute();
         const shelf = await this.getShelfAction.execute({ id: assortment.shelfId, assortmentContext: assortments });
 

@@ -5,6 +5,8 @@ export const updateAssortmentDTOSchema = z.object({
     id: z.string(),
     newData: assortmentDTOSchema.omit({
         id: true,
+        cellId: true,
+        shelfId: true,
         storedAtTimestamp: true,
     }),
 });

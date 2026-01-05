@@ -5,14 +5,16 @@ import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillC
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
 import { PutUpAssortmentDTO } from "../dto/PutUpAssortmentDTO";
+import { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
 
 export class PutUpAssortment {
     constructor(
         private readonly getAllAssortmentAction: GetAllAssormtent,
         private readonly createAssortmentAction: CreateAssortment,
+        private readonly deleteAssortmentAction: DeleteAssortment,
         private readonly fillCellAction: FillCell,
         private readonly getShelfAction: GetShelf,
-    ) { }
+    ) {}
 
     async execute(dto: PutUpAssortmentDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
@@ -26,19 +28,25 @@ export class PutUpAssortment {
             currentUser,
         );
         const assortments = await this.getAllAssortmentAction.execute();
-        await this.fillCellAction.execute(
-            {
-                shelf: {
-                    id: dto.shelfId,
-                    assortmentContext: assortments,
+        try {
+            await this.fillCellAction.execute(
+                {
+                    shelf: {
+                        id: dto.shelfId,
+                        assortmentContext: assortments,
+                    },
+                    cellId: dto.cellId,
+                    assortment,
                 },
-                cellId: dto.cellId,
-                assortment,
-            },
-            currentUser,
-        );
+                currentUser,
+            );
 
-        const assortmentsNew = await this.getAllAssortmentAction.execute();
-        return await this.getShelfAction.execute({ id: dto.shelfId, assortmentContext: assortmentsNew });
+            const assortmentsNew = await this.getAllAssortmentAction.execute();
+            return await this.getShelfAction.execute({ id: dto.shelfId, assortmentContext: assortmentsNew });
+        } catch (error) {
+            await this.deleteAssortmentAction.execute({ id: assortment.id }, currentUser);
+
+            throw error;
+        }
     }
 }
