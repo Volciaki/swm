@@ -1,2 +1,2 @@
 export * from "./identity";
-export * from "./warehouse";
+export * from "./storage";
