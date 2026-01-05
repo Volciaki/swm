@@ -22,12 +22,13 @@ export class UpdateShelf {
             cells: shelf.cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
         });
 
-        const { name, comment, maxAssortmentSize, maxWeight, temperatureRange } = newShelf
+        const { name, comment, maxAssortmentSize, maxWeight, temperatureRange, supportsHazardous } = newShelf
         shelf.name = name;
         shelf.comment = comment;
         shelf.maxAssortmentSize = maxAssortmentSize;
         shelf.maxWeight = maxWeight;
         shelf.temperatureRange = temperatureRange;
+        shelf.supportsHazardous = supportsHazardous;
         shelf.validate();
         await this.shelfRepository.update(shelf);
 

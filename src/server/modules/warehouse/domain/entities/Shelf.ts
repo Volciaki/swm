@@ -11,6 +11,7 @@ import { CellNotFoundError } from "../errors/CellNotFoundError";
 import { ShelfUnevenError } from "../../application/errors/ShelfUnevenError";
 import { AssortmentVO } from "../vo/AssortmentVO";
 import { Cell } from "./Cell";
+import { logger } from "@/server/logger";
 
 export class Shelf {
     private constructor(
@@ -39,6 +40,7 @@ export class Shelf {
     set maxAssortmentSize(value: Dimensions) { this._maxAssortmentSize = value };
     set maxWeight(value: Weight) { this._maxWeight = value };
     set temperatureRange(value: TemperatureRange) { this._temperatureRange = value };
+    set supportsHazardous(value: boolean) { this._supportsHazardous = value };
 
     static create(
         id: UUID,
@@ -75,6 +77,12 @@ export class Shelf {
         }
     }
 
+    private validateWeight() {
+        const totalWeight = this.getTotalWeight();
+        if (totalWeight.kilograms > this.maxWeight.kilograms)
+            throw new ShelfOverloadedError(this.id, this.maxWeight, totalWeight);
+    }
+
     private validateAssortment(assortment: AssortmentVO) {
         const { widthMillimeters, heightMillimeters, lengthMillimeters } = assortment.size;
         const assortmentWidth = Distance.fromMillimeters(widthMillimeters);
@@ -95,12 +103,6 @@ export class Shelf {
         if (assortmentMaximalTemperature < this.temperatureRange.minimal)
             throw new ShelfTooHotForAssortmentError(assortmentMaximalTemperature, this.temperatureRange.minimal);
 
-        const totalWeight = this.getTotalWeight();
-        const assortmentWeight = Weight.fromKilograms(assortment.weightKg);
-        const newTotalWeightKg = totalWeight.kilograms + assortmentWeight.kilograms;
-        if (newTotalWeightKg > this.maxWeight.kilograms)
-            throw new ShelfOverloadedError(this.id, this.maxWeight, Weight.fromKilograms(newTotalWeightKg));
-
         if (assortment.isHazardous && !this.supportsHazardous) throw new AssortmentIsHazardousError(this.id);
     }
 
@@ -113,16 +115,17 @@ export class Shelf {
         }
     }
 
+    public validate() {
+        this.validateCells();
+        this.validateAllAssortment();
+        this.validateWeight();
+    }
+
     private validateNewAssortment(assortment: AssortmentVO) {
         const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
         if (!emptyCell) throw new ShelfFullError(this.id);
 
         this.validateAssortment(assortment);
-    }
-
-    public validate() {
-        this.validateCells();
-        this.validateAllAssortment();
     }
 
     public setCellsAssortmentById(id: UUID, newAssortment: AssortmentVO | null) {

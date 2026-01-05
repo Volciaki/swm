@@ -1,6 +1,6 @@
 import { ShelfDTO } from "@/server/modules/warehouse/application/dto/shared/ShelfDTO";
 import { GetFullShelf } from "@/server/modules/storage/application/use-cases/GetFullShelf";
-import { GetAllAssormtent } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { PutUpAssortment } from "@/server/modules/storage/application/use-cases/PutUpAssortment";
 import { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
@@ -45,7 +45,7 @@ export const storageRouter = createRouter({
 
         const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
 
-        const getAllAssortmentAction = new GetAllAssormtent(assortmentRepository);
+        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
         const getShelfAction = new GetShelf(shelfHelper);
 
         const action = new GetFullShelf(getAllAssortmentAction, getShelfAction);
@@ -58,7 +58,7 @@ export const storageRouter = createRouter({
         
         const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
         
-        const getAllAssortmentAction = new GetAllAssormtent(assortmentRepository);
+        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
         const updateShelfAction = new UpdateShelf(shelfHelper, shelfRepository);
         
         const action = new UpdateFullShelf(getAllAssortmentAction, updateShelfAction);
@@ -71,7 +71,7 @@ export const storageRouter = createRouter({
 
         const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
 
-        const getAllAssortmentAction = new GetAllAssormtent(assortmentRepository);
+        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
         const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
 
         const action = new TakeDownShelf(getAllAssortmentAction, deleteShelfAction);
@@ -86,7 +86,7 @@ export const storageRouter = createRouter({
         const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
         const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
 
-        const getAllAssortmentAction = new GetAllAssormtent(assortmentRepository);
+        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
         const createAssortmentAction = new CreateAssortment(assortmentRepository, uuidManager);
         const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
         const fillCellAction = new FillCell(shelfRepository, shelfHelper);
@@ -114,9 +114,10 @@ export const storageRouter = createRouter({
 
         const getAssortmentAction = new GetAssortment(assortmentHelper);
         const updateAssortmentAction = new UpdateAssortment(assortmentRepository, assortmentHelper);
+        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
         const validateShelfAction = new ValidateShelf(shelfHelper);
 
-        const action = new UpdateShelfAssortment(getAssortmentAction, updateAssortmentAction, validateShelfAction);
+        const action = new UpdateShelfAssortment(getAssortmentAction, updateAssortmentAction, getAllAssortmentAction, validateShelfAction);
         return await action.execute(input, ctx.user ?? undefined);
     }),
     deleteAssortment: procedure.input(takeDownAssortmentDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
@@ -128,7 +129,7 @@ export const storageRouter = createRouter({
         const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
 
         const getAssortmentAction = new GetAssortment(assortmentHelper);
-        const getAllAssortmentAction = new GetAllAssormtent(assortmentRepository);
+        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
         const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
         const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
         const getShelfAction = new GetShelf(shelfHelper);

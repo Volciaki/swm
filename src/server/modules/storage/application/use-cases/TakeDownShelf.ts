@@ -1,11 +1,11 @@
-import { GetAllAssormtent } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { DeleteShelf } from "@/server/modules/warehouse/application/use-cases/DeleteShelf";
 import { UnauthorizedError, UserDTO } from "@/server/utils";
 import { TakeDownShelfDTO } from "../dto/TakeDownShelfDTO";
 
 export class TakeDownShelf {
     constructor(
-        private readonly getAllAssortment: GetAllAssormtent,
+        private readonly getAllAssortment: GetAllAssortment,
         private readonly deleteShelfAction: DeleteShelf,
     ) {}
 

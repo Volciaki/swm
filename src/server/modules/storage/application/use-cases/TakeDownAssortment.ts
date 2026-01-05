@@ -4,14 +4,14 @@ import { DeleteAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
-import { GetAllAssormtent } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
 import { TakeDownAssortmentDTO } from "../dto/TakeDownAssortmentDTO";
 
 export class TakeDownAssortment {
     constructor(
         private readonly getAssortmentAction: GetAssortment,
-        private readonly getAllAssortmentAction: GetAllAssormtent,
+        private readonly getAllAssortmentAction: GetAllAssortment,
         private readonly deleteAssortmentAction: DeleteAssortment,
         private readonly getShelfAction: GetShelf,
         private readonly emptyCellAction: EmptyCell,

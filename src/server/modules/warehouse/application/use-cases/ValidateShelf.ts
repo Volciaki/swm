@@ -9,7 +9,7 @@ export class ValidateShelf {
     async execute(dto: ValidateShelfDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id);
+        const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id, dto.assortmentContext);
         shelf.validate();
 
         return ShelfMapper.fromShelfToShelfDTO(shelf);

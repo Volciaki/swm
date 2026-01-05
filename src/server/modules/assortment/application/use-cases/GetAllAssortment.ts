@@ -1,7 +1,7 @@
 import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
 
-export class GetAllAssormtent {
+export class GetAllAssortment {
     constructor(private readonly assortmentRepository: AssortmentRepository) {}
 
     async execute() {

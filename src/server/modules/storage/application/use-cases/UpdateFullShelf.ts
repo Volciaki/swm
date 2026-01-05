@@ -1,11 +1,11 @@
 import { UnauthorizedError, UserDTO } from "@/server/utils";
 import { UpdateFullShelfDTO } from "../dto/UpdateFullShelf";
-import { GetAllAssormtent } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { UpdateShelf } from "@/server/modules/warehouse/application/use-cases/UpdateShelf";
 
 export class UpdateFullShelf {
     constructor(
-        private readonly getAllAssortmentAction: GetAllAssormtent,
+        private readonly getAllAssortmentAction: GetAllAssortment,
         private readonly updateShelfAction: UpdateShelf,
     ) {}
 

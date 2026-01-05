@@ -1,10 +1,10 @@
 import { GetFullShelfDTO } from "../dto/GetFullShelfDTO";
-import { GetAllAssormtent } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 
 export class GetFullShelf {
     constructor(
-        private readonly getAllAssortment: GetAllAssormtent,
+        private readonly getAllAssortment: GetAllAssortment,
         private readonly getShelf: GetShelf,
     ) {}
 
