@@ -12,7 +12,7 @@ export class DeleteShelf {
     async execute(dto: DeleteShelfDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id);
+        const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id, dto.assortmentContext);
         await this.shelfRepository.delete(shelf);
     }
 }

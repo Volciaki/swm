@@ -14,7 +14,7 @@ export class UpdateShelf {
     async execute(dto: UpdateShelfDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id);
+        const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.shelf.id, dto.shelf.assortmentContext);
 
         const newShelf = ShelfMapper.fromShelfDTOToShelf({
             ...dto.newData,
@@ -28,6 +28,7 @@ export class UpdateShelf {
         shelf.maxAssortmentSize = maxAssortmentSize;
         shelf.maxWeight = maxWeight;
         shelf.temperatureRange = temperatureRange;
+        shelf.validate();
         await this.shelfRepository.update(shelf);
 
         return ShelfMapper.fromShelfToShelfDTO(shelf);

@@ -21,7 +21,7 @@ export class Shelf {
         private _maxWeight: Weight,
         private _maxAssortmentSize: Dimensions,
         private _supportsHazardous: boolean,
-    ) {}
+    ) { }
 
     get id() { return this._id };
     get maxAssortmentSize() { return this._maxAssortmentSize };
@@ -74,26 +74,7 @@ export class Shelf {
         }
     }
 
-    public flatCells() {
-        return this.cells.flat();
-    }
-
-    public getTotalWeigth(): Weight {
-        let totalWeightKg = 0;
-
-        for (const cell of this.flatCells()) {
-            if (!cell.assortment) continue;
-            totalWeightKg += cell.assortment.weightKg;
-        }
-
-        return Weight.fromKilograms(totalWeightKg);
-    }
-
-    // TODO: use this in the application layer!!!
-    public storeAssortment(assortment: AssortmentVO) {
-        const emptyCell = this.flatCells().find((cell) => cell.assortment === null);
-        if (!emptyCell) throw new ShelfFullError(this.id);
-
+    private validateAssortment(assortment: AssortmentVO) {
         const { widthMillimeters, heightMillimeters, lengthMillimeters } = assortment.size;
         const assortmentWidth = Distance.fromMillimeters(widthMillimeters);
         const assortmentHeight = Distance.fromMillimeters(heightMillimeters);
@@ -120,7 +101,39 @@ export class Shelf {
             throw new ShelfOverloadedError(this.id, this.maxWeight, Weight.fromKilograms(newTotalWeightKg));
 
         if (assortment.isHazardous && !this.supportsHazardous) throw new AssortmentIsHazardousError(this.id);
+    }
+
+    public validateAllAssortment() {
+        const assortments = this.cells.flat().map((cell) => cell.assortment);
+        for (const assortment of assortments) {
+            if (assortment === null) continue;
+
+            this.validateAssortment(assortment);
+        }
+    }
+
+    public getTotalWeigth(): Weight {
+        let totalWeightKg = 0;
+
+        for (const cell of this.cells.flat()) {
+            if (!cell.assortment) continue;
+            totalWeightKg += cell.assortment.weightKg;
+        }
+
+        return Weight.fromKilograms(totalWeightKg);
+    }
+
+    public storeAssortment(assortment: AssortmentVO) {
+        const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
+        if (!emptyCell) throw new ShelfFullError(this.id);
+
+        this.validateAssortment(assortment);
 
         emptyCell.assortment = assortment;
+    }
+
+    public validate() {
+        this.validateCells();
+        this.validateAllAssortment();
     }
 }

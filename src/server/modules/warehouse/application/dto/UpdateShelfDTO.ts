@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { shelfDTOSchema } from "./shared/ShelfDTO";
+import { fullShelfIdentificationDTOSchema } from "./shared/FullShelfIdentificationDTO";
 
 export const updateShelfDTOSchema = z.object({
-    id: z.string(),
+    shelf: fullShelfIdentificationDTOSchema,
     newData: shelfDTOSchema.omit({ id: true, cells: true }),
 });
 

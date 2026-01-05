@@ -14,7 +14,7 @@ export class EmptyCell {
     async execute(dto: EmptyCellDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.shelfId);
+        const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.shelf.id, dto.shelf.assortmentContext);
         
         const cellId = UUID.fromString(dto.cellId);
         const cell = shelf.cells.flat().find((cell) => cell.id.value === cellId.value);

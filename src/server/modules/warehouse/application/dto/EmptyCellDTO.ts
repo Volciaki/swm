@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { fullShelfIdentificationDTOSchema } from "./shared/FullShelfIdentificationDTO";
 
 export const emptyCellDTOSchema = z.object({
-    shelfId: z.string(),
+    shelf: fullShelfIdentificationDTOSchema,
     cellId: z.string(),
 });
 
