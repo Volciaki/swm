@@ -1,12 +1,12 @@
 import { UnauthorizedError } from "@/server/utils/unauthorized/error";
 import { UserDTO, UUID } from "@/server/utils";
 import { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
-import { TakeDownAssortmentDTO } from "../dto/TakeDownAssortmentDTO";
 import { GetAssormtent } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
-import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
 import { GetAllAssormtent } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
+import { TakeDownAssortmentDTO } from "../dto/TakeDownAssortmentDTO";
 
 export class TakeDownAssortment {
     constructor(

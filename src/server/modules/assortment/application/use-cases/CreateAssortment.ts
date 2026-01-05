@@ -14,8 +14,9 @@ export class CreateAssortment {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
         const assortment = AssortmentMapper.fromAssortmentDTOToAssortment({
-            id: this.uuidManager.generate().value,
             ...dto,
+            id: this.uuidManager.generate().value,
+            storedAtTimestamp: (new Date()).getTime(),
         });
         await this.assortmentRepository.create(assortment);
         return AssortmentMapper.fromAssortmentToAssortmentDTO(assortment);

@@ -94,7 +94,7 @@ export class Shelf {
         if (assortmentMaximalTemperature < this.temperatureRange.minimal)
             throw new ShelfTooHotForAssortmentError(assortmentMaximalTemperature, this.temperatureRange.minimal);
 
-        const totalWeight = this.getTotalWeigth();
+        const totalWeight = this.getTotalWeight();
         const assortmentWeight = Weight.fromKilograms(assortment.weightKg);
         const newTotalWeightKg = totalWeight.kilograms + assortmentWeight.kilograms;
         if (newTotalWeightKg > this.maxWeight.kilograms)
@@ -103,7 +103,7 @@ export class Shelf {
         if (assortment.isHazardous && !this.supportsHazardous) throw new AssortmentIsHazardousError(this.id);
     }
 
-    public validateAllAssortment() {
+    private validateAllAssortment() {
         const assortments = this.cells.flat().map((cell) => cell.assortment);
         for (const assortment of assortments) {
             if (assortment === null) continue;
@@ -112,7 +112,7 @@ export class Shelf {
         }
     }
 
-    public getTotalWeigth(): Weight {
+    public getTotalWeight(): Weight {
         let totalWeightKg = 0;
 
         for (const cell of this.cells.flat()) {
