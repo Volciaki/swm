@@ -1,32 +1,10 @@
-import { UnauthorizedError, UserDTO, UUID } from "@/server/utils";
+import { UnauthorizedError, UserDTO } from "@/server/utils";
 import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
 import { UpdateShelfDTO } from "../dto/UpdateShelfDTO";
-import { UpdateCellDTO } from "../dto/UpdateShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
-import { Cell } from "../../domain/entities/Cell";
 import { CellMapper } from "../../infrastructure/mappers/CellMapper";
 import { ShelfHelper } from "../helpers/ShelfHelper";
 
-const getNewCellsAfterUpdate = (cells: Cell[][], updatedCells: UpdateCellDTO[][]): Cell[][] => {
-    return cells.map((row) => row.map((cell) => {
-        const cellInUpdateDTO = updatedCells.flat().find(
-            (updatedCell) => UUID.fromString(updatedCell.id).value === cell.id.value
-        );
-
-        if (!cellInUpdateDTO) return cell;
-
-        const newCell = Cell.create(
-            cell.id,
-            cell.shelfId,
-            cellInUpdateDTO.assortment,
-        );
-        return newCell;
-    }));
-};
-
-// TODO: split this up into multiple use cases?
-// I don't know how we'll handle that yet, but I feel like assigning assortment to cells and
-// modifying shelf's properties should be split into seperate use cases. This feels very messy.
 export class UpdateShelf {
     constructor(
         private readonly shelfHelper: ShelfHelper,
@@ -38,21 +16,15 @@ export class UpdateShelf {
 
         const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id);
 
-        const newShelfCells = getNewCellsAfterUpdate(shelf.cells, dto.newData.cells);
         const newShelf = ShelfMapper.fromShelfDTOToShelf({
             ...dto.newData,
             id: shelf.id.value,
-            cells: newShelfCells.map(
-                (row) => row.map(
-                    (cell) => CellMapper.fromCellToCellDTO(cell)
-                )
-            ),
+            cells: shelf.cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
         });
 
-        const { name, comment, cells, maxAssortmentSize, maxWeight, temperatureRange } = newShelf
+        const { name, comment, maxAssortmentSize, maxWeight, temperatureRange } = newShelf
         shelf.name = name;
         shelf.comment = comment;
-        shelf.cells = cells;
         shelf.maxAssortmentSize = maxAssortmentSize;
         shelf.maxWeight = maxWeight;
         shelf.temperatureRange = temperatureRange;

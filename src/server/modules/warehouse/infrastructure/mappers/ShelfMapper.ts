@@ -4,6 +4,12 @@ import { Shelf } from "../../domain/entities/Shelf";
 import { DBShelf } from "../entities/DBShelf";
 import { DBCell } from "../entities/DBCell";
 import { CellMapper } from "./CellMapper";
+import { AssortmentVO } from "../../domain/vo/AssortmentVO";
+
+export type CellWithContext = {
+    db: DBCell;
+    valueObject: AssortmentVO | null;
+};
 
 export class ShelfMapper {
     static fromShelfDTOToShelf(shelfDTO: ShelfDTO): Shelf {
@@ -69,7 +75,7 @@ export class ShelfMapper {
         return dbShelf;
     }
 
-    static fromDBShelfToShelf(dbShelf: DBShelf, dbCells: DBCell[][]): Shelf {
+    static fromDBShelfToShelf(dbShelf: DBShelf, cells: CellWithContext[][]): Shelf {
         const maxAssortmentSize = Dimensions.create(
             Distance.fromMillimeters(dbShelf.maxAssortmentSizeWidthMillimeters),
             Distance.fromMillimeters(dbShelf.maxAssortmentSizeHeightMillimeters),
@@ -80,7 +86,7 @@ export class ShelfMapper {
             dbShelf.name,
             dbShelf.comment,
             // TODO: get the assortment here.
-            dbCells.map((row) => row.map((cell) => CellMapper.fromDBCellToCell(cell, null))),
+            cells.map((row) => row.map((cell) => CellMapper.fromDBCellToCell(cell.db, cell.valueObject))),
             {
                 maximal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMax),
                 minimal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMin),
