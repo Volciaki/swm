@@ -11,4 +11,12 @@ export class DimensionsMapper {
             Distance.fromMillimeters(lengthMillimeters),
         );
     }
+
+    static toDTO(dimensions: Dimensions): DimensionsDTO {
+        return {
+            heightMillimeters: dimensions.height.millimeters,
+            widthMillimeters: dimensions.width.millimeters,
+            lengthMillimeters: dimensions.length.millimeters,
+        };
+    }
 }

@@ -1,4 +1,4 @@
-import { CelsiusDegrees, Dimensions, Distance, TimeFrame, UUID, Weight } from "@/server/utils";
+import { DimensionsMapper, TemperatureRangeMapper, TimeFrame, UUID, Weight } from "@/server/utils";
 import { Assortment } from "../../domain/entities/Assortment";
 import { DBAssortment } from "../entities/DBAssortment";
 import { AssortmentDTO } from "../../application/dto/shared/AssortmentDTO";
@@ -32,16 +32,16 @@ export class AssortmentMapper {
             UUID.fromString(dbAssortment.cellId),
             UUID.fromString(dbAssortment.shelfId),
             dbAssortment.name,
-            {
-                minimal: CelsiusDegrees.fromNumber(dbAssortment.temperatureRangeMin),
-                maximal: CelsiusDegrees.fromNumber(dbAssortment.temperatureRangeMax),
-            },
+            TemperatureRangeMapper.fromDTO({
+                minimalCelsius: dbAssortment.temperatureRangeMin,
+                maximalCelsius: dbAssortment.temperatureRangeMax,
+            }),
             Weight.fromKilograms(dbAssortment.weightKg),
-            Dimensions.create(
-                Distance.fromMillimeters(dbAssortment.sizeWidthMillimeters),
-                Distance.fromMillimeters(dbAssortment.sizeHeightMillimeters),
-                Distance.fromMillimeters(dbAssortment.sizeLengthMillimeters),
-            ),
+            DimensionsMapper.fromDTO({
+                widthMillimeters: dbAssortment.sizeWidthMillimeters,
+                heightMillimeters: dbAssortment.sizeHeightMillimeters,
+                lengthMillimeters: dbAssortment.sizeLengthMillimeters,
+            }),
             dbAssortment.comment,
             dbAssortment.storedAt,
             TimeFrame.fromSeconds(dbAssortment.expiresAfterSeconds),
@@ -55,16 +55,9 @@ export class AssortmentMapper {
             cellId: assortment.cellId.value,
             shelfId: assortment.shelfId.value,
             name: assortment.name,
-            temperatureRange: {
-                maximalCelsius: assortment.temperatureRange.maximal.value,
-                minimalCelsius: assortment.temperatureRange.minimal.value,
-            },
+            temperatureRange: TemperatureRangeMapper.toDTO(assortment.temperatureRange),
             weightKg: assortment.weight.kilograms,
-            size: {
-                lengthMillimeters: assortment.size.length.millimeters,
-                heightMillimeters: assortment.size.height.millimeters,
-                widthMillimeters: assortment.size.width.millimeters,
-            },
+            size: DimensionsMapper.toDTO(assortment.size),
             comment: assortment.comment,
             storedAtTimestamp: assortment.storedAt.getTime(),
             expiresAfterSeconds: assortment.expiresAfter.seconds,
@@ -78,16 +71,9 @@ export class AssortmentMapper {
             UUID.fromString(assortmentDTO.cellId),
             UUID.fromString(assortmentDTO.shelfId),
             assortmentDTO.name,
-            {
-                minimal: CelsiusDegrees.fromNumber(assortmentDTO.temperatureRange.minimalCelsius),
-                maximal: CelsiusDegrees.fromNumber(assortmentDTO.temperatureRange.maximalCelsius),
-            },
+            TemperatureRangeMapper.fromDTO(assortmentDTO.temperatureRange),
             Weight.fromKilograms(assortmentDTO.weightKg),
-            Dimensions.create(
-                Distance.fromMillimeters(assortmentDTO.size.widthMillimeters),
-                Distance.fromMillimeters(assortmentDTO.size.heightMillimeters),
-                Distance.fromMillimeters(assortmentDTO.size.lengthMillimeters),
-            ),
+            DimensionsMapper.fromDTO(assortmentDTO.size),
             assortmentDTO.comment,
             new Date(assortmentDTO.storedAtTimestamp),
             TimeFrame.fromSeconds(assortmentDTO.expiresAfterSeconds),

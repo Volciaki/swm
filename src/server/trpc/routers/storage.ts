@@ -119,7 +119,7 @@ export const storageRouter = createRouter({
         const action = new UpdateShelfAssortment(getAssortmentAction, updateAssortmentAction, validateShelfAction);
         return await action.execute(input, ctx.user ?? undefined);
     }),
-    deleteAssortment: procedure.input(takeDownAssortmentDTOSchema).mutation<void>(async ({ input, ctx }) => {
+    deleteAssortment: procedure.input(takeDownAssortmentDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const assortmentRepository = services.repositories.assortment.db;
         const shelfRepository = services.repositories.shelf.db;

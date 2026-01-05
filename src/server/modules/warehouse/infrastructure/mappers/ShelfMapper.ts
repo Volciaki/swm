@@ -1,4 +1,4 @@
-import { CelsiusDegrees, Dimensions, DimensionsMapper, Distance, TemperatureRangeMapper, UUID, Weight } from "@/server/utils";
+import { DimensionsMapper, TemperatureRangeMapper, UUID, Weight } from "@/server/utils";
 import { ShelfDTO } from "../../application/dto/shared/ShelfDTO";
 import { Shelf } from "../../domain/entities/Shelf";
 import { DBShelf } from "../entities/DBShelf";
@@ -30,15 +30,8 @@ export class ShelfMapper {
         const { id, temperatureRange, maxAssortmentSize, maxWeight, cells, comment, name, supportsHazardous } = shelf;
         return {
             id: id.value,
-            temperatureRange: {
-                maximalCelsius: temperatureRange.maximal.value,
-                minimalCelsius: temperatureRange.minimal.value,
-            },
-            maxAssortmentSize: {
-                lengthMillimeters: maxAssortmentSize.length.millimeters,
-                heightMillimeters: maxAssortmentSize.height.millimeters,
-                widthMillimeters: maxAssortmentSize.width.millimeters,
-            },
+            temperatureRange: TemperatureRangeMapper.toDTO(temperatureRange),
+            maxAssortmentSize: DimensionsMapper.toDTO(maxAssortmentSize),
             maxWeightKg: maxWeight.kilograms,
             cells: cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
             comment,
@@ -76,23 +69,21 @@ export class ShelfMapper {
     }
 
     static fromDBShelfToShelf(dbShelf: DBShelf, cells: CellWithContext[][]): Shelf {
-        const maxAssortmentSize = Dimensions.create(
-            Distance.fromMillimeters(dbShelf.maxAssortmentSizeWidthMillimeters),
-            Distance.fromMillimeters(dbShelf.maxAssortmentSizeHeightMillimeters),
-            Distance.fromMillimeters(dbShelf.maxAssortmentSizeLengthMillimeters),
-        );
         return Shelf.create(
             UUID.fromString(dbShelf.id),
             dbShelf.name,
             dbShelf.comment,
-            // TODO: get the assortment here.
             cells.map((row) => row.map((cell) => CellMapper.fromDBCellToCell(cell.db, cell.valueObject))),
-            {
-                maximal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMax),
-                minimal: CelsiusDegrees.fromNumber(dbShelf.temperatureRangeMin),
-            },
+            TemperatureRangeMapper.fromDTO({
+                maximalCelsius: dbShelf.temperatureRangeMax,
+                minimalCelsius: dbShelf.temperatureRangeMin,
+            }),
             Weight.fromKilograms(dbShelf.maxWeightKg),
-            maxAssortmentSize,
+            DimensionsMapper.fromDTO({
+                lengthMillimeters: dbShelf.maxAssortmentSizeLengthMillimeters,
+                widthMillimeters: dbShelf.maxAssortmentSizeWidthMillimeters,
+                heightMillimeters: dbShelf.maxAssortmentSizeHeightMillimeters,
+            }),
             dbShelf.supportsHazardous,
         );
     }
