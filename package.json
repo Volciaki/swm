@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrations:generate": "./scripts/migrations/generate.sh",
+    "migrations:create": "./scripts/migrations/create.sh"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",
@@ -40,6 +42,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "sass": "^1.97.1",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5"
   }
 }

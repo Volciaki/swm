@@ -37,3 +37,7 @@ Running the first command will cause the following ports to become responsive:
 I've also left a [Hoppscotch](https://github.com/hoppscotch/hoppscotch) collection in `hoppscotch.json`. You may find it useful if you wish to play around with the API.
 
 Have fun! :)
+
+#### Database Migrations
+
+To write a migration you should use either `migrations:generate` or `migrations:create` script. `migrations:generate` attempts to automatically generate SQL necessary to turn your current, available database schema into a structure matching defined entities, and `migrations:create` only writes the migration's boilerplate to an appropiate location.

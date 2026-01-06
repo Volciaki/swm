@@ -1,8 +1,7 @@
-import { UUID } from "@/server/utils";
+import { UUID, UserDTO } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { User } from "../../domain/entities/User";
 import { DBUser } from "../entities/DBUser";
-import { UserDTO } from "../../application/dto/shared/UserDTO";
 
 export class UserMapper {
     static fromDBUserToUser(dbUser: DBUser): User {

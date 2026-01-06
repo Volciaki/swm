@@ -8,15 +8,15 @@ export class DBUser {
     @Column()
     email!: string;
 
-    @Column()
+    @Column({ name: "password_hash" })
     passwordHash!: string;
 
     @Column()
     name!: string;
 
-    @Column()
+    @Column({ name: "is_admin" })
     isAdmin!: boolean;
 
-    @Column()
+    @Column({ name: "two_factor_authentication_enabled" })
     twoFactorAuthenticationEnabled!: boolean;
 }
