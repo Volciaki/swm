@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Providers } from "@/ui/providers";
-// TODO: Choose a font later.
-// import { Geist, Geist_Mono } from "next/font/google";
+import { Sora } from "next/font/google";
 
 export const metadata: Metadata = {
-    title: "Magazyn (?)",
-    description: "???",
+    title: "Simple Warehouse Management",
+    description: "Simple Warehouse Management (SWM) is a service specializing in managing your storage easily.. simple.",
 };
+
+const sora = Sora({
+    variable: "--font-sora",
+    subsets: ["latin"],
+})
 
 const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
     <Providers>
         <html lang="en">
-            <body>
+            <body className={`${sora.variable}`}>
                 {children}
             </body>
         </html>
