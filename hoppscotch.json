@@ -1,0 +1,166 @@
+{
+  "v": 7,
+  "name": "primus-inter-pares-2026",
+  "folders": [
+    {
+      "v": 7,
+      "name": "identity",
+      "folders": [],
+      "requests": [
+        {
+          "v": "12",
+          "name": "listUsers",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/identity.listUsers",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "login",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/identity.login",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"user@example.com\",\n  \"passwordRaw\": \"secret\"\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "twoFactorAuthentication",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/identity.twoFactorAuthentication",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"authenticationId\": \"...\",\n  \"value\": \"...\"\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "deleteUser",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/identity.deleteUser",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"id\": \"...\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "createUser",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/identity.createUser",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"...\",\n  \"email\": \"...\",\n  \"passwordRaw\": \"...\",\n  \"isAdmin\": false,\n  \"twoFactorAuthenticationEnabled\": false\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/identity.requestPasswordReset",
+          "name": "requestPasswordReset",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"userId\": \"...\"\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/identity.passwordReset",
+          "name": "passwordReset",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"authenticationId\": \"...\",\n  \"authenticationValue\": \"...\",\n  \"newPasswordRaw\": \"...\"\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_mjqaybls_26378ec2-d093-4a17-a0ad-b3db6406c9ad"
+    }
+  ],
+  "requests": [],
+  "auth": {
+    "authType": "none",
+    "authActive": true
+  },
+  "headers": [],
+  "_ref_id": "coll_mjqak81p_09a9a4e1-898a-47ac-a756-88672300ceaa"
+}
