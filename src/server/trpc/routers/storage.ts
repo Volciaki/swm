@@ -20,6 +20,9 @@ import { UpdateShelf } from "@/server/modules/warehouse/application/use-cases/Up
 import { AssortmentDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDTO";
 import { ImportShelves } from "@/server/modules/warehouse/application/use-cases/ImportShelves";
 import { ImportAssortment } from "@/server/modules/assortment/application/use-cases/ImportAssortment";
+import { ImportAndReplaceAssortment } from "@/server/modules/storage/application/use-cases/ImportAndReplaceAssortment";
+import { ImportAndReplaceShelves } from "@/server/modules/storage/application/use-cases/ImportAndReplaceShelves";
+import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
 import { createShelfDTOSchema } from "@/server/modules/warehouse/application/dto/shared/CreateShelfDTO";
 import { getFullShelfDTOSchema } from "@/server/modules/storage/application/dto/GetFullShelfDTO";
 import { putUpAssortmentDTOSchema } from "@/server/modules/storage/application/dto/PutUpAssortmentDTO";
@@ -28,8 +31,8 @@ import { takeDownShelfDTOSchema } from "@/server/modules/storage/application/dto
 import { updateShelfAssortmentDTOSchema } from "@/server/modules/storage/application/dto/UpdateShelfAssortmentDTO";
 import { updateFullShelfDTOSchema } from "@/server/modules/storage/application/dto/UpdateFullShelf";
 import { getAssortmentDTOSchema } from "@/server/modules/assortment/application/dto/GetAssortmentDTO";
-import { importShelvesDTOSchema } from "@/server/modules/warehouse/application/dto/ImportShelvesDTO";
-import { importAssortmentDTOSchema } from "@/server/modules/assortment/application/dto/ImportAssortmentDTO";
+import { importAndReplaceShelvesDTOSchema } from "@/server/modules/storage/application/dto/ImportAndReplaceShelvesDTO";
+import { importAndReplaceAssortmentDTOSchema } from "@/server/modules/storage/application/dto/ImportAndReplaceAssortmentDTO";
 import { createRouter, procedure } from "../init";
 import { getServices } from "../services";
 
@@ -44,14 +47,20 @@ export const storageRouter = createRouter({
         const action = new CreateShelf(shelfHelper);
         return await action.execute(input, ctx.user ?? undefined);
     }),
-    importShelves: procedure.input(importShelvesDTOSchema).mutation<ShelfDTO[]>(async ({ input, ctx }) => {
+    importShelves: procedure.input(importAndReplaceShelvesDTOSchema).mutation<ShelfDTO[]>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const shelfRepository = services.repositories.shelf.db;
+        const assortmentRepository = services.repositories.assortment.db;
         const uuidManager = services.utils.uuidManager.default;
 
         const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
 
-        const action = new ImportShelves(shelfHelper);
+        const getAllShelvesAction = new GetAllShelves(shelfRepository);
+        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+        const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
+        const importShelvesAction = new ImportShelves(shelfHelper);
+
+        const action = new ImportAndReplaceShelves(getAllShelvesAction, getAllAssortmentAction, deleteShelfAction, importShelvesAction);
         return await action.execute(input, ctx.user ?? undefined);
     }),
     getShelf: procedure.input(getFullShelfDTOSchema).query<ShelfDTO>(async ({ input, ctx }) => {
@@ -114,14 +123,18 @@ export const storageRouter = createRouter({
         const action = new PutUpAssortment(getAllAssortmentAction, createAssortmentAction, deleteAssortmentAction, fillCellAction, getShelfAction);
         return await action.execute(input, ctx.user ?? undefined);
     }),
-    importAssortment: procedure.input(importAssortmentDTOSchema).mutation<AssortmentDTO[]>(async ({ input, ctx }) => {
+    importAssortment: procedure.input(importAndReplaceAssortmentDTOSchema).mutation<AssortmentDTO[]>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const assortmentRepository = services.repositories.assortment.db;
         const uuidManager = services.utils.uuidManager.default;
 
         const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
 
-        const action = new ImportAssortment(assortmentHelper);
+        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+        const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper)
+        const importAssortmentAction = new ImportAssortment(assortmentHelper);
+
+        const action = new ImportAndReplaceAssortment(getAllAssortmentAction, deleteAssortmentAction, importAssortmentAction);
         return await action.execute(input, ctx.user ?? undefined);
     }),
     getAssortment: procedure.input(getAssortmentDTOSchema).query<AssortmentDTO>(async ({ input, ctx }) => {
