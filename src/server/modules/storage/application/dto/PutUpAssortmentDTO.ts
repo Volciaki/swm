@@ -1,12 +1,5 @@
 import { z } from "zod";
-import { assortmentDTOSchema } from "@/server/modules/storage/application/dto/shared/AssortmentDTO";
-
-const createAssortmentDTOSchema = assortmentDTOSchema.omit({
-    id: true,
-    cellId: true,
-    shelfId: true,
-    storedAtTimestamp: true,
-});
+import { createAssortmentDTOSchema } from "./shared/CreateAssortmentDTO";
 
 export const putUpAssortmentDTOSchema = z.object({
     shelfId: z.string(),
