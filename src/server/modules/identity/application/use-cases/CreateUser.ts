@@ -1,5 +1,5 @@
 import { UnauthorizedError } from "@/server/utils/unauthorized/error";
-import { UUIDManager } from "@/server/utils";
+import { UserDTO, UUIDManager } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { User } from "../../domain/entities/User";
 import { UserRepository } from "../../domain/repositories/UserRepository";
@@ -14,7 +14,7 @@ export class CreateUser {
         private readonly uuidManager: UUIDManager,
     ) {}
 
-    async execute(dto: CreateUserDTO, currentUser?: User) {
+    async execute(dto: CreateUserDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
         const user = User.create(

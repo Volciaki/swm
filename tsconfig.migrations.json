@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist/migrations"
+  },
+  "include": [
+    "./src/server/database/init.ts"
+  ],
+  "exclude": ["node_modules"],
+  "tsc-alias": {
+      "resolveFullPaths": true,
+      "verbose": true
+  }
+}
