@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { assortmentDTOSchema } from "./shared/AssortmentDTO";
+import { assortmentDTOSchema } from "./AssortmentDTO";
 
 export const createAssortmentDTOSchema = assortmentDTOSchema.omit({ id: true, storedAtTimestamp: true });
 

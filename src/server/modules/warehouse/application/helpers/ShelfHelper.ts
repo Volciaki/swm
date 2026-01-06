@@ -31,7 +31,7 @@ const generateCellDTOsForShape = (
 
 export interface ShelfHelper {
     getByIdStringOrThrow(id: string, assortmentContext?: AssortmentVO[]): Promise<Shelf>;
-    createShelfByDTO(dto: CreateShelfDTO): Promise<Shelf>;
+    createByDTO(dto: CreateShelfDTO): Promise<Shelf>;
 };
 
 export class DefaultShelfHelper implements ShelfHelper {
@@ -49,7 +49,7 @@ export class DefaultShelfHelper implements ShelfHelper {
         return shelf;
     }
 
-    async createShelfByDTO(dto: CreateShelfDTO) {
+    async createByDTO(dto: CreateShelfDTO) {
         const shelfId = this.uuidManager.generate();
         const shelfCellDTOs = generateCellDTOsForShape(dto.cellsShape, this.uuidManager.generate, shelfId);
         const shelf = ShelfMapper.fromShelfDTOToShelf({

@@ -9,7 +9,7 @@ export class CreateShelf {
     async execute(dto: CreateShelfDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const shelf = await this.shelfHelper.createShelfByDTO(dto);
+        const shelf = await this.shelfHelper.createByDTO(dto);
         return ShelfMapper.fromShelfToShelfDTO(shelf);
     }
 }

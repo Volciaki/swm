@@ -10,7 +10,7 @@ export class ImportShelves {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
         const shelves = await Promise.all(
-            dto.shelves.map(async (shelf) => await this.shelfHelper.createShelfByDTO(shelf))
+            dto.shelves.map(async (shelf) => await this.shelfHelper.createByDTO(shelf))
         );
         return shelves.map((shelf) => ShelfMapper.fromShelfToShelfDTO(shelf));
     }
