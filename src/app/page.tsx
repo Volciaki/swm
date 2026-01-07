@@ -12,17 +12,19 @@ const Home: FC = () => {
         if (!data) {
             alert("Database not connected");
         }
-    }, [data]);*/ // TODO Backend: Expose a return function that will respond whether the database is achievable or not.
+    }, [data]);*/ // TODO Backend: Expose a return function that will respond whether the database is achievable or not.\
+
+    // Make the login button a new atom instead. Same for It's styles.
 
     return (
         <>
             <Navbar />
+            <img
+                src={"https://logit.com.pl/wp-content/uploads/2021/07/shutterstock_396462703-1024x683.jpg"}
+                alt={"Logistyka"}
+                className={styles["backgroundImage"]}
+            />
             <div className={styles["container"]}>
-                <img
-                    src={"https://files.khenzii.dev/exploding-ryo.gif"}
-                    alt={"Ryo"}
-                    style={{ maxHeight: "300px" }}
-                />
                 <p className={styles["text"]}>{":3"}</p>
                 <p className={styles["text"]}>{`${data?.greeting}`}</p>
             </div>
