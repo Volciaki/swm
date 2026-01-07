@@ -3,7 +3,6 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
 import { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
-import { ImportAssortment } from "@/server/modules/assortment/application/use-cases/ImportAssortment";
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
@@ -25,7 +24,6 @@ export const deleteAssortment = procedure.input(takeDownAssortmentDTOSchema).mut
     const getAssortmentAction = new GetAssortment(assortmentHelper);
     const createAssortmentAction = new CreateAssortment(assortmentHelper);
     const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
-    const importAssortmentAction = new ImportAssortment(assortmentHelper);
     const getShelfAction = new GetShelf(shelfHelper);
     const fillCellAction = new FillCell(shelfRepository, shelfHelper);
     const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
@@ -35,7 +33,6 @@ export const deleteAssortment = procedure.input(takeDownAssortmentDTOSchema).mut
         getAssortmentAction,
         createAssortmentAction,
         deleteAssortmentAction,
-        importAssortmentAction,
         getShelfAction,
         fillCellAction,
         emptyCellAction,

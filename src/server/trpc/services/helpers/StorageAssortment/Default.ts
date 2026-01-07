@@ -3,7 +3,6 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
 import { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
-import { ImportAssortment } from "@/server/modules/assortment/application/use-cases/ImportAssortment";
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
@@ -16,7 +15,6 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
             getAssortment: GetAssortment,
             createAssortment: CreateAssortment,
             deleteAssortment: DeleteAssortment,
-            importAssortment: ImportAssortment,
             getShelf: GetShelf,
             fillCell: FillCell,
             emptyCell: EmptyCell,
@@ -25,7 +23,6 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
             getAssortment,
             createAssortment,
             deleteAssortment,
-            importAssortment,
             getShelf,
             fillCell,
             emptyCell,

@@ -5,7 +5,6 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
-import { ImportAssortment } from "@/server/modules/assortment/application/use-cases/ImportAssortment";
 import { UserDTO, UUID } from "@/server/utils";
 import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
 import { ShelfDTO } from "../dto/shared/ShelfDTO";
@@ -28,7 +27,6 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
         private readonly getAssortment: GetAssortment,
         private readonly createAssortment: CreateAssortment,
         private readonly deleteAssortment: DeleteAssortment,
-        private readonly importAssortment: ImportAssortment,
         private readonly getShelf: GetShelf,
         private readonly fillCell: FillCell,
         private readonly emptyCell: EmptyCell,
@@ -106,10 +104,8 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 
         try {
             await this.takeDownAssortments(currentAssortments, currentUser);
-            const createdAssortments = await this.importAssortment.execute(dto, currentUser);
-            await this.putUpAssortments(createdAssortments, currentUser);
-
-            return createdAssortments;
+            await this.putUpAssortments(dto.assortment, currentUser);
+            return await this.getAllAssortment.execute();
         } catch (error) {
             // Attempt to rollback the changes if an error occurred.
             const newAssortments = await this.getAllAssortment.execute();

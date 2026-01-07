@@ -27,6 +27,7 @@ export class ImportAndReplaceShelves {
         const currentAssortment = await this.getAllAssortment.execute();
 
         try {
+            await this.deleteAllAssortment(currentUser);
             await this.deleteShelves(currentShelves, currentAssortment, currentUser);
             const createdShelves = await this.importShelves.execute(dto, currentUser);
             return createdShelves;
@@ -64,5 +65,12 @@ export class ImportAndReplaceShelves {
                 { enforceMinimalAmountOfShelves: false },
             );
         }
+    }
+
+    private async deleteAllAssortment(currentUser: UserDTO) {
+        await this.storageAssortmentHelper.importAndReplaceAssortment(
+            { assortment: [] },
+            currentUser,
+        );
     }
 }
