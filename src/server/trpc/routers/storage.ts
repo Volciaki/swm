@@ -53,14 +53,41 @@ export const storageRouter = createRouter({
         const assortmentRepository = services.repositories.assortment.db;
         const uuidManager = services.utils.uuidManager.default;
 
+        const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
         const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
 
         const getAllShelvesAction = new GetAllShelves(shelfRepository);
         const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
         const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
         const importShelvesAction = new ImportShelves(shelfHelper);
+        const createShelfAction = new CreateShelf(shelfHelper);
+        const getAssortmentAction = new GetAssortment(assortmentHelper);
+        const createAssortmentAction = new CreateAssortment(assortmentHelper);
+        const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
+        const importAssortmentAction = new ImportAssortment(assortmentHelper);
+        const getShelfAction = new GetShelf(shelfHelper);
+        const fillCellAction = new FillCell(shelfRepository, shelfHelper);
+        const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
 
-        const action = new ImportAndReplaceShelves(getAllShelvesAction, getAllAssortmentAction, deleteShelfAction, importShelvesAction);
+        const storageAssortmentHelper = services.helpers.storageAssortment.default.get(
+            getAllAssortmentAction,
+            getAssortmentAction,
+            createAssortmentAction,
+            deleteAssortmentAction,
+            importAssortmentAction,
+            getShelfAction,
+            fillCellAction,
+            emptyCellAction,
+        );
+
+        const action = new ImportAndReplaceShelves(
+            getAllShelvesAction,
+            getAllAssortmentAction,
+            deleteShelfAction,
+            createShelfAction,
+            importShelvesAction,
+            storageAssortmentHelper,
+        );
         return await action.execute(input, ctx.user ?? undefined);
     }),
     getShelf: procedure.input(getFullShelfDTOSchema).query<ShelfDTO>(async ({ input, ctx }) => {
@@ -115,26 +142,58 @@ export const storageRouter = createRouter({
         const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
 
         const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+        const getAssortmentAction = new GetAssortment(assortmentHelper);
         const createAssortmentAction = new CreateAssortment(assortmentHelper);
         const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
-        const fillCellAction = new FillCell(shelfRepository, shelfHelper);
+        const importAssortmentAction = new ImportAssortment(assortmentHelper);
         const getShelfAction = new GetShelf(shelfHelper);
+        const fillCellAction = new FillCell(shelfRepository, shelfHelper);
+        const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
 
-        const action = new PutUpAssortment(getAllAssortmentAction, createAssortmentAction, deleteAssortmentAction, fillCellAction, getShelfAction);
+        const storageAssortmentHelper = services.helpers.storageAssortment.default.get(
+            getAllAssortmentAction,
+            getAssortmentAction,
+            createAssortmentAction,
+            deleteAssortmentAction,
+            importAssortmentAction,
+            getShelfAction,
+            fillCellAction,
+            emptyCellAction,
+        );
+
+        const action = new PutUpAssortment(storageAssortmentHelper);
         return await action.execute(input, ctx.user ?? undefined);
     }),
     importAssortment: procedure.input(importAndReplaceAssortmentDTOSchema).mutation<AssortmentDTO[]>(async ({ input, ctx }) => {
         const services = getServices(ctx);
         const assortmentRepository = services.repositories.assortment.db;
+        const shelfRepository = services.repositories.shelf.db;
         const uuidManager = services.utils.uuidManager.default;
 
         const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
+        const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
 
         const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
-        const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper)
+        const getAssortmentAction = new GetAssortment(assortmentHelper);
+        const createAssortmentAction = new CreateAssortment(assortmentHelper);
+        const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
         const importAssortmentAction = new ImportAssortment(assortmentHelper);
+        const getShelfAction = new GetShelf(shelfHelper);
+        const fillCellAction = new FillCell(shelfRepository, shelfHelper);
+        const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
 
-        const action = new ImportAndReplaceAssortment(getAllAssortmentAction, deleteAssortmentAction, importAssortmentAction);
+        const storageAssortmentHelper = services.helpers.storageAssortment.default.get(
+            getAllAssortmentAction,
+            getAssortmentAction,
+            createAssortmentAction,
+            deleteAssortmentAction,
+            importAssortmentAction,
+            getShelfAction,
+            fillCellAction,
+            emptyCellAction,
+        );
+
+        const action = new ImportAndReplaceAssortment(storageAssortmentHelper);
         return await action.execute(input, ctx.user ?? undefined);
     }),
     getAssortment: procedure.input(getAssortmentDTOSchema).query<AssortmentDTO>(async ({ input, ctx }) => {
@@ -173,13 +232,27 @@ export const storageRouter = createRouter({
         const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
         const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
 
-        const getAssortmentAction = new GetAssortment(assortmentHelper);
         const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+        const getAssortmentAction = new GetAssortment(assortmentHelper);
+        const createAssortmentAction = new CreateAssortment(assortmentHelper);
         const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
-        const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
+        const importAssortmentAction = new ImportAssortment(assortmentHelper);
         const getShelfAction = new GetShelf(shelfHelper);
+        const fillCellAction = new FillCell(shelfRepository, shelfHelper);
+        const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
 
-        const action = new TakeDownAssortment(getAssortmentAction, getAllAssortmentAction, deleteAssortmentAction, getShelfAction, emptyCellAction);
+        const storageAssortmentHelper = services.helpers.storageAssortment.default.get(
+            getAllAssortmentAction,
+            getAssortmentAction,
+            createAssortmentAction,
+            deleteAssortmentAction,
+            importAssortmentAction,
+            getShelfAction,
+            fillCellAction,
+            emptyCellAction,
+        );
+
+        const action = new TakeDownAssortment(storageAssortmentHelper);
         return await action.execute(input, ctx.user ?? undefined);
     }),
 });

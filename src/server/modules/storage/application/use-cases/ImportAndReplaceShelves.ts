@@ -1,30 +1,68 @@
 import { DeleteShelf } from "@/server/modules/warehouse/application/use-cases/DeleteShelf";
 import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
 import { ImportShelves } from "@/server/modules/warehouse/application/use-cases/ImportShelves";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { UnauthorizedError, UserDTO } from "@/server/utils";
 import { ImportAndReplaceShelvesDTO } from "../dto/ImportAndReplaceShelvesDTO";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
+import { ShelfDTO } from "../dto/shared/ShelfDTO";
+import { AssortmentDTO } from "../dto/shared/AssortmentDTO";
+import { CreateShelf } from "@/server/modules/warehouse/application/use-cases/CreateShelf";
+import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
 
 export class ImportAndReplaceShelves {
     constructor(
         private readonly getAllShelves: GetAllShelves,
         private readonly getAllAssortment: GetAllAssortment,
         private readonly deleteShelf: DeleteShelf,
-        private readonly importShelvesAction: ImportShelves,
+        private readonly createShelf: CreateShelf,
+        private readonly importShelves: ImportShelves,
+        private readonly storageAssortmentHelper: StorageAssortmentHelper,
     ) {}
 
     async execute(dto: ImportAndReplaceShelvesDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const assortment = await this.getAllAssortment.execute();
         const currentShelves = await this.getAllShelves.execute();
-        for (const shelf of currentShelves) {
+        const currentAssortment = await this.getAllAssortment.execute();
+
+        try {
+            await this.deleteShelves(currentShelves, currentAssortment, currentUser);
+            const createdShelves = await this.importShelves.execute(dto, currentUser);
+            return createdShelves;
+        } catch (error) {
+            // Attempt to rollback the changes if an error occurred.
+            const createCurrentShelveDTOs = currentShelves.map((shelf) => ({
+                ...shelf,
+                cells: undefined,
+                cellsShape: {
+                    rows: shelf.cells.length,
+                    columns: shelf.cells[0].length,
+                },
+            }));
+            await this.createShelves(createCurrentShelveDTOs, currentUser);
+            await this.storageAssortmentHelper.importAndReplaceAssortment(
+                { assortment: currentAssortment },
+                currentUser,
+            );
+
+            throw error;
+        }
+    }
+
+    private async createShelves(shelves: CreateShelfDTO[], currentUser: UserDTO) {
+        for (const shelf of shelves) {
+            await this.createShelf.execute(shelf, currentUser);
+        }
+    }
+
+    private async deleteShelves(shelves: ShelfDTO[], assortments: AssortmentDTO[], currentUser: UserDTO) {
+        for (const shelf of shelves) {
             await this.deleteShelf.execute(
-                { id: shelf.id, assortmentContext: assortment },
-                currentUser
+                { id: shelf.id, assortmentContext: assortments },
+                currentUser,
+                { enforceMinimalAmountOfShelves: false },
             );
         }
-
-        return await this.importShelvesAction.execute(dto, currentUser);
     }
 }
