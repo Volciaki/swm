@@ -7,12 +7,12 @@ import { getTwoFactorAuthenticationValueSenderServices } from "./TwoFactorAuthen
 import { getEmailManagerServices } from "./EmailManager";
 
 export const getUtils = (ctx: GetServicesContext) => {
-    return {
-        stringHasher: getStringHasherServices(ctx),
-        uuidManager: getUUIDManagerServices(ctx),
-        authenticationManager: getAuthenticationManagerServices(ctx),
-        twoFactorAuthenticationValueGenerator: getTwoFactorAuthenticationValueGeneratorServices(ctx),
-        twoFactorAuthenticationValueSender: getTwoFactorAuthenticationValueSenderServices(ctx),
-        emailManager: getEmailManagerServices(ctx),
-    };
+	return {
+		stringHasher: getStringHasherServices(ctx),
+		uuidManager: getUUIDManagerServices(ctx),
+		authenticationManager: getAuthenticationManagerServices(ctx),
+		twoFactorAuthenticationValueGenerator: getTwoFactorAuthenticationValueGeneratorServices(ctx),
+		twoFactorAuthenticationValueSender: getTwoFactorAuthenticationValueSenderServices(ctx),
+		emailManager: getEmailManagerServices(ctx),
+	};
 };

@@ -2,5 +2,5 @@ import { NodeAuthenticationManager } from "@/server/modules/identity/infrastruct
 import { GetServicesContext } from "../../context";
 
 export const getNodeAuthenticationManager = (ctx: GetServicesContext): NodeAuthenticationManager => {
-    return new NodeAuthenticationManager();
+	return new NodeAuthenticationManager();
 }

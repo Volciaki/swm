@@ -13,15 +13,15 @@ import { deleteAssortment } from "./deleteAssortment";
 import { createAssortmentCopy } from "./createAssortmentCopy";
 
 export const storageRouter = createRouter({
-    createShelf,
-    importShelves,
-    getShelf,
-    updateShelf,
-    deleteShelf,
-    createAssortment,
+	createShelf,
+	importShelves,
+	getShelf,
+	updateShelf,
+	deleteShelf,
+	createAssortment,
 	createAssortmentCopy,
-    importAssortment,
-    getAssortment,
-    updateAssortment,
-    deleteAssortment,
+	importAssortment,
+	getAssortment,
+	updateAssortment,
+	deleteAssortment,
 });

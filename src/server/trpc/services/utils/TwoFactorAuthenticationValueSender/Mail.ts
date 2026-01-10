@@ -2,5 +2,5 @@ import { MailTwoFactorAuthenticationValueSender } from "@/server/modules/identit
 import { GetServicesContext } from "../../context";
 
 export const getMailTwoFactorAuthenticationValueSender = (ctx: GetServicesContext): MailTwoFactorAuthenticationValueSender => {
-    return new MailTwoFactorAuthenticationValueSender();
+	return new MailTwoFactorAuthenticationValueSender();
 }

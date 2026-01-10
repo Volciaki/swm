@@ -9,11 +9,11 @@ import { requestPasswordReset } from "./requestPasswordReset";
 import { twoFactorAuthentication } from "./twoFactorAuthentication";
 
 export const identityRouter = createRouter({
-    createUser,
-    deleteUser,
-    listUsers,
-    login,
-    passwordReset,
-    requestPasswordReset,
-    twoFactorAuthentication,
+	createUser,
+	deleteUser,
+	listUsers,
+	login,
+	passwordReset,
+	requestPasswordReset,
+	twoFactorAuthentication,
 });

@@ -4,10 +4,10 @@ import { UUIDManager } from "@/server/utils";
 import { GetServicesContext } from "../../context";
 
 export const getDefaultShelfHelper = (ctx: GetServicesContext) => {
-    return {
-        get: (
-            shelfRepository: ShelfRepository,
-            uuidManager: UUIDManager,
-        ) => new DefaultShelfHelper(shelfRepository, uuidManager)
-    };
+	return {
+		get: (
+			shelfRepository: ShelfRepository,
+			uuidManager: UUIDManager,
+		) => new DefaultShelfHelper(shelfRepository, uuidManager)
+	};
 };

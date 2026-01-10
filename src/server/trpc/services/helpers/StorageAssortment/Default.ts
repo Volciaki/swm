@@ -9,23 +9,23 @@ import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/Empt
 import { GetServicesContext } from "../../context";
 
 export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
-    return {
-        get: (
-            getAllAssortment: GetAllAssortment,
-            getAssortment: GetAssortment,
-            createAssortment: CreateAssortment,
-            deleteAssortment: DeleteAssortment,
-            getShelf: GetShelf,
-            fillCell: FillCell,
-            emptyCell: EmptyCell,
-        ) => new DefaultStorageAssortmentHelper(
-            getAllAssortment,
-            getAssortment,
-            createAssortment,
-            deleteAssortment,
-            getShelf,
-            fillCell,
-            emptyCell,
-        )
-    };
+	return {
+		get: (
+			getAllAssortment: GetAllAssortment,
+			getAssortment: GetAssortment,
+			createAssortment: CreateAssortment,
+			deleteAssortment: DeleteAssortment,
+			getShelf: GetShelf,
+			fillCell: FillCell,
+			emptyCell: EmptyCell,
+		) => new DefaultStorageAssortmentHelper(
+			getAllAssortment,
+			getAssortment,
+			createAssortment,
+			deleteAssortment,
+			getShelf,
+			fillCell,
+			emptyCell,
+		)
+	};
 };

@@ -4,5 +4,5 @@ import { DBCell } from "@/server/modules/warehouse/infrastructure/entities/DBCel
 import { GetServicesContext } from "../../context";
 
 export const getDBShelfRepository = (ctx: GetServicesContext): DBShelfRepository => {
-    return new DBShelfRepository(ctx.db.getRepository(DBShelf), ctx.db.getRepository(DBCell));
+	return new DBShelfRepository(ctx.db.getRepository(DBShelf), ctx.db.getRepository(DBCell));
 };

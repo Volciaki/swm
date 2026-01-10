@@ -8,32 +8,32 @@ import { TwoFactorAuthenticationSessionRepository } from "../../domain/repositor
 import { TwoFactorAuthenticationValueSender } from "../services/TwoFactorAuthenticationValueSender";
 
 export class RequestPasswordReset {
-    constructor(
+	constructor(
         private readonly userRepository: UserRepository,
         private readonly twoFactorAuthenticationSessionRepository: TwoFactorAuthenticationSessionRepository,
         private readonly uuidManager: UUIDManager,
         private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
         private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender,
-    ) {}
+	) {}
 
-    async execute(dto: RequestPasswordResetDTO, currentUser?: UserDTO) {
-        if (currentUser) throw new AlreadyLoggedInError();
+	async execute(dto: RequestPasswordResetDTO, currentUser?: UserDTO) {
+		if (currentUser) throw new AlreadyLoggedInError();
 
-        const userId = UUID.fromString(dto.userId);
-        const user = await this.userRepository.getById(userId);
+		const userId = UUID.fromString(dto.userId);
+		const user = await this.userRepository.getById(userId);
 
-        if (!user) throw new UserNotFoundError("UUID", dto.userId);
+		if (!user) throw new UserNotFoundError("UUID", dto.userId);
 
-        const twoFactorAuthenticationValue = this.twoFactorAuthenticationValueGenerator.generate();
-        const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
-            user,
-            this.uuidManager.generate(),
-            twoFactorAuthenticationValue,
-        );
+		const twoFactorAuthenticationValue = this.twoFactorAuthenticationValueGenerator.generate();
+		const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
+			user,
+			this.uuidManager.generate(),
+			twoFactorAuthenticationValue,
+		);
 
-        if (this.twoFactorAuthenticationValueSender)
-            await this.twoFactorAuthenticationValueSender.deliverToUser(user, authenticationSession);
+		if (this.twoFactorAuthenticationValueSender)
+			await this.twoFactorAuthenticationValueSender.deliverToUser(user, authenticationSession);
 
-        return { authenticationId: authenticationSession.id.value };
-    }
+		return { authenticationId: authenticationSession.id.value };
+	}
 }

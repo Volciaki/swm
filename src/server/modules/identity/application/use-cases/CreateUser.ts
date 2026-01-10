@@ -8,24 +8,24 @@ import { StringHasher } from "../services/StringHasher";
 import { UserMapper } from "../../infrastructure/mappers/UserMapper";
 
 export class CreateUser {
-    constructor(
+	constructor(
         private readonly userRepository: UserRepository,
         private readonly stringHasher: StringHasher,
         private readonly uuidManager: UUIDManager,
-    ) {}
+	) {}
 
-    async execute(dto: CreateUserDTO, currentUser?: UserDTO) {
-        if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(dto: CreateUserDTO, currentUser?: UserDTO) {
+		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const user = User.create(
-            Email.fromString(dto.email),
-            await this.stringHasher.hash(dto.passwordRaw),
-            this.uuidManager.generate(),
-            dto.name,
-            dto.isAdmin,
-            dto.twoFactorAuthenticationEnabled,
-        );
-        await this.userRepository.create(user);
-        return UserMapper.fromUserToUserDTO(user);
-    }
+		const user = User.create(
+			Email.fromString(dto.email),
+			await this.stringHasher.hash(dto.passwordRaw),
+			this.uuidManager.generate(),
+			dto.name,
+			dto.isAdmin,
+			dto.twoFactorAuthenticationEnabled,
+		);
+		await this.userRepository.create(user);
+		return UserMapper.fromUserToUserDTO(user);
+	}
 }

@@ -6,5 +6,5 @@ type ProvidersProps = {
 };
 
 export const Providers: FC<ProvidersProps> = ({ children }) => (
-    <TRPCProvider>{children}</TRPCProvider>
+	<TRPCProvider>{children}</TRPCProvider>
 );

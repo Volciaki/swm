@@ -4,9 +4,9 @@ import { procedure } from "../../init";
 import { getServices } from "../../services";
 
 export const listUsers = procedure.query<ListUsersResponseDTO>(async ({ ctx }) => {
-    const services = getServices(ctx);
-    const userRepository = services.repositories.user.db;
+	const services = getServices(ctx);
+	const userRepository = services.repositories.user.db;
 
-    const action = new ListUsers(userRepository);
-    return await action.execute();
+	const action = new ListUsers(userRepository);
+	return await action.execute();
 });
