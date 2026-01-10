@@ -7,40 +7,40 @@ import { DBUser } from "../entities/DBUser";
 import { UserMapper } from "../mappers/UserMapper";
 
 export class DBUserRepository implements UserRepository {
-    constructor(private readonly db: Repository<DBUser>) {}
+	constructor(private readonly db: Repository<DBUser>) {}
     
-    async create(user: User) {
-        const dbUser = UserMapper.fromUserToDBUser(user);
-        await this.db.save(dbUser);
-    }
+	async create(user: User) {
+		const dbUser = UserMapper.fromUserToDBUser(user);
+		await this.db.save(dbUser);
+	}
 
-    async delete(user: User) {
-        const dbUser = await this.db.findOneBy({ id: user.id.value });
+	async delete(user: User) {
+		const dbUser = await this.db.findOneBy({ id: user.id.value });
 
-        if (dbUser === null) return;
+		if (dbUser === null) return;
 
-        await this.db.remove(dbUser);
-    }
+		await this.db.remove(dbUser);
+	}
 
-    async getAll() {
-        const dbUsers = await this.db.find();
-        const users = dbUsers.map((user) => UserMapper.fromDBUserToUser(user));
-        return users;
-    }
+	async getAll() {
+		const dbUsers = await this.db.find();
+		const users = dbUsers.map((user) => UserMapper.fromDBUserToUser(user));
+		return users;
+	}
 
-    async getById(id: UUID) {
-        const dbUser = await this.db.findOneBy({ id: id.value });
+	async getById(id: UUID) {
+		const dbUser = await this.db.findOneBy({ id: id.value });
 
-        if (dbUser === null) return null;
+		if (dbUser === null) return null;
 
-        return UserMapper.fromDBUserToUser(dbUser);
-    }
+		return UserMapper.fromDBUserToUser(dbUser);
+	}
 
-    async getByEmail(email: Email) {
-        const dbUser = await this.db.findOneBy({ email: email.value });
+	async getByEmail(email: Email) {
+		const dbUser = await this.db.findOneBy({ email: email.value });
 
-        if (dbUser === null) return null;
+		if (dbUser === null) return null;
 
-        return UserMapper.fromDBUserToUser(dbUser);
-    }
+		return UserMapper.fromDBUserToUser(dbUser);
+	}
 }

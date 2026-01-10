@@ -2,5 +2,5 @@ import { NodeTwoFactorAuthenticationValueManager } from "@/server/modules/identi
 import { GetServicesContext } from "../../context";
 
 export const getNodeTwoFactorAuthenticationValueManager = (ctx: GetServicesContext): NodeTwoFactorAuthenticationValueManager => {
-    return new NodeTwoFactorAuthenticationValueManager();
+	return new NodeTwoFactorAuthenticationValueManager();
 }

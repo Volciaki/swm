@@ -12,36 +12,36 @@ import { StringHasher } from "../services/StringHasher";
 import { TwoFactorAuthenticationValueManager } from "../services/TwoFactorAuthenticationValueManager";
 
 export class Login {
-    constructor(
+	constructor(
         private readonly userRepository: UserRepository,
         private readonly twoFactorAuthenticationSessionRepository: TwoFactorAuthenticationSessionRepository,
         private readonly stringHasher: StringHasher,
         private readonly authenticationManager: AuthenticationManager,
         private readonly uuidManager: UUIDManager,
         private readonly twoFactorAuthenticationValueManager: TwoFactorAuthenticationValueManager,
-    ) {}
+	) {}
 
-    async execute(dto: LoginDTO, currentUser?: User) {
-        if (currentUser) throw new AlreadyLoggedInError();
+	async execute(dto: LoginDTO, currentUser?: User) {
+		if (currentUser) throw new AlreadyLoggedInError();
 
-        const email = Email.fromString(dto.email);
-        const user = await this.userRepository.getByEmail(email);
-        if (!user) throw new UserNotFoundError("mail", dto.email);
+		const email = Email.fromString(dto.email);
+		const user = await this.userRepository.getByEmail(email);
+		if (!user) throw new UserNotFoundError("mail", dto.email);
 
-        const passwordMatches = await this.stringHasher.verify(dto.passwordRaw, user.passwordHash);
-        if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);
+		const passwordMatches = await this.stringHasher.verify(dto.passwordRaw, user.passwordHash);
+		if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);
 
-        if (user.twoFactorAuthenticationEnabled) {
-            const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
-                user,
-                this.uuidManager.generate(),
-                this.twoFactorAuthenticationValueManager.generate(),
-            );
-            return { authenticationId: authenticationSession.id.value };
-        }
+		if (user.twoFactorAuthenticationEnabled) {
+			const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
+				user,
+				this.uuidManager.generate(),
+				this.twoFactorAuthenticationValueManager.generate(),
+			);
+			return { authenticationId: authenticationSession.id.value };
+		}
 
-        return {
-            authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)
-        };
-    }
+		return {
+			authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)
+		};
+	}
 }
