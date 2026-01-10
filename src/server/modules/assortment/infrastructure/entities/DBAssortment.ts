@@ -3,44 +3,44 @@ import { Entity, PrimaryColumn, Column } from "typeorm";
 @Entity("assortments")
 export class DBAssortment {
     @PrimaryColumn()
-    id!: string;
+        id!: string;
 
     @Column()
-    cellId!: string;
+        cellId!: string;
 
     @Column()
-    shelfId!: string;
+        shelfId!: string;
 
     @Column()
-    name!: string;
+        name!: string;
 
     @Column()
-    comment!: string;
+        comment!: string;
 
     @Column({ name: "temperature_range_max", type: "float" })
-    temperatureRangeMax!: number;
+        temperatureRangeMax!: number;
 
     @Column({ name: "temperature_range_min", type: "float" })
-    temperatureRangeMin!: number;
+        temperatureRangeMin!: number;
 
     @Column({ name: "weight_kg", type: "float" })
-    weightKg!: number;
+        weightKg!: number;
 
     @Column({ name: "size_width_mm", type: "float" })
-    sizeWidthMillimeters!: number;
+        sizeWidthMillimeters!: number;
 
     @Column({ name: "size_height_mm", type: "float" })
-    sizeHeightMillimeters!: number;
+        sizeHeightMillimeters!: number;
 
     @Column({ name: "size_length_mm", type: "float" })
-    sizeLengthMillimeters!: number;
+        sizeLengthMillimeters!: number;
 
     @Column({ name: "stored_at" })
-    storedAt!: Date;
+        storedAt!: Date;
 
     @Column({ name: "expires_after_seconds" })
-    expiresAfterSeconds!: number;
+        expiresAfterSeconds!: number;
 
     @Column({ name: "is_hazardous" })
-    isHazardous!: boolean;
+        isHazardous!: boolean;
 }

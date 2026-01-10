@@ -3,20 +3,20 @@ import { Entity, PrimaryColumn, Column } from "typeorm";
 @Entity("users")
 export class DBUser {
     @PrimaryColumn()
-    id!: string;
+        id!: string;
 
     @Column()
-    email!: string;
+        email!: string;
 
     @Column({ name: "password_hash" })
-    passwordHash!: string;
+        passwordHash!: string;
 
     @Column()
-    name!: string;
+        name!: string;
 
     @Column({ name: "is_admin" })
-    isAdmin!: boolean;
+        isAdmin!: boolean;
 
     @Column({ name: "two_factor_authentication_enabled" })
-    twoFactorAuthenticationEnabled!: boolean;
+        twoFactorAuthenticationEnabled!: boolean;
 }

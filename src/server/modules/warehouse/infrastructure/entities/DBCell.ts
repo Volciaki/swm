@@ -3,11 +3,11 @@ import { Entity, PrimaryColumn, Column } from "typeorm";
 @Entity("cells")
 export class DBCell {
     @PrimaryColumn()
-    id!: string;
+        id!: string;
 
     @Column({ name: "shelf_id" })
-    shelfId!: string;
+        shelfId!: string;
 
     @Column({ name: "assortment_id", type: "varchar", nullable: true })
-    assortmentId!: string | null;
+        assortmentId!: string | null;
 }
