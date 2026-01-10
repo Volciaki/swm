@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { userDTOSchema } from "./shared/UserDTO";
+import { userDTOSchema } from "@/server/utils";
 
 export const createUserDTOSchema = userDTOSchema
 	.omit({ id: true, passwordHash: true })

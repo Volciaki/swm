@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrations:generate": "./scripts/migrations/generate.sh",
+    "migrations:create": "./scripts/migrations/create.sh"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",
@@ -17,6 +19,7 @@
     "chalk": "^5.6.2",
     "jsonwebtoken": "^9.0.3",
     "next": "16.1.1",
+    "nodemailer": "^7.0.12",
     "pg": "^8.16.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -30,6 +33,7 @@
     "@types/bcryptjs": "^3.0.0",
     "@types/jsonwebtoken": "^9",
     "@types/node": "^20",
+    "@types/nodemailer": "^7.0.4",
     "@types/pg": "^8",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -38,6 +42,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "sass": "^1.97.1",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5"
   }
 }

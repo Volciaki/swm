@@ -14,6 +14,11 @@ export class DBUserRepository implements UserRepository {
 		await this.db.save(dbUser);
 	}
 
+	async update(user: User) {
+		// TypeORM's `save` method acts as UPSERT if the primary key exists.
+		return await this.create(user);
+	}
+
 	async delete(user: User) {
 		const dbUser = await this.db.findOneBy({ id: user.id.value });
 

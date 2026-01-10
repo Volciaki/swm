@@ -17,4 +17,13 @@ export const productionEnvironment: Environment = {
 			expiresIn: process.env.AUTHENTICATION_COOKIE_EXPIRES_IN!,
 		},
 	},
+	mail: {
+		host: process.env.MAIL_HOST!,
+		port: Number(process.env.MAIL_PORT),
+		sslEnabled: Boolean(process.env.MAIL_SSL_ENABLED),
+		user: {
+			name: process.env.MAIL_USER_NAME!,
+			password: process.env.MAIL_USER_PASSWORD!,
+		},
+	},
 }

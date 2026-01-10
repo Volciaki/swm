@@ -1,8 +1,10 @@
 import { z } from "zod";
 
-const twoFactorAuthenticationResponseDTOSchema = z.object({
+export const twoFactorAuthenticationResponseDTOSchema = z.object({
 	authenticationId: z.string(),
 });
+
+export type TwoFactorAuthenticationResponseDTO = z.infer<typeof twoFactorAuthenticationResponseDTOSchema>;
 
 export const authenticationTokenResponseDTOSchema = z.object({
 	authenticationToken: z.string(),
