@@ -2,17 +2,17 @@ import { z } from "zod";
 import { InvalidEmailError } from "../errors/InvalidEmailError";
 
 const isStringValidEmail = (value: string): boolean => {
-    const emailSchema = z.email();
-    const result = emailSchema.safeParse(value);
-    return result.success;
+	const emailSchema = z.email();
+	const result = emailSchema.safeParse(value);
+	return result.success;
 }
 
 export class Email {
-    private constructor(public readonly value: string) {}
+	private constructor(public readonly value: string) {}
 
-    static fromString(value: string) {
-        if (!isStringValidEmail(value)) throw new InvalidEmailError(value);
+	static fromString(value: string) {
+		if (!isStringValidEmail(value)) throw new InvalidEmailError(value);
 
-        return new Email(value);
-    }
+		return new Email(value);
+	}
 }

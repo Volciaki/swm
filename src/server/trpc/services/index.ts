@@ -7,9 +7,9 @@ import { getRepositories } from "./repositories";
 import { getUtils } from "./utils";
 
 export const getServices = (ctx: GetServicesContext) => {
-    return {
-        repositories: getRepositories(ctx),
-        utils: getUtils(ctx),
-        helpers: getHelpers(ctx),
-    };
+	return {
+		repositories: getRepositories(ctx),
+		utils: getUtils(ctx),
+		helpers: getHelpers(ctx),
+	};
 };

@@ -2,5 +2,5 @@ import { NodeTwoFactorAuthenticationValueGenerator } from "@/server/modules/iden
 import { GetServicesContext } from "../../context";
 
 export const getNodeTwoFactorAuthenticationValueGenerator = (ctx: GetServicesContext): NodeTwoFactorAuthenticationValueGenerator => {
-    return new NodeTwoFactorAuthenticationValueGenerator();
+	return new NodeTwoFactorAuthenticationValueGenerator();
 }

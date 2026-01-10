@@ -2,5 +2,5 @@ import { NodeStringHasher } from "@/server/modules/identity/infrastructure/servi
 import { GetServicesContext } from "../../context";
 
 export const getNodeStringHasher = (ctx: GetServicesContext): NodeStringHasher => {
-    return new NodeStringHasher();
+	return new NodeStringHasher();
 }

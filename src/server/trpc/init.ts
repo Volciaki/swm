@@ -18,44 +18,44 @@ export type APIContext = {
 };
 
 const getUserBasedOnAuthCookie = async (cookie?: { value: string }): Promise<UserDTO | null> => {
-    if (!cookie) return null;
+	if (!cookie) return null;
 
-    const authenticationManager = new NodeAuthenticationManager();
-    let cookieValue;
-    try {
-        cookieValue = await authenticationManager.decodeAuthenticationToken(cookie.value);
-    } catch (error) {
-        if (error instanceof InvalidAuthenticationTokenError) return null;
-        throw error;
-    }
+	const authenticationManager = new NodeAuthenticationManager();
+	let cookieValue;
+	try {
+		cookieValue = await authenticationManager.decodeAuthenticationToken(cookie.value);
+	} catch (error) {
+		if (error instanceof InvalidAuthenticationTokenError) return null;
+		throw error;
+	}
 
-    const userRepository = new DBUserRepository(appDataSource.getRepository(DBUser));
+	const userRepository = new DBUserRepository(appDataSource.getRepository(DBUser));
 
-    let userId;
-    try {
-        userId = UUID.fromString(cookieValue.userId);
-    } catch(error) {
-        if (error instanceof InvalidUUIDError) return null;
-        throw error;
-    }
+	let userId;
+	try {
+		userId = UUID.fromString(cookieValue.userId);
+	} catch(error) {
+		if (error instanceof InvalidUUIDError) return null;
+		throw error;
+	}
 
-    const userAggregate = await userRepository.getById(userId);
-    if (userAggregate === null) return null;
+	const userAggregate = await userRepository.getById(userId);
+	if (userAggregate === null) return null;
     
-    return UserMapper.fromUserToUserDTO(userAggregate);
+	return UserMapper.fromUserToUserDTO(userAggregate);
 };
 
 /**
  * @see: https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (): Promise<APIContext> => {
-    await initializeDatabase();
+	await initializeDatabase();
 
-    const cookieStore = await cookies();
-    const authCookie = cookieStore.get(environment.authentication.cookie.name);
-    const user = await getUserBasedOnAuthCookie(authCookie);
+	const cookieStore = await cookies();
+	const authCookie = cookieStore.get(environment.authentication.cookie.name);
+	const user = await getUserBasedOnAuthCookie(authCookie);
 
-    return { db: appDataSource, user };
+	return { db: appDataSource, user };
 };
 
 const t = initTRPC.context<APIContext>().create();

@@ -30,111 +30,111 @@ import { getServices } from "../services";
 import { getAssortmentDTOSchema } from "@/server/modules/assortment/application/dto/GetAssortmentDTO";
 
 export const storageRouter = createRouter({
-    createShelf: procedure.input(createShelfDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
-        const services = getServices(ctx);
-        const shelfRepository = services.repositories.shelf.db;
-        const uuidManager = services.utils.uuidManager.default;
+	createShelf: procedure.input(createShelfDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
+		const services = getServices(ctx);
+		const shelfRepository = services.repositories.shelf.db;
+		const uuidManager = services.utils.uuidManager.default;
 
-        const action = new CreateShelf(shelfRepository, uuidManager);
-        return await action.execute(input, ctx.user ?? undefined);
-    }),
-    getShelf: procedure.input(getFullShelfDTOSchema).query<ShelfDTO>(async ({ input, ctx }) => {
-        const services = getServices(ctx);
-        const assortmentRepository = services.repositories.assortment.db;
-        const shelfRepository = services.repositories.shelf.db;
+		const action = new CreateShelf(shelfRepository, uuidManager);
+		return await action.execute(input, ctx.user ?? undefined);
+	}),
+	getShelf: procedure.input(getFullShelfDTOSchema).query<ShelfDTO>(async ({ input, ctx }) => {
+		const services = getServices(ctx);
+		const assortmentRepository = services.repositories.assortment.db;
+		const shelfRepository = services.repositories.shelf.db;
 
-        const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
+		const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
 
-        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
-        const getShelfAction = new GetShelf(shelfHelper);
+		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+		const getShelfAction = new GetShelf(shelfHelper);
 
-        const action = new GetFullShelf(getAllAssortmentAction, getShelfAction);
-        return await action.execute(input);
-    }),
-    updateShelf: procedure.input(updateFullShelfDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
-        const services = getServices(ctx);
-        const assortmentRepository = services.repositories.assortment.db;
-        const shelfRepository = services.repositories.shelf.db;
+		const action = new GetFullShelf(getAllAssortmentAction, getShelfAction);
+		return await action.execute(input);
+	}),
+	updateShelf: procedure.input(updateFullShelfDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
+		const services = getServices(ctx);
+		const assortmentRepository = services.repositories.assortment.db;
+		const shelfRepository = services.repositories.shelf.db;
         
-        const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
+		const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
         
-        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
-        const updateShelfAction = new UpdateShelf(shelfHelper, shelfRepository);
+		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+		const updateShelfAction = new UpdateShelf(shelfHelper, shelfRepository);
         
-        const action = new UpdateFullShelf(getAllAssortmentAction, updateShelfAction);
-        return await action.execute(input, ctx.user ?? undefined);
-    }),
-    deleteShelf: procedure.input(takeDownShelfDTOSchema).mutation<void>(async ({ input, ctx }) => {
-        const services = getServices(ctx);
-        const assortmentRepository = services.repositories.assortment.db;
-        const shelfRepository = services.repositories.shelf.db;
+		const action = new UpdateFullShelf(getAllAssortmentAction, updateShelfAction);
+		return await action.execute(input, ctx.user ?? undefined);
+	}),
+	deleteShelf: procedure.input(takeDownShelfDTOSchema).mutation<void>(async ({ input, ctx }) => {
+		const services = getServices(ctx);
+		const assortmentRepository = services.repositories.assortment.db;
+		const shelfRepository = services.repositories.shelf.db;
 
-        const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
+		const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
 
-        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
-        const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
+		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+		const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
 
-        const action = new TakeDownShelf(getAllAssortmentAction, deleteShelfAction);
-        return await action.execute(input, ctx.user ?? undefined);
-    }),
-    createAssortment: procedure.input(putUpAssortmentDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
-        const services = getServices(ctx);
-        const assortmentRepository = services.repositories.assortment.db;
-        const shelfRepository = services.repositories.shelf.db;
-        const uuidManager = services.utils.uuidManager.default;
+		const action = new TakeDownShelf(getAllAssortmentAction, deleteShelfAction);
+		return await action.execute(input, ctx.user ?? undefined);
+	}),
+	createAssortment: procedure.input(putUpAssortmentDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
+		const services = getServices(ctx);
+		const assortmentRepository = services.repositories.assortment.db;
+		const shelfRepository = services.repositories.shelf.db;
+		const uuidManager = services.utils.uuidManager.default;
 
-        const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
-        const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
+		const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
+		const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
 
-        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
-        const createAssortmentAction = new CreateAssortment(assortmentRepository, uuidManager);
-        const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
-        const fillCellAction = new FillCell(shelfRepository, shelfHelper);
-        const getShelfAction = new GetShelf(shelfHelper);
+		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+		const createAssortmentAction = new CreateAssortment(assortmentRepository, uuidManager);
+		const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
+		const fillCellAction = new FillCell(shelfRepository, shelfHelper);
+		const getShelfAction = new GetShelf(shelfHelper);
 
-        const action = new PutUpAssortment(getAllAssortmentAction, createAssortmentAction, deleteAssortmentAction, fillCellAction, getShelfAction);
-        return await action.execute(input, ctx.user ?? undefined);
-    }),
-    getAssortment: procedure.input(getAssortmentDTOSchema).query<AssortmentDTO>(async ({ input, ctx }) => {
-        const services = getServices(ctx);
-        const assortmentRepository = services.repositories.assortment.db;
+		const action = new PutUpAssortment(getAllAssortmentAction, createAssortmentAction, deleteAssortmentAction, fillCellAction, getShelfAction);
+		return await action.execute(input, ctx.user ?? undefined);
+	}),
+	getAssortment: procedure.input(getAssortmentDTOSchema).query<AssortmentDTO>(async ({ input, ctx }) => {
+		const services = getServices(ctx);
+		const assortmentRepository = services.repositories.assortment.db;
 
-        const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
+		const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
 
-        const action = new GetAssortment(assortmentHelper);
-        return await action.execute(input);
-    }),
-    updateAssortment: procedure.input(updateShelfAssortmentDTOSchema).mutation<AssortmentDTO>(async ({ input, ctx }) => {
-        const services = getServices(ctx);
-        const assortmentRepository = services.repositories.assortment.db;
-        const shelfRepository = services.repositories.shelf.db;
+		const action = new GetAssortment(assortmentHelper);
+		return await action.execute(input);
+	}),
+	updateAssortment: procedure.input(updateShelfAssortmentDTOSchema).mutation<AssortmentDTO>(async ({ input, ctx }) => {
+		const services = getServices(ctx);
+		const assortmentRepository = services.repositories.assortment.db;
+		const shelfRepository = services.repositories.shelf.db;
 
-        const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
-        const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
+		const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
+		const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
 
-        const getAssortmentAction = new GetAssortment(assortmentHelper);
-        const updateAssortmentAction = new UpdateAssortment(assortmentRepository, assortmentHelper);
-        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
-        const validateShelfAction = new ValidateShelf(shelfHelper);
+		const getAssortmentAction = new GetAssortment(assortmentHelper);
+		const updateAssortmentAction = new UpdateAssortment(assortmentRepository, assortmentHelper);
+		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+		const validateShelfAction = new ValidateShelf(shelfHelper);
 
-        const action = new UpdateShelfAssortment(getAssortmentAction, updateAssortmentAction, getAllAssortmentAction, validateShelfAction);
-        return await action.execute(input, ctx.user ?? undefined);
-    }),
-    deleteAssortment: procedure.input(takeDownAssortmentDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
-        const services = getServices(ctx);
-        const assortmentRepository = services.repositories.assortment.db;
-        const shelfRepository = services.repositories.shelf.db;
+		const action = new UpdateShelfAssortment(getAssortmentAction, updateAssortmentAction, getAllAssortmentAction, validateShelfAction);
+		return await action.execute(input, ctx.user ?? undefined);
+	}),
+	deleteAssortment: procedure.input(takeDownAssortmentDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
+		const services = getServices(ctx);
+		const assortmentRepository = services.repositories.assortment.db;
+		const shelfRepository = services.repositories.shelf.db;
 
-        const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
-        const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
+		const shelfHelper = services.helpers.shelf.default.get(shelfRepository);
+		const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository);
 
-        const getAssortmentAction = new GetAssortment(assortmentHelper);
-        const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
-        const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
-        const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
-        const getShelfAction = new GetShelf(shelfHelper);
+		const getAssortmentAction = new GetAssortment(assortmentHelper);
+		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+		const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
+		const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
+		const getShelfAction = new GetShelf(shelfHelper);
 
-        const action = new TakeDownAssortment(getAssortmentAction, getAllAssortmentAction, deleteAssortmentAction, getShelfAction, emptyCellAction);
-        return await action.execute(input, ctx.user ?? undefined);
-    }),
+		const action = new TakeDownAssortment(getAssortmentAction, getAllAssortmentAction, deleteAssortmentAction, getShelfAction, emptyCellAction);
+		return await action.execute(input, ctx.user ?? undefined);
+	}),
 });

@@ -8,25 +8,25 @@ import { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
 
 const generateCellDTOsForShape = (
-    shape: { columns: number; rows: number },
-    uuidGenerator: () => UUID,
-    shelfId: UUID,
+	shape: { columns: number; rows: number },
+	uuidGenerator: () => UUID,
+	shelfId: UUID,
 ): CellDTO[][] => {
-    const shelfCellDTOs: CellDTO[][] = [];
+	const shelfCellDTOs: CellDTO[][] = [];
 
-    for (let i = 0; i < shape.rows; i++) {
-        const row: CellDTO[] = [];
-        for (let j = 0; j < shape.columns; j++) {
-            row.push({
-                id: uuidGenerator().value,
-                shelfId: shelfId.value,
-                assortment: null,
-            });
-        }
-        shelfCellDTOs.push(row);
-    }
+	for (let i = 0; i < shape.rows; i++) {
+		const row: CellDTO[] = [];
+		for (let j = 0; j < shape.columns; j++) {
+			row.push({
+				id: uuidGenerator().value,
+				shelfId: shelfId.value,
+				assortment: null,
+			});
+		}
+		shelfCellDTOs.push(row);
+	}
 
-    return shelfCellDTOs;
+	return shelfCellDTOs;
 };
 
 export interface ShelfHelper {
@@ -35,30 +35,30 @@ export interface ShelfHelper {
 };
 
 export class DefaultShelfHelper implements ShelfHelper {
-    constructor(
+	constructor(
         private readonly shelfRepository: ShelfRepository,
         private readonly uuidManager: UUIDManager,
-    ) {}
+	) {}
 
-    async getByIdStringOrThrow(id: string, assortmentContext?: AssortmentVO[]) {
-        const shelfId = UUID.fromString(id);
-        const shelf = await this.shelfRepository.getById(shelfId, assortmentContext);
+	async getByIdStringOrThrow(id: string, assortmentContext?: AssortmentVO[]) {
+		const shelfId = UUID.fromString(id);
+		const shelf = await this.shelfRepository.getById(shelfId, assortmentContext);
 
-        if (shelf === null) throw new ShelfNotFoundError(shelfId);
+		if (shelf === null) throw new ShelfNotFoundError(shelfId);
 
-        return shelf;
-    }
+		return shelf;
+	}
 
-    async createByDTO(dto: CreateShelfDTO) {
-        const shelfId = this.uuidManager.generate();
-        const shelfCellDTOs = generateCellDTOsForShape(dto.cellsShape, this.uuidManager.generate, shelfId);
-        const shelf = ShelfMapper.fromShelfDTOToShelf({
-            ...dto,
-            id: shelfId.value,
-            cells: shelfCellDTOs,
-        });
+	async createByDTO(dto: CreateShelfDTO) {
+		const shelfId = this.uuidManager.generate();
+		const shelfCellDTOs = generateCellDTOsForShape(dto.cellsShape, this.uuidManager.generate, shelfId);
+		const shelf = ShelfMapper.fromShelfDTOToShelf({
+			...dto,
+			id: shelfId.value,
+			cells: shelfCellDTOs,
+		});
 
-        await this.shelfRepository.create(shelf);
-        return shelf;
-    }
+		await this.shelfRepository.create(shelf);
+		return shelf;
+	}
 }

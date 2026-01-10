@@ -3,5 +3,5 @@ import { DBAssortment } from "@/server/modules/assortment/infrastructure/entitie
 import { GetServicesContext } from "../../context";
 
 export const getDBAssortmentRepository = (ctx: GetServicesContext): DBAssortmentRepository => {
-    return new DBAssortmentRepository(ctx.db.getRepository(DBAssortment));
+	return new DBAssortmentRepository(ctx.db.getRepository(DBAssortment));
 };

@@ -4,14 +4,14 @@ import { UUID } from "./entity";
 import { UUIDManager } from "./service";
 
 export class DefaultUUIDManager implements UUIDManager {
-    generate(): UUID {
-        const uuid = uuidv4();
-        return UUID.fromString(uuid);
-    }
+	generate(): UUID {
+		const uuid = uuidv4();
+		return UUID.fromString(uuid);
+	}
 
-    validate(value: string): boolean {
-        const uuidSchema = z.uuidv4();
-        const result = uuidSchema.safeParse(value);
-        return result.success;
-    }
+	validate(value: string): boolean {
+		const uuidSchema = z.uuidv4();
+		const result = uuidSchema.safeParse(value);
+		return result.success;
+	}
 }
