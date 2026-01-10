@@ -14,15 +14,15 @@ import { Cell } from "./Cell";
 
 export class Shelf {
 	private constructor(
-        private _id: UUID,
-        private _name: string,
-        private _comment: string,
-        private _cells: Cell[][],
-        private _temperatureRange: TemperatureRange,
-        private _maxWeight: Weight,
-        private _maxAssortmentSize: Dimensions,
-        private _supportsHazardous: boolean,
-	) {}
+		private _id: UUID,
+		private _name: string,
+		private _comment: string,
+		private _cells: Cell[][],
+		private _temperatureRange: TemperatureRange,
+		private _maxWeight: Weight,
+		private _maxAssortmentSize: Dimensions,
+		private _supportsHazardous: boolean,
+	) { }
 
 	get id() { return this._id };
 	get maxAssortmentSize() { return this._maxAssortmentSize };
@@ -157,3 +157,4 @@ export class Shelf {
 		return Weight.fromKilograms(totalWeightKg);
 	}
 }
+
