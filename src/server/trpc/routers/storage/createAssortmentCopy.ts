@@ -40,6 +40,6 @@ export const createAssortmentCopy = procedure.input(putUpAssortmentCopyDTOSchema
 		emptyCellAction,
 	);
 
-	const action = new PutUpAssortmentCopy(storageAssortmentHelper, getAssortmentAction, getAllShelvesAction);
+	const action = new PutUpAssortmentCopy(storageAssortmentHelper, getAssortmentAction, getAllShelvesAction, getAllAssortmentAction);
 	return await action.execute(input, ctx.user ?? undefined);
 });

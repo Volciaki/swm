@@ -3,6 +3,7 @@ import { UnauthorizedError } from "@/server/utils/unauthorized/error";
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
 import { PutUpAssortmentCopyDTO } from "../dto/PutUpAssortmentCopyDTO";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
 import { ShelfDTO } from "../dto/shared/ShelfDTO";
 import { CellDTO } from "../dto/shared/CellDTO";
@@ -20,8 +21,8 @@ const findEmptyCells = (shelf: ShelfDTO): CellDTO[] => {
 };
 
 const formatErrorDetails = (details: string[]): string => {
-	const dashedDetails = details.map((detail) => `- ${detail},`);
-	const joinedDetails = dashedDetails.join("\n");
+	const dashedDetails = details.map((detail) => `- ${detail}`);
+	const joinedDetails = dashedDetails.join(",\n");
 	return `\n\n${joinedDetails}`;
 };
 
@@ -31,6 +32,7 @@ export class PutUpAssortmentCopy {
 		private readonly storageHelper: StorageAssortmentHelper,
 		private readonly getAssortmentAction: GetAssortment,
 		private readonly getAllShelvesAction: GetAllShelves,
+		private readonly getAllAssortmentAction: GetAllAssortment,
 	) {}
 
 	async execute(dto: PutUpAssortmentCopyDTO, currentUser?: UserDTO) {
@@ -48,7 +50,8 @@ export class PutUpAssortmentCopy {
 			expiresAfterSeconds,
 		};
 
-		const shelves = await this.getAllShelvesAction.execute();
+		const assortments = await this.getAllAssortmentAction.execute();
+		const shelves = await this.getAllShelvesAction.execute({ assortmentContext: assortments });
 		const errorDetails: string[] = [];
 		for (const shelf of shelves) {
 			const emptyCells = findEmptyCells(shelf);
