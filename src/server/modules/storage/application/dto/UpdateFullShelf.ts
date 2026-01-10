@@ -1,14 +1,5 @@
-import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 import z from "zod";
-
-const updateShelfDTOSchema = z.object({
-    name: z.string(),
-    comment: z.string(),
-    temperatureRange: temperatureRangeDTOSchema,
-    maxWeightKg: z.number(),
-    maxAssortmentSize: dimensionsDTOSchema,
-    supportsHazardous: z.boolean(),
-});
+import { updateShelfDTOSchema } from "./shared/UpdateShelfDTOSchema";
 
 export const updateFullShelfDTOSchema = z.object({
     shelfId: z.string(),
