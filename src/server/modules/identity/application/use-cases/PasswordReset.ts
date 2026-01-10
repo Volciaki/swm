@@ -10,29 +10,29 @@ import { InvalidTwoFactorAuthenticationSessionError } from "../errors/InvalidTwo
 import { StringHasher } from "../services/StringHasher";
 
 export class PasswordReset {
-    constructor(
+	constructor(
         private readonly userRepository: UserRepository,
         private readonly twoFactorAuthenticationSessionRepository: TwoFactorAuthenticationSessionRepository,
         private readonly stringHasher: StringHasher,
-    ) {}
+	) {}
 
-    async execute(dto: PasswordResetDTO, currentUser?: User) {
-        if (currentUser) throw new AlreadyLoggedInError();
+	async execute(dto: PasswordResetDTO, currentUser?: User) {
+		if (currentUser) throw new AlreadyLoggedInError();
 
-        const sessionId = UUID.fromString(dto.authenticationId);
-        const session = await this.twoFactorAuthenticationSessionRepository.getById(sessionId);
+		const sessionId = UUID.fromString(dto.authenticationId);
+		const session = await this.twoFactorAuthenticationSessionRepository.getById(sessionId);
 
-        if (!session) throw new TwoFactorAuthenticationSessionNotFoundError(dto.authenticationId);
+		if (!session) throw new TwoFactorAuthenticationSessionNotFoundError(dto.authenticationId);
 
-        if (session.value !== dto.authenticationValue) throw new WrongTwoFactorAuthenticationValueError(dto.authenticationValue);
+		if (session.value !== dto.authenticationValue) throw new WrongTwoFactorAuthenticationValueError(dto.authenticationValue);
 
-        const user = await this.userRepository.getById(session.userId);
+		const user = await this.userRepository.getById(session.userId);
         
-        if (!user) throw new InvalidTwoFactorAuthenticationSessionError(session.id.value, session.userId.value);
+		if (!user) throw new InvalidTwoFactorAuthenticationSessionError(session.id.value, session.userId.value);
 
-        const newPasswordHash = await this.stringHasher.hash(dto.newPasswordRaw);
-        user.passwordHash = newPasswordHash;
+		const newPasswordHash = await this.stringHasher.hash(dto.newPasswordRaw);
+		user.passwordHash = newPasswordHash;
 
-        await this.userRepository.update(user);
-    }
+		await this.userRepository.update(user);
+	}
 }

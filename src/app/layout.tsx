@@ -5,18 +5,18 @@ import { Providers } from "@/ui/providers";
 // import { Geist, Geist_Mono } from "next/font/google";
 
 export const metadata: Metadata = {
-    title: "Magazyn (?)",
-    description: "???",
+	title: "Magazyn (?)",
+	description: "???",
 };
 
 const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
-    <Providers>
-        <html lang="en">
-            <body>
-                {children}
-            </body>
-        </html>
-    </Providers>
+	<Providers>
+		<html lang="en">
+			<body>
+				{children}
+			</body>
+		</html>
+	</Providers>
 );
 
 export default RootLayout;

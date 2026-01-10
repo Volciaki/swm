@@ -13,7 +13,7 @@ import { TwoFactorAuthenticationValueGenerator } from "../services/TwoFactorAuth
 import { TwoFactorAuthenticationValueSender } from "../services/TwoFactorAuthenticationValueSender";
 
 export class Login {
-    constructor(
+	constructor(
         private readonly userRepository: UserRepository,
         private readonly twoFactorAuthenticationSessionRepository: TwoFactorAuthenticationSessionRepository,
         private readonly stringHasher: StringHasher,
@@ -21,34 +21,34 @@ export class Login {
         private readonly uuidManager: UUIDManager,
         private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
         private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender,
-    ) {}
+	) {}
 
-    async execute(dto: LoginDTO, currentUser?: User) {
-        if (currentUser) throw new AlreadyLoggedInError();
+	async execute(dto: LoginDTO, currentUser?: User) {
+		if (currentUser) throw new AlreadyLoggedInError();
 
-        const email = Email.fromString(dto.email);
-        const user = await this.userRepository.getByEmail(email);
-        if (!user) throw new UserNotFoundError("mail", dto.email);
+		const email = Email.fromString(dto.email);
+		const user = await this.userRepository.getByEmail(email);
+		if (!user) throw new UserNotFoundError("mail", dto.email);
 
-        const passwordMatches = await this.stringHasher.verify(dto.passwordRaw, user.passwordHash);
-        if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);
+		const passwordMatches = await this.stringHasher.verify(dto.passwordRaw, user.passwordHash);
+		if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);
 
-        if (user.twoFactorAuthenticationEnabled) {
-            const twoFactorAuthenticationValue = this.twoFactorAuthenticationValueGenerator.generate();
-            const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
-                user,
-                this.uuidManager.generate(),
-                twoFactorAuthenticationValue,
-            );
+		if (user.twoFactorAuthenticationEnabled) {
+			const twoFactorAuthenticationValue = this.twoFactorAuthenticationValueGenerator.generate();
+			const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
+				user,
+				this.uuidManager.generate(),
+				twoFactorAuthenticationValue,
+			);
 
-            if (this.twoFactorAuthenticationValueSender)
-                await this.twoFactorAuthenticationValueSender.deliverToUser(user, authenticationSession);
+			if (this.twoFactorAuthenticationValueSender)
+				await this.twoFactorAuthenticationValueSender.deliverToUser(user, authenticationSession);
 
-            return { authenticationId: authenticationSession.id.value };
-        }
+			return { authenticationId: authenticationSession.id.value };
+		}
 
-        return {
-            authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)
-        };
-    }
+		return {
+			authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)
+		};
+	}
 }

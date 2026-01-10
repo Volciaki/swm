@@ -18,24 +18,24 @@ export type APIContext = {
  * @see: https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (): Promise<APIContext> => {
-    await initializeDatabase();
+	await initializeDatabase();
 
-    const cookieStore = await cookies();
-    const authCookie = cookieStore.get(environment.authentication.cookie.name);
+	const cookieStore = await cookies();
+	const authCookie = cookieStore.get(environment.authentication.cookie.name);
 
-    let user;
-    if (authCookie) {
-        const authenticationManager = new NodeAuthenticationManager();
-        const cookieValue = await authenticationManager.decodeAuthenticationToken(authCookie.value);
+	let user;
+	if (authCookie) {
+		const authenticationManager = new NodeAuthenticationManager();
+		const cookieValue = await authenticationManager.decodeAuthenticationToken(authCookie.value);
 
-        const userRepository = new DBUserRepository(appDataSource.getRepository(DBUser));
-        const userId = UUID.fromString(cookieValue.userId);
-        user = await userRepository.getById(userId);
-    } else {
-        user = null;
-    }
+		const userRepository = new DBUserRepository(appDataSource.getRepository(DBUser));
+		const userId = UUID.fromString(cookieValue.userId);
+		user = await userRepository.getById(userId);
+	} else {
+		user = null;
+	}
 
-    return { db: appDataSource, user };
+	return { db: appDataSource, user };
 };
 
 const t = initTRPC.context<APIContext>().create();
