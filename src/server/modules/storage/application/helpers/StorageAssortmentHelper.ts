@@ -14,9 +14,10 @@ import { PutUpAssortmentDTO } from "../dto/PutUpAssortmentDTO";
 import { AssortmentDTO } from "../dto/shared/AssortmentDTO";
 import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { ImportAndReplaceAssortmentDTO } from "../dto/ImportAndReplaceAssortmentDTO";
+import { PutUpAssortmentResponseDTO } from "../dto/PutUpAssortmentResponseDTO";
 
 export interface StorageAssortmentHelper {
-    putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO): Promise<ShelfDTO>;
+    putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO): Promise<PutUpAssortmentResponseDTO>;
     takeDownAssortmentByDTO(dto: TakeDownAssortmentDTO, currentUser: UserDTO): Promise<ShelfDTO>;
     importAndReplaceAssortment(dto: ImportAndReplaceAssortmentDTO, currentUser: UserDTO): Promise<AssortmentDTO[]>;
 };
@@ -64,7 +65,11 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
             );
 
             assortments = await this.getAllAssortment.execute();
-            return await this.getShelf.execute({ id: dto.shelfId, assortmentContext: assortments });
+			const shelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext: assortments });
+			return {
+				shelf,
+				newAssortment: assortment,
+			};
         } catch (error) {
             await this.deleteAssortment.execute({ id: assortment.id }, currentUser);
 

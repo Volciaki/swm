@@ -5,13 +5,14 @@ import { DeleteAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
-import { PutUpAssortment } from "@/server/modules/storage/application/use-cases/PutUpAssortment";
+import { PutUpAssortmentCopy } from "@/server/modules/storage/application/use-cases/PutUpAssortmentCopy";
+import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
 import { PutUpAssortmentResponseDTO } from "@/server/modules/storage/application/dto/PutUpAssortmentResponseDTO";
-import { putUpAssortmentDTOSchema } from "@/server/modules/storage/application/dto/PutUpAssortmentDTO";
+import { putUpAssortmentCopyDTOSchema } from "@/server/modules/storage/application/dto/PutUpAssortmentCopyDTO";
 import { getServices } from "../../services";
 import { procedure } from "../../init";
 
-export const createAssortment = procedure.input(putUpAssortmentDTOSchema).mutation<PutUpAssortmentResponseDTO>(async ({ input, ctx }) => {
+export const createAssortmentCopy = procedure.input(putUpAssortmentCopyDTOSchema).mutation<PutUpAssortmentResponseDTO>(async ({ input, ctx }) => {
     const services = getServices(ctx);
     const assortmentRepository = services.repositories.assortment.db;
     const shelfRepository = services.repositories.shelf.db;
@@ -27,6 +28,7 @@ export const createAssortment = procedure.input(putUpAssortmentDTOSchema).mutati
     const getShelfAction = new GetShelf(shelfHelper);
     const fillCellAction = new FillCell(shelfRepository, shelfHelper);
     const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
+	const getAllShelvesAction = new GetAllShelves(shelfRepository);
 
     const storageAssortmentHelper = services.helpers.storageAssortment.default.get(
         getAllAssortmentAction,
@@ -38,6 +40,6 @@ export const createAssortment = procedure.input(putUpAssortmentDTOSchema).mutati
         emptyCellAction,
     );
 
-    const action = new PutUpAssortment(storageAssortmentHelper);
+    const action = new PutUpAssortmentCopy(storageAssortmentHelper, getAssortmentAction, getAllShelvesAction);
     return await action.execute(input, ctx.user ?? undefined);
 });

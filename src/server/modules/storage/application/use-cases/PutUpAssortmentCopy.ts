@@ -58,7 +58,7 @@ export class PutUpAssortmentCopy {
 			const cell = emptyCells[0];
 
 			try {
-				const assortment = await this.storageHelper.putUpAssortmentByDTO(
+				return await this.storageHelper.putUpAssortmentByDTO(
 					{
 						shelfId: shelf.id,
 						cellId: cell.id,
@@ -66,7 +66,6 @@ export class PutUpAssortmentCopy {
 					},
 					currentUser,
 				);
-				return assortment;
 			} catch (err) {
 				const error = err as Error;
 				errorDetails.push(`Shelf: ${shelf.id}, Cell: ${cell.id}, Error: ${error.name} - ${error.message}`);

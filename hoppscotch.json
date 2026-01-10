@@ -162,17 +162,17 @@
       "requests": [
         {
           "v": "12",
-          "endpoint": "http://localhost:3000/api/trpc/storage.createShelf",
           "name": "createShelf",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.createShelf",
           "params": [],
           "headers": [],
-          "method": "POST",
+          "preRequestScript": "",
+          "testScript": "",
           "auth": {
             "authType": "inherit",
             "authActive": true
           },
-          "preRequestScript": "",
-          "testScript": "",
           "body": {
             "contentType": "application/json",
             "body": "{\n  \"name\": \"...\",\n  \"comment\": \"...\",\n  \"temperatureRange\": {\n    \"minimalCelsius\": 13.1,\n    \"maximalCelsius\": 43.6\n  },\n  \"maxWeightKg\": 20.1,\n  \"maxAssortmentSize\": {\n    \"widthMillimeters\": 40.2,\n    \"heightMillimeters\": 30.5,\n    \"lengthMillimeters\": 40.9\n  },\n  \"supportsHazardous\": true,\n  \"cellsShape\": {\n    \"rows\": 2,\n    \"columns\": 2\n  }\n}"
@@ -182,8 +182,9 @@
         },
         {
           "v": "12",
-          "endpoint": "http://localhost:3000/api/trpc/storage.getShelf",
           "name": "getShelf",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/storage.getShelf",
           "params": [
             {
               "key": "input",
@@ -193,13 +194,12 @@
             }
           ],
           "headers": [],
-          "method": "GET",
+          "preRequestScript": "",
+          "testScript": "",
           "auth": {
             "authType": "inherit",
             "authActive": true
           },
-          "preRequestScript": "",
-          "testScript": "",
           "body": {
             "contentType": null,
             "body": null
@@ -209,17 +209,17 @@
         },
         {
           "v": "12",
-          "endpoint": "http://localhost:3000/api/trpc/storage.updateShelf",
           "name": "updateShelf",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.updateShelf",
           "params": [],
           "headers": [],
-          "method": "POST",
+          "preRequestScript": "",
+          "testScript": "",
           "auth": {
             "authType": "inherit",
             "authActive": true
           },
-          "preRequestScript": "",
-          "testScript": "",
           "body": {
             "contentType": "application/json",
             "body": "{\n  \"shelfId\": \"...\",\n  \"newData\": {\n    \"name\": \"...\",\n    \"comment\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": -10,\n      \"maximalCelsius\": 40\n    },\n    \"maxWeightKg\": 50,\n    \"maxAssortmentSize\": {\n      \"widthMillimeters\": 3015.1,\n      \"heightMillimeters\": 3120.2,\n      \"lengthMillimeters\": 3500.3\n    },\n    \"supportsHazardous\": false\n  }\n}\n"
@@ -229,17 +229,17 @@
         },
         {
           "v": "12",
-          "endpoint": "http://localhost:3000/api/trpc/storage.deleteShelf",
           "name": "deleteShelf",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.deleteShelf",
           "params": [],
           "headers": [],
-          "method": "POST",
+          "preRequestScript": "",
+          "testScript": "",
           "auth": {
             "authType": "inherit",
             "authActive": true
           },
-          "preRequestScript": "",
-          "testScript": "",
           "body": {
             "contentType": "application/json",
             "body": "{\n  \"id\": \"...\"\n}"
@@ -249,17 +249,17 @@
         },
         {
           "v": "12",
-          "endpoint": "http://localhost:3000/api/trpc/storage.createAssortment",
           "name": "createAssortment",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.createAssortment",
           "params": [],
           "headers": [],
-          "method": "POST",
+          "preRequestScript": "",
+          "testScript": "",
           "auth": {
             "authType": "inherit",
             "authActive": true
           },
-          "preRequestScript": "",
-          "testScript": "",
           "body": {
             "contentType": "application/json",
             "body": "{\n  \"shelfId\": \"...\",\n  \"cellId\": \"...\",\n  \"assortment\": {\n    \"name\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": -10,\n      \"maximalCelsius\": 40\n    },\n    \"weightKg\": 10,\n    \"size\": {\n      \"widthMillimeters\": 1000,\n      \"heightMillimeters\": 1000,\n      \"lengthMillimeters\": 1000\n    },\n    \"comment\": \"...\",\n    \"expiresAfterSeconds\": 1400,\n    \"isHazardous\": false\n  }\n}"
@@ -269,8 +269,9 @@
         },
         {
           "v": "12",
-          "endpoint": "http://localhost:3000/api/trpc/storage.getAssortment",
           "name": "getAssortment",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/storage.getAssortment",
           "params": [
             {
               "key": "input",
@@ -280,13 +281,12 @@
             }
           ],
           "headers": [],
-          "method": "GET",
+          "preRequestScript": "",
+          "testScript": "",
           "auth": {
             "authType": "inherit",
             "authActive": true
           },
-          "preRequestScript": "",
-          "testScript": "",
           "body": {
             "contentType": null,
             "body": null
@@ -296,17 +296,17 @@
         },
         {
           "v": "12",
-          "endpoint": "http://localhost:3000/api/trpc/storage.updateAssortment",
           "name": "updateAssortment",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.updateAssortment",
           "params": [],
           "headers": [],
-          "method": "POST",
+          "preRequestScript": "",
+          "testScript": "",
           "auth": {
             "authType": "inherit",
             "authActive": true
           },
-          "preRequestScript": "",
-          "testScript": "",
           "body": {
             "contentType": "application/json",
             "body": "{\n  \"id\": \"...\",\n  \"newData\": {\n  \t\"name\": \"...\",\n    \"comment\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": -10,\n      \"maximalCelsius\": 40\n    },\n    \"weightKg\": 10,\n    \"size\": {\n      \"widthMillimeters\": 1000,\n      \"heightMillimeters\": 1000,\n      \"lengthMillimeters\": 1000\n    },\n    \"expiresAfterSeconds\": 1400,\n    \"isHazardous\": false\n  }\n}"
@@ -316,20 +316,60 @@
         },
         {
           "v": "12",
-          "endpoint": "http://localhost:3000/api/trpc/storage.deleteAssortment",
           "name": "deleteAssortment",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.deleteAssortment",
           "params": [],
           "headers": [],
-          "method": "POST",
+          "preRequestScript": "",
+          "testScript": "",
           "auth": {
             "authType": "inherit",
             "authActive": true
           },
-          "preRequestScript": "",
-          "testScript": "",
           "body": {
             "contentType": "application/json",
             "body": "{\n  \"id\": \"...\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "importAssortment",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.importAssortment",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"assortment\": [\n    {\n      \"shelfId\": \"...\",\n      \"cellId\": \"...\",\n      \"assortment\": {\n        \"name\": \"...\",\n        \"temperatureRange\": {\n          \"minimalCelsius\": -10,\n          \"maximalCelsius\": 40\n        },\n        \"weightKg\": 10,\n        \"size\": {\n          \"widthMillimeters\": 1000,\n          \"heightMillimeters\": 1000,\n          \"lengthMillimeters\": 1000\n        },\n        \"comment\": \"...\",\n        \"expiresAfterSeconds\": 1400,\n        \"isHazardous\": false\n      }\n    },\n    {\n      \"shelfId\": \"...\",\n      \"cellId\": \"...\",\n      \"assortment\": {\n        \"name\": \"...\",\n        \"temperatureRange\": {\n          \"minimalCelsius\": -10,\n          \"maximalCelsius\": 40\n        },\n        \"weightKg\": 10,\n        \"size\": {\n          \"widthMillimeters\": 1000,\n          \"heightMillimeters\": 1000,\n          \"lengthMillimeters\": 1000\n        },\n        \"comment\": \"...\",\n        \"expiresAfterSeconds\": 1400,\n        \"isHazardous\": false\n      }\n    }\n  ]\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "importShelves",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.importShelves",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"shelves\": [\n    {\n      \"name\": \"...\",\n      \"comment\": \"...\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": 13.1,\n        \"maximalCelsius\": 43.6\n      },\n      \"maxWeightKg\": 20.1,\n      \"maxAssortmentSize\": {\n        \"widthMillimeters\": 40.2,\n        \"heightMillimeters\": 30.5,\n        \"lengthMillimeters\": 40.9\n      },\n      \"supportsHazardous\": true,\n      \"cellsShape\": {\n        \"rows\": 2,\n        \"columns\": 2\n      }\n    },\n    {\n      \"name\": \"...\",\n      \"comment\": \"...\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": 13.1,\n        \"maximalCelsius\": 43.6\n      },\n      \"maxWeightKg\": 20.1,\n      \"maxAssortmentSize\": {\n        \"widthMillimeters\": 40.2,\n        \"heightMillimeters\": 30.5,\n        \"lengthMillimeters\": 40.9\n      },\n      \"supportsHazardous\": true,\n      \"cellsShape\": {\n        \"rows\": 2,\n        \"columns\": 2\n      }\n    },\n  ]\n}\n"
           },
           "requestVariables": [],
           "responses": {}
