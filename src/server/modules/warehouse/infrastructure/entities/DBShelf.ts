@@ -3,35 +3,35 @@ import { Entity, PrimaryColumn, Column } from "typeorm";
 @Entity("shelves")
 export class DBShelf {
     @PrimaryColumn()
-    id!: string;
+        id!: string;
 
     @Column()
-    name!: string;
+        name!: string;
 
     @Column()
-    comment!: string;
+        comment!: string;
 
     @Column({ name: "cell_ids", type: "json" })
-    cellIds!: string[][];
+        cellIds!: string[][];
 
     @Column({ name: "temperature_range_max", type: "float" })
-    temperatureRangeMax!: number;
+        temperatureRangeMax!: number;
 
     @Column({ name: "temperature_range_min", type: "float" })
-    temperatureRangeMin!: number;
+        temperatureRangeMin!: number;
 
     @Column({ name: "max_weight_kg", type: "float" })
-    maxWeightKg!: number;
+        maxWeightKg!: number;
 
     @Column({ name: "max_assortment_size_width_mm", type: "float" })
-    maxAssortmentSizeWidthMillimeters!: number;
+        maxAssortmentSizeWidthMillimeters!: number;
 
     @Column({ name: "max_assortment_size_height_mm", type: "float" })
-    maxAssortmentSizeHeightMillimeters!: number;
+        maxAssortmentSizeHeightMillimeters!: number;
 
     @Column({ name: "max_assortment_size_length_mm", type: "float" })
-    maxAssortmentSizeLengthMillimeters!: number;
+        maxAssortmentSizeLengthMillimeters!: number;
 
     @Column({ name: "supports_hazardous" })
-    supportsHazardous!: boolean;
+        supportsHazardous!: boolean;
 }

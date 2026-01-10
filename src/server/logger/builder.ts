@@ -29,20 +29,20 @@ export class LogBuilder {
         if (this.date) string = `${formatDateAsHumanReadable(this.date)} > ${string}`
 
         switch (this.level) {
-            case LogLevel.DEBUG:
-                string = chalk.blue(string);
-                break;
-            case LogLevel.LOG:
-                string = chalk.white(string);
-                break;
-            case LogLevel.WARN:
-                string = chalk.yellow(string);
-                break;
-            case LogLevel.ERROR:
-                string = chalk.red(string);
-                break;
-            default:
-                const _exhaustiveCheck: never = this.level;
+        case LogLevel.DEBUG:
+            string = chalk.blue(string);
+            break;
+        case LogLevel.LOG:
+            string = chalk.white(string);
+            break;
+        case LogLevel.WARN:
+            string = chalk.yellow(string);
+            break;
+        case LogLevel.ERROR:
+            string = chalk.red(string);
+            break;
+        default:
+            const _exhaustiveCheck: never = this.level;
         }
 
         return string;
