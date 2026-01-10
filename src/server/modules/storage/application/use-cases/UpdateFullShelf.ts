@@ -4,24 +4,24 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { UpdateShelf } from "@/server/modules/warehouse/application/use-cases/UpdateShelf";
 
 export class UpdateFullShelf {
-    constructor(
+	constructor(
         private readonly getAllAssortmentAction: GetAllAssortment,
         private readonly updateShelfAction: UpdateShelf,
-    ) {}
+	) {}
 
-    async execute(dto: UpdateFullShelfDTO, currentUser?: UserDTO) {
-        if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(dto: UpdateFullShelfDTO, currentUser?: UserDTO) {
+		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const assortments = await this.getAllAssortmentAction.execute();
-        return await this.updateShelfAction.execute(
-            {
-                shelf: {
-                    id: dto.shelfId,
-                    assortmentContext: assortments,
-                },
-                newData: dto.newData,
-            },
-            currentUser,
-        );
-    }
+		const assortments = await this.getAllAssortmentAction.execute();
+		return await this.updateShelfAction.execute(
+			{
+				shelf: {
+					id: dto.shelfId,
+					assortmentContext: assortments,
+				},
+				newData: dto.newData,
+			},
+			currentUser,
+		);
+	}
 }

@@ -5,16 +5,16 @@ import { DeleteUserDTO } from "../dto/DeleteUserDTO";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 
 export class DeleteUser {
-    constructor(private readonly userRepository: UserRepository) {}
+	constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(dto: DeleteUserDTO, currentUser?: UserDTO) {
-        if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(dto: DeleteUserDTO, currentUser?: UserDTO) {
+		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const userId = UUID.fromString(dto.id);
-        const user = await this.userRepository.getById(userId);
+		const userId = UUID.fromString(dto.id);
+		const user = await this.userRepository.getById(userId);
 
-        if (!user) throw new UserNotFoundError("UUID", dto.id);
+		if (!user) throw new UserNotFoundError("UUID", dto.id);
 
-        await this.userRepository.delete(user);
-    }
+		await this.userRepository.delete(user);
+	}
 }

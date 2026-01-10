@@ -4,12 +4,12 @@ import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
 import { ShelfHelper } from "../helpers/ShelfHelper";
 
 export class CreateShelf {
-    constructor( private readonly shelfHelper: ShelfHelper) {}
+	constructor( private readonly shelfHelper: ShelfHelper) {}
 
-    async execute(dto: CreateShelfDTO, currentUser?: UserDTO) {
-        if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(dto: CreateShelfDTO, currentUser?: UserDTO) {
+		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const shelf = await this.shelfHelper.createByDTO(dto);
-        return ShelfMapper.fromShelfToShelfDTO(shelf);
-    }
+		const shelf = await this.shelfHelper.createByDTO(dto);
+		return ShelfMapper.fromShelfToShelfDTO(shelf);
+	}
 }

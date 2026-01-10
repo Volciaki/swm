@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const authenticationPayloadDTOSchema = z.object({
-    userId: z.string(),
+	userId: z.string(),
 });
 
 export type AuthenticationPayloadDTO = z.infer<typeof authenticationPayloadDTOSchema>;

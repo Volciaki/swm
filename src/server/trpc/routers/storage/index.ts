@@ -12,14 +12,14 @@ import { updateAssortment } from "./updateAssortment";
 import { deleteAssortment } from "./deleteAssortment";
 
 export const storageRouter = createRouter({
-    createShelf,
-    importShelves,
-    getShelf,
-    updateShelf,
-    deleteShelf,
-    createAssortment,
-    importAssortment,
-    getAssortment,
-    updateAssortment,
-    deleteAssortment,
+	createShelf,
+	importShelves,
+	getShelf,
+	updateShelf,
+	deleteShelf,
+	createAssortment,
+	importAssortment,
+	getAssortment,
+	updateAssortment,
+	deleteAssortment,
 });

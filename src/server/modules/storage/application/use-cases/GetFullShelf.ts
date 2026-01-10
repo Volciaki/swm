@@ -3,16 +3,16 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 
 export class GetFullShelf {
-    constructor(
+	constructor(
         private readonly getAllAssortment: GetAllAssortment,
         private readonly getShelf: GetShelf,
-    ) {}
+	) {}
 
-    async execute(dto: GetFullShelfDTO) {
-        const assortments = await this.getAllAssortment.execute();
-        return await this.getShelf.execute({
-            id: dto.id,
-            assortmentContext: assortments,
-        });
-    }
+	async execute(dto: GetFullShelfDTO) {
+		const assortments = await this.getAllAssortment.execute();
+		return await this.getShelf.execute({
+			id: dto.id,
+			assortmentContext: assortments,
+		});
+	}
 }

@@ -4,10 +4,10 @@ import { UUIDManager } from "@/server/utils";
 import { GetServicesContext } from "../../context";
 
 export const getDefaultAssortmentHelper = (ctx: GetServicesContext) => {
-    return {
-        get: (
-            assortmentRepository: AssortmentRepository,
-            uuidManager: UUIDManager,
-        ) => new DefaultAssortmentHelper(assortmentRepository, uuidManager)
-    };
+	return {
+		get: (
+			assortmentRepository: AssortmentRepository,
+			uuidManager: UUIDManager,
+		) => new DefaultAssortmentHelper(assortmentRepository, uuidManager)
+	};
 };
