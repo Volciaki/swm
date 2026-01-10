@@ -11,7 +11,6 @@ import { CellNotFoundError } from "../errors/CellNotFoundError";
 import { ShelfUnevenError } from "../../application/errors/ShelfUnevenError";
 import { AssortmentVO } from "../vo/AssortmentVO";
 import { Cell } from "./Cell";
-import { logger } from "@/server/logger";
 
 export class Shelf {
     private constructor(

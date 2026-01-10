@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { shelfDTOSchema } from "./shared/ShelfDTO";
+import { shelfDTOSchema } from "./ShelfDTO";
 
 export const createShelfDTOSchema = shelfDTOSchema
     .omit({ id: true, cells: true })

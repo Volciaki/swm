@@ -1,24 +1,16 @@
 import { UnauthorizedError } from "@/server/utils/unauthorized/error";
-import { UserDTO, UUIDManager } from "@/server/utils";
-import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
-import { CreateAssortmentDTO } from "../dto/CreateAssortmentDTO";
+import { UserDTO } from "@/server/utils";
+import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
+import { AssortmentHelper } from "../helpers/AssortmentHelper";
 
 export class CreateAssortment {
-    constructor(
-        private readonly assortmentRepository: AssortmentRepository,
-        private readonly uuidManager: UUIDManager,
-    ) {}
+    constructor(private readonly assortmentHelper: AssortmentHelper) {}
 
     async execute(dto: CreateAssortmentDTO, currentUser?: UserDTO) {
         if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-        const assortment = AssortmentMapper.fromAssortmentDTOToAssortment({
-            ...dto,
-            id: this.uuidManager.generate().value,
-            storedAtTimestamp: (new Date()).getTime(),
-        });
-        await this.assortmentRepository.create(assortment);
+        const assortment = await this.assortmentHelper.createByDTO(dto);
         return AssortmentMapper.fromAssortmentToAssortmentDTO(assortment);
     }
 }
