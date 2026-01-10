@@ -14,7 +14,7 @@ const eslintConfig = defineConfig([
 			quotes: ["error", "double", { "avoidEscape": true }],
 			indent: ["error", "tab", {
 				"ignoredNodes": ["PropertyDefinition[decorators]"]
-			}]
+			}],
 		},
 	},
 ]);

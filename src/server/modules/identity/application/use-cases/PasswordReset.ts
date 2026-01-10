@@ -1,5 +1,4 @@
-import { UUID } from "@/server/utils";
-import { User } from "../../domain/entities/User";
+import { UserDTO, UUID } from "@/server/utils";
 import { AlreadyLoggedInError } from "../../domain/errors/AlreadyLoggedInError";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { PasswordResetDTO } from "../dto/PasswordResetDTO";
@@ -16,7 +15,7 @@ export class PasswordReset {
         private readonly stringHasher: StringHasher,
 	) {}
 
-	async execute(dto: PasswordResetDTO, currentUser?: User) {
+	async execute(dto: PasswordResetDTO, currentUser?: UserDTO) {
 		if (currentUser) throw new AlreadyLoggedInError();
 
 		const sessionId = UUID.fromString(dto.authenticationId);

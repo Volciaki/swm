@@ -1,6 +1,5 @@
-import { UUIDManager } from "@/server/utils";
+import { UserDTO, UUIDManager } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
-import { User } from "../../domain/entities/User";
 import { AlreadyLoggedInError } from "../../domain/errors/AlreadyLoggedInError";
 import { WrongPasswordError } from "../../domain/errors/WrongPasswordError";
 import { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
@@ -23,7 +22,7 @@ export class Login {
         private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender,
 	) {}
 
-	async execute(dto: LoginDTO, currentUser?: User) {
+	async execute(dto: LoginDTO, currentUser?: UserDTO) {
 		if (currentUser) throw new AlreadyLoggedInError();
 
 		const email = Email.fromString(dto.email);
