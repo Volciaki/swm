@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const putUpAssortmentCopyDTOSchema = z.object({
-	assortmentId: z.string(),
+	id: z.string(),
 });
 
 export type PutUpAssortmentCopyDTO = z.infer<typeof putUpAssortmentCopyDTOSchema>;

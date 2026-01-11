@@ -26,7 +26,7 @@ const formatErrorDetails = (details: string[]): string => {
 	return `\n\n${joinedDetails}`;
 };
 
-// Stores another Assortment of a kind by ID.
+// Stores another Assortment of a kind by ID. With this action you can easily duplicate assortments.
 export class PutUpAssortmentCopy {
 	constructor(
 		private readonly storageHelper: StorageAssortmentHelper,
@@ -38,7 +38,7 @@ export class PutUpAssortmentCopy {
 	async execute(dto: PutUpAssortmentCopyDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-		const assortment = await this.getAssortmentAction.execute({ id: dto.assortmentId });
+		const assortment = await this.getAssortmentAction.execute({ id: dto.id });
 		const { weightKg, name, size, comment, isHazardous, temperatureRange, expiresAfterSeconds } = assortment;
 		const sharedData = {
 			weightKg,

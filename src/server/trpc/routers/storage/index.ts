@@ -11,6 +11,7 @@ import { getAssortment } from "./getAssortment";
 import { updateAssortment } from "./updateAssortment";
 import { deleteAssortment } from "./deleteAssortment";
 import { createAssortmentCopy } from "./createAssortmentCopy";
+import { deleteAssortmentCopy } from "./deleteAssortmentCopy";
 
 export const storageRouter = createRouter({
 	createShelf,
@@ -24,4 +25,5 @@ export const storageRouter = createRouter({
 	getAssortment,
 	updateAssortment,
 	deleteAssortment,
+	deleteAssortmentCopy,
 });
