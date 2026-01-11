@@ -1,5 +1,6 @@
-import styles from  "./index.module.scss";
-import { routes } from "./routes";
+import styles from "./index.module.scss";
+import { Button } from "./../../atoms/Button/index";
+import { navbarRoutes } from "@/utils/routes";
 
 const NavigationBar = () => {
 	// To Khenzii: Da się zrobić żeby w <h1> kontent był zależny od specyficznego atomu/konfiguracji/zmiennej?
@@ -10,11 +11,11 @@ const NavigationBar = () => {
 				<h1>SWM</h1>
 			</div>
 			<li>
-				{routes.map((route, index) => (
+				{navbarRoutes.map((route, index) => (
 					<a href={route.path} key={`route-${index}`}>{route.text}</a>
 				))}
 			</li>
-			<a href="#" className={styles["button"]}>Zaloguj się</a>
+      <Button variant="primary">Zaloguj Się</Button>
 		</nav>
 	)
 };
