@@ -5,6 +5,7 @@ import { getAuthenticationManagerServices } from "./AuthenticationManager";
 import { getTwoFactorAuthenticationValueGeneratorServices } from "./TwoFactorAuthenticationValueGenerator";
 import { getTwoFactorAuthenticationValueSenderServices } from "./TwoFactorAuthenticationValueSender";
 import { getEmailManagerServices } from "./EmailManager";
+import { getFileStorageServices } from "./FileStorage";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -14,5 +15,6 @@ export const getUtils = (ctx: GetServicesContext) => {
 		twoFactorAuthenticationValueGenerator: getTwoFactorAuthenticationValueGeneratorServices(ctx),
 		twoFactorAuthenticationValueSender: getTwoFactorAuthenticationValueSenderServices(ctx),
 		emailManager: getEmailManagerServices(ctx),
+		fileStorage: getFileStorageServices(ctx),
 	};
 };

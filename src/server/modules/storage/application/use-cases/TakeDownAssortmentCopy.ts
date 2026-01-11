@@ -5,7 +5,6 @@ import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
 import { TakeDownAssortmentCopyDTO } from "../dto/TakeDownAssortmentCopyDTO";
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { AssortmentDTO } from "../dto/shared/AssortmentDTO";
-import { logger } from "@/server/logger";
 
 const isAlikeAssortment = (a: AssortmentDTO, b: AssortmentDTO): boolean => {
 	if (a.size.lengthMillimeters !== b.size.lengthMillimeters) return false;

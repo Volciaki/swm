@@ -1,2 +1,4 @@
-// TODO: figure out how to type this after installing minio.
-// export interface FileStorage {};
+export interface FileStorage {
+	uploadFile(path: string, buffer: Buffer, mimeType?: string): Promise<void>;
+	removeFile(path: string): Promise<void>;
+};
