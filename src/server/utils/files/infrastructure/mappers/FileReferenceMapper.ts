@@ -1,5 +1,5 @@
 import { UUID } from "@/server/utils/uuid";
-import { FileReferenceDTO } from "../../application/dto/FileReferenceDTO";
+import { FileReferenceDTO } from "../../application/dto/shared/FileReferenceDTO";
 import { FileReference } from "../../domain/entities/FileReference";
 import { VisibilityMapper } from "./VisibilityMapper";
 import { DBFileReference } from "../entities/DBFileReference";

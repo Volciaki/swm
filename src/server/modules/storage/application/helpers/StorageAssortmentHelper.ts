@@ -31,7 +31,6 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		private readonly getShelf: GetShelf,
 		private readonly fillCell: FillCell,
 		private readonly emptyCell: EmptyCell,
-		private readonly 
 	) { }
 
 	async putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO) {

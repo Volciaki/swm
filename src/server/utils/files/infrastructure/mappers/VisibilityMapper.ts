@@ -1,4 +1,4 @@
-import { VisibilityDTO } from "../../domain/dto/shared/VisbilityDTO";
+import { VisibilityDTO } from "../../application/dto/shared/VisbilityDTO";
 import { Visibility } from "../../domain/entities/Visibility";
 
 export class VisibilityMapper {

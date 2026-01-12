@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { visibilityDTOSchema } from "./shared/VisbilityDTO";
+import { visibilityDTOSchema } from "./VisbilityDTO";
 
 export const fileReferenceDTOSchema = z.object({
 	id: z.string(),

@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { UUID } from "@/server/utils";
-import { FileReferenceRepository } from "../../domain/repositories/FileReferenceRepository";
+import { FileReferenceRepository } from "../../domain/services/FileReferenceRepository";
 import { DBFileReference } from "../entities/DBFileReference";
 import { FileReferenceMapper } from "../mappers/FileReferenceMapper";
 import { FileReference } from "../../domain/entities/FileReference";

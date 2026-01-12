@@ -4,9 +4,8 @@ import { FileManager } from "../../domain/services/FileManager";
 
 export class DefaultFileManager extends FileManager {
 	async uploadFile(file: UploadFileDTO) {
-		return await this.repository.create({
-
-		});
+		const visibility = await this.storage.getSharedVisibility();
+		return await this.helper.createByDTO(file, visibility);
 	}
 
 	async deleteFile(file: FileReference) {
