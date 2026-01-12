@@ -6,10 +6,13 @@ import sharp from "sharp";
 import path from "path";
 import { logger } from "@/server/logger";
 
-// Around 20% of the QR code can be damaged if using high correction level.
-const LOGO_SIZE_RATIO = 0.2;
+// Around 25-30% of the QR code can be damaged if using high correction level.
+// (This includes the white background margin around our logo asset).
+const LOGO_SIZE_RATIO = 0.273;
 
-// const getOffsetBySize = (totalSize: number, size: number)
+const getOffsetBySize = (totalSize: number, size: number): number => {
+	return Math.floor((totalSize - size) / 2);
+};
 
 export class DefaultQRCodeGenerator implements QRCodeGenerator {
 	async generate(code: QRCode, optionsUnsafe?: GenerateQRCodeOptions) {
@@ -27,13 +30,12 @@ export class DefaultQRCodeGenerator implements QRCodeGenerator {
 		});
 
 		if (options.addLogo) {
-			const logoSize = LOGO_SIZE_RATIO * code.size.value;
-
-			const backgroundSize = logoSize + 0.02 * code.size.value;
+			const backgroundSize = Math.floor(LOGO_SIZE_RATIO * code.size.value);
+			const logoSize = Math.floor(backgroundSize - 0.03 * code.size.value);
+	
 			const background = await sharp(
 				{
 					create: {
-						// TODO: add some margin here?
 						width: backgroundSize,
 						height: backgroundSize,
 						channels: 4,
@@ -51,8 +53,8 @@ export class DefaultQRCodeGenerator implements QRCodeGenerator {
 				.png()
 				.toBuffer()
 			
-			const backgroundOffset = Math.floor((code.size.value - backgroundSize) / 2);
-			const logoOffset = Math.floor((code.size.value - logoSize) / 2);
+			const backgroundOffset = getOffsetBySize(code.size.value, backgroundSize);
+			const logoOffset = getOffsetBySize(code.size.value, logoSize);
 			buffer = await sharp(buffer)
 				.composite([
 					{
