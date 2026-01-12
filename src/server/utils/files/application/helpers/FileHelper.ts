@@ -16,6 +16,7 @@ const getSizeBytesByBase64String = (content: string): number => {
 
 export interface FileHelper {
 	getByIdStringOrThrow(id: string): Promise<FileReference>;
+	getByPathOrThrow(path: string): Promise<FileReference>;
 	createByDTO(dto: UploadFileDTO, visibility: Visibility): Promise<FileReference>;
 };
 
@@ -29,7 +30,15 @@ export class DefaultFileHelper implements FileHelper {
 		const id = UUID.fromString(idString);
 		const entity = await this.fileReferenceRepository.getById(id);
 
-		if (entity === null) throw new FileNotFoundError(id);
+		if (entity === null) throw new FileNotFoundError("ID", id.value);
+
+		return entity;
+	}
+
+	async getByPathOrThrow(path: string) {
+		const entity = await this.fileReferenceRepository.getByPath(path);
+
+		if (entity === null) throw new FileNotFoundError("path", path);
 
 		return entity;
 	}

@@ -1,4 +1,4 @@
-import { UtilsError } from "@/server/utils/error";
+import { UtilsError } from "@/server/utils/errors";
 
 export class FilesApplicationError extends UtilsError {
 	constructor(message: string) {

@@ -42,4 +42,12 @@ export class DBFileReferenceRepository implements FileReferenceRepository {
 
 		return FileReferenceMapper.fromDBToEntity(dbObject);
 	}
+
+	async getByPath(path: string) {
+		const dbObject = await this.db.findOneBy({ path });
+
+		if (dbObject === null) return null;
+
+		return FileReferenceMapper.fromDBToEntity(dbObject);
+	}
 }

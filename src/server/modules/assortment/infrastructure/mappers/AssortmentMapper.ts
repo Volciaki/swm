@@ -12,13 +12,13 @@ export class AssortmentMapper {
 		dbAssortment.cellId = cellId.value;
 		dbAssortment.shelfId = shelfId.value;
 		dbAssortment.name = name;
-		dbAssortment.sizeWidthMillimeters = size.width.millimeters;
-		dbAssortment.sizeHeightMillimeters = size.height.millimeters;
-		dbAssortment.sizeLengthMillimeters = size.length.millimeters;
-		dbAssortment.weightKg = weight.kilograms;
+		dbAssortment.sizeWidthMillimeters = size.width.millimeters.value;
+		dbAssortment.sizeHeightMillimeters = size.height.millimeters.value;
+		dbAssortment.sizeLengthMillimeters = size.length.millimeters.value;
+		dbAssortment.weightKg = weight.kilograms.value;
 		dbAssortment.comment = comment;
 		dbAssortment.storedAt = storedAt;
-		dbAssortment.expiresAfterSeconds = expiresAfter.seconds;
+		dbAssortment.expiresAfterSeconds = expiresAfter.seconds.value;
 		dbAssortment.temperatureRangeMin = temperatureRange.minimal.value;
 		dbAssortment.temperatureRangeMax = temperatureRange.maximal.value;
 		dbAssortment.isHazardous = isHazardous;
@@ -56,11 +56,11 @@ export class AssortmentMapper {
 			shelfId: assortment.shelfId.value,
 			name: assortment.name,
 			temperatureRange: TemperatureRangeMapper.toDTO(assortment.temperatureRange),
-			weightKg: assortment.weight.kilograms,
+			weightKg: assortment.weight.kilograms.value,
 			size: DimensionsMapper.toDTO(assortment.size),
 			comment: assortment.comment,
 			storedAtTimestamp: assortment.storedAt.getTime(),
-			expiresAfterSeconds: assortment.expiresAfter.seconds,
+			expiresAfterSeconds: assortment.expiresAfter.seconds.value,
 			isHazardous: assortment.isHazardous,
 		};
 	}

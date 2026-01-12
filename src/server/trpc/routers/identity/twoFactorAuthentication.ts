@@ -6,6 +6,7 @@ import { procedure } from "../../init";
 
 export const twoFactorAuthentication = procedure.input(twoFactorAuthenticationDTOSchema).mutation<AuthenticationTokenResponseDTO>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
+
 	const userRepository = services.repositories.user.db;
 	const twoFactorAuthenticationSessionRepository = services.repositories.twoFactorAuthenticationSession.db;
 	const authenticationManager = services.utils.authenticationManager.node;

@@ -7,4 +7,5 @@ export interface FileReferenceRepository {
     delete(fileReference: FileReference): Promise<void>;
     getAll(): Promise<FileReference[]>;
     getById(id: UUID): Promise<FileReference | null>;
+    getByPath(path: string): Promise<FileReference | null>;
 };

@@ -17,6 +17,6 @@ export class DBFileReference {
 	@Column({ name: "is_public" })
 	isPublic!: boolean;
 
-	@Column({ name: "public_url", nullable: true })
+	@Column({ name: "public_url", type: "varchar", nullable: true })
 	publicUrl!: string | null;
 }

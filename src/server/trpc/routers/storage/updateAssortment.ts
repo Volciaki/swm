@@ -5,17 +5,17 @@ import { UpdateAssortment } from "@/server/modules/assortment/application/use-ca
 import { ValidateShelf } from "@/server/modules/warehouse/application/use-cases/ValidateShelf";
 import { UpdateShelfAssortment } from "@/server/modules/storage/application/use-cases/UpdateShelfAssortment";
 import { updateShelfAssortmentDTOSchema } from "@/server/modules/storage/application/dto/UpdateShelfAssortmentDTO";
-import { getServices } from "../../services";
+import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
 export const updateAssortment = procedure.input(updateShelfAssortmentDTOSchema).mutation<AssortmentDTO>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
-	const assortmentRepository = services.repositories.assortment.db;
-	const shelfRepository = services.repositories.shelf.db;
-	const uuidManager = services.utils.uuidManager.default;
+	const presets = getPresets(services);
 
-	const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
-	const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
+	const assortmentRepository = services.repositories.assortment.db;
+
+	const shelfHelper = presets.shelfHelper.default;
+	const assortmentHelper = presets.assortmentHelper.default;
 
 	const getAssortmentAction = new GetAssortment(assortmentHelper);
 	const updateAssortmentAction = new UpdateAssortment(assortmentRepository, assortmentHelper);

@@ -6,6 +6,8 @@ import { getTwoFactorAuthenticationValueGeneratorServices } from "./TwoFactorAut
 import { getTwoFactorAuthenticationValueSenderServices } from "./TwoFactorAuthenticationValueSender";
 import { getEmailManagerServices } from "./EmailManager";
 import { getFileStorageServices } from "./FileStorage";
+import { getQRCodeGeneratorServices } from "./QRCodeGenerator";
+import { getFileManagerServices } from "./FileManager";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -16,5 +18,7 @@ export const getUtils = (ctx: GetServicesContext) => {
 		twoFactorAuthenticationValueSender: getTwoFactorAuthenticationValueSenderServices(ctx),
 		emailManager: getEmailManagerServices(ctx),
 		fileStorage: getFileStorageServices(ctx),
+		qrCodeGenerator: getQRCodeGeneratorServices(ctx),
+		fileManager: getFileManagerServices(ctx),
 	};
 };

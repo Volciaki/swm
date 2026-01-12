@@ -3,20 +3,21 @@ import { FileReference } from "@/server/utils/files/domain/entities/FileReferenc
 
 export class Assortment {
 	private constructor(
-        private _id: UUID,
-        private _cellId: UUID,
-        private _shelfId: UUID,
-        private _name: string,
-        private qrCode: FileReference,
-        private image: FileReference,
-        private _temperatureRange: TemperatureRange,
-        private _weight: Weight,
-        private _size: Dimensions,
-        private _comment: string,
-        private _storedAt: Date,
-        private _expiresAfter: TimeFrame,
-        private _isHazardous: boolean,
-	) {}
+		private _id: UUID,
+		private _cellId: UUID,
+		private _shelfId: UUID,
+		private _name: string,
+		// TODO: ...
+		// private _qrCode: FileReference,
+		// private _image: FileReference,
+		private _temperatureRange: TemperatureRange,
+		private _weight: Weight,
+		private _size: Dimensions,
+		private _comment: string,
+		private _storedAt: Date,
+		private _expiresAfter: TimeFrame,
+		private _isHazardous: boolean,
+	) { }
 
 	get id() { return this._id };
 	get cellId() { return this._cellId };

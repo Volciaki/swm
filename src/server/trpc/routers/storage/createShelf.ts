@@ -2,14 +2,13 @@ import { ShelfDTO } from "@/server/modules/warehouse/application/dto/shared/Shel
 import { CreateShelf } from "@/server/modules/warehouse/application/use-cases/CreateShelf";
 import { createShelfDTOSchema } from "@/server/modules/warehouse/application/dto/shared/CreateShelfDTO";
 import { procedure } from "../../init";
-import { getServices } from "../../services";
+import { getPresets, getServices } from "../../services";
 
 export const createShelf = procedure.input(createShelfDTOSchema).mutation<ShelfDTO>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
-	const shelfRepository = services.repositories.shelf.db;
-	const uuidManager = services.utils.uuidManager.default;
+	const presets = getPresets(services);
 
-	const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
+	const shelfHelper = presets.shelfHelper.default;
 
 	const action = new CreateShelf(shelfHelper);
 	return await action.execute(input, ctx.user ?? undefined);

@@ -6,6 +6,10 @@ import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetSh
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { UserDTO, UUID } from "@/server/utils";
+import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/GenerateQRCode";
+import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import { QRCode } from "@/server/utils/qr-codes/domain/entities/QRCode";
+import { PositiveNumber } from "@/server/utils/numbers/positive";
 import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
 import { ShelfDTO } from "../dto/shared/ShelfDTO";
 import { CellAlreadyTakenError } from "../errors/CellAlreadyTakenError";
@@ -31,6 +35,8 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		private readonly getShelf: GetShelf,
 		private readonly fillCell: FillCell,
 		private readonly emptyCell: EmptyCell,
+		private readonly generateQRCode: GenerateQRCode,
+		private readonly uploadFile: UploadFile,
 	) { }
 
 	async putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO) {
@@ -51,6 +57,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 			currentUser,
 		);
 		assortments = await this.getAllAssortment.execute();
+		const qrCodeFilePath = `${assortment.id}.png`;
 		try {
 			await this.fillCell.execute(
 				{
@@ -64,17 +71,34 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 				currentUser,
 			);
 
-			assortments = await this.getAllAssortment.execute();
-			const shelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext: assortments });
-			return {
-				shelf,
-				newAssortment: assortment,
-			};
+			const qrCode = QRCode.create(assortment.id, PositiveNumber.create(200));
+			const generatedCode = await this.generateQRCode.execute({
+				qrCode: {
+					data: qrCode.data,
+					size: qrCode.size.value,
+				},
+			});
+
+			await this.uploadFile.execute(
+				{
+					path: qrCodeFilePath,
+					contentBase64: generatedCode.base64,
+					mimeType: "image/png"
+				},
+				currentUser,
+			);
 		} catch (error) {
 			await this.deleteAssortment.execute({ id: assortment.id }, currentUser);
 
 			throw error;
 		}
+
+		assortments = await this.getAllAssortment.execute();
+		const newShelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext: assortments });
+		return {
+			shelf: newShelf,
+			newAssortment: assortment,
+		};
 	}
 
 	async takeDownAssortmentByDTO(dto: TakeDownAssortmentDTO, currentUser: UserDTO) {

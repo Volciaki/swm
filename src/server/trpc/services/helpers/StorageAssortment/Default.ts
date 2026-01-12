@@ -6,6 +6,8 @@ import { DeleteAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
+import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/GenerateQRCode";
+import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { GetServicesContext } from "../../context";
 
 export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
@@ -18,6 +20,8 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 			getShelf: GetShelf,
 			fillCell: FillCell,
 			emptyCell: EmptyCell,
+			generateQRCode: GenerateQRCode,
+			uploadFile: UploadFile,
 		) => new DefaultStorageAssortmentHelper(
 			getAllAssortment,
 			getAssortment,
@@ -26,6 +30,8 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 			getShelf,
 			fillCell,
 			emptyCell,
+			generateQRCode,
+			uploadFile,
 		)
 	};
 };

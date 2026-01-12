@@ -32,7 +32,7 @@ export class ShelfMapper {
 			id: id.value,
 			temperatureRange: TemperatureRangeMapper.toDTO(temperatureRange),
 			maxAssortmentSize: DimensionsMapper.toDTO(maxAssortmentSize),
-			maxWeightKg: maxWeight.kilograms,
+			maxWeightKg: maxWeight.kilograms.value,
 			cells: cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
 			comment,
 			name,
@@ -54,16 +54,16 @@ export class ShelfMapper {
 		} = shelf;
 
 		dbShelf.id = id.value;
-		dbShelf.maxWeightKg = maxWeight.kilograms;
+		dbShelf.maxWeightKg = maxWeight.kilograms.value;
 		dbShelf.cellIds = cells.map((row) => row.map((cell) => cell.id.value));
 		dbShelf.temperatureRangeMax = temperatureRange.maximal.value;
 		dbShelf.temperatureRangeMin = temperatureRange.minimal.value;
 		dbShelf.name = name;
 		dbShelf.comment = comment;
 		dbShelf.supportsHazardous = supportsHazardous;
-		dbShelf.maxAssortmentSizeWidthMillimeters = maxAssortmentSize.width.millimeters;
-		dbShelf.maxAssortmentSizeHeightMillimeters = maxAssortmentSize.height.millimeters;
-		dbShelf.maxAssortmentSizeLengthMillimeters = maxAssortmentSize.length.millimeters;
+		dbShelf.maxAssortmentSizeWidthMillimeters = maxAssortmentSize.width.millimeters.value;
+		dbShelf.maxAssortmentSizeHeightMillimeters = maxAssortmentSize.height.millimeters.value;
+		dbShelf.maxAssortmentSizeLengthMillimeters = maxAssortmentSize.length.millimeters.value;
 
 		return dbShelf;
 	}

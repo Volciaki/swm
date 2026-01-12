@@ -1,4 +1,4 @@
-import { UtilsError } from "../error";
+import { UtilsError } from "../errors";
 
 export class InvalidTimeFrameError extends UtilsError {
 	constructor(value: number) {

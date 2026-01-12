@@ -3,9 +3,15 @@ import { S3StorageService } from "@/server/utils/files/infrastructure/services/S
 import { GetServicesContext } from "../../context";
 
 export const getS3FileStorage = <T extends S3FileStorageBucket>(ctx: GetServicesContext) => {
-	const s3StorageService = S3StorageService.create();
-
 	return {
-		get: (bucket: T) => new S3FileStorage(s3StorageService, bucket)
+		get: (bucket: T) => {
+			const s3StorageService = S3StorageService.create();
+			void s3StorageService.setup();
+
+			const s3FileStorage = new S3FileStorage(s3StorageService, bucket);
+			void s3FileStorage.setup();
+
+			return s3FileStorage;
+		},
 	};
 }
