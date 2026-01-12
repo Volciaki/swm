@@ -1,4 +1,4 @@
-import { UnauthorizedError } from "@/server/utils/unauthorized/error";
+import { UnauthorizedError } from "@/server/utils";
 import { UserDTO, UUID } from "@/server/utils";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { DeleteUserDTO } from "../dto/DeleteUserDTO";

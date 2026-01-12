@@ -1,5 +1,5 @@
 import { UserDTO } from "@/server/utils";
-import { UnauthorizedError } from "@/server/utils/unauthorized/error";
+import { UnauthorizedError } from "@/server/utils";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
 import { TakeDownAssortmentCopyDTO } from "../dto/TakeDownAssortmentCopyDTO";

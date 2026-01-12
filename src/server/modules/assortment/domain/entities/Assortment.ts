@@ -1,4 +1,5 @@
 import { UUID, TemperatureRange, Weight, Dimensions, TimeFrame } from "@/server/utils";
+import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
 
 export class Assortment {
 	private constructor(
@@ -6,10 +7,8 @@ export class Assortment {
         private _cellId: UUID,
         private _shelfId: UUID,
         private _name: string,
-        // TODO: Hm.. will it be easier to use a QR code or a line code here?
-        // private qrCode: string,
-        // TODO: do we want to create some util aggregate? something like an `Asset`.
-        // private image: string,
+        private qrCode: FileReference,
+        private image: FileReference,
         private _temperatureRange: TemperatureRange,
         private _weight: Weight,
         private _size: Dimensions,

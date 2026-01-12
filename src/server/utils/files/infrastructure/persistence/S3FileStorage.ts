@@ -31,7 +31,7 @@ export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage
 		);
 	}
 
-	async removeFile(path: string) {
+	async deleteFile(path: string) {
 		await this.client.removeObject(this.bucket, path);
 	}
 }

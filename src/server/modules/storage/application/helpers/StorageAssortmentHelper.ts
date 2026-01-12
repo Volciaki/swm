@@ -17,21 +17,22 @@ import { ImportAndReplaceAssortmentDTO } from "../dto/ImportAndReplaceAssortment
 import { PutUpAssortmentResponseDTO } from "../dto/PutUpAssortmentResponseDTO";
 
 export interface StorageAssortmentHelper {
-    putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO): Promise<PutUpAssortmentResponseDTO>;
-    takeDownAssortmentByDTO(dto: TakeDownAssortmentDTO, currentUser: UserDTO): Promise<ShelfDTO>;
-    importAndReplaceAssortment(dto: ImportAndReplaceAssortmentDTO, currentUser: UserDTO): Promise<AssortmentDTO[]>;
+	putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO): Promise<PutUpAssortmentResponseDTO>;
+	takeDownAssortmentByDTO(dto: TakeDownAssortmentDTO, currentUser: UserDTO): Promise<ShelfDTO>;
+	importAndReplaceAssortment(dto: ImportAndReplaceAssortmentDTO, currentUser: UserDTO): Promise<AssortmentDTO[]>;
 };
 
 export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 	constructor(
-        private readonly getAllAssortment: GetAllAssortment,
-        private readonly getAssortment: GetAssortment,
-        private readonly createAssortment: CreateAssortment,
-        private readonly deleteAssortment: DeleteAssortment,
-        private readonly getShelf: GetShelf,
-        private readonly fillCell: FillCell,
-        private readonly emptyCell: EmptyCell,
-	) {}
+		private readonly getAllAssortment: GetAllAssortment,
+		private readonly getAssortment: GetAssortment,
+		private readonly createAssortment: CreateAssortment,
+		private readonly deleteAssortment: DeleteAssortment,
+		private readonly getShelf: GetShelf,
+		private readonly fillCell: FillCell,
+		private readonly emptyCell: EmptyCell,
+		private readonly 
+	) { }
 
 	async putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO) {
 		let assortments;

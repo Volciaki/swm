@@ -1,4 +1,4 @@
-import { UnauthorizedError } from "@/server/utils/unauthorized/error";
+import { UnauthorizedError } from "@/server/utils";
 import { UserDTO, UUIDManager } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { User } from "../../domain/entities/User";

@@ -1,4 +1,4 @@
-import { UnauthorizedError } from "@/server/utils/unauthorized/error";
+import { UnauthorizedError } from "@/server/utils";
 import { UserDTO } from "@/server/utils";
 import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
