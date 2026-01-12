@@ -71,7 +71,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 				currentUser,
 			);
 
-			const qrCode = QRCode.create(assortment.id, PositiveNumber.create(200));
+			const qrCode = QRCode.create(assortment.id, PositiveNumber.create(500));
 			const generatedCode = await this.generateQRCode.execute({
 				qrCode: {
 					data: qrCode.data,

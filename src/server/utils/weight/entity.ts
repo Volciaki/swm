@@ -24,10 +24,10 @@ export class Weight {
 	}
 
 	public toStringKilograms() {
-		return `${this.kilograms}kg`;
+		return `${this.kilograms.value}kg`;
 	}
 
 	public toStringGrams() {
-		return `${this.grams}g`;
+		return `${this.grams.value}g`;
 	}
 }
