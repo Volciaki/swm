@@ -5712,6 +5712,7 @@ __metadata:
     reflect-metadata: "npm:^0.2.2"
     sass: "npm:^1.97.1"
     server-only: "npm:^0.0.1"
+    sharp: "npm:^0.34.5"
     tsc-alias: "npm:^1.8.16"
     typeorm: "npm:^0.3.28"
     typescript: "npm:^5"
@@ -6147,7 +6148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:^0.34.4":
+"sharp@npm:^0.34.4, sharp@npm:^0.34.5":
   version: 0.34.5
   resolution: "sharp@npm:0.34.5"
   dependencies:
