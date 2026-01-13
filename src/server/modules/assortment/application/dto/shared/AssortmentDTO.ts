@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
+import { fileReferenceDTOSchema } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
 
 export const assortmentDTOSchema = z.object({
 	id: z.string(),
 	cellId: z.string(),
 	shelfId: z.string(),
 	name: z.string(),
-	// TODO: Think what to do about those.
-	// qrCode: z.string(),
-	// image: z.string(),
+	qrCode: fileReferenceDTOSchema,
+	image: fileReferenceDTOSchema.nullable(),
 	temperatureRange: temperatureRangeDTOSchema,
 	weightKg: z.number(),
 	size: dimensionsDTOSchema,

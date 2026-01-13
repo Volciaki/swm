@@ -3,6 +3,11 @@ import { Visibility } from "../../domain/entities/Visibility";
 import { FileStorage } from "../../domain/services/FileStorage";
 import { S3StorageService } from "../services/S3StorageService";
 
+// TODO: implement this! You could use a library perhaps?
+const streamToBuffer = (stream: unknown): Buffer => {
+	return Buffer.from("...");
+}
+
 export enum S3FileStorageBucket {
 	QR_CODES = "qr-codes",
 };
@@ -80,5 +85,10 @@ export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage
 
 		if (isPublic) return Visibility.create(isPublic, publicUrl);
 		return Visibility.create(isPublic, undefined);
+	}
+
+	async fetchFile(path: string) {
+		const stream = await this.client.getObject(this.bucket, path);
+		return streamToBuffer(stream);
 	}
 }

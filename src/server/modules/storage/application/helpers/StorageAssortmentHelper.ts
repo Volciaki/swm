@@ -10,6 +10,9 @@ import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/Ge
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { QRCode } from "@/server/utils/qr-codes/domain/entities/QRCode";
 import { PositiveNumber } from "@/server/utils/numbers/positive";
+import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
+import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
 import { ShelfDTO } from "../dto/shared/ShelfDTO";
 import { CellAlreadyTakenError } from "../errors/CellAlreadyTakenError";
@@ -36,8 +39,39 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		private readonly fillCell: FillCell,
 		private readonly emptyCell: EmptyCell,
 		private readonly generateQRCode: GenerateQRCode,
-		private readonly uploadFile: UploadFile,
+		private readonly uploadFileProductImages: UploadFile,
+		private readonly uploadFileQRCodes: UploadFile,
+		private readonly fetchFile: FetchFile,
 	) { }
+
+	private async uploadImageByBase64(
+		location: "qr-codes" | "product-images",
+		path: string,
+		base64: string,
+		currentUser?: UserDTO,
+	): Promise<FileReference> {
+		const executor = location === "qr-codes" ? this.uploadFileQRCodes : this.uploadFileProductImages;
+		const fileReferenceDTO = await executor.execute(
+			{
+				path: path,
+				contentBase64: base64,
+				mimeType: "image/png"
+			},
+			currentUser,
+		);
+		return FileReferenceMapper.fromDTOToEntity(fileReferenceDTO);
+	}
+
+	private async getQRCodeBase64ById(id: string, currentUser?: UserDTO): Promise<FileReference> {
+		const qrCode = QRCode.create(id, PositiveNumber.create(500));
+		const generatedCode = await this.generateQRCode.execute({
+			qrCode: {
+				data: qrCode.data,
+				size: qrCode.size.value,
+			},
+		});
+		return await this.uploadImageByBase64("qr-codes", `${id}.png`, generatedCode.base64, currentUser);
+	}
 
 	async putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO) {
 		let assortments;
@@ -54,10 +88,14 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 				cellId: dto.cellId,
 				shelfId: dto.shelfId,
 			},
+			{
+				getQRCode: async (id) => await this.getQRCodeBase64ById(id, currentUser),
+				addAssortmentImageByBase64:
+					async (path, base64) => await this.uploadImageByBase64("product-images", path, base64, currentUser),
+			},
 			currentUser,
 		);
 		assortments = await this.getAllAssortment.execute();
-		const qrCodeFilePath = `${assortment.id}.png`;
 		try {
 			await this.fillCell.execute(
 				{
@@ -67,23 +105,6 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 					},
 					cellId: dto.cellId,
 					assortment,
-				},
-				currentUser,
-			);
-
-			const qrCode = QRCode.create(assortment.id, PositiveNumber.create(500));
-			const generatedCode = await this.generateQRCode.execute({
-				qrCode: {
-					data: qrCode.data,
-					size: qrCode.size.value,
-				},
-			});
-
-			await this.uploadFile.execute(
-				{
-					path: qrCodeFilePath,
-					contentBase64: generatedCode.base64,
-					mimeType: "image/png"
 				},
 				currentUser,
 			);
@@ -130,6 +151,12 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 
 	async importAndReplaceAssortment(dto: ImportAndReplaceAssortmentDTO, currentUser: UserDTO) {
 		const currentAssortments = await this.getAllAssortment.execute();
+		const fullCurrentAssortments = await Promise.all(currentAssortments.map(async (assortment) => {
+			const imageContentBase64 = assortment.image?.id
+				? (await this.fetchFile.execute({ id: assortment.image?.id })).base64
+				: null;
+			return { ...assortment, imageContentBase64 };
+		}));
 
 		try {
 			await this.takeDownAssortments(currentAssortments, currentUser);
@@ -139,7 +166,10 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 			// Attempt to rollback the changes if an error occurred.
 			const newAssortments = await this.getAllAssortment.execute();
 			await this.takeDownAssortments(newAssortments, currentUser);
-			await this.putUpAssortments(currentAssortments, currentUser);
+			await this.putUpAssortments(
+				fullCurrentAssortments,
+				currentUser,
+			);
 
 			throw error;
 		}

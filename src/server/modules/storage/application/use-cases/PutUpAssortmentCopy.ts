@@ -5,6 +5,7 @@ import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
 import { PutUpAssortmentCopyDTO } from "../dto/PutUpAssortmentCopyDTO";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
+import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { ShelfDTO } from "../dto/shared/ShelfDTO";
 import { CellDTO } from "../dto/shared/CellDTO";
 import { AssortmentNoSpaceError } from "../errors/AssortmentNoSpaceError";
@@ -33,13 +34,15 @@ export class PutUpAssortmentCopy {
 		private readonly getAssortmentAction: GetAssortment,
 		private readonly getAllShelvesAction: GetAllShelves,
 		private readonly getAllAssortmentAction: GetAllAssortment,
+		private readonly fetchFile: FetchFile,
 	) {}
 
 	async execute(dto: PutUpAssortmentCopyDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
 		const assortment = await this.getAssortmentAction.execute({ id: dto.id });
-		const { weightKg, name, size, comment, isHazardous, temperatureRange, expiresAfterSeconds } = assortment;
+		const { weightKg, name, size, comment, isHazardous, temperatureRange, expiresAfterSeconds, image } = assortment;
+		const imageContentBase64 = image?.id ? (await this.fetchFile.execute({ id: image.id })).base64 : null;
 		const sharedData = {
 			weightKg,
 			name,
@@ -48,6 +51,7 @@ export class PutUpAssortmentCopy {
 			isHazardous,
 			temperatureRange,
 			expiresAfterSeconds,
+			imageContentBase64,
 		};
 
 		const assortments = await this.getAllAssortmentAction.execute();

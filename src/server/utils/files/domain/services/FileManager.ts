@@ -14,4 +14,5 @@ export abstract class FileManager {
 
 	abstract uploadFile(file: UploadFileDTO): Promise<FileReference>;
 	abstract deleteFile(file: FileReference): Promise<void>;
+	abstract fetchFile(file: FileReference): Promise<Buffer>;
 }

@@ -6,7 +6,6 @@ export class FileReference {
 		private readonly _id: UUID,
 		private readonly _sizeBytes: number,
 		private readonly _mimeType: string,
-		// TODO: Do we need this? I guess that this could be used for finding files in minio.
 		private readonly _path: string,
 		private readonly _visibility: Visibility,
 	) {}

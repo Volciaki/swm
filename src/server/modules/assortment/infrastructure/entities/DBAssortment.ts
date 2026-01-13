@@ -43,4 +43,10 @@ export class DBAssortment {
 
 	@Column({ name: "is_hazardous" })
 	isHazardous!: boolean;
+
+	@Column({ name: "qr_code_file_reference_id" })
+	qrCodeFileReferenceId!: string;
+
+	@Column({ name: "image_file_reference_id", type: "varchar", nullable: true })
+	imageFileReferenceId!: string | null;
 }
