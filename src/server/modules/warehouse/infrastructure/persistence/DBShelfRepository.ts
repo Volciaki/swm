@@ -49,7 +49,7 @@ export class DBShelfRepository implements ShelfRepository {
 
 		const cells: CellWithContext[][] = [];
 		for (const cellRowIds of dbShelf.cellIds) {
-			// TODO: does this keep the ordering of cells?
+			// TODO: does this keep the ordering of cells? This will be well visible after the frontend is written.
 			const rowDBCells = await this.cells.find({ where: { id: In(cellRowIds) }});
 			const rowCells = rowDBCells.map((dbCell) => ({
 				db: dbCell,
