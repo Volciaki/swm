@@ -1,5 +1,6 @@
+import clsx from "clsx";
 import styles from  "./index.module.scss";
-import { routes } from "./routes";
+import { defaultRoutes, loggedRoutes } from "./routes";
 
 const NavigationBar = () => {
 	// To Khenzii: Da się zrobić żeby w <h1> kontent był zależny od specyficznego atomu/konfiguracji/zmiennej?
@@ -10,11 +11,13 @@ const NavigationBar = () => {
 				<h1>SWM</h1>
 			</div>
 			<li>
-				{routes.map((route, index) => (
-					<a href={route.path} key={`route-${index}`}>{route.text}</a>
+				{loggedRoutes.map((route, index) => ( // ONLY SHOW WHEN LOGGED IN
+					<a href={route.path} key={`route-${index}`} className={clsx(styles["topbarButton"], styles["loggedButton"])}>{route.text}</a>
+				))}
+				{defaultRoutes.map((route, index) => (
+					<a href={route.path} key={`route-${index}`} className={clsx(styles["topbarButton"], styles["defaultButton"])}>{route.text}</a>
 				))}
 			</li>
-			<a href="#" className={styles["button"]}>Zaloguj się</a>
 		</nav>
 	)
 };

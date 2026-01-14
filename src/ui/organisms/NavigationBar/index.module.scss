@@ -4,10 +4,10 @@
     position: fixed;
     display: flex;
     flex-direction: row;
-    justify-content: left;
+    justify-content: space-between;
     align-items: center;
     width: 100vw;
-    height: 3.5rem;
+    height: 3.2rem;
     background-color: constants.$topbar; 
     z-index: 1;
 
@@ -19,36 +19,49 @@
         align-items: center;
         margin-left: 6%;
         font-size: large;
-        background-color: constants.$topbar-title;
         padding: 0 2rem;
-        color: constants.$dark-text;
+        color: constants.$text;
     }
 
     li {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         list-style: none;
-        padding-left: 40%;
 
         a {
             padding: 0 2rem;
             text-decoration: none;
             color: constants.$text;
-            transition: 0.3s;
 
             &:hover {
                 color: constants.$dark-text;
+                transform: translate(0px, 0px);
+                box-shadow: 0 0 #000;
             }
         }
     }
 
-    .button {
+    .topbarButton {
         display: flex;
-        justify-content: center;
+        justify-content: center; /* Nie wiem dlaczego ale bez tego to nie działa poprawnie */
         align-items: center;
-        margin-left: 4%;
-        background-color: #0F2854;
         width: 7rem;
-        height: 3.5rem;
-        color: #BDE8F5;
+        height: 2.7rem;
+        color: #ffffff;
+        margin-right: 0.5rem;
         text-decoration: none;
+        border-radius: 4px;
+        box-shadow: 4px 4px #000;
+        transform: translate(-3px, -3px);
+    }
+
+    .defaultButton {
+        border: solid 2px #0F2854;
+    }
+
+    .loggedButton {
+        background-color: #1F4B7A;
+        border: solid 2px #0F2854;
     }
 }

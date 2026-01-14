@@ -19,14 +19,5 @@ body {
     align-items: center;
     flex-direction: column;
     gap: 10;
-}
-
-.backgroundImage {
-    width: 100vw;
-    height: auto;
-    opacity: 0.7;
-}
-
-.text {
-    color: constants.$text;
+    border: red 3px solid;
 }

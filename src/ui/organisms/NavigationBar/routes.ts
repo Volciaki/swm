@@ -1,7 +1,10 @@
 export type Route = { text: string; path: string };
 
-export const routes: Route[] = [
-	{ text: "Strona Główna", path: "#" },
-	{ text: "O nas", path: "#" },
-	{ text: "Kontakt", path: "#" }
+export const defaultRoutes: Route[] = [
+	{ text: "Zaloguj Się", path: "#" }
+] as const;
+
+export const loggedRoutes: Route[] = [
+	{ text: "Panel Główny", path: "#" },
+	{ text: "Alerty", path: "#"}
 ] as const;
