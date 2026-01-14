@@ -5,7 +5,7 @@ import { FileManager } from "../../domain/services/FileManager";
 
 export class DefaultFileManager extends FileManager {
 	async uploadFile(file: UploadFileDTO) {
-		const visibility = await this.storage.getSharedVisibility();
+		const visibility = await this.storage.getVisibility(file.path);
 		const fileBuffer = Base64Mapper.toBuffer(Base64.fromString(file.contentBase64));
 
 		await this.storage.uploadFile(file.path, fileBuffer, file.mimeType);

@@ -8,6 +8,7 @@ export const updateAssortmentDTOSchema = z.object({
 		cellId: true,
 		shelfId: true,
 		storedAtTimestamp: true,
+		qrCode: true,
 	}),
 });
 

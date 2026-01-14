@@ -6,6 +6,7 @@ export const updateAssortmentDTOSchema = assortmentDTOSchema.omit({
 	cellId: true,
 	shelfId: true,
 	storedAtTimestamp: true,
+	qrCode: true,
 });
 
 export type UpdateAssortmentDTO = z.infer<typeof updateAssortmentDTOSchema>;

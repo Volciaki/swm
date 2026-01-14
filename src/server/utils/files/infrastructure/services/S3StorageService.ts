@@ -12,7 +12,6 @@ export class S3StorageService {
 		try {
 			// This verifies the connection. `Client`'s constructor doesn't check anything.
 			await this.client.listBuckets();
-			logger.log("MinIO connection OK!");
 		} catch {
 			logger.error("MinIO connection has failed! Further errors may arise. It is advised to stop the program and redefine your secrets.");
 		}

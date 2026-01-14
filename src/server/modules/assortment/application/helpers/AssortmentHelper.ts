@@ -8,10 +8,12 @@ import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
 
 export type FileGetter = (id: UUID) => Promise<FileReference>;
-
 export type QRCodeGetter = (value: string) => Promise<FileReference>;
+export type Base64UploadFunction = (path: string, value: string) => Promise<FileReference>;
 
-export type Base64UploadFunction = (path: string, value: string) => Promise<FileReference>
+type DeleteFileByPath = (path: string) => Promise<void>;
+export type DeleteQRCodeByPath = DeleteFileByPath;
+export type DeleteProductImageByPathFunction = DeleteFileByPath;
 
 export interface AssortmentHelper {
 	getByIdStringOrThrow(id: string, getFile: FileGetter): Promise<Assortment>;
@@ -20,6 +22,11 @@ export interface AssortmentHelper {
 		getQRCode: QRCodeGetter,
 		uploadBase64Image: Base64UploadFunction,
 	): Promise<Assortment>;
+	delete(
+		assortment: Assortment,
+		deleteQRCodeByPath: DeleteQRCodeByPath,
+		deleteImageByPath: DeleteProductImageByPathFunction,
+	): Promise<void>;
 };
 
 export class DefaultAssortmentHelper implements AssortmentHelper {
@@ -62,5 +69,18 @@ export class DefaultAssortmentHelper implements AssortmentHelper {
 		);
 		await this.assortmentRepository.create(assortment);
 		return assortment;
+	}
+
+	async delete(
+		assortment: Assortment,
+		deleteQRCodeByPath: DeleteQRCodeByPath,
+		deleteImageByPath: DeleteProductImageByPathFunction,
+	) {
+		await this.assortmentRepository.delete(assortment);
+		await deleteQRCodeByPath(assortment.qrCode.path);
+		
+		if (assortment.image === null) return;
+
+		await deleteImageByPath(assortment.image.path);
 	}
 }

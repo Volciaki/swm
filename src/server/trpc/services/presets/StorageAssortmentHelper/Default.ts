@@ -1,5 +1,4 @@
 import { StorageAssortmentHelper } from "@/server/modules/storage/application/helpers/StorageAssortmentHelper";
-import { Services } from "../../get";
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
@@ -12,6 +11,8 @@ import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/Ge
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import { Services } from "../../get";
+import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
 
 export const getDefaultStorageAssortmentHelperPreset = (services: Services): StorageAssortmentHelper => {
 	const assortmentRepository = services.repositories.assortment.db;
@@ -35,13 +36,15 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const getAssortmentAction = new GetAssortment(assortmentHelper, assortmentFileHelper);
 	const createAssortmentAction = new CreateAssortment(assortmentHelper);
-	const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper, assortmentFileHelper);
+	const deleteAssortmentAction = new DeleteAssortment(assortmentHelper, assortmentFileHelper);
 	const getShelfAction = new GetShelf(shelfHelper);
 	const fillCellAction = new FillCell(shelfRepository, shelfHelper);
 	const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
 	const generateQRCodeAction = new GenerateQRCode(qrCodeGenerator);
 	const uploadQRCodeFileAction = new UploadFile(qrCodesFileManager);
 	const uploadAssortmentImageFileAction = new UploadFile(assortmentImagesFileManager);
+	const deleteFileQRCode = new DeleteFileByPath(fileHelper, qrCodesFileManager);
+	const deleteAssortmentImageFileAction = new DeleteFileByPath(fileHelper, assortmentImagesFileManager);
 	const fetchAssortmentImageFileAction = new FetchFile(fileHelper, assortmentImagesFileManager);
 
 	return services.helpers.storageAssortment.default.get(
@@ -53,8 +56,10 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 		fillCellAction,
 		emptyCellAction,
 		generateQRCodeAction,
-		uploadQRCodeFileAction,
 		uploadAssortmentImageFileAction,
+		uploadQRCodeFileAction,
+		deleteAssortmentImageFileAction,
+		deleteFileQRCode,
 		fetchAssortmentImageFileAction,
 	);
 }

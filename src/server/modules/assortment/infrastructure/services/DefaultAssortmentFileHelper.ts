@@ -4,7 +4,11 @@ import { UUID } from "@/server/utils";
 import { AssortmentFileHelper } from "../../application/services/AssortmentFileHelper";
 
 export class DefaultAssortmentFileHelper implements AssortmentFileHelper {
-	constructor(private readonly getFile: GetFile) { }
+	constructor(private readonly getFile: GetFile) {
+		// Required so that instances of this class can pass theirs `fileGetter`
+		// // method around, without losing access to provided `getFile` action.
+		this.fileGetter = this.fileGetter.bind(this);
+	}
 
 	async fileGetter(id: UUID) {
 		const fileDTO = await this.getFile.execute({ id: id.value });

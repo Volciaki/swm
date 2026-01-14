@@ -1,12 +1,9 @@
+import { getStreamAsBuffer as streamToBuffer } from "get-stream";
 import { environment } from "@/server/environment";
 import { Visibility } from "../../domain/entities/Visibility";
 import { FileStorage } from "../../domain/services/FileStorage";
 import { S3StorageService } from "../services/S3StorageService";
-
-// TODO: implement this! You could use a library perhaps?
-const streamToBuffer = (stream: unknown): Buffer => {
-	return Buffer.from("...");
-}
+import { FileReference } from "../../domain/entities/FileReference";
 
 export enum S3FileStorageBucket {
 	QR_CODES = "qr-codes",
@@ -80,10 +77,10 @@ export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage
 		await this.client.removeObject(this.bucket, path);
 	}
 
-	async getSharedVisibility() {
+	async getVisibility(path: string) {
 		const bucketOptions = s3FileStorageBucketOptions[this.bucket];
 		const { isPublic } = bucketOptions;
-		const publicUrl = `${environment.storage.publicUrl}/${this.bucket}`
+		const publicUrl = `${environment.storage.publicUrl}/${this.bucket}/${path}`
 
 		if (isPublic) return Visibility.create(isPublic, publicUrl);
 		return Visibility.create(isPublic, undefined);

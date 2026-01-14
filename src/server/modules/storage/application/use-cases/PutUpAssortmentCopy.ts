@@ -34,7 +34,7 @@ export class PutUpAssortmentCopy {
 		private readonly getAssortmentAction: GetAssortment,
 		private readonly getAllShelvesAction: GetAllShelves,
 		private readonly getAllAssortmentAction: GetAllAssortment,
-		private readonly fetchFile: FetchFile,
+		private readonly fetchFileAssortmentImages: FetchFile,
 	) {}
 
 	async execute(dto: PutUpAssortmentCopyDTO, currentUser?: UserDTO) {
@@ -42,7 +42,9 @@ export class PutUpAssortmentCopy {
 
 		const assortment = await this.getAssortmentAction.execute({ id: dto.id });
 		const { weightKg, name, size, comment, isHazardous, temperatureRange, expiresAfterSeconds, image } = assortment;
-		const imageContentBase64 = image?.id ? (await this.fetchFile.execute({ id: image.id })).base64 : null;
+		const imageContentBase64 = image?.id
+			? (await this.fetchFileAssortmentImages.execute({ id: image.id }, currentUser)).base64
+			: null;
 		const sharedData = {
 			weightKg,
 			name,

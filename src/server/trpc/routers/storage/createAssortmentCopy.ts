@@ -20,13 +20,19 @@ export const createAssortmentCopy = procedure.input(putUpAssortmentCopyDTOSchema
 	const assortmentHelper = presets.assortmentHelper.default;
 	const fileHelper = presets.fileHelper.default;
 	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
-	const fileManager = presets.fileManager.default.get(S3FileStorageBucket.QR_CODES);
+	const fileManagerAssortmentPictures = presets.fileManager.default.get(S3FileStorageBucket.ASSORTMENT_IMAGES);
 
 	const getAssortmentAction = new GetAssortment(assortmentHelper, assortmentFileHelper);
 	const getAllShelvesAction = new GetAllShelves(shelfRepository);
 	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
-	const fetchFile = new FetchFile(fileHelper, fileManager);
+	const fetchAssortmentPictureFile = new FetchFile(fileHelper, fileManagerAssortmentPictures);
 
-	const action = new PutUpAssortmentCopy(storageAssortmentHelper, getAssortmentAction, getAllShelvesAction, getAllAssortmentAction, fetchFile);
+	const action = new PutUpAssortmentCopy(
+		storageAssortmentHelper,
+		getAssortmentAction,
+		getAllShelvesAction,
+		getAllAssortmentAction,
+		fetchAssortmentPictureFile,
+	);
 	return await action.execute(input, ctx.user ?? undefined);
 });
