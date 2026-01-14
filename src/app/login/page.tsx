@@ -4,6 +4,7 @@ import { useEffect, type FC } from "react";
 import { apiClient } from "@/ui/providers";
 import styles from "@/styles/login.module.scss";
 import Navbar from "@/ui/organisms/NavigationBar";
+import InputLoginForm from "@/ui/molecules/loginForm";
 
 const Home: FC = () => {
 	const { data } = apiClient.hello.useQuery({ text: "test" });
@@ -16,15 +17,13 @@ const Home: FC = () => {
 
 	// Make the login button a new atom instead. Same for It's styles.
 
+    // Daj tutaj jakiś interaktywny background, np. paczki na skos w tle
+
 	return (
 		<>
 			<Navbar />
-            {
-                // Daj tutaj jakiś interaktywny background, np. paczki na skos w tle
-            }
 			<div className={styles["container"]}>
-				<p className={styles["text"]}>{":3"}</p>
-				<p className={styles["text"]}>{`${data?.greeting}`}</p>
+				<InputLoginForm onClick={()=>alert("Clicked")} />
 			</div>
 		</>
 	)
