@@ -8,6 +8,7 @@ import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillC
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
 import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/GenerateQRCode";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { GetServicesContext } from "../../context";
 
 export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
@@ -21,7 +22,9 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 			fillCell: FillCell,
 			emptyCell: EmptyCell,
 			generateQRCode: GenerateQRCode,
-			uploadFile: UploadFile,
+			uploadFileProductImages: UploadFile,
+			uploadFileQRCodes: UploadFile,
+			fetchFile: FetchFile,
 		) => new DefaultStorageAssortmentHelper(
 			getAllAssortment,
 			getAssortment,
@@ -31,7 +34,9 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 			fillCell,
 			emptyCell,
 			generateQRCode,
-			uploadFile,
+			uploadFileProductImages,
+			uploadFileQRCodes,
+			fetchFile,
 		)
 	};
 };

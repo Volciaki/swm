@@ -13,8 +13,10 @@ export const deleteShelf = procedure.input(takeDownShelfDTOSchema).mutation<void
 	const shelfRepository = services.repositories.shelf.db;
 
 	const shelfHelper = presets.shelfHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
 
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
 
 	const action = new TakeDownShelf(getAllAssortmentAction, deleteShelfAction);

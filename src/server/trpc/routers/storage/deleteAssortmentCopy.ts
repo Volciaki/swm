@@ -14,9 +14,11 @@ export const deleteAssortmentCopy = procedure.input(putUpAssortmentCopyDTOSchema
 
 	const storageAssortmentHelper = presets.storageAssortmentHelper.default;
 	const assortmentHelper = presets.assortmentHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
 
-	const getAssortmentAction = new GetAssortment(assortmentHelper);
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+	const getAssortmentAction = new GetAssortment(assortmentHelper, assortmentFileHelper);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 
 	const action = new TakeDownAssortmentCopy(storageAssortmentHelper, getAssortmentAction, getAllAssortmentAction);
 	return await action.execute(input, ctx.user ?? undefined);

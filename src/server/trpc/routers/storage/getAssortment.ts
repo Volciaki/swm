@@ -9,7 +9,9 @@ export const getAssortment = procedure.input(getAssortmentDTOSchema).query<Assor
 	const presets = getPresets(services);
 
 	const assortmentHelper = presets.assortmentHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
 
-	const action = new GetAssortment(assortmentHelper);
+	const action = new GetAssortment(assortmentHelper, assortmentFileHelper);
 	return await action.execute(input);
 });

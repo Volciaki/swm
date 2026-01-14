@@ -10,11 +10,13 @@ export const getShelf = procedure.input(getFullShelfDTOSchema).query<ShelfDTO>(a
 	const services = getServices(ctx);
 	const presets = getPresets(services);
 
-	const shelfHelper = presets.shelfHelper.default;
-
 	const assortmentRepository = services.repositories.assortment.db;
 
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+	const shelfHelper = presets.shelfHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
+
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const getShelfAction = new GetShelf(shelfHelper);
 
 	const action = new GetFullShelf(getAllAssortmentAction, getShelfAction);

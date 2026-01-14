@@ -16,4 +16,8 @@ export class DefaultFileManager extends FileManager {
 		await this.repository.delete(file);
 		await this.storage.deleteFile(file.path);
 	}
+
+	async fetchFile(file: FileReference) {
+		return await this.storage.fetchFile(file.path);
+	}
 }

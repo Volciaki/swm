@@ -10,10 +10,12 @@ const streamToBuffer = (stream: unknown): Buffer => {
 
 export enum S3FileStorageBucket {
 	QR_CODES = "qr-codes",
+	ASSORTMENT_IMAGES = "assortment-images",
 };
 
 export const s3FileStorageBucketOptions: Record<S3FileStorageBucket, { isPublic: boolean }> = {
 	[S3FileStorageBucket.QR_CODES]: { isPublic: true },
+	[S3FileStorageBucket.ASSORTMENT_IMAGES]: { isPublic: true },
 };
 
 export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage {

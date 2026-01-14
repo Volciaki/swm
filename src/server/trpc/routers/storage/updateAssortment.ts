@@ -16,10 +16,12 @@ export const updateAssortment = procedure.input(updateShelfAssortmentDTOSchema).
 
 	const shelfHelper = presets.shelfHelper.default;
 	const assortmentHelper = presets.assortmentHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
 
-	const getAssortmentAction = new GetAssortment(assortmentHelper);
-	const updateAssortmentAction = new UpdateAssortment(assortmentRepository, assortmentHelper);
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+	const getAssortmentAction = new GetAssortment(assortmentHelper, assortmentFileHelper);
+	const updateAssortmentAction = new UpdateAssortment(assortmentRepository, assortmentHelper, assortmentFileHelper);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const validateShelfAction = new ValidateShelf(shelfHelper);
 
 	const action = new UpdateShelfAssortment(getAssortmentAction, updateAssortmentAction, getAllAssortmentAction, validateShelfAction);

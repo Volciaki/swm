@@ -14,8 +14,10 @@ export const updateShelf = procedure.input(updateFullShelfDTOSchema).mutation<Sh
 	const assortmentRepository = services.repositories.assortment.db;
 
 	const shelfHelper = presets.shelfHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
 
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const updateShelfAction = new UpdateShelf(shelfHelper, shelfRepository);
 
 	const action = new UpdateFullShelf(getAllAssortmentAction, updateShelfAction);
