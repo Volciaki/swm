@@ -2,6 +2,7 @@ import { Base64, Base64Mapper } from "@/server/utils/base64";
 import { UploadFileDTO } from "../../application/dto/UploadFileDTO";
 import { FileReference } from "../../domain/entities/FileReference";
 import { FileManager } from "../../domain/services/FileManager";
+import { FileMetadata } from "../../domain/entities/FileMetadata";
 
 export class DefaultFileManager extends FileManager {
 	async uploadFile(file: UploadFileDTO) {
@@ -9,7 +10,14 @@ export class DefaultFileManager extends FileManager {
 		const fileBuffer = Base64Mapper.toBuffer(Base64.fromString(file.contentBase64));
 
 		await this.storage.uploadFile(file.path, fileBuffer, file.mimeType);
-		return await this.helper.createByDTO(file, visibility);
+		return await this.helper.createByDTO(
+			file,
+			visibility,
+			FileMetadata.create(
+				this.storage.getStorageType(),
+				file.metadata.bucket,
+			),
+		);
 	}
 
 	async deleteFile(file: FileReference) {
@@ -19,5 +27,9 @@ export class DefaultFileManager extends FileManager {
 
 	async fetchFile(file: FileReference) {
 		return await this.storage.fetchFile(file.path);
+	}
+
+	getStorageType() {
+		return this.storage.getStorageType();
 	}
 }

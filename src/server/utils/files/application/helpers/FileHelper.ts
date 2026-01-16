@@ -7,6 +7,9 @@ import { Base64, Base64Mapper } from "@/server/utils/base64";
 import { Visibility } from "../../domain/entities/Visibility";
 import { VisibilityMapper } from "../../infrastructure/mappers/VisibilityMapper";
 import { FileNotFoundError } from "../errors/FileNotFoundError";
+import { FileMetadata } from "../../domain/entities/FileMetadata";
+import { FileMetadataMapper } from "../../infrastructure/mappers/FileMetadataMapper";
+import { FileStorageType } from "../../domain/services/FileStorage";
 
 const getSizeBytesByBase64String = (content: string): number => {
 	const base64 = Base64.fromString(content);
@@ -16,8 +19,8 @@ const getSizeBytesByBase64String = (content: string): number => {
 
 export interface FileHelper {
 	getByIdStringOrThrow(id: string): Promise<FileReference>;
-	getByPathOrThrow(path: string): Promise<FileReference>;
-	createByDTO(dto: UploadFileDTO, visibility: Visibility): Promise<FileReference>;
+	getByPathOrThrow(path: string, metadata: FileMetadata): Promise<FileReference>;
+	createByDTO(dto: UploadFileDTO, visibility: Visibility, metadata: FileMetadata): Promise<FileReference>;
 };
 
 export class DefaultFileHelper implements FileHelper {
@@ -35,21 +38,22 @@ export class DefaultFileHelper implements FileHelper {
 		return entity;
 	}
 
-	async getByPathOrThrow(path: string) {
-		const entity = await this.fileReferenceRepository.getByPath(path);
+	async getByPathOrThrow(path: string, metadata: FileMetadata) {
+		const entity = await this.fileReferenceRepository.getByPath(path, metadata);
 
 		if (entity === null) throw new FileNotFoundError("path", path);
 
 		return entity;
 	}
 
-	async createByDTO(dto: UploadFileDTO, visibility: Visibility) {
+	async createByDTO(dto: UploadFileDTO, visibility: Visibility, metadata: FileMetadata) {
 		const sizeBytes = getSizeBytesByBase64String(dto.contentBase64);
 		const fileReference = FileReferenceMapper.fromDTOToEntity({
 			...dto,
 			id: this.uuidManager.generate().value,
 			sizeBytes: sizeBytes,
 			visibility: VisibilityMapper.toDTO(visibility),
+			metadata: FileMetadataMapper.toDTO(metadata),
 		});
 		await this.fileReferenceRepository.create(fileReference);
 		return fileReference;

@@ -1,4 +1,5 @@
 import { Entity, PrimaryColumn, Column } from "typeorm";
+import { type FileMetadataDTO } from "../../application/dto/shared/FileMetadataDTO";
 
 @Entity("file_references")
 export class DBFileReference {
@@ -19,4 +20,7 @@ export class DBFileReference {
 
 	@Column({ name: "public_url", type: "varchar", nullable: true })
 	publicUrl!: string | null;
+
+	@Column({ type: "json" })
+	metadata!: FileMetadataDTO;
 }

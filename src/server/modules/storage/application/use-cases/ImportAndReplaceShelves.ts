@@ -4,6 +4,7 @@ import { ImportShelves } from "@/server/modules/warehouse/application/use-cases/
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { CreateShelf } from "@/server/modules/warehouse/application/use-cases/CreateShelf";
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { UnauthorizedError, UserDTO } from "@/server/utils";
 import { ImportAndReplaceShelvesDTO } from "../dto/ImportAndReplaceShelvesDTO";
 import { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
@@ -14,14 +15,14 @@ import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 
 export class ImportAndReplaceShelves {
 	constructor(
-        private readonly getAllShelves: GetAllShelves,
-        private readonly getAllAssortment: GetAllAssortment,
-        private readonly deleteShelf: DeleteShelf,
-        private readonly createShelf: CreateShelf,
-        private readonly importShelves: ImportShelves,
-        private readonly storageAssortmentHelper: StorageAssortmentHelper,
-        private readonly fetchFile: FetchFile,
-	) {}
+		private readonly getAllShelves: GetAllShelves,
+		private readonly getAllAssortment: GetAllAssortment,
+		private readonly deleteShelf: DeleteShelf,
+		private readonly createShelf: CreateShelf,
+		private readonly importShelves: ImportShelves,
+		private readonly storageAssortmentHelper: StorageAssortmentHelper,
+		private readonly fetchFile: FetchFile,
+	) { }
 
 	async execute(dto: ImportAndReplaceShelvesDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
@@ -30,7 +31,12 @@ export class ImportAndReplaceShelves {
 		const currentAssortment = await this.getAllAssortment.execute();
 		const currentFullAssortment: CreateAssortmentDTO[] = await Promise.all(currentAssortment.map(async (assortment) => {
 			const imageContentBase64 = assortment.image?.id
-				? (await this.fetchFile.execute({ id: assortment.image?.id })).base64
+				? (await this.fetchFile.execute(
+					{
+						id: assortment.image?.id,
+						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
+					},
+				)).base64
 				: null;
 			return {
 				...assortment,

@@ -4,6 +4,8 @@ import { FileReferenceRepository } from "../../domain/services/FileReferenceRepo
 import { DBFileReference } from "../entities/DBFileReference";
 import { FileReferenceMapper } from "../mappers/FileReferenceMapper";
 import { FileReference } from "../../domain/entities/FileReference";
+import { FileMetadata } from "../../domain/entities/FileMetadata";
+import { FileStorageType } from "../../domain/services/FileStorage";
 
 export class DBFileReferenceRepository implements FileReferenceRepository {
 	constructor(private readonly db: Repository<DBFileReference>) {}
@@ -43,10 +45,18 @@ export class DBFileReferenceRepository implements FileReferenceRepository {
 		return FileReferenceMapper.fromDBToEntity(dbObject);
 	}
 
-	async getByPath(path: string) {
-		const dbObject = await this.db.findOneBy({ path });
+	async getByPath(path: string, metadata: FileMetadata) {
+		let dbObject;
 
-		if (dbObject === null) return null;
+		const matchingPaths = await this.db.find({ where: { path } });
+		const bucket = metadata.storageType === FileStorageType.S3 ? metadata.bucket : null;
+		if (bucket === null) {
+			dbObject = matchingPaths[0];
+		} else {
+			dbObject = matchingPaths.find((object) => object.metadata.bucket === bucket);
+		}
+
+		if (dbObject === null || dbObject === undefined) return null;
 
 		return FileReferenceMapper.fromDBToEntity(dbObject);
 	}

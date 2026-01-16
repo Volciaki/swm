@@ -7,7 +7,6 @@ import { AssortmentHelper, Base64UploadFunction, DeleteProductImageByPathFunctio
 import { AssortmentFileHelper } from "../services/AssortmentFileHelper";
 import { Assortment } from "../../domain/entities/Assortment";
 import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
-import { logger } from "@/server/logger";
 
 export type UpdateAssortmentOptions = {
 	deleteProductImageByPath: DeleteProductImageByPathFunction,
@@ -61,8 +60,6 @@ export class UpdateAssortment {
 				image: newImage === null ? null : FileReferenceMapper.fromEntityToDTO(newImage),
 			},
 		);
-
-		logger.warn(`new image: ${JSON.stringify(newImage)}`);
 
 		const { weight, size, expiresAfter, isHazardous, name, temperatureRange, comment, image } = newAssortment;
 		assortment.weight = weight;

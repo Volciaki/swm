@@ -1,9 +1,8 @@
 import { getStreamAsBuffer as streamToBuffer } from "get-stream";
 import { environment } from "@/server/environment";
 import { Visibility } from "../../domain/entities/Visibility";
-import { FileStorage } from "../../domain/services/FileStorage";
+import { FileStorage, FileStorageType } from "../../domain/services/FileStorage";
 import { S3StorageService } from "../services/S3StorageService";
-import { logger } from "@/server/logger";
 
 export enum S3FileStorageBucket {
 	QR_CODES = "qr-codes",
@@ -74,8 +73,6 @@ export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage
 	}
 
 	async deleteFile(path: string) {
-		logger.warn(`Removing file: ${path} from bucket: ${this.bucket}`);
-
 		await this.client.removeObject(this.bucket, path);
 	}
 
@@ -91,5 +88,9 @@ export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage
 	async fetchFile(path: string) {
 		const stream = await this.client.getObject(this.bucket, path);
 		return streamToBuffer(stream);
+	}
+
+	getStorageType() {
+		return FileStorageType.S3;
 	}
 }

@@ -1,4 +1,4 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
+import { UnauthorizedError, UserDTO, UUID } from "@/server/utils";
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { UpdateAssortment, UpdateAssortmentOptions } from "@/server/modules/assortment/application/use-cases/UpdateAssortment";
 import { ValidateShelf } from "@/server/modules/warehouse/application/use-cases/ValidateShelf";
@@ -8,6 +8,7 @@ import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFil
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
 import { UpdateShelfAssortmentDTO } from "../dto/UpdateShelfAssortmentDTO";
+import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 
 export class UpdateShelfAssortment {
 	constructor(
@@ -22,14 +23,24 @@ export class UpdateShelfAssortment {
 
 	private getUpdateOptions(currentUser?: UserDTO): UpdateAssortmentOptions {
 		return {
-			fetchAssortmentImage: async (id) => this.fetchFileAction.execute({ id: id.value }, currentUser),
-			deleteProductImageByPath: async (path) => this.deleteFileByPathAction.execute({ path }, currentUser),
+			fetchAssortmentImage: async (id) => this.fetchFileAction.execute(
+				{ id: id.value, metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES } },
+				currentUser,
+			),
+			deleteProductImageByPath: async (path) => this.deleteFileByPathAction.execute(
+				{
+					path,
+					metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
+				},
+				currentUser
+			),
 			addAssortmentImageByBase64: async (path, contentBase64) => {
 				const file = await this.uploadFileAction.execute(
 					{
 						path,
 						contentBase64,
 						mimeType: "image/png",
+						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES },
 					},
 					currentUser,
 				);
@@ -41,16 +52,18 @@ export class UpdateShelfAssortment {
 	async execute(dto: UpdateShelfAssortmentDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
+		const updateOptions = this.getUpdateOptions(currentUser);
+
 		const assortment = await this.getAssortmentAction.execute({ id: dto.id });
 		const fullAssortment = {
 			...assortment,
 			imageContentBase64: assortment.image === null
 				? null
-				: (await this.fetchFileAction.execute({ id: assortment.image.id }, currentUser)).base64
+				: (await updateOptions.fetchAssortmentImage(UUID.fromString(assortment.image.id))).base64
 		};
 		const newAssortment = await this.updateAssortmentAction.execute(
 			{ id: dto.id, newData: dto.newData },
-			this.getUpdateOptions(currentUser),
+			updateOptions,
 			currentUser
 		);
 		try {
@@ -60,7 +73,7 @@ export class UpdateShelfAssortment {
 		} catch (error) {
 			await this.updateAssortmentAction.execute(
 				{ id: newAssortment.id, newData: fullAssortment },
-				this.getUpdateOptions(currentUser),
+				updateOptions,
 				currentUser,
 			);
 

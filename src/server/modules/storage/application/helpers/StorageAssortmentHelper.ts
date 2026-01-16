@@ -14,6 +14,7 @@ import { FileReference } from "@/server/utils/files/domain/entities/FileReferenc
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
+import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
 import { ShelfDTO } from "../dto/shared/ShelfDTO";
 import { CellAlreadyTakenError } from "../errors/CellAlreadyTakenError";
@@ -23,6 +24,8 @@ import { AssortmentDTO } from "../dto/shared/AssortmentDTO";
 import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { ImportAndReplaceAssortmentDTO } from "../dto/ImportAndReplaceAssortmentDTO";
 import { PutUpAssortmentResponseDTO } from "../dto/PutUpAssortmentResponseDTO";
+
+type SupportedFileLocation = S3FileStorageBucket.ASSORTMENT_IMAGES | S3FileStorageBucket.QR_CODES;
 
 export interface StorageAssortmentHelper {
 	putUpAssortmentByDTO(dto: PutUpAssortmentDTO, currentUser: UserDTO): Promise<PutUpAssortmentResponseDTO>;
@@ -45,20 +48,21 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		private readonly deleteFileProductImage: DeleteFileByPath,
 		private readonly deleteFileQRCode: DeleteFileByPath,
 		private readonly fetchFileProductImage: FetchFile,
-	) {}
+	) { }
 
 	private async uploadImageByBase64(
-		location: "qr-codes" | "product-images",
+		location: SupportedFileLocation,
 		path: string,
 		base64: string,
 		currentUser?: UserDTO,
 	): Promise<FileReference> {
-		const executor = location === "qr-codes" ? this.uploadFileQRCodes : this.uploadFileProductImages;
+		const executor = location === S3FileStorageBucket.QR_CODES ? this.uploadFileQRCodes : this.uploadFileProductImages;
 		const fileReferenceDTO = await executor.execute(
 			{
 				path: path,
 				contentBase64: base64,
-				mimeType: "image/png"
+				mimeType: "image/png",
+				metadata: { bucket: location },
 			},
 			currentUser,
 		);
@@ -73,12 +77,18 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 				size: qrCode.size.value,
 			},
 		});
-		return await this.uploadImageByBase64("qr-codes", `${id}.png`, generatedCode.base64, currentUser);
+		return await this.uploadImageByBase64(S3FileStorageBucket.QR_CODES, `${id}.png`, generatedCode.base64, currentUser);
 	}
 
-	private async deleteFileByPath(location: "qr-codes" | "product-images", path: string, currentUser?: UserDTO) {
-		const executor = location === "qr-codes" ? this.deleteFileQRCode : this.deleteFileProductImage;
-		await executor.execute({ path }, currentUser);
+	private async deleteFileByPath(location: SupportedFileLocation, path: string, currentUser?: UserDTO) {
+		const executor = location === S3FileStorageBucket.QR_CODES ? this.deleteFileQRCode : this.deleteFileProductImage;
+		await executor.execute(
+			{
+				path,
+				metadata: { bucket: location },
+			},
+			currentUser
+		);
 	}
 
 	// Removes the assortment the DB and its related files from S3.
@@ -87,9 +97,9 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 			{ id: assortment.id },
 			{
 				deleteProductImageByPath:
-					async (path: string) => await this.deleteFileByPath("product-images", path, currentUser),
+					async (path: string) => await this.deleteFileByPath(S3FileStorageBucket.ASSORTMENT_IMAGES, path, currentUser),
 				deleteQRCodeByPath:
-					async (path: string) => await this.deleteFileByPath("qr-codes", path, currentUser),
+					async (path: string) => await this.deleteFileByPath(S3FileStorageBucket.QR_CODES, path, currentUser),
 			},
 			currentUser,
 		);
@@ -128,7 +138,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 			{
 				getQRCode: async (id) => await this.getQRCodeBase64ById(id, currentUser),
 				addAssortmentImageByBase64:
-					async (path, base64) => await this.uploadImageByBase64("product-images", path, base64, currentUser),
+					async (path, base64) => await this.uploadImageByBase64(S3FileStorageBucket.ASSORTMENT_IMAGES, path, base64, currentUser),
 			},
 			currentUser,
 		);
@@ -190,7 +200,12 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		const currentAssortments = await this.getAllAssortment.execute();
 		const fullCurrentAssortments = await Promise.all(currentAssortments.map(async (assortment) => {
 			const imageContentBase64 = assortment.image?.id
-				? (await this.fetchFileProductImage.execute({ id: assortment.image?.id })).base64
+				? (await this.fetchFileProductImage.execute(
+					{
+						id: assortment.image?.id,
+						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
+					},
+				)).base64
 				: null;
 			return { ...assortment, imageContentBase64 };
 		}));

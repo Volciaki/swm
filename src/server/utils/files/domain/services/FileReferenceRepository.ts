@@ -1,5 +1,6 @@
 import { UUID } from "@/server/utils/uuid";
 import { FileReference } from "../entities/FileReference";
+import { FileMetadata } from "../entities/FileMetadata";
 
 export interface FileReferenceRepository {
     create(fileReference: FileReference): Promise<FileReference>;
@@ -7,5 +8,5 @@ export interface FileReferenceRepository {
     delete(fileReference: FileReference): Promise<void>;
     getAll(): Promise<FileReference[]>;
     getById(id: UUID): Promise<FileReference | null>;
-    getByPath(path: string): Promise<FileReference | null>;
+    getByPath(path: string, metadata: FileMetadata): Promise<FileReference | null>;
 };

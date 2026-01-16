@@ -9,6 +9,7 @@ import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile"
 import { ShelfDTO } from "../dto/shared/ShelfDTO";
 import { CellDTO } from "../dto/shared/CellDTO";
 import { AssortmentNoSpaceError } from "../errors/AssortmentNoSpaceError";
+import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 
 const findEmptyCells = (shelf: ShelfDTO): CellDTO[] => {
 	const emptyCells: CellDTO[] = [];
@@ -35,7 +36,7 @@ export class PutUpAssortmentCopy {
 		private readonly getAllShelvesAction: GetAllShelves,
 		private readonly getAllAssortmentAction: GetAllAssortment,
 		private readonly fetchFileAssortmentImages: FetchFile,
-	) {}
+	) { }
 
 	async execute(dto: PutUpAssortmentCopyDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
@@ -43,7 +44,13 @@ export class PutUpAssortmentCopy {
 		const assortment = await this.getAssortmentAction.execute({ id: dto.id });
 		const { weightKg, name, size, comment, isHazardous, temperatureRange, expiresAfterSeconds, image } = assortment;
 		const imageContentBase64 = image?.id
-			? (await this.fetchFileAssortmentImages.execute({ id: image.id }, currentUser)).base64
+			? (await this.fetchFileAssortmentImages.execute(
+				{
+					id: image.id,
+					metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
+				},
+				currentUser
+			)).base64
 			: null;
 		const sharedData = {
 			weightKg,
