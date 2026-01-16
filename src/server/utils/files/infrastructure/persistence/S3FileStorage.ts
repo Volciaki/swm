@@ -3,7 +3,7 @@ import { environment } from "@/server/environment";
 import { Visibility } from "../../domain/entities/Visibility";
 import { FileStorage } from "../../domain/services/FileStorage";
 import { S3StorageService } from "../services/S3StorageService";
-import { FileReference } from "../../domain/entities/FileReference";
+import { logger } from "@/server/logger";
 
 export enum S3FileStorageBucket {
 	QR_CODES = "qr-codes",
@@ -74,6 +74,8 @@ export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage
 	}
 
 	async deleteFile(path: string) {
+		logger.warn(`Removing file: ${path} from bucket: ${this.bucket}`);
+
 		await this.client.removeObject(this.bucket, path);
 	}
 

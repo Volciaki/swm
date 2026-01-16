@@ -6,7 +6,7 @@ import { AssortmentFileHelper } from "../../application/services/AssortmentFileH
 export class DefaultAssortmentFileHelper implements AssortmentFileHelper {
 	constructor(private readonly getFile: GetFile) {
 		// Required so that instances of this class can pass theirs `fileGetter`
-		// // method around, without losing access to provided `getFile` action.
+		// method around, without losing access to provided `getFile` action.
 		this.fileGetter = this.fileGetter.bind(this);
 	}
 
