@@ -1,11 +1,17 @@
 {
   "v": 7,
   "name": "primus-inter-pares-2026",
+  "requests": [],
+  "auth": {
+    "authType": "none",
+    "authActive": true
+  },
+  "headers": [],
+  "_ref_id": "coll_mjqak81p_09a9a4e1-898a-47ac-a756-88672300ceaa",
   "folders": [
     {
       "v": 7,
       "name": "identity",
-      "folders": [],
       "requests": [
         {
           "v": "12",
@@ -153,12 +159,12 @@
         "authActive": true
       },
       "headers": [],
-      "_ref_id": "coll_mjqaybls_26378ec2-d093-4a17-a0ad-b3db6406c9ad"
+      "_ref_id": "coll_mjqaybls_26378ec2-d093-4a17-a0ad-b3db6406c9ad",
+      "folders": []
     },
     {
       "v": 7,
       "name": "storage",
-      "folders": [],
       "requests": [
         {
           "v": "12",
@@ -262,7 +268,7 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"shelfId\": \"...\",\n  \"cellId\": \"...\",\n  \"assortment\": {\n    \"name\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": -10,\n      \"maximalCelsius\": 40\n    },\n    \"weightKg\": 10,\n    \"size\": {\n      \"widthMillimeters\": 1000,\n      \"heightMillimeters\": 1000,\n      \"lengthMillimeters\": 1000\n    },\n    \"comment\": \"...\",\n    \"expiresAfterSeconds\": 1400,\n    \"isHazardous\": false\n  }\n}"
+            "body": "{\n  \"shelfId\": \"...\",\n  \"cellId\": \"...\",\n  \"assortment\": {\n    \"name\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": -10,\n      \"maximalCelsius\": 40\n    },\n    \"weightKg\": 10,\n    \"size\": {\n      \"widthMillimeters\": 1000,\n      \"heightMillimeters\": 1000,\n      \"lengthMillimeters\": 1000\n    },\n    \"comment\": \"...\",\n    \"expiresAfterSeconds\": 1400,\n    \"isHazardous\": false,\n    \"imageContentBase64\": null\n  }\n}"
           },
           "requestVariables": [],
           "responses": {}
@@ -309,7 +315,7 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"id\": \"...\",\n  \"newData\": {\n  \t\"name\": \"...\",\n    \"comment\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": -10,\n      \"maximalCelsius\": 40\n    },\n    \"weightKg\": 10,\n    \"size\": {\n      \"widthMillimeters\": 1000,\n      \"heightMillimeters\": 1000,\n      \"lengthMillimeters\": 1000\n    },\n    \"expiresAfterSeconds\": 1400,\n    \"isHazardous\": false\n  }\n}"
+            "body": "{\n  \"id\": \"...\",\n  \"newData\": {\n    \"name\": \"...\",\n    \"comment\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": -10,\n      \"maximalCelsius\": 40\n    },\n    \"weightKg\": 10,\n    \"size\": {\n      \"widthMillimeters\": 1000,\n      \"heightMillimeters\": 1000,\n      \"lengthMillimeters\": 1000\n    },\n    \"expiresAfterSeconds\": 1400,\n    \"isHazardous\": false,\n    \"imageContentBase64\": null\n  }\n}\n"
           },
           "requestVariables": [],
           "responses": {}
@@ -349,7 +355,7 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"assortment\": [\n    {\n      \"shelfId\": \"...\",\n      \"cellId\": \"...\",\n      \"assortment\": {\n        \"name\": \"...\",\n        \"temperatureRange\": {\n          \"minimalCelsius\": -10,\n          \"maximalCelsius\": 40\n        },\n        \"weightKg\": 10,\n        \"size\": {\n          \"widthMillimeters\": 1000,\n          \"heightMillimeters\": 1000,\n          \"lengthMillimeters\": 1000\n        },\n        \"comment\": \"...\",\n        \"expiresAfterSeconds\": 1400,\n        \"isHazardous\": false\n      }\n    },\n    {\n      \"shelfId\": \"...\",\n      \"cellId\": \"...\",\n      \"assortment\": {\n        \"name\": \"...\",\n        \"temperatureRange\": {\n          \"minimalCelsius\": -10,\n          \"maximalCelsius\": 40\n        },\n        \"weightKg\": 10,\n        \"size\": {\n          \"widthMillimeters\": 1000,\n          \"heightMillimeters\": 1000,\n          \"lengthMillimeters\": 1000\n        },\n        \"comment\": \"...\",\n        \"expiresAfterSeconds\": 1400,\n        \"isHazardous\": false\n      }\n    }\n  ]\n}\n"
+            "body": "{\n  \"assortment\": [\n    {\n      \"shelfId\": \"...\",\n      \"cellId\": \"...\",\n      \"assortment\": {\n        \"name\": \"...\",\n        \"temperatureRange\": {\n          \"minimalCelsius\": -10,\n          \"maximalCelsius\": 40\n        },\n        \"weightKg\": 10,\n        \"size\": {\n          \"widthMillimeters\": 1000,\n          \"heightMillimeters\": 1000,\n          \"lengthMillimeters\": 1000\n        },\n        \"comment\": \"...\",\n        \"expiresAfterSeconds\": 1400,\n        \"isHazardous\": false,\n        \"imageContentBase64\": null\n      }\n    },\n    {\n      \"shelfId\": \"...\",\n      \"cellId\": \"...\",\n      \"assortment\": {\n        \"name\": \"...\",\n        \"temperatureRange\": {\n          \"minimalCelsius\": -10,\n          \"maximalCelsius\": 40\n        },\n        \"weightKg\": 10,\n        \"size\": {\n          \"widthMillimeters\": 1000,\n          \"heightMillimeters\": 1000,\n          \"lengthMillimeters\": 1000\n        },\n        \"comment\": \"...\",\n        \"expiresAfterSeconds\": 1400,\n        \"isHazardous\": false,\n        \"imageContentBase64\": null\n      }\n    }\n  ]\n}\n"
           },
           "requestVariables": [],
           "responses": {}
@@ -373,6 +379,46 @@
           },
           "requestVariables": [],
           "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "deleteAssortmentCopy",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.deleteAssortmentCopy",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"id\": \"...\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "createAssortmentCopy",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.createAssortmentCopy",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"id\": \"...\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
         }
       ],
       "auth": {
@@ -380,14 +426,8 @@
         "authActive": true
       },
       "headers": [],
-      "_ref_id": "coll_mk1erskw_79d92b08-ccce-42a1-ad8b-70ce25ccd0ef"
+      "_ref_id": "coll_mk1erskw_79d92b08-ccce-42a1-ad8b-70ce25ccd0ef",
+      "folders": []
     }
-  ],
-  "requests": [],
-  "auth": {
-    "authType": "none",
-    "authActive": true
-  },
-  "headers": [],
-  "_ref_id": "coll_mjqak81p_09a9a4e1-898a-47ac-a756-88672300ceaa"
+  ]
 }
