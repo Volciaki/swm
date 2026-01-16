@@ -55,10 +55,10 @@ export class DefaultAssortmentHelper implements AssortmentHelper {
 		addAssortmentImageByBase64: Base64UploadFunction,
 	) {
 		const assortmentId = this.uuidManager.generate().value;
-		const qrCode = await getQRCode(assortmentId);
 		const image = dto.imageContentBase64 === null
 			? null
 			: await addAssortmentImageByBase64(`${assortmentId}.png`, dto.imageContentBase64);
+		const qrCode = await getQRCode(assortmentId);
 
 		const assortment = AssortmentMapper.fromAssortmentDTOToAssortment(
 			{
