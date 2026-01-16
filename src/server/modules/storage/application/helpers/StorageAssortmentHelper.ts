@@ -182,7 +182,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		if (cellToUpdate.assortment === null) return shelf;
 
 		cellToUpdate.assortment = null;
-		await this.deleteAssortmentFull(assortment);
+		await this.deleteAssortmentFull(assortment, currentUser);
 		const newAssortments = await this.getAllAssortment.execute();
 		return await this.emptyCell.execute(
 			{
@@ -205,6 +205,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 						id: assortment.image?.id,
 						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
 					},
+					currentUser,
 				)).base64
 				: null;
 			return { ...assortment, imageContentBase64 };
