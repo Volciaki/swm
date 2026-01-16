@@ -29,4 +29,12 @@ export type Environment = {
             password: string;
         },
     },
+	storage: {
+		accessKey: string;
+		secretKey: string;
+		endpoint: string;
+		publicUrl: string;
+		port: number;
+		sslEnabled: boolean;
+	},
 };

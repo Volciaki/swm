@@ -1,6 +1,5 @@
 export * from "./uuid";
 export * from "./mail";
-export * from "./unauthorized";
 export * from "./dates";
 export * from "./temperature";
 export * from "./weight";
@@ -8,3 +7,4 @@ export * from "./dimensions";
 export * from "./distance";
 export * from "./identity";
 export * from "./time-frame";
+export * from "./errors";

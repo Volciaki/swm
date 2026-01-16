@@ -1,4 +1,4 @@
-import { UtilsError } from "../error";
+import { UtilsError } from "../errors";
 
 export class InvalidUUIDError extends UtilsError {
 	constructor(value: string) {

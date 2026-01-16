@@ -14,9 +14,9 @@ export class DimensionsMapper {
 
 	static toDTO(dimensions: Dimensions): DimensionsDTO {
 		return {
-			heightMillimeters: dimensions.height.millimeters,
-			widthMillimeters: dimensions.width.millimeters,
-			lengthMillimeters: dimensions.length.millimeters,
+			heightMillimeters: dimensions.height.millimeters.value,
+			widthMillimeters: dimensions.width.millimeters.value,
+			lengthMillimeters: dimensions.length.millimeters.value,
 		};
 	}
 }

@@ -4,47 +4,33 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { DeleteShelf } from "@/server/modules/warehouse/application/use-cases/DeleteShelf";
 import { ImportShelves } from "@/server/modules/warehouse/application/use-cases/ImportShelves";
 import { CreateShelf } from "@/server/modules/warehouse/application/use-cases/CreateShelf";
-import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
-import { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
-import { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
-import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
-import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
-import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
 import { ImportAndReplaceShelves } from "@/server/modules/storage/application/use-cases/ImportAndReplaceShelves";
+import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { importAndReplaceShelvesDTOSchema } from "@/server/modules/storage/application/dto/ImportAndReplaceShelvesDTO";
-import { getServices } from "../../services";
+import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
+import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 
 export const importShelves = procedure.input(importAndReplaceShelvesDTOSchema).mutation<ShelfDTO[]>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
+	const presets = getPresets(services);
+
 	const shelfRepository = services.repositories.shelf.db;
 	const assortmentRepository = services.repositories.assortment.db;
-	const uuidManager = services.utils.uuidManager.default;
 
-	const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
-	const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
+	const shelfHelper = presets.shelfHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
+	const fileManager = presets.fileManager.default.get(S3FileStorageBucket.ASSORTMENT_IMAGES);
 
 	const getAllShelvesAction = new GetAllShelves(shelfRepository);
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
 	const importShelvesAction = new ImportShelves(shelfHelper);
 	const createShelfAction = new CreateShelf(shelfHelper);
-	const getAssortmentAction = new GetAssortment(assortmentHelper);
-	const createAssortmentAction = new CreateAssortment(assortmentHelper);
-	const deleteAssortmentAction = new DeleteAssortment(assortmentRepository, assortmentHelper);
-	const getShelfAction = new GetShelf(shelfHelper);
-	const fillCellAction = new FillCell(shelfRepository, shelfHelper);
-	const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
+	const fetchFile = new FetchFile(fileHelper, fileManager);
 
-	const storageAssortmentHelper = services.helpers.storageAssortment.default.get(
-		getAllAssortmentAction,
-		getAssortmentAction,
-		createAssortmentAction,
-		deleteAssortmentAction,
-		getShelfAction,
-		fillCellAction,
-		emptyCellAction,
-	);
+	const storageAssortmentHelper = presets.storageAssortmentHelper.default;
 
 	const action = new ImportAndReplaceShelves(
 		getAllShelvesAction,
@@ -53,6 +39,7 @@ export const importShelves = procedure.input(importAndReplaceShelvesDTOSchema).m
 		createShelfAction,
 		importShelvesAction,
 		storageAssortmentHelper,
+		fetchFile,
 	);
 	return await action.execute(input, ctx.user ?? undefined);
 });
