@@ -1,4 +1,4 @@
-import { UtilsError } from "../error";
+import { UtilsError } from "../errors";
 
 export class NegativeWeightError extends UtilsError {
 	constructor(grams: number) {

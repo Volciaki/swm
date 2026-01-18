@@ -3,6 +3,7 @@ import { getUserRepositories } from "./User";
 import { getTwoFactorAuthenticationSessionRepositories } from "./TwoFactorAuthenticationSession";
 import { getShelfRepositories } from "./Shelf";
 import { getAssortmentRepositories } from "./Assortment";
+import { getFileReferenceRepositories } from "./FileReference";
 
 export const getRepositories = (ctx: GetServicesContext) => {
 	return {
@@ -10,5 +11,6 @@ export const getRepositories = (ctx: GetServicesContext) => {
 		twoFactorAuthenticationSession: getTwoFactorAuthenticationSessionRepositories(ctx),
 		shelf: getShelfRepositories(ctx),
 		assortment: getAssortmentRepositories(ctx),
+		fileReference: getFileReferenceRepositories(ctx),
 	};
 };

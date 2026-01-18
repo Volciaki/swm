@@ -2,18 +2,21 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { DeleteShelf } from "@/server/modules/warehouse/application/use-cases/DeleteShelf";
 import { TakeDownShelf } from "@/server/modules/storage/application/use-cases/TakeDownShelf";
 import { takeDownShelfDTOSchema } from "@/server/modules/storage/application/dto/TakeDownShelfDTO";
-import { getServices } from "../../services";
+import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
 export const deleteShelf = procedure.input(takeDownShelfDTOSchema).mutation<void>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
+	const presets = getPresets(services);
+
 	const assortmentRepository = services.repositories.assortment.db;
 	const shelfRepository = services.repositories.shelf.db;
-	const uuidManager = services.utils.uuidManager.default;
 
-	const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
+	const shelfHelper = presets.shelfHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
 
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
 
 	const action = new TakeDownShelf(getAllAssortmentAction, deleteShelfAction);

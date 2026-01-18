@@ -1,16 +1,17 @@
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { AssortmentDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDTO";
 import { getAssortmentDTOSchema } from "@/server/modules/assortment/application/dto/GetAssortmentDTO";
-import { getServices } from "../../services";
+import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
 export const getAssortment = procedure.input(getAssortmentDTOSchema).query<AssortmentDTO>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
-	const assortmentRepository = services.repositories.assortment.db;
-	const uuidManager = services.utils.uuidManager.default;
+	const presets = getPresets(services);
 
-	const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
+	const assortmentHelper = presets.assortmentHelper.default;
+	const fileHelper = presets.fileHelper.default;
+	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
 
-	const action = new GetAssortment(assortmentHelper);
+	const action = new GetAssortment(assortmentHelper, assortmentFileHelper);
 	return await action.execute(input);
 });
