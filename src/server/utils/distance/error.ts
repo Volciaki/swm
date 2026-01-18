@@ -1,4 +1,4 @@
-import { UtilsError } from "../error";
+import { UtilsError } from "../errors";
 
 export class NegativeDistanceError extends UtilsError {
 	constructor(value: number) {

@@ -6,7 +6,11 @@ import { DeleteAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
+import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/GenerateQRCode";
+import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { GetServicesContext } from "../../context";
+import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
 
 export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 	return {
@@ -18,6 +22,12 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 			getShelf: GetShelf,
 			fillCell: FillCell,
 			emptyCell: EmptyCell,
+			generateQRCode: GenerateQRCode,
+			uploadFileProductImage: UploadFile,
+			uploadFileQRCode: UploadFile,
+			deleteFileProductImage: DeleteFileByPath,
+			deleteFileQRCode: DeleteFileByPath,
+			fetchFileProductImage: FetchFile,
 		) => new DefaultStorageAssortmentHelper(
 			getAllAssortment,
 			getAssortment,
@@ -26,6 +36,12 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 			getShelf,
 			fillCell,
 			emptyCell,
+			generateQRCode,
+			uploadFileProductImage,
+			uploadFileQRCode,
+			deleteFileProductImage,
+			deleteFileQRCode,
+			fetchFileProductImage,
 		)
 	};
 };

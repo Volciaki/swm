@@ -1,14 +1,12 @@
 import { Repository } from "typeorm";
 import { UUID } from "@/server/utils";
-import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
+import { AssortmentRepository, FileContextByIDGetter } from "../../domain/repositories/AssortmentRepository";
 import { DBAssortment } from "../entities/DBAssortment";
 import { Assortment } from "../../domain/entities/Assortment";
 import { AssortmentMapper } from "../mappers/AssortmentMapper";
 
-// TODO: This repository has been implemented very similarly to DBUser.
-// I should probably consider somehow abstracting away the common CRUD operations.
 export class DBAssortmentRepository implements AssortmentRepository {
-	constructor(private readonly db: Repository<DBAssortment>) {}
+	constructor(private readonly db: Repository<DBAssortment>) { }
 
 	async create(assortment: Assortment) {
 		const dbAssortment = AssortmentMapper.fromAssortmentToDBAssortment(assortment);
@@ -28,16 +26,28 @@ export class DBAssortmentRepository implements AssortmentRepository {
 		await this.db.remove(dbAssortment);
 	}
 
-	async getById(id: UUID) {
+	async getById(id: UUID, getFileContextById: FileContextByIDGetter) {
 		const dbAssortment = await this.db.findOneBy({ id: id.value });
 
 		if (dbAssortment === null) return null;
 
-		return AssortmentMapper.fromDBAssortmentToAssortment(dbAssortment);
+		return AssortmentMapper.fromDBAssortmentToAssortment(
+			dbAssortment,
+			await getFileContextById(UUID.fromString(dbAssortment.qrCodeFileReferenceId)),
+			dbAssortment.imageFileReferenceId === null
+				? null
+				: await getFileContextById(UUID.fromString(dbAssortment.imageFileReferenceId)),
+		);
 	}
 
-	async getAll() {
+	async getAll(getFileContextById: FileContextByIDGetter) {
 		const dbAssortments = await this.db.find();
-		return dbAssortments.map((assortment) => AssortmentMapper.fromDBAssortmentToAssortment(assortment));
+		const assortments = dbAssortments.map(async (dbAssortment) => {
+			const dbAssortmentId = UUID.fromString(dbAssortment.id);
+			return await this.getById(dbAssortmentId, getFileContextById);
+		});
+		const assortmentsFetched = await Promise.all(assortments);
+
+		return assortmentsFetched.filter((assortment) => assortment !== null);
 	}
 }

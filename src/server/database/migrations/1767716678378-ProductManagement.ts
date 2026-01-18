@@ -14,5 +14,4 @@ export class ProductManagement1767716678378 implements MigrationInterface {
     	await queryRunner.query("DROP TABLE \"cells\"");
     	await queryRunner.query("DROP TABLE \"shelves\"");
     }
-
 }

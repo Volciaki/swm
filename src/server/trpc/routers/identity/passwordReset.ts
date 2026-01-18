@@ -5,6 +5,7 @@ import { getServices } from "../../services";
 
 export const passwordReset = procedure.input(passwordResetDTOSchema).mutation<void>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
+
 	const userRepository = services.repositories.user.db;
 	const twoFactorAuthenticationSessionRepository = services.repositories.twoFactorAuthenticationSession.db;
 	const stringHasher = services.utils.stringHasher.node;

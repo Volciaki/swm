@@ -3,12 +3,18 @@ import { assortmentDTOSchema } from "./shared/AssortmentDTO";
 
 export const updateAssortmentDTOSchema = z.object({
 	id: z.string(),
-	newData: assortmentDTOSchema.omit({
-		id: true,
-		cellId: true,
-		shelfId: true,
-		storedAtTimestamp: true,
-	}),
+	newData: assortmentDTOSchema
+		.omit({
+			id: true,
+			cellId: true,
+			shelfId: true,
+			storedAtTimestamp: true,
+			qrCode: true,
+			image: true,
+		})
+		.extend({
+			imageContentBase64: z.string().nullable(),
+		}),
 });
 
 
