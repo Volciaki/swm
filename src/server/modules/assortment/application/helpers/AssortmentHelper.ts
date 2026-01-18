@@ -67,6 +67,10 @@ export class DefaultAssortmentHelper implements AssortmentHelper {
 				storedAtTimestamp: (new Date()).getTime(),
 				qrCode: FileReferenceMapper.fromEntityToDTO(qrCode),
 				image: image === null ? null : FileReferenceMapper.fromEntityToDTO(image),
+				hasExpired: false,
+				hasExpiredNotification: null,
+				isCloseToExpiration: false,
+				isCloseToExpirationNotification: null,
 			},
 		);
 		await this.assortmentRepository.create(assortment);
