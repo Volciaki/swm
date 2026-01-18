@@ -14,15 +14,15 @@ import { Cell } from "./Cell";
 
 export class Shelf {
 	private constructor(
-        private _id: UUID,
-        private _name: string,
-        private _comment: string,
-        private _cells: Cell[][],
-        private _temperatureRange: TemperatureRange,
-        private _maxWeight: Weight,
-        private _maxAssortmentSize: Dimensions,
-        private _supportsHazardous: boolean,
-	) {}
+		private _id: UUID,
+		private _name: string,
+		private _comment: string,
+		private _cells: Cell[][],
+		private _temperatureRange: TemperatureRange,
+		private _maxWeight: Weight,
+		private _maxAssortmentSize: Dimensions,
+		private _supportsHazardous: boolean,
+	) { }
 
 	get id() { return this._id };
 	get maxAssortmentSize() { return this._maxAssortmentSize };
@@ -84,9 +84,11 @@ export class Shelf {
 
 	private validateAssortment(assortment: AssortmentVO) {
 		const { widthMillimeters, heightMillimeters, lengthMillimeters } = assortment.size;
+
 		const assortmentWidth = Distance.fromMillimeters(widthMillimeters);
 		const assortmentHeight = Distance.fromMillimeters(heightMillimeters);
 		const assortmentLength = Distance.fromMillimeters(lengthMillimeters);
+
 		if (assortmentWidth > this.maxAssortmentSize.width)
 			throw new AssortmentTooWideError(assortmentWidth, this.maxAssortmentSize.width);
 		if (assortmentHeight > this.maxAssortmentSize.height)
@@ -95,8 +97,10 @@ export class Shelf {
 			throw new AssortmentTooLongError(assortmentLength, this.maxAssortmentSize.length);
 
 		const { minimalCelsius, maximalCelsius } = assortment.temperatureRange;
+
 		const assortmentMinimalTemperature = CelsiusDegrees.fromNumber(minimalCelsius);
 		const assortmentMaximalTemperature = CelsiusDegrees.fromNumber(maximalCelsius);
+
 		if (assortmentMinimalTemperature > this.temperatureRange.maximal)
 			throw new ShelfTooColdForAssortmentError(assortmentMinimalTemperature, this.temperatureRange.maximal);
 		if (assortmentMaximalTemperature < this.temperatureRange.minimal)
@@ -153,3 +157,4 @@ export class Shelf {
 		return Weight.fromKilograms(totalWeightKg);
 	}
 }
+

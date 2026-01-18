@@ -26,4 +26,12 @@ export const productionEnvironment: Environment = {
 			password: process.env.MAIL_USER_PASSWORD!,
 		},
 	},
+	storage: {
+		accessKey: process.env.STORAGE_ACCESS_KEY!,
+		secretKey: process.env.STORAGE_SECRET_KEY!,
+		endpoint: process.env.STORAGE_ENDPOINT!,
+		port: Number(process.env.STORAGE_PORT),
+		publicUrl: process.env.STORAGE_PUBLIC_URL!,
+		sslEnabled: Boolean(process.env.STORAGE_SSL_ENABLED),
+	},
 }

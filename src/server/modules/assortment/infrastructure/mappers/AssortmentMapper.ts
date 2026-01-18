@@ -1,3 +1,5 @@
+import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
+import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
 import { DimensionsMapper, TemperatureRangeMapper, TimeFrame, UUID, Weight } from "@/server/utils";
 import { Assortment } from "../../domain/entities/Assortment";
 import { DBAssortment } from "../entities/DBAssortment";
@@ -7,31 +9,35 @@ export class AssortmentMapper {
 	static fromAssortmentToDBAssortment(assortment: Assortment): DBAssortment {
 		const dbAssortment = new DBAssortment();
 
-		const { id, cellId, shelfId, name, size, weight, comment, storedAt, expiresAfter, temperatureRange, isHazardous } = assortment;
+		const { id, cellId, shelfId, name, size, weight, comment, storedAt, expiresAfter, temperatureRange, isHazardous, image, qrCode } = assortment;
 		dbAssortment.id = id.value;
 		dbAssortment.cellId = cellId.value;
 		dbAssortment.shelfId = shelfId.value;
 		dbAssortment.name = name;
-		dbAssortment.sizeWidthMillimeters = size.width.millimeters;
-		dbAssortment.sizeHeightMillimeters = size.height.millimeters;
-		dbAssortment.sizeLengthMillimeters = size.length.millimeters;
-		dbAssortment.weightKg = weight.kilograms;
+		dbAssortment.sizeWidthMillimeters = size.width.millimeters.value;
+		dbAssortment.sizeHeightMillimeters = size.height.millimeters.value;
+		dbAssortment.sizeLengthMillimeters = size.length.millimeters.value;
+		dbAssortment.weightKg = weight.kilograms.value;
 		dbAssortment.comment = comment;
 		dbAssortment.storedAt = storedAt;
-		dbAssortment.expiresAfterSeconds = expiresAfter.seconds;
+		dbAssortment.expiresAfterSeconds = expiresAfter.seconds.value;
 		dbAssortment.temperatureRangeMin = temperatureRange.minimal.value;
 		dbAssortment.temperatureRangeMax = temperatureRange.maximal.value;
 		dbAssortment.isHazardous = isHazardous;
+		dbAssortment.imageFileReferenceId = image?.id.value ?? null;
+		dbAssortment.qrCodeFileReferenceId = qrCode.id.value;
 
 		return dbAssortment;
 	}
 
-	static fromDBAssortmentToAssortment(dbAssortment: DBAssortment): Assortment {
+	static fromDBAssortmentToAssortment(dbAssortment: DBAssortment, qrCode: FileReference, image: FileReference | null): Assortment {
 		return Assortment.create(
 			UUID.fromString(dbAssortment.id),
 			UUID.fromString(dbAssortment.cellId),
 			UUID.fromString(dbAssortment.shelfId),
 			dbAssortment.name,
+			qrCode,
+			image,
 			TemperatureRangeMapper.fromDTO({
 				minimalCelsius: dbAssortment.temperatureRangeMin,
 				maximalCelsius: dbAssortment.temperatureRangeMax,
@@ -56,12 +62,14 @@ export class AssortmentMapper {
 			shelfId: assortment.shelfId.value,
 			name: assortment.name,
 			temperatureRange: TemperatureRangeMapper.toDTO(assortment.temperatureRange),
-			weightKg: assortment.weight.kilograms,
+			weightKg: assortment.weight.kilograms.value,
 			size: DimensionsMapper.toDTO(assortment.size),
 			comment: assortment.comment,
 			storedAtTimestamp: assortment.storedAt.getTime(),
-			expiresAfterSeconds: assortment.expiresAfter.seconds,
+			expiresAfterSeconds: assortment.expiresAfter.seconds.value,
 			isHazardous: assortment.isHazardous,
+			image: assortment.image === null ? null : FileReferenceMapper.fromEntityToDTO(assortment.image),
+			qrCode: FileReferenceMapper.fromEntityToDTO(assortment.qrCode),
 		};
 	}
 
@@ -71,6 +79,8 @@ export class AssortmentMapper {
 			UUID.fromString(assortmentDTO.cellId),
 			UUID.fromString(assortmentDTO.shelfId),
 			assortmentDTO.name,
+			FileReferenceMapper.fromDTOToEntity(assortmentDTO.qrCode),
+			assortmentDTO.image === null ? null : FileReferenceMapper.fromDTOToEntity(assortmentDTO.image),
 			TemperatureRangeMapper.fromDTO(assortmentDTO.temperatureRange),
 			Weight.fromKilograms(assortmentDTO.weightKg),
 			DimensionsMapper.fromDTO(assortmentDTO.size),

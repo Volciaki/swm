@@ -1,12 +1,19 @@
+import { attempt } from "../errors";
+import { PositiveNumber } from "../numbers/positive";
 import { NegativeWeightError } from "./error";
 
 export class Weight {
-	private constructor(private readonly _grams: number) {
-		if (_grams < 0) throw new NegativeWeightError(_grams);
+	private readonly _grams: PositiveNumber;
+
+	private constructor(value: number) {
+		const positive = attempt(() => PositiveNumber.create(value));
+		if (positive instanceof Error) throw new NegativeWeightError(value);
+
+		this._grams = positive;
 	}
 
 	get grams() { return this._grams };
-	get kilograms() { return this.grams / 1000 };
+	get kilograms() { return PositiveNumber.create(this.grams.value / 1000) };
 
 	static fromGrams(value: number) {
 		return new Weight(value);
@@ -17,10 +24,10 @@ export class Weight {
 	}
 
 	public toStringKilograms() {
-		return `${this.kilograms}kg`;
+		return `${this.kilograms.value}kg`;
 	}
 
 	public toStringGrams() {
-		return `${this.grams}g`;
+		return `${this.grams.value}g`;
 	}
 }

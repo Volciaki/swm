@@ -26,4 +26,12 @@ export const developmentEnvironment: Environment = {
 			password: process.env.MAIL_USER_PASSWORD ?? "development-mail-password",
 		},
 	},
+	storage: {
+		accessKey: process.env.STORAGE_ACCESS_KEY ?? "development-user",
+		secretKey: process.env.STORAGE_SECRET_KEY ?? "development-password",
+		endpoint: process.env.STORAGE_ENDPOINT ?? "localhost",
+		port: Number(process.env.STORAGE_PORT ?? 9000),
+		publicUrl: process.env.STORAGE_PUBLIC_URL ?? "http://localhost:9000",
+		sslEnabled: Boolean(process.env.STORAGE_SSL_ENABLED ?? false),
+	},
 }

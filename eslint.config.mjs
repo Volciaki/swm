@@ -13,7 +13,7 @@ const eslintConfig = defineConfig([
 		rules: {
 			indent: ["error", "tab", {
 				"ignoredNodes": ["PropertyDefinition[decorators]"]
-			}]
+			}],
 		},
 	},
 ]);
