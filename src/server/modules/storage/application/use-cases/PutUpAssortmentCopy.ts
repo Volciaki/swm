@@ -78,7 +78,13 @@ export class PutUpAssortmentCopy {
 					{
 						shelfId: shelf.id,
 						cellId: cell.id,
-						assortment: { ...sharedData },
+						assortment: {
+							...sharedData,
+							hasExpired: false,
+							hasExpiredNotification: null,
+							isCloseToExpiration: false,
+							isCloseToExpirationNotification: null,
+						},
 					},
 					currentUser,
 				);

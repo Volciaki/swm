@@ -58,6 +58,10 @@ export class UpdateAssortment {
 				storedAtTimestamp: assortment.storedAt.getTime(),
 				qrCode: FileReferenceMapper.fromEntityToDTO(assortment.qrCode),
 				image: newImage === null ? null : FileReferenceMapper.fromEntityToDTO(newImage),
+				hasExpired: false,
+				hasExpiredNotification: null,
+				isCloseToExpiration: false,
+				isCloseToExpirationNotification: null,
 			},
 		);
 

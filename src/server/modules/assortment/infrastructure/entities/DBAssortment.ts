@@ -49,4 +49,16 @@ export class DBAssortment {
 
 	@Column({ name: "image_file_reference_id", type: "varchar", nullable: true })
 	imageFileReferenceId!: string | null;
+
+	@Column({ name: "has_expired" })
+	hasExpired!: boolean;
+
+	@Column({ name: "has_expired_notification_id", type: "varchar", nullable: true })
+	hasExpiredNotificationId!: string | null;
+
+	@Column({ name: "is_close_to_expiration" })
+	isCloseToExpiration!: boolean;
+
+	@Column({ name: "is_close_to_expiration_notification_id", type: "varchar", nullable: true })
+	isCloseToExpirationNotificationId!: string | null;
 }

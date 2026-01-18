@@ -62,7 +62,7 @@ export class UpdateShelfAssortment {
 				: (await updateOptions.fetchAssortmentImage(UUID.fromString(assortment.image.id))).base64
 		};
 		const newAssortment = await this.updateAssortmentAction.execute(
-			{ id: dto.id, newData: dto.newData },
+			{ id: dto.id, newData: dto.assortment.newData },
 			updateOptions,
 			currentUser
 		);

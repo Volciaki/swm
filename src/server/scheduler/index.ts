@@ -1,0 +1,34 @@
+import { logger } from "../logger";
+import { SchedulerTask } from "./task";
+import { getSchedulerTasks } from "./tasks";
+
+let started = false;
+
+class Scheduler {
+	constructor(private readonly tasks: SchedulerTask[]) {}
+
+	private async setupTask(task: SchedulerTask) {
+		setInterval(async () => {
+			try {
+				await task.execute();
+			} catch (error) {
+				logger.error(`An error has occurred while running task ${task.getName()}! Details: ${error}.`)
+			}
+		}, task.getIntervalMilliseconds());
+	}
+
+	async start() {
+		for (const task of this.tasks) {
+			await this.setupTask(task);
+		}
+	}
+}
+
+export const startScheduler = () => {
+	if (started) return;
+
+	started = true;
+	const tasks = getSchedulerTasks();
+	const scheduler = new Scheduler(tasks);
+	void scheduler.start();
+};

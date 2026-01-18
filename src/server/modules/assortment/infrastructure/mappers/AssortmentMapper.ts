@@ -9,23 +9,30 @@ export class AssortmentMapper {
 	static fromAssortmentToDBAssortment(assortment: Assortment): DBAssortment {
 		const dbAssortment = new DBAssortment();
 
-		const { id, cellId, shelfId, name, size, weight, comment, storedAt, expiresAfter, temperatureRange, isHazardous, image, qrCode } = assortment;
-		dbAssortment.id = id.value;
-		dbAssortment.cellId = cellId.value;
-		dbAssortment.shelfId = shelfId.value;
-		dbAssortment.name = name;
-		dbAssortment.sizeWidthMillimeters = size.width.millimeters.value;
-		dbAssortment.sizeHeightMillimeters = size.height.millimeters.value;
-		dbAssortment.sizeLengthMillimeters = size.length.millimeters.value;
-		dbAssortment.weightKg = weight.kilograms.value;
-		dbAssortment.comment = comment;
-		dbAssortment.storedAt = storedAt;
-		dbAssortment.expiresAfterSeconds = expiresAfter.seconds.value;
-		dbAssortment.temperatureRangeMin = temperatureRange.minimal.value;
-		dbAssortment.temperatureRangeMax = temperatureRange.maximal.value;
-		dbAssortment.isHazardous = isHazardous;
-		dbAssortment.imageFileReferenceId = image?.id.value ?? null;
-		dbAssortment.qrCodeFileReferenceId = qrCode.id.value;
+		dbAssortment.id = assortment.id.value;
+		dbAssortment.cellId = assortment.cellId.value;
+		dbAssortment.shelfId = assortment.shelfId.value;
+		dbAssortment.name = assortment.name;
+		dbAssortment.sizeWidthMillimeters = assortment.size.width.millimeters.value;
+		dbAssortment.sizeHeightMillimeters = assortment.size.height.millimeters.value;
+		dbAssortment.sizeLengthMillimeters = assortment.size.length.millimeters.value;
+		dbAssortment.weightKg = assortment.weight.kilograms.value;
+		dbAssortment.comment = assortment.comment;
+		dbAssortment.storedAt = assortment.storedAt;
+		dbAssortment.expiresAfterSeconds = assortment.expiresAfter.seconds.value;
+		dbAssortment.temperatureRangeMin = assortment.temperatureRange.minimal.value;
+		dbAssortment.temperatureRangeMax = assortment.temperatureRange.maximal.value;
+		dbAssortment.isHazardous = assortment.isHazardous;
+		dbAssortment.imageFileReferenceId = assortment.image?.id.value ?? null;
+		dbAssortment.qrCodeFileReferenceId = assortment.qrCode.id.value;
+		dbAssortment.isCloseToExpiration = assortment.isCloseToExpiration;
+		dbAssortment.isCloseToExpirationNotificationId = assortment.isCloseToExpirationNotification === null
+			? null
+			: assortment.isCloseToExpirationNotification.id;
+		dbAssortment.hasExpired = assortment.hasExpired;
+		dbAssortment.hasExpiredNotificationId = assortment.hasExpiredNotification === null
+			? null
+			: assortment.hasExpiredNotification.id;
 
 		return dbAssortment;
 	}
@@ -52,6 +59,10 @@ export class AssortmentMapper {
 			dbAssortment.storedAt,
 			TimeFrame.fromSeconds(dbAssortment.expiresAfterSeconds),
 			dbAssortment.isHazardous,
+			dbAssortment.hasExpired,
+			dbAssortment.hasExpiredNotificationId === null ? null : { id: dbAssortment.hasExpiredNotificationId },
+			dbAssortment.isCloseToExpiration,
+			dbAssortment.isCloseToExpirationNotificationId === null ? null : { id: dbAssortment.isCloseToExpirationNotificationId },
 		);
 	}
 
@@ -70,6 +81,14 @@ export class AssortmentMapper {
 			isHazardous: assortment.isHazardous,
 			image: assortment.image === null ? null : FileReferenceMapper.fromEntityToDTO(assortment.image),
 			qrCode: FileReferenceMapper.fromEntityToDTO(assortment.qrCode),
+			hasExpired: assortment.hasExpired,
+			hasExpiredNotification: assortment.hasExpiredNotification === null
+				? null
+				: { id: assortment.hasExpiredNotification.id },
+			isCloseToExpiration: assortment.isCloseToExpiration,
+			isCloseToExpirationNotification: assortment.isCloseToExpirationNotification === null
+				? null
+				: { id: assortment.isCloseToExpirationNotification.id },
 		};
 	}
 
@@ -88,6 +107,10 @@ export class AssortmentMapper {
 			new Date(assortmentDTO.storedAtTimestamp),
 			TimeFrame.fromSeconds(assortmentDTO.expiresAfterSeconds),
 			assortmentDTO.isHazardous,
+			assortmentDTO.hasExpired,
+			assortmentDTO.hasExpiredNotification,
+			assortmentDTO.isCloseToExpiration,
+			assortmentDTO.isCloseToExpirationNotification,
 		);
 	}
 }
