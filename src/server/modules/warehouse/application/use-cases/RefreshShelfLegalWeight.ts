@@ -1,4 +1,3 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
 import { ShelfHelper } from "../helpers/ShelfHelper";
 import { RefreshShelfLegalWeightDTO } from "../dto/RefreshShelfLegalWeightDTO";
 import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
@@ -10,9 +9,7 @@ export class RefreshShelfLegalWeight {
 		private readonly shelfRepository: ShelfRepository,
 	) {}
 
-	async execute(dto: RefreshShelfLegalWeightDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
-
+	async execute(dto: RefreshShelfLegalWeightDTO) {
 		const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id, dto.assortmentContext);
 		shelf.updateLastRecordedLegalWeight();
 

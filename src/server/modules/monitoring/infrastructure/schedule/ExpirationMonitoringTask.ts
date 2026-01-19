@@ -13,7 +13,7 @@ export class ExpirationMonitoringTask implements SchedulerTask {
 	) { }
 
 	getName() { return "ExpirationMonitoringTask" };
-	getIntervalMilliseconds() { return 60 * 1000 };
+	getIntervalMilliseconds() { return 30 * 1000 };
 
 	async execute() {
 		const expiredAssortments = await this.GetExpiredAssortment.execute();

@@ -13,7 +13,7 @@ export class UpcomingExpiryMonitoringTask implements SchedulerTask {
 	) { }
 
 	getName() { return "UpcomingExpiryMonitoringTask" };
-	getIntervalMilliseconds() { return 60 * 1000 };
+	getIntervalMilliseconds() { return 30 * 1000 };
 
 	async execute() {
 		const assortmentsToExpire = await this.getCloseToExpirationAssortment.execute();

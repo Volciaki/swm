@@ -74,7 +74,7 @@ export class UpdateShelfAssortment {
 			const shelfIdentification = { id: assortment.shelfId, assortmentContext: allAssortment };
 
 			await this.validateShelfAction.execute(shelfIdentification, currentUser);
-			await this.refreshShelfLegalWeight.execute(shelfIdentification, currentUser)
+			await this.refreshShelfLegalWeight.execute(shelfIdentification)
 
 			return newAssortment;
 		} catch (error) {
