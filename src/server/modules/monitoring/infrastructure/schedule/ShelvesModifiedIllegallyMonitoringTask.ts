@@ -1,0 +1,38 @@
+import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
+import { SchedulerTask } from "@/server/scheduler/task";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { RefreshShelfLegalWeight } from "@/server/modules/warehouse/application/use-cases/RefreshShelfLegalWeight";
+import { CreateNotification } from "../../application/use-cases/CreateNotification";
+import { NotificationType } from "../../domain/entities/Notification";
+
+// Sends a warning notification if any of the shelves have been tampered with.
+export class ShelvesModifiedIllegallyMonitoringTask implements SchedulerTask {
+	constructor(
+		private readonly GetAllAssortment: GetAllAssortment,
+		private readonly getShelves: GetAllShelves,
+		private readonly createNotification: CreateNotification,
+		private readonly refreshShelfLegalWeight: RefreshShelfLegalWeight,
+	) { }
+
+	getName() { return "ShelvesModifiedIllegallyMonitoringTask" };
+	getIntervalMilliseconds() { return 30 * 1000 };
+
+	async execute() {
+		const allAssortments = await this.GetAllAssortment.execute();
+		const shelves = await this.getShelves.execute({ assortmentContext: allAssortments });
+
+		for (const shelf of shelves) {
+			const totalShelfWeight = shelf.cells.flat().reduce((sum, cell) => sum + (cell.assortment?.weightKg ?? 0), 0);
+			const lastRecordedWeight = shelf.lastRecordedLegalWeightKg;
+
+			if (totalShelfWeight === lastRecordedWeight) continue;
+
+			await this.createNotification.execute({
+				type: NotificationType.ALERT,
+				title: "Wykryto nieautoryzowane zdjęcie przedmiotu z magazynu.",
+				message: `Szafka "${shelf.name}" podczas ostatniej autoryzowanej modyfikacji posiadała łączną wage ${lastRecordedWeight}kg. Teraz jednak, zawarte w niej asortymenty ważą ${totalShelfWeight}kg. Świadczy to o tym, że musiało dojść do modyfikacji stanu magazynu, bez powiadomienia o tym systemu, lub awarii niektórych czujników (jeśli takie występują). Te powiadomienie nie zostanie wysłane ponownie, a system od teraz założy, że nowa waga jest legalna. Jeśli utracony przedmiot zostanie przywrócony, powinien on zostać dodany według klasycznych procedur obsługi systemu.`
+			});
+			await this.refreshShelfLegalWeight.execute({ id: shelf.id, assortmentContext: allAssortments });
+		}
+	}
+}

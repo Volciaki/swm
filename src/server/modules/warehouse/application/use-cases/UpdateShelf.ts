@@ -20,6 +20,7 @@ export class UpdateShelf {
 			...dto.newData,
 			id: shelf.id.value,
 			cells: shelf.cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
+			lastRecordedLegalWeightKg: shelf.lastRecordedLegalWeight.kilograms.value,
 		});
 
 		const { name, comment, maxAssortmentSize, maxWeight, temperatureRange, supportsHazardous } = newShelf

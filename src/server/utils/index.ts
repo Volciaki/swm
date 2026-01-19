@@ -8,3 +8,4 @@ export * from "./distance";
 export * from "./identity";
 export * from "./time-frame";
 export * from "./errors";
+export * from "./enums";

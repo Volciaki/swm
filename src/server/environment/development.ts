@@ -1,7 +1,8 @@
-import { type Environment, EnvironmentType } from "./type";
+import { type Environment, EnvironmentType, NextPhase } from "./type";
 
 export const developmentEnvironment: Environment = {
 	type: EnvironmentType.DEVELOPMENT,
+	nextPhase: process.env.NEXT_PHASE === "phase-production-build" ? NextPhase.BUILD : null,
 	port: Number(process.env.PORT ?? 3000),
 	database: {
 		host: process.env.DATABASE_HOST ?? "localhost",

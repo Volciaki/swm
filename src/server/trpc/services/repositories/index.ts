@@ -4,6 +4,7 @@ import { getTwoFactorAuthenticationSessionRepositories } from "./TwoFactorAuthen
 import { getShelfRepositories } from "./Shelf";
 import { getAssortmentRepositories } from "./Assortment";
 import { getFileReferenceRepositories } from "./FileReference";
+import { getNotificationRepositories } from "./Notification";
 
 export const getRepositories = (ctx: GetServicesContext) => {
 	return {
@@ -12,5 +13,6 @@ export const getRepositories = (ctx: GetServicesContext) => {
 		shelf: getShelfRepositories(ctx),
 		assortment: getAssortmentRepositories(ctx),
 		fileReference: getFileReferenceRepositories(ctx),
+		notification: getNotificationRepositories(ctx),
 	};
 };
