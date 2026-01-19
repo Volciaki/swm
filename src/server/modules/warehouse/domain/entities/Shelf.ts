@@ -94,11 +94,11 @@ export class Shelf {
 		const assortmentHeight = Distance.fromMillimeters(heightMillimeters);
 		const assortmentLength = Distance.fromMillimeters(lengthMillimeters);
 
-		if (assortmentWidth > this.maxAssortmentSize.width)
+		if (assortmentWidth.millimeters > this.maxAssortmentSize.width.millimeters)
 			throw new AssortmentTooWideError(assortmentWidth, this.maxAssortmentSize.width);
-		if (assortmentHeight > this.maxAssortmentSize.height)
+		if (assortmentHeight.millimeters > this.maxAssortmentSize.height.millimeters)
 			throw new AssortmentTooTallError(assortmentHeight, this.maxAssortmentSize.height);
-		if (assortmentLength > this.maxAssortmentSize.length)
+		if (assortmentLength.millimeters > this.maxAssortmentSize.length.millimeters)
 			throw new AssortmentTooLongError(assortmentLength, this.maxAssortmentSize.length);
 
 		const { minimalCelsius, maximalCelsius } = assortment.temperatureRange;

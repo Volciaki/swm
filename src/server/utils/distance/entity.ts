@@ -19,7 +19,7 @@ export class Distance {
 	}
 
 	public toSringMillimeters() {
-		return `${this.millimeters}mm`;
+		return `${this.millimeters.value}mm`;
 	}
 
 	public valueOf() {
