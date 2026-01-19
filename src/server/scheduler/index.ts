@@ -1,3 +1,5 @@
+import { environment } from "../environment";
+import { NextPhase } from "../environment/type";
 import { logger } from "../logger";
 import { SchedulerTask } from "./task";
 import { getSchedulerTasks } from "./tasks";
@@ -25,6 +27,8 @@ class Scheduler {
 }
 
 export const startScheduler = () => {
+	// Prevents NextJS from attempting to resolve all the tasks during build time :facepalm:
+	if (environment.nextPhase === NextPhase.BUILD) return;
 	if (started) return;
 
 	started = true;

@@ -1,10 +1,15 @@
 export enum EnvironmentType {
     PRODUCTION = "production",
     DEVELOPMENT = "development",
-}
+};
+
+export enum NextPhase {
+	BUILD = "BUILD",
+};
 
 export type Environment = {
     type: EnvironmentType,
+	nextPhase: NextPhase | null,
     port: number,
     database: {
         host: string;
