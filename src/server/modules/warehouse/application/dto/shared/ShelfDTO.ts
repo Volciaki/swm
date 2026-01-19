@@ -11,6 +11,7 @@ export const shelfDTOSchema = z.object({
 	maxWeightKg: z.number(),
 	maxAssortmentSize: dimensionsDTOSchema,
 	supportsHazardous: z.boolean(),
+	lastRecordedLegalWeightKg: z.number(),
 });
 
 export type ShelfDTO = z.infer<typeof shelfDTOSchema>;

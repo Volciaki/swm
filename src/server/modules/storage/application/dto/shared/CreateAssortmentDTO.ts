@@ -1,15 +1,17 @@
 import { z } from "zod";
-import { assortmentDTOSchema } from "./AssortmentDTO";
+import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 
-export const createAssortmentDTOSchema = assortmentDTOSchema
-	.omit({
-		id: true,
-		storedAtTimestamp: true,
-		qrCode: true,
-		image: true,
-	})
-	.extend({
-		imageContentBase64: z.string().nullable(),
-	});
+export const createAssortmentDTOSchema = z.object({
+	cellId: z.string(),
+	shelfId: z.string(),
+	name: z.string(),
+	temperatureRange: temperatureRangeDTOSchema,
+	weightKg: z.number(),
+	size: dimensionsDTOSchema,
+	comment: z.string(),
+	expiresAfterSeconds: z.number(),
+	isHazardous: z.boolean(),
+	imageContentBase64: z.string().nullable(),
+});
 
 export type CreateAssortmentDTO = z.infer<typeof createAssortmentDTOSchema>;

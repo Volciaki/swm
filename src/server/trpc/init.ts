@@ -6,9 +6,12 @@ import { DBUser } from "../modules/identity/infrastructure/entities/DBUser";
 import { DBUserRepository } from "../modules/identity/infrastructure/persistence/DBUserRepository";
 import { UserMapper } from "../modules/identity/infrastructure/mappers/UserMapper";
 import { InvalidAuthenticationTokenError } from "../modules/identity/application/errors/InvalidAuthenticationTokenError";
+import { InvalidUUIDError, UserDTO, UUID } from "../utils";
 import { appDataSource, initializeDatabase } from "../database/init";
 import { environment } from "../environment";
-import { InvalidUUIDError, UserDTO, UUID } from "../utils";
+import { startScheduler } from "../scheduler";
+
+startScheduler();
 
 export type APIContext = {
     db: DataSource;

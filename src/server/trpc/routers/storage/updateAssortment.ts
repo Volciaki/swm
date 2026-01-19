@@ -11,12 +11,14 @@ import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persist
 import { updateShelfAssortmentDTOSchema } from "@/server/modules/storage/application/dto/UpdateShelfAssortmentDTO";
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
+import { RefreshShelfLegalWeight } from "@/server/modules/warehouse/application/use-cases/RefreshShelfLegalWeight";
 
 export const updateAssortment = procedure.input(updateShelfAssortmentDTOSchema).mutation<AssortmentDTO>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
 	const presets = getPresets(services);
 
 	const assortmentRepository = services.repositories.assortment.db;
+	const shelfRepository = services.repositories.shelf.db;
 
 	const shelfHelper = presets.shelfHelper.default;
 	const assortmentHelper = presets.assortmentHelper.default;
@@ -28,6 +30,7 @@ export const updateAssortment = procedure.input(updateShelfAssortmentDTOSchema).
 	const updateAssortmentAction = new UpdateAssortment(assortmentRepository, assortmentHelper, assortmentFileHelper);
 	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const validateShelfAction = new ValidateShelf(shelfHelper);
+	const refreshShelfLegalWeightAction = new RefreshShelfLegalWeight(shelfHelper, shelfRepository);
 	const fetchFileAction = new FetchFile(fileHelper, fileManager);
 	const deleteFileByPathAction = new DeleteFileByPath(fileHelper, fileManager);
 	const uploadFileAction = new UploadFile(fileManager);
@@ -37,6 +40,7 @@ export const updateAssortment = procedure.input(updateShelfAssortmentDTOSchema).
 		updateAssortmentAction,
 		getAllAssortmentAction,
 		validateShelfAction,
+		refreshShelfLegalWeightAction,
 		fetchFileAction,
 		deleteFileByPathAction,
 		uploadFileAction,
