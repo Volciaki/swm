@@ -1,9 +1,8 @@
+import { isValidEnumValue } from "@/server/utils/enums";
 import { InvalidStorageTypeValue } from "../errors/InvalidStorageTypeValue";
 import { FileStorageType } from "../services/FileStorage";
 
-const stringIsFileStorageType = (value: string): value is FileStorageType => {
-	return Object.values(FileStorageType).includes(value as FileStorageType);
-}
+const stringIsFileStorageType = (value: string) => isValidEnumValue(FileStorageType, value);
 
 export class FileMetadata {
 	constructor(

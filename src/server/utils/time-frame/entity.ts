@@ -6,6 +6,7 @@ export class TimeFrame {
 	private constructor(private readonly _seconds: PositiveNumber) {}
 
 	get seconds() { return this._seconds };
+	get milliseconds() { return PositiveNumber.create(this.seconds.value * 1000) };
 
 	static fromSeconds(value: number) {
 		const positive = attempt(() => PositiveNumber.create(value));

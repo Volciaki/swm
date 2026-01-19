@@ -2,7 +2,7 @@ import { z } from "zod";
 import { shelfDTOSchema } from "./ShelfDTO";
 
 export const createShelfDTOSchema = shelfDTOSchema
-	.omit({ id: true, cells: true })
+	.omit({ id: true, cells: true, lastRecordedLegalWeightKg: true })
 	.extend({
 		cellsShape: z.object({
 			columns: z.number(),

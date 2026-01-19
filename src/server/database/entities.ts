@@ -4,6 +4,7 @@ import { DBShelf } from "../modules/warehouse/infrastructure/entities/DBShelf";
 import { DBCell } from "../modules/warehouse/infrastructure/entities/DBCell";
 import { DBAssortment } from "../modules/assortment/infrastructure/entities/DBAssortment";
 import { DBFileReference } from "../utils/files/infrastructure/entities/DBFileReference";
+import { DBNotification } from "../modules/monitoring/infrastructure/entities/DBNotification";
 
 export const entities = [
 	DBUser,
@@ -12,4 +13,5 @@ export const entities = [
 	DBCell,
 	DBAssortment,
 	DBFileReference,
+	DBNotification,
 ];

@@ -7,8 +7,9 @@ import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile"
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
-import { UpdateShelfAssortmentDTO } from "../dto/UpdateShelfAssortmentDTO";
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import { RefreshShelfLegalWeight } from "@/server/modules/warehouse/application/use-cases/RefreshShelfLegalWeight";
+import { UpdateShelfAssortmentDTO } from "../dto/UpdateShelfAssortmentDTO";
 
 export class UpdateShelfAssortment {
 	constructor(
@@ -16,6 +17,7 @@ export class UpdateShelfAssortment {
 		private readonly updateAssortmentAction: UpdateAssortment,
 		private readonly getAllAssortmentAction: GetAllAssortment,
 		private readonly validateShelfAction: ValidateShelf,
+		private readonly refreshShelfLegalWeight: RefreshShelfLegalWeight,
 		private readonly fetchFileAction: FetchFile,
 		private readonly deleteFileByPathAction: DeleteFileByPath,
 		private readonly uploadFileAction: UploadFile,
@@ -23,11 +25,11 @@ export class UpdateShelfAssortment {
 
 	private getUpdateOptions(currentUser?: UserDTO): UpdateAssortmentOptions {
 		return {
-			fetchAssortmentImage: async (id) => this.fetchFileAction.execute(
+			fetchAssortmentImage: async (id) => await this.fetchFileAction.execute(
 				{ id: id.value, metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES } },
 				currentUser,
 			),
-			deleteProductImageByPath: async (path) => this.deleteFileByPathAction.execute(
+			deleteProductImageByPath: async (path) => await this.deleteFileByPathAction.execute(
 				{
 					path,
 					metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
@@ -55,6 +57,7 @@ export class UpdateShelfAssortment {
 		const updateOptions = this.getUpdateOptions(currentUser);
 
 		const assortment = await this.getAssortmentAction.execute({ id: dto.id });
+
 		const fullAssortment = {
 			...assortment,
 			imageContentBase64: assortment.image === null
@@ -68,7 +71,11 @@ export class UpdateShelfAssortment {
 		);
 		try {
 			const allAssortment = await this.getAllAssortmentAction.execute();
-			await this.validateShelfAction.execute({ id: assortment.shelfId, assortmentContext: allAssortment }, currentUser);
+			const shelfIdentification = { id: assortment.shelfId, assortmentContext: allAssortment };
+
+			await this.validateShelfAction.execute(shelfIdentification, currentUser);
+			await this.refreshShelfLegalWeight.execute(shelfIdentification)
+
 			return newAssortment;
 		} catch (error) {
 			await this.updateAssortmentAction.execute(

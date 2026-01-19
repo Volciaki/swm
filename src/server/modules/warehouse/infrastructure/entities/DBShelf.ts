@@ -34,4 +34,7 @@ export class DBShelf {
 
 	@Column({ name: "supports_hazardous" })
 	supportsHazardous!: boolean;
+	
+	@Column({ name: "last_recorded_legal_weight_kg", type: "float" })
+	lastRecordedLegalWeightKg!: number;
 }
