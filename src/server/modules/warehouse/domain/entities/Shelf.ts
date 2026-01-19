@@ -22,6 +22,7 @@ export class Shelf {
 		private _maxWeight: Weight,
 		private _maxAssortmentSize: Dimensions,
 		private _supportsHazardous: boolean,
+		private _lastRecordedLegalWeight: Weight,
 	) { }
 
 	get id() { return this._id };
@@ -32,6 +33,7 @@ export class Shelf {
 	get comment() { return this._comment };
 	get name() { return this._name };
 	get supportsHazardous() { return this._supportsHazardous };
+	get lastRecordedLegalWeight() { return this._lastRecordedLegalWeight };
 
 	set name(value: string) { this._name = value };
 	set comment(value: string) { this._comment = value };
@@ -40,6 +42,7 @@ export class Shelf {
 	set maxWeight(value: Weight) { this._maxWeight = value };
 	set temperatureRange(value: TemperatureRange) { this._temperatureRange = value };
 	set supportsHazardous(value: boolean) { this._supportsHazardous = value };
+	private set lastRecordedLegalWeight(value: Weight) { this._lastRecordedLegalWeight = value };
 
 	static create(
 		id: UUID,
@@ -50,6 +53,7 @@ export class Shelf {
 		maxWeight: Weight,
 		maxAssortmentSize: Dimensions,
 		supportsHazardous: boolean,
+		lastRecordedLegalWeight: Weight,
 	) {
 		const shelf = new Shelf(
 			id,
@@ -60,6 +64,7 @@ export class Shelf {
 			maxWeight,
 			maxAssortmentSize,
 			supportsHazardous,
+			lastRecordedLegalWeight,
 		);
 
 		shelf.validate();
@@ -89,11 +94,11 @@ export class Shelf {
 		const assortmentHeight = Distance.fromMillimeters(heightMillimeters);
 		const assortmentLength = Distance.fromMillimeters(lengthMillimeters);
 
-		if (assortmentWidth > this.maxAssortmentSize.width)
+		if (assortmentWidth.millimeters > this.maxAssortmentSize.width.millimeters)
 			throw new AssortmentTooWideError(assortmentWidth, this.maxAssortmentSize.width);
-		if (assortmentHeight > this.maxAssortmentSize.height)
+		if (assortmentHeight.millimeters > this.maxAssortmentSize.height.millimeters)
 			throw new AssortmentTooTallError(assortmentHeight, this.maxAssortmentSize.height);
-		if (assortmentLength > this.maxAssortmentSize.length)
+		if (assortmentLength.millimeters > this.maxAssortmentSize.length.millimeters)
 			throw new AssortmentTooLongError(assortmentLength, this.maxAssortmentSize.length);
 
 		const { minimalCelsius, maximalCelsius } = assortment.temperatureRange;
@@ -156,5 +161,20 @@ export class Shelf {
 
 		return Weight.fromKilograms(totalWeightKg);
 	}
-}
 
+	public updateLastRecordedLegalWeight() {
+		const currentWeight = this.getTotalWeight();
+		this.lastRecordedLegalWeight = currentWeight;
+	}
+
+	/// This will return `true` if an unnoted change to this Shelf has been made.
+	// To check this we compare the previously recorded weight of the Shelf to weight of all its current assortments.
+	// If an assortment has, for example, been taken down without oficial approval of doing so, the weights will not
+	// match, as the system didn't have the chance to update them.
+	public hasBeenChangedIllegaly() {
+		const lastRecordedWeight = this.lastRecordedLegalWeight;
+		const currentWeight = this.getTotalWeight();
+
+		return lastRecordedWeight !== currentWeight;
+	}
+}

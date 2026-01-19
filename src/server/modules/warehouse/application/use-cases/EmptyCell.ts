@@ -17,6 +17,7 @@ export class EmptyCell {
 		const cellId = UUID.fromString(dto.cellId);
 
 		shelf.setCellsAssortmentById(cellId, null);
+		shelf.updateLastRecordedLegalWeight();
 
 		await this.shelfRepository.update(shelf);
 		return ShelfMapper.fromShelfToShelfDTO(shelf);

@@ -56,6 +56,7 @@ export class DefaultShelfHelper implements ShelfHelper {
 			...dto,
 			id: shelfId.value,
 			cells: shelfCellDTOs,
+			lastRecordedLegalWeightKg: 0,
 		});
 
 		await this.shelfRepository.create(shelf);
