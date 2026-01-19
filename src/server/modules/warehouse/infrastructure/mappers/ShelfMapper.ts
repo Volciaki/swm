@@ -13,7 +13,7 @@ export type CellWithContext = {
 
 export class ShelfMapper {
 	static fromShelfDTOToShelf(shelfDTO: ShelfDTO): Shelf {
-		const { id, name, comment, cells, temperatureRange, maxWeightKg, maxAssortmentSize, supportsHazardous } = shelfDTO;
+		const { id, name, comment, cells, temperatureRange, maxWeightKg, maxAssortmentSize, supportsHazardous, lastRecordedLegalWeightKg } = shelfDTO;
 		return Shelf.create(
 			UUID.fromString(id),
 			name,
@@ -23,17 +23,19 @@ export class ShelfMapper {
 			Weight.fromKilograms(maxWeightKg),
 			DimensionsMapper.fromDTO(maxAssortmentSize),
 			supportsHazardous,
+			Weight.fromKilograms(lastRecordedLegalWeightKg),
 		);
 	}
 
 	static fromShelfToShelfDTO(shelf: Shelf): ShelfDTO {
-		const { id, temperatureRange, maxAssortmentSize, maxWeight, cells, comment, name, supportsHazardous } = shelf;
+		const { id, temperatureRange, maxAssortmentSize, maxWeight, cells, comment, name, supportsHazardous, lastRecordedLegalWeight } = shelf;
 		return {
 			id: id.value,
 			temperatureRange: TemperatureRangeMapper.toDTO(temperatureRange),
 			maxAssortmentSize: DimensionsMapper.toDTO(maxAssortmentSize),
 			maxWeightKg: maxWeight.kilograms.value,
 			cells: cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
+			lastRecordedLegalWeightKg: lastRecordedLegalWeight.kilograms.value,
 			comment,
 			name,
 			supportsHazardous,
@@ -51,6 +53,7 @@ export class ShelfMapper {
 			maxWeight,
 			maxAssortmentSize,
 			supportsHazardous,
+			lastRecordedLegalWeight,
 		} = shelf;
 
 		dbShelf.id = id.value;
@@ -64,6 +67,7 @@ export class ShelfMapper {
 		dbShelf.maxAssortmentSizeWidthMillimeters = maxAssortmentSize.width.millimeters.value;
 		dbShelf.maxAssortmentSizeHeightMillimeters = maxAssortmentSize.height.millimeters.value;
 		dbShelf.maxAssortmentSizeLengthMillimeters = maxAssortmentSize.length.millimeters.value;
+		dbShelf.lastRecordedLegalWeightKg = lastRecordedLegalWeight.kilograms.value;
 
 		return dbShelf;
 	}
@@ -85,6 +89,7 @@ export class ShelfMapper {
 				heightMillimeters: dbShelf.maxAssortmentSizeHeightMillimeters,
 			}),
 			dbShelf.supportsHazardous,
+			Weight.fromKilograms(dbShelf.lastRecordedLegalWeightKg),
 		);
 	}
 }

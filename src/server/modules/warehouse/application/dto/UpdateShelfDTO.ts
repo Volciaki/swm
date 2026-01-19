@@ -4,7 +4,7 @@ import { fullShelfIdentificationDTOSchema } from "./shared/FullShelfIdentificati
 
 export const updateShelfDTOSchema = z.object({
 	shelf: fullShelfIdentificationDTOSchema,
-	newData: shelfDTOSchema.omit({ id: true, cells: true }),
+	newData: shelfDTOSchema.omit({ id: true, cells: true, lastRecordedLegalWeightKg: true }),
 });
 
 export type UpdateShelfDTO = z.infer<typeof updateShelfDTOSchema>;
