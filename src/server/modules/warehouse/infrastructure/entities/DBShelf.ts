@@ -37,4 +37,10 @@ export class DBShelf {
 	
 	@Column({ name: "last_recorded_legal_weight_kg", type: "float" })
 	lastRecordedLegalWeightKg!: number;
+
+	@Column({ name: "temperature_reading_ids", type: "varchar", array: true })
+	temperatureReadingIds!: string[];
+
+	@Column({ name: "current_temperature_celsius", type: "float" })
+	currentTemperatureCelsius!: number;
 }

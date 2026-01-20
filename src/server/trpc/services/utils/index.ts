@@ -8,6 +8,7 @@ import { getEmailManagerServices } from "./EmailManager";
 import { getFileStorageServices } from "./FileStorage";
 import { getQRCodeGeneratorServices } from "./QRCodeGenerator";
 import { getFileManagerServices } from "./FileManager";
+import { getShelfThermometerServices } from "./ShelfThermometer";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -20,5 +21,6 @@ export const getUtils = (ctx: GetServicesContext) => {
 		fileStorage: getFileStorageServices(ctx),
 		qrCodeGenerator: getQRCodeGeneratorServices(ctx),
 		fileManager: getFileManagerServices(ctx),
+		shelfThermometer: getShelfThermometerServices(ctx),
 	};
 };

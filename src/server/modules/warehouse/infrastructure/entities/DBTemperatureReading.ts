@@ -11,7 +11,7 @@ export class DBTemperatureReading {
 	@Column()
 	date!: Date;
 
-	@Column({ name: "temperature_celsius" })
+	@Column({ name: "temperature_celsius", type: "float" })
 	temperatureCelsius!: number;
 
 	@Column({ name: "temperature_was_too_low" })

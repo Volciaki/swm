@@ -5,6 +5,7 @@ import { getShelfRepositories } from "./Shelf";
 import { getAssortmentRepositories } from "./Assortment";
 import { getFileReferenceRepositories } from "./FileReference";
 import { getNotificationRepositories } from "./Notification";
+import { getTemperatureReadingRepositories } from "./TemperatureReading";
 
 export const getRepositories = (ctx: GetServicesContext) => {
 	return {
@@ -14,5 +15,6 @@ export const getRepositories = (ctx: GetServicesContext) => {
 		assortment: getAssortmentRepositories(ctx),
 		fileReference: getFileReferenceRepositories(ctx),
 		notification: getNotificationRepositories(ctx),
+		temperatureReading: getTemperatureReadingRepositories(ctx),
 	};
 };

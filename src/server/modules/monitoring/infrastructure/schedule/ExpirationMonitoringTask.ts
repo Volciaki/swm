@@ -8,7 +8,7 @@ import { NotificationType } from "../../domain/entities/Notification";
 export class ExpirationMonitoringTask implements SchedulerTask {
 	constructor(
 		private readonly createNotification: CreateNotification,
-		private readonly GetExpiredAssortment: GetExpiredAssortment,
+		private readonly getExpiredAssortment: GetExpiredAssortment,
 		private readonly setAssortmentExpiredNotification: SetAssortmentExpiredNotification,
 	) { }
 
@@ -16,7 +16,7 @@ export class ExpirationMonitoringTask implements SchedulerTask {
 	getIntervalMilliseconds() { return 30 * 1000 };
 
 	async execute() {
-		const expiredAssortments = await this.GetExpiredAssortment.execute();
+		const expiredAssortments = await this.getExpiredAssortment.execute();
 
 		for (const assortment of expiredAssortments) {
 			if (assortment.hasExpiredNotification !== null) continue;

@@ -1,4 +1,4 @@
-import { DimensionsMapper, TemperatureRangeMapper, UUID, Weight } from "@/server/utils";
+import { CelsiusDegrees, DimensionsMapper, TemperatureRangeMapper, UUID, Weight } from "@/server/utils";
 import { ShelfDTO } from "../../application/dto/shared/ShelfDTO";
 import { Shelf } from "../../domain/entities/Shelf";
 import { DBShelf } from "../entities/DBShelf";
@@ -13,32 +13,35 @@ export type CellWithContext = {
 
 export class ShelfMapper {
 	static fromShelfDTOToShelf(shelfDTO: ShelfDTO): Shelf {
-		const { id, name, comment, cells, temperatureRange, maxWeightKg, maxAssortmentSize, supportsHazardous, lastRecordedLegalWeightKg } = shelfDTO;
 		return Shelf.create(
-			UUID.fromString(id),
-			name,
-			comment,
-			cells.map((row) => row.map((cell) => CellMapper.fromCellDTOToCell(cell))),
-			TemperatureRangeMapper.fromDTO(temperatureRange),
-			Weight.fromKilograms(maxWeightKg),
-			DimensionsMapper.fromDTO(maxAssortmentSize),
-			supportsHazardous,
-			Weight.fromKilograms(lastRecordedLegalWeightKg),
+			UUID.fromString(shelfDTO.id),
+			shelfDTO.name,
+			shelfDTO.comment,
+			shelfDTO.cells.map((row) => row.map((cell) => CellMapper.fromCellDTOToCell(cell))),
+			TemperatureRangeMapper.fromDTO(shelfDTO.temperatureRange),
+			Weight.fromKilograms(shelfDTO.maxWeightKg),
+			DimensionsMapper.fromDTO(shelfDTO.maxAssortmentSize),
+			shelfDTO.supportsHazardous,
+			Weight.fromKilograms(shelfDTO.lastRecordedLegalWeightKg),
+			shelfDTO.temperatureReadingIds.map((id) => UUID.fromString(id)),
+			CelsiusDegrees.fromNumber(shelfDTO.currentTemperatureCelsius),
 		);
 	}
 
 	static fromShelfToShelfDTO(shelf: Shelf): ShelfDTO {
-		const { id, temperatureRange, maxAssortmentSize, maxWeight, cells, comment, name, supportsHazardous, lastRecordedLegalWeight } = shelf;
 		return {
-			id: id.value,
-			temperatureRange: TemperatureRangeMapper.toDTO(temperatureRange),
-			maxAssortmentSize: DimensionsMapper.toDTO(maxAssortmentSize),
-			maxWeightKg: maxWeight.kilograms.value,
-			cells: cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
-			lastRecordedLegalWeightKg: lastRecordedLegalWeight.kilograms.value,
-			comment,
-			name,
-			supportsHazardous,
+			id: shelf.id.value,
+			temperatureRange: TemperatureRangeMapper.toDTO(shelf.temperatureRange),
+			maxAssortmentSize: DimensionsMapper.toDTO(shelf.maxAssortmentSize),
+			maxWeightKg: shelf.maxWeight.kilograms.value,
+			cells: shelf.cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
+			lastRecordedLegalWeightKg: shelf.lastRecordedLegalWeight.kilograms.value,
+			temperatureReadingIds: shelf.temperatureReadingIds.map((id) => id.value),
+			currentTemperatureCelsius: shelf.currentTemperature.value,
+			comment: shelf.comment,
+			name: shelf.name,
+			supportsHazardous: shelf.supportsHazardous,
+			hasBeenChangedIllegally: shelf.hasBeenChangedIllegaly,
 		};
 	}
 
@@ -54,6 +57,8 @@ export class ShelfMapper {
 			maxAssortmentSize,
 			supportsHazardous,
 			lastRecordedLegalWeight,
+			temperatureReadingIds,
+			currentTemperature,
 		} = shelf;
 
 		dbShelf.id = id.value;
@@ -68,6 +73,8 @@ export class ShelfMapper {
 		dbShelf.maxAssortmentSizeHeightMillimeters = maxAssortmentSize.height.millimeters.value;
 		dbShelf.maxAssortmentSizeLengthMillimeters = maxAssortmentSize.length.millimeters.value;
 		dbShelf.lastRecordedLegalWeightKg = lastRecordedLegalWeight.kilograms.value;
+		dbShelf.temperatureReadingIds = temperatureReadingIds.map((id) => id.value);
+		dbShelf.currentTemperatureCelsius = currentTemperature.value;
 
 		return dbShelf;
 	}
@@ -90,6 +97,8 @@ export class ShelfMapper {
 			}),
 			dbShelf.supportsHazardous,
 			Weight.fromKilograms(dbShelf.lastRecordedLegalWeightKg),
+			dbShelf.temperatureReadingIds.map((id) => UUID.fromString(id)),
+			CelsiusDegrees.fromNumber(dbShelf.currentTemperatureCelsius),
 		);
 	}
 }

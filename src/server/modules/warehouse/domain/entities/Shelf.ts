@@ -11,6 +11,7 @@ import { CellNotFoundError } from "../errors/CellNotFoundError";
 import { ShelfUnevenError } from "../../application/errors/ShelfUnevenError";
 import { AssortmentVO } from "../vo/AssortmentVO";
 import { Cell } from "./Cell";
+import { TemperatureReading } from "./TemperatureReading";
 
 export class Shelf {
 	private constructor(
@@ -23,6 +24,9 @@ export class Shelf {
 		private _maxAssortmentSize: Dimensions,
 		private _supportsHazardous: boolean,
 		private _lastRecordedLegalWeight: Weight,
+		private _temperatureReadingIds: UUID[],
+		private _currentTemperature: CelsiusDegrees,
+		private _hasBeenChangedIllegaly: boolean,
 	) { }
 
 	get id() { return this._id };
@@ -34,6 +38,9 @@ export class Shelf {
 	get name() { return this._name };
 	get supportsHazardous() { return this._supportsHazardous };
 	get lastRecordedLegalWeight() { return this._lastRecordedLegalWeight };
+	get temperatureReadingIds() { return this._temperatureReadingIds };
+	get currentTemperature() { return this._currentTemperature };
+	get hasBeenChangedIllegaly() { return this._hasBeenChangedIllegaly };
 
 	set name(value: string) { this._name = value };
 	set comment(value: string) { this._comment = value };
@@ -42,6 +49,8 @@ export class Shelf {
 	set maxWeight(value: Weight) { this._maxWeight = value };
 	set temperatureRange(value: TemperatureRange) { this._temperatureRange = value };
 	set supportsHazardous(value: boolean) { this._supportsHazardous = value };
+	set currentTemperature(value: CelsiusDegrees) { this._currentTemperature = value };
+	set hasBeenChangedIllegaly(value: boolean) { this._hasBeenChangedIllegaly = value };
 	private set lastRecordedLegalWeight(value: Weight) { this._lastRecordedLegalWeight = value };
 
 	static create(
@@ -54,6 +63,8 @@ export class Shelf {
 		maxAssortmentSize: Dimensions,
 		supportsHazardous: boolean,
 		lastRecordedLegalWeight: Weight,
+		temperatureReadingIds: UUID[],
+		currentTemperature: CelsiusDegrees,
 	) {
 		const shelf = new Shelf(
 			id,
@@ -65,9 +76,13 @@ export class Shelf {
 			maxAssortmentSize,
 			supportsHazardous,
 			lastRecordedLegalWeight,
+			temperatureReadingIds,
+			currentTemperature,
+			false,
 		);
 
 		shelf.validate();
+		shelf.updateHasBeenChangedIllegally();
 
 		return shelf;
 	}
@@ -123,17 +138,24 @@ export class Shelf {
 		}
 	}
 
+	private validateNewAssortment(assortment: AssortmentVO) {
+		const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
+		if (!emptyCell) throw new ShelfFullError(this.id);
+
+		this.validateAssortment(assortment);
+	}
+
 	public validate() {
 		this.validateCells();
 		this.validateAllAssortment();
 		this.validateWeight();
 	}
 
-	private validateNewAssortment(assortment: AssortmentVO) {
-		const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
-		if (!emptyCell) throw new ShelfFullError(this.id);
+	public updateHasBeenChangedIllegally() {
+		const lastRecordedWeight = this.lastRecordedLegalWeight;
+		const currentWeight = this.getTotalWeight();
 
-		this.validateAssortment(assortment);
+		this.hasBeenChangedIllegaly = lastRecordedWeight !== currentWeight;
 	}
 
 	public setCellsAssortmentById(id: UUID, newAssortment: AssortmentVO | null) {
@@ -167,14 +189,7 @@ export class Shelf {
 		this.lastRecordedLegalWeight = currentWeight;
 	}
 
-	/// This will return `true` if an unnoted change to this Shelf has been made.
-	// To check this we compare the previously recorded weight of the Shelf to weight of all its current assortments.
-	// If an assortment has, for example, been taken down without oficial approval of doing so, the weights will not
-	// match, as the system didn't have the chance to update them.
-	public hasBeenChangedIllegaly() {
-		const lastRecordedWeight = this.lastRecordedLegalWeight;
-		const currentWeight = this.getTotalWeight();
-
-		return lastRecordedWeight !== currentWeight;
+	public addTemperatureReading(temperatureReading: TemperatureReading) {
+		this._temperatureReadingIds.push(temperatureReading.id);
 	}
 }
