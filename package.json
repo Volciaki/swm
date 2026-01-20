@@ -39,6 +39,7 @@
     "@types/jsonwebtoken": "^9",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.4",
+    "@types/pdfkit": "^0.17.4",
     "@types/pg": "^8",
     "@types/qrcode": "^1",
     "@types/react": "^19",

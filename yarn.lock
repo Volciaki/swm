@@ -2135,6 +2135,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pdfkit@npm:^0.17.4":
+  version: 0.17.4
+  resolution: "@types/pdfkit@npm:0.17.4"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/d2e5c8b951627bf725c7b29592011ec69df44447f334a9dc5a30b0cc1c7c32381d9b3de0d8c3cfc51114f497586bb2538d07bd937be5d8a73a09aa383f5a34ee
+  languageName: node
+  linkType: hard
+
 "@types/pg@npm:^8":
   version: 8.16.0
   resolution: "@types/pg@npm:8.16.0"
@@ -5822,6 +5831,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:^9"
     "@types/node": "npm:^20"
     "@types/nodemailer": "npm:^7.0.4"
+    "@types/pdfkit": "npm:^0.17.4"
     "@types/pg": "npm:^8"
     "@types/qrcode": "npm:^1"
     "@types/react": "npm:^19"
