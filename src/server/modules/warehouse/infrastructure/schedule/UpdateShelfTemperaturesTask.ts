@@ -14,7 +14,7 @@ export class UpdateShelfTemperaturesTask implements SchedulerTask {
 	) { }
 
 	getName() { return "UpdateShelfTemperaturesTask" };
-	getIntervalMilliseconds() { return 3 * 1000 };
+	getIntervalMilliseconds() { return 60 * 1000 };
 
 	async execute() {
 		const shelfDTOs = await this.getAllShelves.execute();

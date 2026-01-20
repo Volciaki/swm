@@ -1,4 +1,5 @@
 import { GetServicesContext } from "../context";
+
 import { getStringHasherServices } from "./StringHasher";
 import { getUUIDManagerServices } from "./UUIDManager";
 import { getAuthenticationManagerServices } from "./AuthenticationManager";
@@ -9,6 +10,9 @@ import { getFileStorageServices } from "./FileStorage";
 import { getQRCodeGeneratorServices } from "./QRCodeGenerator";
 import { getFileManagerServices } from "./FileManager";
 import { getShelfThermometerServices } from "./ShelfThermometer";
+import { getCloseToExpirationAssortmentReportGeneratorServices } from "./CloseToExpirationAssortmentReportGenerator";
+import { getFullStorageShowcaseReportGeneratorServices } from "./FullStorageShowcaseReportGenerator";
+import { getTemperatureExceededDetailsReportGeneratorServices } from "./TemperatureExceededDetailsReportGenerator";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -22,5 +26,8 @@ export const getUtils = (ctx: GetServicesContext) => {
 		qrCodeGenerator: getQRCodeGeneratorServices(ctx),
 		fileManager: getFileManagerServices(ctx),
 		shelfThermometer: getShelfThermometerServices(ctx),
+		closeToExpirationAssortmentReportGenerator: getCloseToExpirationAssortmentReportGeneratorServices(ctx),
+		fullStorageShowcaseReportGenerator: getFullStorageShowcaseReportGeneratorServices(ctx),
+		temperatureExceededDetailsReportGenerator: getTemperatureExceededDetailsReportGeneratorServices(ctx),
 	};
 };

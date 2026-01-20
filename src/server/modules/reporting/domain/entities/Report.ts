@@ -10,10 +10,10 @@ export enum ReportType {
 
 const stringIsReportType = (value: string) => isValidEnumValue(ReportType, value);
 
-export class Report {
+export class Report<T extends ReportType = ReportType> {
 	private constructor(
         private readonly _id: UUID,
-        private readonly _type: ReportType,
+        private readonly _type: T,
         private readonly _generationDate: Date,
         private readonly _file: FileReference,
    	) {}
