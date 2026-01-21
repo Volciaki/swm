@@ -1,19 +1,11 @@
-import PDFDocument from "pdfkit";
-import { getStreamAsBuffer as streamToBuffer } from "get-stream";
-import { Base64Mapper } from "@/server/utils/base64";
 import { ReportType } from "../../domain/entities/Report";
-import { FullStorageShowcaseReportGenerator } from "../../domain/services/ReportGenerator";
+import { DefaultBaseReportGenerator } from "./DefaultBaseReportGenerator";
 
-export class DefaultFullStorageShowcaseReportGenerator implements FullStorageShowcaseReportGenerator {
+export class DefaultFullStorageShowcaseReportGenerator extends DefaultBaseReportGenerator<ReportType.FULL_STORAGE_SHOWCASE> {
+	protected getType() { return ReportType.FULL_STORAGE_SHOWCASE as const };
+
 	async generate() {
-		const doc = new PDFDocument();
-		doc.text("DefaultFullStorageShowcaseReportGenerator");
-		doc.end();
-
-		const buffer = await streamToBuffer(doc);
-		return {
-			metadata: { type: ReportType.FULL_STORAGE_SHOWCASE as const },
-			content: Base64Mapper.fromBuffer(buffer),
-		};
+		this.document.text("DefaultFullStorageShowcaseReportGenerator");
+		return this.getReturnValue();
 	}
 }

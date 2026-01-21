@@ -12,7 +12,9 @@ class Scheduler {
 	private async setupTask(task: SchedulerTask) {
 		setInterval(async () => {
 			try {
+				logger.log(`Running task ${task.getName()}...`);
 				await task.execute();
+				logger.log(`Task ${task.getName()} has finished!`);
 			} catch (error) {
 				logger.error(`An error has occurred while running task ${task.getName()}! Details: ${error}.`)
 			}

@@ -1,19 +1,11 @@
-import PDFDocument from "pdfkit";
-import { getStreamAsBuffer as streamToBuffer } from "get-stream";
-import { Base64Mapper } from "@/server/utils/base64";
 import { ReportType } from "../../domain/entities/Report";
-import { TemperatureExceededDetailsReportGenerator } from "../../domain/services/ReportGenerator";
+import { DefaultBaseReportGenerator } from "./DefaultBaseReportGenerator";
 
-export class DefaultTemperatureExceededDetailsReportGenerator implements TemperatureExceededDetailsReportGenerator {
+export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBaseReportGenerator<ReportType.TEMPERATURE_EXCEEDED_DETAILS> {
+	protected getType() { return ReportType.TEMPERATURE_EXCEEDED_DETAILS as const };
+
 	async generate() {
-		const doc = new PDFDocument();
-		doc.text("DefaultTemperatureExceededDetailsReportGenerator");
-		doc.end();
-
-		const buffer = await streamToBuffer(doc);
-		return {
-			metadata: { type: ReportType.TEMPERATURE_EXCEEDED_DETAILS as const },
-			content: Base64Mapper.fromBuffer(buffer),
-		};
+		this.document.text("DefaultTemperatureExceededDetailsReportGenerator");
+		return this.getReturnValue();
 	}
 }
