@@ -184,7 +184,7 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 		const contextString = `zakres temperatur: ${roundNumber(assortment.temperatureRange.minimalCelsius)} do ${roundNumber(assortment.temperatureRange.maximalCelsius)}°C, waga: ${roundNumber(assortment.weightKg)}kg, rozmiary: ${roundNumber(assortment.size.lengthMillimeters)}x${roundNumber(assortment.size.widthMillimeters)}x${roundNumber(assortment.size.heightMillimeters)}mm, data przyjęcia: ${dateFormatter(assortment.storedAtTimestamp)}, ważny do: ${dateFormatter(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000)}`
 
 		this.document.fillColor(this.constants.colors.gray);
-		this.document.fontSize(10).text(
+		this.document.fontSize(compact ? 10 : 12).text(
 			contextString,
 			startingX + height + this.constants.margin,
 			startingY + firstSectionHeight + (this.constants.margin / 2),
@@ -280,7 +280,7 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 			contextString,
 			startingX,
 			startingY + firstSectionHeight + (this.constants.margin / 2),
-			{ width: lineWidth, lineGap: compact ? 1 : undefined },
+			{ width: lineWidth, lineGap: compact ? 1 : undefined, align: "justify" },
 		);
 		this.document.fillColor(this.constants.colors.black);
 
@@ -354,7 +354,7 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 			contextString,
 			startingX,
 			startingY + sectionHeight + (seperatorHeight / 2) + (contextStringHeight / 2),
-			{ width: cardWidth, lineGap: 2 },
+			{ width: cardWidth, lineGap: 2, align: "justify" },
 		);
 		this.document.fillColor(this.constants.colors.black);
 

@@ -22,7 +22,6 @@ export class StoreTemperatureReading {
 			this.uuidManager.generate(),
 			shelf,
 			new Date(),
-			shelf.currentTemperature,
 		);
 		shelf.addTemperatureReading(temperatureReading);
 

@@ -18,15 +18,14 @@ export class TemperatureReading {
 	get temperatureWasTooLow() { return this._temperatureWasTooLow };
 	get temperatureWasTooHigh() { return this._temperatureWasTooHigh };
 
-	// TODO: refactor this to not require the `temperature` argument later, when it's be owned by the Shelf.
-	static createNew(id: UUID, shelf: Shelf, date: Date, temperature: CelsiusDegrees) {
+	static createNew(id: UUID, shelf: Shelf, date: Date) {
 		return new TemperatureReading(
 			id,
 			shelf,
 			date,
-			temperature,
-			temperature.value > shelf.temperatureRange.maximal.value,
-			temperature.value < shelf.temperatureRange.minimal.value,
+			shelf.currentTemperature,
+			shelf.currentTemperature.value > shelf.temperatureRange.maximal.value,
+			shelf.currentTemperature.value < shelf.temperatureRange.minimal.value,
 		);
 	}
 
