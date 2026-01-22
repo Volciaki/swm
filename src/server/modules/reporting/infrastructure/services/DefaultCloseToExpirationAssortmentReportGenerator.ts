@@ -28,17 +28,17 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 		this.utils.addDate();
 
 		this.document.fontSize(20).text(
-			"Asortyment zbliżajacy się do przedawnienia",
+			"Asortyment zbliżający się do przedawnienia",
 			this.document.x,
 			this.document.y + this.constants.margin,
 			{ align: "center" },
 		);
 
-		this.document.fontSize(14).text(
+		this.document.fontSize(12).text(
 			"Poniżej znajdziesz liste asortymentów, które zbliżaja się do przedawnienia. Zostaną one posortowane rosnąco według pozostałego im czasu zdatności. Oznacza to, że produkty najbardziej wymagające Twojej uwagi znajdziesz na samej górze listy.",
 			this.document.x,
 			this.document.y + this.constants.margin,
-			{ align: "justify" }
+			{ align: "justify", lineGap: 2 }
 		);
 
 		if (closeToExpirationAssortment.length === 0) {
@@ -51,7 +51,8 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 			return this.getReturnValue();
 		}
 
-		this.utils.addAssortments(closeToExpirationAssortment);
+		this.document.y += this.constants.margin;
+		await this.utils.addAssortments(closeToExpirationAssortment);
 
 		return this.getReturnValue();
 	}

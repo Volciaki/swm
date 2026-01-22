@@ -20,6 +20,7 @@
     "date-fns": "^4.1.0",
     "get-stream": "^9.0.1",
     "jsonwebtoken": "^9.0.3",
+    "lodash": "^4.17.23",
     "minio": "^8.0.6",
     "next": "16.1.1",
     "nodemailer": "^7.0.12",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
     "@types/jsonwebtoken": "^9",
+    "@types/lodash": "^4",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.4",
     "@types/pdfkit": "^0.17.4",

@@ -4,6 +4,7 @@ import { logger } from "../logger";
 import { SchedulerTask } from "./task";
 import { getSchedulerTasks } from "./tasks";
 
+// TODO: this doesn't work... it also won't work in serverless environments.
 let started = false;
 
 class Scheduler {

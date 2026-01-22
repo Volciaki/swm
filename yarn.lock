@@ -2100,6 +2100,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4":
+  version: 4.17.23
+  resolution: "@types/lodash@npm:4.17.23"
+  checksum: 10c0/9d9cbfb684e064a2b78aab9e220d398c9c2a7d36bc51a07b184ff382fa043a99b3d00c16c7f109b4eb8614118f4869678dbae7d5c6700ed16fb9340e26cc0bf6
+  languageName: node
+  linkType: hard
+
 "@types/ms@npm:*":
   version: 2.1.0
   resolution: "@types/ms@npm:2.1.0"
@@ -5013,6 +5020,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash@npm:^4.17.23":
+  version: 4.17.23
+  resolution: "lodash@npm:4.17.23"
+  checksum: 10c0/1264a90469f5bb95d4739c43eb6277d15b6d9e186df4ac68c3620443160fc669e2f14c11e7d8b2ccf078b81d06147c01a8ccced9aab9f9f63d50dcf8cace6bf6
+  languageName: node
+  linkType: hard
+
 "loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
@@ -5836,6 +5850,7 @@ __metadata:
     "@trpc/server": "npm:^11.8.1"
     "@types/bcryptjs": "npm:^3.0.0"
     "@types/jsonwebtoken": "npm:^9"
+    "@types/lodash": "npm:^4"
     "@types/node": "npm:^20"
     "@types/nodemailer": "npm:^7.0.4"
     "@types/pdfkit": "npm:^0.17.4"
@@ -5852,6 +5867,7 @@ __metadata:
     eslint-config-next: "npm:16.1.1"
     get-stream: "npm:^9.0.1"
     jsonwebtoken: "npm:^9.0.3"
+    lodash: "npm:^4.17.23"
     minio: "npm:^8.0.6"
     next: "npm:16.1.1"
     nodemailer: "npm:^7.0.12"
