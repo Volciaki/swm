@@ -28,22 +28,22 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 		this.utils.addDate();
 
 		this.document.fontSize(20).text(
-			"Asortyment zblizajacy sie do przedawnienia",
+			"Asortyment zbliżajacy się do przedawnienia",
 			this.document.x,
 			this.document.y + this.constants.margin,
 			{ align: "center" },
 		);
 
 		this.document.fontSize(14).text(
-			"Ponizej znajdziesz liste asortymentow, ktore zblizaja sie do przedawnienia. Zostana one posortowane rosnaco wedlug pozostalego im czasu zdatnosci. Oznacza to, ze produkty najbardziej wymagajace Twojej uwagi znajdziesz na samej gorze listy.",
+			"Poniżej znajdziesz liste asortymentów, które zbliżaja się do przedawnienia. Zostaną one posortowane rosnąco według pozostałego im czasu zdatności. Oznacza to, że produkty najbardziej wymagające Twojej uwagi znajdziesz na samej górze listy.",
 			this.document.x,
 			this.document.y + this.constants.margin,
-			{ align: "justify", lineGap: 3 }
+			{ align: "justify" }
 		);
 
 		if (closeToExpirationAssortment.length === 0) {
 			this.document.fontSize(18).text(
-				"Brak asortymentu zblizajacego sie do przedawnienia!",
+				"Brak asortymentu zbliżającego się do przedawnienia!",
 				this.document.x,
 				this.document.y + this.constants.margin,
 				{ align: "center" },

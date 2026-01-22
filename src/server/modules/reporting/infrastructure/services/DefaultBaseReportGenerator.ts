@@ -1,7 +1,7 @@
 import PDFKit from "pdfkit";
 import { format as formatDate } from "date-fns";
 import { getStreamAsBuffer as streamToBuffer } from "get-stream";
-import { Base64Mapper } from "@/server/utils/base64";
+import { Base64Mapper, loadAssetByName } from "@/server/utils";
 import { GeneratedReport, ReportGenerator } from "../../domain/services/ReportGenerator";
 import { ReportType } from "../../domain/entities/Report";
 import { AssortmentVO } from "../../domain/vo/AssortmentVO";
@@ -72,6 +72,13 @@ export abstract class DefaultBaseReportGenerator<T extends ReportType> implement
 				right: 36,
 			},
 		});
+
+		const regularFontBuffer = loadAssetByName("inter.ttf");
+		const boldFontBuffer = loadAssetByName("inter-bold.ttf");
+		this.document.registerFont("regular", regularFontBuffer);
+		this.document.registerFont("bold", boldFontBuffer);
+		this.document.font("regular");
+
 		this.utils = new DefaultReportGeneratorUtils(this.document, this.constants);
 	}
 
