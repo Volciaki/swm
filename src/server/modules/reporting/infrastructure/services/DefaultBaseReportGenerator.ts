@@ -6,6 +6,7 @@ import { Base64Mapper, loadAssetByName } from "@/server/utils";
 import { GeneratedReport, ReportGenerator } from "../../domain/services/ReportGenerator";
 import { ReportType } from "../../domain/entities/Report";
 import { AssortmentVO } from "../../domain/vo/AssortmentVO";
+import { ShelfVO } from "../../domain/vo/ShelfVO";
 
 // TODO: refactor this into multiple files.
 
@@ -35,10 +36,13 @@ type ReportGeneratorConstants = {
 };
 
 interface ReportGeneratorUtils {
-	addDate(): void;
+	date(): void;
 	remoteImage(url: string, x?: number, y?: number, options?: ImageOptions): Promise<void>;
-	addAssortment(assortment: AssortmentVO, index: string, height?: number): Promise<void>;
-	addAssortments(assortments: AssortmentVO[], height?: number): Promise<void>;
+	assortment(assortment: AssortmentVO, index: string, height?: number): Promise<void>;
+	assortments(assortments: AssortmentVO[], index?: string, height?: number): Promise<void>;
+	shelf(shelf: ShelfVO, index: string, height?: number): Promise<void>;
+	shelves(shelves: ShelfVO[], height?: number): Promise<void>;
+	header(text: string): void;
 };
 
 class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
@@ -47,7 +51,7 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 		private readonly constants: ReportGeneratorConstants,
 	) { }
 
-	addDate() {
+	date() {
 		const date = new Date();
 		const dateText = formatDate(date);
 		this.document
@@ -67,8 +71,7 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 		this.document.image(buffer, x, y, options);
 	}
 
-
-	async addAssortment(assortment: AssortmentVO, index: string, height = 75) {
+	async assortment(assortment: AssortmentVO, index: string, height = 75) {
 		const startingX = this.document.x;
 		const startingY = this.document.y;
 
@@ -86,7 +89,6 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 		const seperatorHeight = 1 + (this.constants.margin / 2);
 		const heightToDistribute = height - seperatorHeight;
 		const firstSectionHeight = heightToDistribute * 0.3;
-		const secondSectionHeight = heightToDistribute * 0.7;
 
 		const heightOfIndexString = this.document.fontSize(20).heightOfString(index);
 		const widthOfIndexString = this.document.widthOfString(index);
@@ -106,7 +108,7 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 			startingY + (firstSectionHeight / 2) - (heightOfNameString / 2),
 		);
 
-		const comment = lodash.truncate(assortment.comment, { length: 10 - index.length });
+		const comment = lodash.truncate(assortment.comment, { length: 12 - index.length });
 		const heightOfCommentString = this.document.fontSize(14).heightOfString(comment);
 		const widthOfCommentString = this.document.widthOfString(comment);
 
@@ -148,7 +150,7 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 
 		const dateFormatter = (dateTimestamp: number): string => formatDate(new Date(dateTimestamp));
 		// TODO: Dear God.. refactor this later
-		const contextString = `zakres temperatur: ${assortment.temperatureRange.minimalCelsius}-${assortment.temperatureRange.maximalCelsius}°C, waga: ${assortment.weightKg}kg, rozmiary: ${assortment.size.lengthMillimeters}x${assortment.size.widthMillimeters}x${assortment.size.heightMillimeters}mm, data przyjęcia: ${dateFormatter(assortment.storedAtTimestamp)}, ważny do: ${dateFormatter(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000)}`
+		const contextString = `zakres temperatur: ${assortment.temperatureRange.minimalCelsius} do ${assortment.temperatureRange.maximalCelsius}°C, waga: ${assortment.weightKg}kg, rozmiary: ${assortment.size.lengthMillimeters}x${assortment.size.widthMillimeters}x${assortment.size.heightMillimeters}mm, data przyjęcia: ${dateFormatter(assortment.storedAtTimestamp)}, ważny do: ${dateFormatter(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000)}`
 
 		this.document.fillColor(this.constants.colors.gray);
 		this.document.text(
@@ -175,15 +177,100 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 		this.document.y = startingY + height + this.constants.margin;
 	}
 
-	async addAssortments(assortments: AssortmentVO[], height = 75) {
+	async assortments(assortments: AssortmentVO[], index?: string, height = 75) {
 		let i = 0;
 		for (const assortment of assortments) {
 			// If next Assortment doesn't fit on this page, create a new one.
 			if (this.document.y + height > this.document.page.height - this.constants.page.margins.bottom) this.document.addPage();
 
 			i += 1;
-			await this.addAssortment(assortment, `${i.toString()}.`, height);
+			await this.assortment(assortment, `${index ?? ""}${i.toString()}.`, height);
 		}
+	}
+
+	async shelf(shelf: ShelfVO, index: string, height = 75) {
+		const startingX = this.document.x;
+		const startingY = this.document.y;
+
+		const seperatorHeight = 1 + (this.constants.margin / 2);
+		const heightToDistribute = height - seperatorHeight;
+		const firstSectionHeight = heightToDistribute * 0.3;
+
+		const heightOfIndexString = this.document.fontSize(20).heightOfString(index);
+		const widthOfIndexString = this.document.widthOfString(index);
+
+		this.document.text(
+			index,
+			startingX,
+			startingY + (firstSectionHeight / 2) - (heightOfIndexString / 2),
+		);
+
+		const heightOfNameString = this.document.fontSize(16).heightOfString(shelf.name);
+		const widthOfNameString = this.document.widthOfString(shelf.name);
+
+		this.document.text(
+			shelf.name,
+			this.document.x + widthOfIndexString + this.constants.margin,
+			startingY + (firstSectionHeight / 2) - (heightOfNameString / 2),
+		);
+
+		const comment = lodash.truncate(shelf.comment, { length: 50 });
+		const heightOfCommentString = this.document.fontSize(14).heightOfString(comment);
+
+		this.document.fillColor(this.constants.colors.gray);
+		this.document.text(
+			comment,
+			this.document.x + widthOfNameString + this.constants.margin,
+			startingY + (firstSectionHeight / 2) - (heightOfCommentString / 2),
+		);
+		this.document.fillColor(this.constants.colors.black);
+
+		this.document.moveTo(
+			startingX,
+			startingY + firstSectionHeight + (seperatorHeight / 2)
+		);
+		this.document.lineTo(
+			this.document.page.width - this.document.page.margins.right,
+			startingY + firstSectionHeight + (seperatorHeight / 2)
+		);
+		this.document.stroke();
+
+		// TODO: Dear God.. refactor this later
+		const contextString = `zakres temperatur: ${shelf.temperatureRange.minimalCelsius} do ${shelf.temperatureRange.maximalCelsius}°C, obecna temperatura: ${shelf.currentTemperatureCelsius}°C, wspierana waga: ${shelf.maxWeightKg}kg, obecna waga: ${shelf.lastRecordedLegalWeightKg}kg, maksymalny wspierany rozmiar: ${shelf.maxAssortmentSize.lengthMillimeters}x${shelf.maxAssortmentSize.widthMillimeters}x${shelf.maxAssortmentSize.heightMillimeters}mm, wspiera niebezpieczne: ${shelf.supportsHazardous ? "Tak" : "Nie"}`;
+		this.document.fillColor(this.constants.colors.gray);
+		this.document.text(
+			contextString,
+			startingX,
+			startingY + firstSectionHeight + (this.constants.margin / 2),
+			{ width: this.document.page.width - this.constants.page.margins.left - this.constants.page.margins.right },
+		);
+		this.document.fillColor(this.constants.colors.black);
+
+
+		this.document.x = startingX;
+		this.document.y = startingY + height + this.constants.margin;
+
+		await this.assortments(shelf.assortments, index, height);
+	}
+
+	async shelves(shelves: ShelfVO[], height = 75): Promise<void> {
+		let i = 0;
+		for (const shelf of shelves) {
+			if (this.document.y + height > this.document.page.height - this.constants.page.margins.bottom) this.document.addPage();
+
+			i += 1;
+			await this.shelf(shelf, `${i.toString()}.`, height);
+		}
+	}
+
+	header(text: string) {
+		this.document.fontSize(20).text(
+			text,
+			this.document.x,
+			this.document.y + this.constants.margin,
+			{ align: "center" },
+		);
+
 	}
 }
 

@@ -2,17 +2,14 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { ReportType } from "../../domain/entities/Report";
 import { DefaultBaseReportGenerator } from "./DefaultBaseReportGenerator";
 
-// TODO: add a custom font with support for Polish characters
 export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBaseReportGenerator<ReportType.CLOSE_TO_EXPIRATION_ASSORTMENT> {
-	constructor(private readonly getAllAssortment: GetAllAssortment) {
-		super()
-	}
+	constructor(private readonly getAllAssortment: GetAllAssortment) { super() }
 
 	protected getType() { return ReportType.CLOSE_TO_EXPIRATION_ASSORTMENT as const };
 
 	async generate() {
 		const assortment = await this.getAllAssortment.execute();
-		const closeToExpirationAssortment = assortment.filter((a) => a.isCloseToExpiration);
+		const closeToExpirationAssortment = assortment.filter((a) => a.isCloseToExpiration && !a.hasExpired);
 		closeToExpirationAssortment.sort((a, b) => {
 			const now = new Date();
 
@@ -25,14 +22,8 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 			return aTimeLeft - bTimeLeft;
 		});
 
-		this.utils.addDate();
-
-		this.document.fontSize(20).text(
-			"Asortyment zbliżający się do przedawnienia",
-			this.document.x,
-			this.document.y + this.constants.margin,
-			{ align: "center" },
-		);
+		this.utils.date();
+		this.utils.header("Asortyment zbliżający się do przedawnienia");
 
 		this.document.fontSize(12).text(
 			"Poniżej znajdziesz liste asortymentów, które zbliżaja się do przedawnienia. Zostaną one posortowane rosnąco według pozostałego im czasu zdatności. Oznacza to, że produkty najbardziej wymagające Twojej uwagi znajdziesz na samej górze listy.",
@@ -52,7 +43,8 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 		}
 
 		this.document.y += this.constants.margin;
-		await this.utils.addAssortments(closeToExpirationAssortment);
+
+		await this.utils.assortments(closeToExpirationAssortment);
 
 		return this.getReturnValue();
 	}

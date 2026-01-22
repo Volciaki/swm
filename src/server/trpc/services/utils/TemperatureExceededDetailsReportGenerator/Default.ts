@@ -1,6 +1,15 @@
 import { DefaultTemperatureExceededDetailsReportGenerator } from "@/server/modules/reporting/infrastructure/services/DefaultTemperatureExceededDetailsReportGenerator";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
+import { GetShelfTemperatureReadings } from "@/server/modules/warehouse/application/use-cases/GetShelfTemperatureReading";
 import { GetServicesContext } from "../../context";
 
-export const getDefaultTemperatureExceededDetailsReportGenerator = (ctx: GetServicesContext): DefaultTemperatureExceededDetailsReportGenerator => {
-	return new DefaultTemperatureExceededDetailsReportGenerator();
+export const getDefaultTemperatureExceededDetailsReportGenerator = (ctx: GetServicesContext) => {
+	return {
+		get: (
+			getAllAssortment: GetAllAssortment,
+			getAllShelves: GetAllShelves,
+			getShelfTemperatureReadings: GetShelfTemperatureReadings,
+		) => new DefaultTemperatureExceededDetailsReportGenerator(getAllAssortment, getAllShelves, getShelfTemperatureReadings),
+	};
 }
