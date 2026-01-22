@@ -106,7 +106,7 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 			startingY + (firstSectionHeight / 2) - (heightOfNameString / 2),
 		);
 
-		const comment = lodash.truncate(assortment.comment, { length: 13 });
+		const comment = lodash.truncate(assortment.comment, { length: 10 - index.length });
 		const heightOfCommentString = this.document.fontSize(14).heightOfString(comment);
 		const widthOfCommentString = this.document.widthOfString(comment);
 
@@ -149,13 +149,12 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 		const dateFormatter = (dateTimestamp: number): string => formatDate(new Date(dateTimestamp));
 		// TODO: Dear God.. refactor this later
 		const contextString = `zakres temperatur: ${assortment.temperatureRange.minimalCelsius}-${assortment.temperatureRange.maximalCelsius}°C, waga: ${assortment.weightKg}kg, rozmiary: ${assortment.size.lengthMillimeters}x${assortment.size.widthMillimeters}x${assortment.size.heightMillimeters}mm, data przyjęcia: ${dateFormatter(assortment.storedAtTimestamp)}, ważny do: ${dateFormatter(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000)}`
-		const heightOfContextString = this.document.fontSize(12).heightOfString(contextString);
 
 		this.document.fillColor(this.constants.colors.gray);
 		this.document.text(
 			contextString,
 			startingX + height + this.constants.margin,
-			startingY + firstSectionHeight + seperatorHeight + (this.constants.margin / 2) + (secondSectionHeight / 2) - (heightOfContextString / 2),
+			startingY + firstSectionHeight + (this.constants.margin / 2),
 			{ width: this.document.page.width - (height * 2) - (this.constants.margin * 2) - this.constants.page.margins.left - this.constants.page.margins.right },
 		);
 		this.document.fillColor(this.constants.colors.black);
@@ -173,12 +172,15 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 		);
 
 		this.document.x = startingX;
-		this.document.y += this.constants.margin;
+		this.document.y = startingY + height + this.constants.margin;
 	}
 
 	async addAssortments(assortments: AssortmentVO[], height = 75) {
 		let i = 0;
 		for (const assortment of assortments) {
+			// If next Assortment doesn't fit on this page, create a new one.
+			if (this.document.y + height > this.document.page.height - this.constants.page.margins.bottom) this.document.addPage();
+
 			i += 1;
 			await this.addAssortment(assortment, `${i.toString()}.`, height);
 		}
