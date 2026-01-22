@@ -4,7 +4,7 @@ import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/
 import { TemperatureReadingVO } from "../../domain/vo/TemperatureReadingVO";
 import { ShelfVO } from "../../domain/vo/ShelfVO";
 import { ReportType } from "../../domain/entities/Report";
-import { DefaultBaseReportGenerator } from "./DefaultBaseReportGenerator";
+import { DefaultBaseReportGenerator, ReportTemperatureExceededData } from "./DefaultBaseReportGenerator";
 
 type FullShelf = ShelfVO & {
 	temperatureReadings: TemperatureReadingVO[];
@@ -19,7 +19,7 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 
 	protected getType() { return ReportType.TEMPERATURE_EXCEEDED_DETAILS as const };
 
-	async generate() {
+	private async getData() {
 		const assortmentContext = await this.getAllAssortment.execute();
 		const shelves = await this.getShelves.execute({ assortmentContext });
 		const fullShelves: FullShelf[] = [];
@@ -35,6 +35,37 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 			});
 		}
 
+		const temperaturesExceeded: ReportTemperatureExceededData[] = [];
+		for (const shelf of fullShelves) {
+			for (const temperatureReading of shelf.temperatureReadings) {
+				if (temperatureReading.temperatureWasTooLow || temperatureReading.temperatureWasTooHigh) temperaturesExceeded.push({
+					entity: {
+						...shelf,
+						assortments: [],
+					},
+					entityType: "shelf",
+					details: temperatureReading,
+				});
+
+				for (const assortment of shelf.assortments) {
+					if (
+						temperatureReading.temperatureCelsius < assortment.temperatureRange.minimalCelsius ||
+						temperatureReading.temperatureCelsius > assortment.temperatureRange.maximalCelsius
+					) temperaturesExceeded.push({
+						entity: assortment,
+						entityType: "assortment",
+						details: temperatureReading,
+					});
+				}
+			}
+		}
+
+		return { temperaturesExceeded };
+	}
+
+	async generate() {
+		const { temperaturesExceeded } = await this.getData();
+
 		this.utils.date();
 		this.utils.header("Przekroczone zakresy temperatur");
 
@@ -45,10 +76,19 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 			{ align: "justify", lineGap: 2 }
 		);
 
+		if (temperaturesExceeded.length === 0) {
+			this.document.fontSize(18).text(
+				"Nie zaobserwowano ani jednego przekroczenia temperatur.",
+				this.document.x,
+				this.document.y + this.constants.margin,
+				{ align: "center" },
+			);
+			return this.getReturnValue();
+		}
+
 		this.document.y += this.constants.margin;
 
-		// TODO: ???
-		// this.utils.shelves(fullShelves);
+		await this.utils.temperaturesExceeded(temperaturesExceeded);
 
 		return this.getReturnValue();
 	}

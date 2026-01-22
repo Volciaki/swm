@@ -7,7 +7,7 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 
 	protected getType() { return ReportType.CLOSE_TO_EXPIRATION_ASSORTMENT as const };
 
-	async generate() {
+	private async getData() {
 		const assortment = await this.getAllAssortment.execute();
 		const closeToExpirationAssortment = assortment.filter((a) => a.isCloseToExpiration && !a.hasExpired);
 		closeToExpirationAssortment.sort((a, b) => {
@@ -21,6 +21,12 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 
 			return aTimeLeft - bTimeLeft;
 		});
+
+		return { closeToExpirationAssortment };
+	}
+
+	async generate() {
+		const { closeToExpirationAssortment } = await this.getData();
 
 		this.utils.date();
 		this.utils.header("Asortyment zbliżający się do przedawnienia");

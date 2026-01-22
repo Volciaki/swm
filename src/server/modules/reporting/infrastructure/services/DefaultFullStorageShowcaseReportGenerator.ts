@@ -12,7 +12,7 @@ export class DefaultFullStorageShowcaseReportGenerator extends DefaultBaseReport
 
 	protected getType() { return ReportType.FULL_STORAGE_SHOWCASE as const };
 
-	async generate() {
+	private async getData() {
 		const assortmentContext = await this.getAllAssortment.execute();
 		const shelves = await this.getShelves.execute({ assortmentContext });
 		const fullShelves: ShelfVO[] = [];
@@ -26,6 +26,12 @@ export class DefaultFullStorageShowcaseReportGenerator extends DefaultBaseReport
 			});
 		}
 
+		return { fullShelves };
+	}
+
+	async generate() {
+		const { fullShelves } = await this.getData();
+
 		this.utils.date();
 		this.utils.header("Inwentaryzacja stanu magazynu");
 
@@ -38,7 +44,6 @@ export class DefaultFullStorageShowcaseReportGenerator extends DefaultBaseReport
 
 		this.document.y += this.constants.margin;
 
-		// await this.utils.assortments(fullShelves[0].assortments);
 		await this.utils.shelves(fullShelves);
 
 		return this.getReturnValue();
