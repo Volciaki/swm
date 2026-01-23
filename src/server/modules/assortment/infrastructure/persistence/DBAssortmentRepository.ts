@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import { UUID } from "@/server/utils";
-import { AssortmentRepository, FileContextByIDGetter } from "../../domain/repositories/AssortmentRepository";
+import { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
+import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
 import { DBAssortment } from "../entities/DBAssortment";
 import { Assortment } from "../../domain/entities/Assortment";
 import { AssortmentMapper } from "../mappers/AssortmentMapper";

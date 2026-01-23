@@ -1,4 +1,5 @@
 import { getStreamAsBuffer as streamToBuffer } from "get-stream";
+import { EnvironmentType } from "@/server/environment/type";
 import { environment } from "@/server/environment";
 import { Visibility } from "../../domain/entities/Visibility";
 import { FileStorage, FileStorageType } from "../../domain/services/FileStorage";
@@ -7,11 +8,13 @@ import { S3StorageService } from "../services/S3StorageService";
 export enum S3FileStorageBucket {
 	QR_CODES = "qr-codes",
 	ASSORTMENT_IMAGES = "assortment-images",
+	REPORTS = "reports",
 };
 
 export const s3FileStorageBucketOptions: Record<S3FileStorageBucket, { isPublic: boolean }> = {
 	[S3FileStorageBucket.QR_CODES]: { isPublic: true },
 	[S3FileStorageBucket.ASSORTMENT_IMAGES]: { isPublic: true },
+	[S3FileStorageBucket.REPORTS]: { isPublic: environment.type === EnvironmentType.DEVELOPMENT },
 };
 
 export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage {

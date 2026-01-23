@@ -4,6 +4,7 @@ import { Services } from "../../get";
 export const getDefaultShelfHelperPreset = (services: Services): ShelfHelper => {
 	const shelfRepository = services.repositories.shelf.db;
 	const uuidManager = services.utils.uuidManager.default;
+	const shelfThermometer = services.utils.shelfThermometer.random;
 	
-	return services.helpers.shelf.default.get(shelfRepository, uuidManager);
+	return services.helpers.shelf.default.get(shelfRepository, uuidManager, shelfThermometer);
 }

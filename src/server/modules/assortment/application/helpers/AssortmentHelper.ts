@@ -1,14 +1,15 @@
-import { UUID, UUIDManager } from "@/server/utils";
+import { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
 import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { FetchFileResponseDTO } from "@/server/utils/files/application/dto/FetchFileResponseDTO";
+import { UUID, UUIDManager } from "@/server/utils";
 import { Assortment } from "../../domain/entities/Assortment";
 import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
 import { AssortmentNotFoundError } from "../errors/AssortmentNotFound";
 import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
 
-export type FileGetter = (id: UUID) => Promise<FileReference>;
+export type FileGetter = FileContextByIDGetter;
 export type FileFetcher = (id: UUID) => Promise<FetchFileResponseDTO>;
 export type QRCodeGetter = (value: string) => Promise<FileReference>;
 export type Base64UploadFunction = (path: string, value: string) => Promise<FileReference>;

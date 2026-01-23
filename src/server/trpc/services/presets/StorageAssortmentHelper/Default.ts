@@ -20,8 +20,9 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 	const uuidManager = services.utils.uuidManager.default;
 	const qrCodeGenerator = services.utils.qrCodeGenerator.default;
 	const fileReferenceRepository = services.repositories.fileReference.db;
+	const shelfThermometer = services.utils.shelfThermometer.random;
 
-	const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager);
+	const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager, shelfThermometer);
 	const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
 	const fileHelper = services.helpers.file.default.get(fileReferenceRepository, uuidManager);
 

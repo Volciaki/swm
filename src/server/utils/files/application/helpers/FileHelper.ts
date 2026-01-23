@@ -9,7 +9,6 @@ import { VisibilityMapper } from "../../infrastructure/mappers/VisibilityMapper"
 import { FileNotFoundError } from "../errors/FileNotFoundError";
 import { FileMetadata } from "../../domain/entities/FileMetadata";
 import { FileMetadataMapper } from "../../infrastructure/mappers/FileMetadataMapper";
-import { FileStorageType } from "../../domain/services/FileStorage";
 
 const getSizeBytesByBase64String = (content: string): number => {
 	const base64 = Base64.fromString(content);

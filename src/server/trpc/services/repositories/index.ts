@@ -1,10 +1,13 @@
 import { GetServicesContext } from "../context";
+
 import { getUserRepositories } from "./User";
 import { getTwoFactorAuthenticationSessionRepositories } from "./TwoFactorAuthenticationSession";
 import { getShelfRepositories } from "./Shelf";
 import { getAssortmentRepositories } from "./Assortment";
 import { getFileReferenceRepositories } from "./FileReference";
 import { getNotificationRepositories } from "./Notification";
+import { getTemperatureReadingRepositories } from "./TemperatureReading";
+import { getReportRepositories } from "./Report";
 
 export const getRepositories = (ctx: GetServicesContext) => {
 	return {
@@ -14,5 +17,7 @@ export const getRepositories = (ctx: GetServicesContext) => {
 		assortment: getAssortmentRepositories(ctx),
 		fileReference: getFileReferenceRepositories(ctx),
 		notification: getNotificationRepositories(ctx),
+		temperatureReading: getTemperatureReadingRepositories(ctx),
+		report: getReportRepositories(ctx),
 	};
 };
