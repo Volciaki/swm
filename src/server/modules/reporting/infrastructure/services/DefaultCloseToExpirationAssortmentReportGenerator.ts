@@ -1,6 +1,6 @@
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { ReportType } from "../../domain/entities/Report";
-import { DefaultBaseReportGenerator } from "./DefaultBaseReportGenerator";
+import { DefaultBaseReportGenerator } from "./BaseReportGenerator/Default";
 
 export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBaseReportGenerator<ReportType.CLOSE_TO_EXPIRATION_ASSORTMENT> {
 	constructor(private readonly getAllAssortment: GetAllAssortment) { super() }

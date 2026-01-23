@@ -1,62 +1,15 @@
-import PDFKit from "pdfkit";
 import lodash from "lodash";
 import { format as formatDateExternal } from "date-fns";
-import { getStreamAsBuffer as streamToBuffer } from "get-stream";
-import { Base64Mapper, loadAssetByName } from "@/server/utils";
-import { GeneratedReport, ReportGenerator } from "../../domain/services/ReportGenerator";
-import { ReportType } from "../../domain/entities/Report";
-import { AssortmentVO } from "../../domain/vo/AssortmentVO";
-import { ShelfVO } from "../../domain/vo/ShelfVO";
-import { TemperatureReadingVO } from "../../domain/vo/TemperatureReadingVO";
-
-// TODO: refactor this into multiple files.
+import { AssortmentVO } from "@/server/modules/reporting/domain/vo/AssortmentVO";
+import { PDFDocument, ReportGeneratorConstants } from "../type";
+import { ImageOptions, ReportGeneratorUtils, ReportTemperatureExceededData } from "./type";
+import { ShelfVO } from "@/server/modules/reporting/domain/vo/ShelfVO";
 
 const roundNumber = (value: number): number => Number(value.toFixed(3));
 
 const formatDate = (date: Date) => formatDateExternal(date, "HH:mm:ss dd.MM.yyyy");
 
-type PDFDocument = typeof PDFKit;
-
-// Yes, the library doesn't expose this type. We have to extract it ourselves using some method's signature...
-type ImageOptions = NonNullable<Parameters<PDFDocument["image"]>[1]>;
-
-type RGBColor = [number, number, number];
-
-type ReportGeneratorConstants = {
-	margin: number;
-	page: {
-		margins: {
-			left: number;
-			right: number;
-			top: number;
-			bottom: number;
-		};
-	};
-	colors: {
-		black: RGBColor;
-		gray: RGBColor;
-	};
-};
-
-export type ReportTemperatureExceededData = {
-	entityType: "assortment" | "shelf";
-	entity: AssortmentVO | ShelfVO;
-	details: TemperatureReadingVO;
-};
-
-interface ReportGeneratorUtils {
-	header(text: string): void;
-	date(): void;
-	remoteImage(url: string, x?: number, y?: number, options?: ImageOptions): Promise<void>;
-	assortment(assortment: AssortmentVO, index: string, height?: number, compact?: boolean): Promise<void>;
-	assortments(assortments: AssortmentVO[], index?: string, height?: number): Promise<void>;
-	shelf(shelf: ShelfVO, index: string, height?: number, compact?: boolean): Promise<void>;
-	shelves(shelves: ShelfVO[], height?: number): Promise<void>;
-	temperatureExceeded(temperature: ReportTemperatureExceededData, height?: number): Promise<void>;
-	temperaturesExceeded(temperatures: ReportTemperatureExceededData[], height?: number): Promise<void>;
-};
-
-class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
+export class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 	constructor(
 		private readonly document: PDFDocument,
 		private readonly constants: ReportGeneratorConstants,
@@ -378,60 +331,4 @@ class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 			await this.temperatureExceeded(temperature, height);
 		}
 	}
-}
-
-export abstract class DefaultBaseReportGenerator<T extends ReportType> implements ReportGenerator<T> {
-	protected readonly document: PDFDocument;
-	protected readonly utils: ReportGeneratorUtils;
-	protected readonly constants: ReportGeneratorConstants = {
-		margin: 10,
-		page: {
-			margins: {
-				top: 36,
-				bottom: 36,
-				left: 36,
-				right: 36,
-			},
-		},
-		colors: {
-			black: [0, 0, 0],
-			gray: [128, 128, 128],
-		},
-	};
-
-	constructor() {
-		this.document = new PDFKit({
-			size: "A4",
-			info: {
-				Title: "Dokument SWM",
-				Author: "SWM",
-				CreationDate: new Date(),
-			},
-			displayTitle: true,
-			lang: "pl",
-			margins: this.constants.page.margins,
-		});
-
-		const regularFontBuffer = loadAssetByName("inter.ttf");
-		const boldFontBuffer = loadAssetByName("inter-bold.ttf");
-		this.document.registerFont("regular", regularFontBuffer);
-		this.document.registerFont("bold", boldFontBuffer);
-		this.document.font("regular");
-
-		this.utils = new DefaultReportGeneratorUtils(this.document, this.constants);
-	}
-
-	protected abstract getType(): T;
-
-	protected async getReturnValue(): ReturnType<ReportGenerator<T>["generate"]> {
-		this.document.end();
-
-		const buffer = await streamToBuffer(this.document);
-		return {
-			metadata: { type: this.getType() },
-			content: Base64Mapper.fromBuffer(buffer),
-		};
-	}
-
-	abstract generate(): Promise<GeneratedReport<T>>;
 }

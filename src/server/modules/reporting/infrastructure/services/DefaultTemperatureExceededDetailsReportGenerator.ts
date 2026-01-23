@@ -4,7 +4,8 @@ import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/
 import { TemperatureReadingVO } from "../../domain/vo/TemperatureReadingVO";
 import { ShelfVO } from "../../domain/vo/ShelfVO";
 import { ReportType } from "../../domain/entities/Report";
-import { DefaultBaseReportGenerator, ReportTemperatureExceededData } from "./DefaultBaseReportGenerator";
+import { ReportTemperatureExceededData } from "./BaseReportGenerator/Default/utils";
+import { DefaultBaseReportGenerator } from "./BaseReportGenerator/Default";
 
 type FullShelf = ShelfVO & {
 	temperatureReadings: TemperatureReadingVO[];

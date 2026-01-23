@@ -2,7 +2,7 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
 import { ReportType } from "../../domain/entities/Report";
 import { ShelfVO } from "../../domain/vo/ShelfVO";
-import { DefaultBaseReportGenerator } from "./DefaultBaseReportGenerator";
+import { DefaultBaseReportGenerator } from "./BaseReportGenerator/Default";
 
 export class DefaultFullStorageShowcaseReportGenerator extends DefaultBaseReportGenerator<ReportType.FULL_STORAGE_SHOWCASE> {
 	constructor(
