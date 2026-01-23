@@ -6,10 +6,9 @@ import { CreateNotification } from "../../application/use-cases/CreateNotificati
 import { NotificationType } from "../../domain/entities/Notification";
 
 // Sends a warning notification if any of the shelves have been tampered with.
-// TODO: does this still work? ...
 export class ShelvesModifiedIllegallyMonitoringTask implements SchedulerTask {
 	constructor(
-		private readonly GetAllAssortment: GetAllAssortment,
+		private readonly getAllAssortment: GetAllAssortment,
 		private readonly getShelves: GetAllShelves,
 		private readonly createNotification: CreateNotification,
 		private readonly refreshShelfLegalWeight: RefreshShelfLegalWeight,
@@ -19,7 +18,7 @@ export class ShelvesModifiedIllegallyMonitoringTask implements SchedulerTask {
 	getIntervalMilliseconds() { return 30 * 1000 };
 
 	async execute() {
-		const allAssortments = await this.GetAllAssortment.execute();
+		const allAssortments = await this.getAllAssortment.execute();
 		const shelves = await this.getShelves.execute({ assortmentContext: allAssortments });
 
 		for (const shelf of shelves) {

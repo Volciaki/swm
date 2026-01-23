@@ -41,7 +41,7 @@ export class ShelfMapper {
 			comment: shelf.comment,
 			name: shelf.name,
 			supportsHazardous: shelf.supportsHazardous,
-			hasBeenChangedIllegally: shelf.hasBeenChangedIllegaly,
+			hasBeenChangedIllegally: shelf.hasBeenChangedIllegally,
 		};
 	}
 

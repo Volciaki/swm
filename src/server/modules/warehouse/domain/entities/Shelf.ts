@@ -26,7 +26,7 @@ export class Shelf {
 		private _lastRecordedLegalWeight: Weight,
 		private _temperatureReadingIds: UUID[],
 		private _currentTemperature: CelsiusDegrees,
-		private _hasBeenChangedIllegaly: boolean,
+		private _hasBeenChangedIllegally: boolean,
 	) { }
 
 	get id() { return this._id };
@@ -40,7 +40,7 @@ export class Shelf {
 	get lastRecordedLegalWeight() { return this._lastRecordedLegalWeight };
 	get temperatureReadingIds() { return this._temperatureReadingIds };
 	get currentTemperature() { return this._currentTemperature };
-	get hasBeenChangedIllegaly() { return this._hasBeenChangedIllegaly };
+	get hasBeenChangedIllegally() { return this._hasBeenChangedIllegally };
 
 	set name(value: string) { this._name = value };
 	set comment(value: string) { this._comment = value };
@@ -50,7 +50,7 @@ export class Shelf {
 	set temperatureRange(value: TemperatureRange) { this._temperatureRange = value };
 	set supportsHazardous(value: boolean) { this._supportsHazardous = value };
 	set currentTemperature(value: CelsiusDegrees) { this._currentTemperature = value };
-	set hasBeenChangedIllegaly(value: boolean) { this._hasBeenChangedIllegaly = value };
+	set hasBeenChangedIllegally(value: boolean) { this._hasBeenChangedIllegally = value };
 	private set lastRecordedLegalWeight(value: Weight) { this._lastRecordedLegalWeight = value };
 
 	static create(
@@ -155,7 +155,7 @@ export class Shelf {
 		const lastRecordedWeight = this.lastRecordedLegalWeight;
 		const currentWeight = this.getTotalWeight();
 
-		this.hasBeenChangedIllegaly = lastRecordedWeight !== currentWeight;
+		this.hasBeenChangedIllegally = lastRecordedWeight.grams.value !== currentWeight.grams.value;
 	}
 
 	public setCellsAssortmentById(id: UUID, newAssortment: AssortmentVO | null) {
