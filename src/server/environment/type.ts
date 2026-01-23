@@ -11,6 +11,9 @@ export type Environment = {
     type: EnvironmentType,
 	nextPhase: NextPhase | null,
     port: number,
+	schedule: {
+		authentication: { passphrase: string };
+	};
     database: {
         host: string;
         port: number;
@@ -32,8 +35,8 @@ export type Environment = {
         user: {
             name: string;
             password: string;
-        },
-    },
+        };
+    };
 	storage: {
 		accessKey: string;
 		secretKey: string;
@@ -41,5 +44,5 @@ export type Environment = {
 		publicUrl: string;
 		port: number;
 		sslEnabled: boolean;
-	},
+	};
 };

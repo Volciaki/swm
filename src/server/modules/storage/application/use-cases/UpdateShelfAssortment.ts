@@ -44,6 +44,7 @@ export class UpdateShelfAssortment {
 						mimeType: "image/png",
 						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES },
 					},
+					undefined,
 					currentUser,
 				);
 				return FileReferenceMapper.fromDTOToEntity(file);
