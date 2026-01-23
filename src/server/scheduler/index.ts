@@ -1,5 +1,6 @@
 import { environment } from "../environment";
 import { logger } from "../logger";
+import { GetServicesContext } from "../trpc/services/context";
 import { SchedulerAuthorizationError } from "./errors/SchedulerAuthorizationError";
 import { SchedulerTaskNotFoundError } from "./errors/SchedulerTaskNotFoundError";
 import { SchedulerTask } from "./task";
@@ -23,10 +24,10 @@ class Scheduler {
 	}
 }
 
-export const getScheduler = async (authenticationPassphrase: string) => {
+export const getScheduler = async (authenticationPassphrase: string, ctx: GetServicesContext) => {
 	if (authenticationPassphrase !== environment.schedule.authentication.passphrase)
 		throw new SchedulerAuthorizationError(authenticationPassphrase);
 
-	const tasks = getSchedulerTasks();
+	const tasks = getSchedulerTasks(ctx);
 	return new Scheduler(tasks);
 };

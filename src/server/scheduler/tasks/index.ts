@@ -1,4 +1,3 @@
-import { appDataSource } from "@/server/database/init";
 import { GetServicesContext } from "@/server/trpc/services/context";
 
 import { getExpirationMonitoringPresets } from "./ExpirationMonitoring";
@@ -15,9 +14,8 @@ const getPresets = (ctx: GetServicesContext) => {
 	};
 };
 
-export const getSchedulerTasks = () => {
-	const servicesContext: GetServicesContext = { db: appDataSource };
-	const presets = getPresets(servicesContext);
+export const getSchedulerTasks = (ctx: GetServicesContext) => {
+	const presets = getPresets(ctx);
 
 	const epxirationMonitoring = presets.expirationMonitoring.default;
 	const upcomingExpiryMonitoring = presets.upcomingExpiryMonitoring.default;
