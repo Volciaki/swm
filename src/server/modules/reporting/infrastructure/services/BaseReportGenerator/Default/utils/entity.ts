@@ -1,19 +1,25 @@
-import lodash from "lodash";
-import { format as formatDateExternal } from "date-fns";
 import { AssortmentVO } from "@/server/modules/reporting/domain/vo/AssortmentVO";
-import { PDFDocument, ReportGeneratorConstants } from "../type";
-import { ImageOptions, ReportGeneratorUtils, ReportTemperatureExceededData } from "./type";
 import { ShelfVO } from "@/server/modules/reporting/domain/vo/ShelfVO";
-
-const roundNumber = (value: number): number => Number(value.toFixed(3));
-
-const formatDate = (date: Date) => formatDateExternal(date, "HH:mm:ss dd.MM.yyyy");
+import { PDFDocument, ReportGeneratorConstants } from "../type";
+import { ImageOptions, ReportGeneratorUtils, ReportTemperatureExceededData, SharedContext } from "./type";
+import { formatDate } from "./shared";
+import { temperatureExceeded, temperaturesExceeded } from "./temperature-exceeded";
+import { assortment, assortments } from "./assortment";
+import { shelf, shelves } from "./shelf";
 
 export class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 	constructor(
 		private readonly document: PDFDocument,
 		private readonly constants: ReportGeneratorConstants,
 	) { }
+
+	private getContext(): SharedContext {
+		return {
+			document: this.document,
+			constants: this.constants,
+			remoteImage: this.remoteImage,
+		};
+	}
 
 	header(text: string) {
 		this.document.fontSize(20).text(
@@ -44,291 +50,53 @@ export class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 		this.document.image(buffer, x, y, options);
 	}
 
-	async assortment(assortment: AssortmentVO, index?: string, height = 75, compact = false) {
-		const startingX = this.document.x;
-		const startingY = this.document.y;
-
-		const imageUrl = assortment.image?.visibility.publicUrl;
-		if (imageUrl) await this.remoteImage(
-			imageUrl,
-			this.document.x,
-			this.document.y,
-			{
-				width: height,
-				height,
-			}
-		);
-
-		const seperatorHeight = 1 + (this.constants.margin / 2);
-		const heightToDistribute = height - seperatorHeight;
-		const firstSectionHeight = heightToDistribute * 0.3;
-
-		let widthOfIndexString = 0;
-		if (index) {
-			const heightOfIndexString = this.document.fontSize(20).heightOfString(index);
-			widthOfIndexString = this.document.widthOfString(index);
-
-			this.document.text(
-				index,
-				startingX + height + this.constants.margin,
-				startingY + (firstSectionHeight / 2) - (heightOfIndexString / 2),
-			);
-		}
-
-		const heightOfNameString = this.document.fontSize(16).heightOfString(assortment.name);
-		const widthOfNameString = this.document.widthOfString(assortment.name);
-
-		this.document.text(
-			assortment.name,
-			startingX + height + widthOfIndexString + this.constants.margin,
-			startingY + (firstSectionHeight / 2) - (heightOfNameString / 2),
-		);
-
-		let heightOfCommentString = 0;
-		let widthOfCommentString = 0;
-		if (!compact) {
-			const comment = lodash.truncate(assortment.comment, { length: 12 - (index?.length ?? 0) });
-			heightOfCommentString = this.document.fontSize(14).heightOfString(comment);
-			widthOfCommentString = this.document.widthOfString(comment);
-
-			this.document.fillColor(this.constants.colors.gray);
-			this.document.text(
-				comment,
-				this.document.x + widthOfNameString + this.constants.margin,
-				startingY + (firstSectionHeight / 2) - (heightOfCommentString / 2),
-			);
-			this.document.fillColor(this.constants.colors.black);
-		}
-
-		const assortmentState = `Status: ${assortment.hasExpired
-			? "przeterminowany"
-			: assortment.isCloseToExpiration
-				? "bliski przeterminowania"
-				: "zdatny do użytku"
-		}`;
-		const heightOfStateString = this.document.fontSize(12).heightOfString(assortmentState);
-		const widthOfStateString = this.document.widthOfString(assortmentState);
-
-		this.document.text(
-			assortmentState,
-			this.document.page.width - this.constants.page.margins.right - height - this.constants.margin - widthOfStateString,
-			startingY + (firstSectionHeight / 2) - (heightOfStateString / 2),
-			{
-				width: this.document.page.width - (height * 2) - (this.constants.margin * 5) - widthOfIndexString - widthOfNameString - widthOfCommentString - this.constants.page.margins.left - this.constants.page.margins.right
-			},
-		);
-
-		const lineStartX = startingX + height + this.constants.margin;
-		const lineEndX = this.document.page.width - this.document.page.margins.right - height - this.constants.margin;
-		this.document.moveTo(
-			lineStartX,
-			startingY + firstSectionHeight + (seperatorHeight / 2)
-		);
-		this.document.lineTo(
-			lineEndX,
-			startingY + firstSectionHeight + (seperatorHeight / 2)
-		);
-		this.document.stroke();
-
-		const lineWidth = lineEndX - lineStartX;
-
-		const dateFormatter = (dateTimestamp: number): string => formatDate(new Date(dateTimestamp));
-		// TODO: Dear God.. refactor this later
-		const contextString = `zakres temperatur: ${roundNumber(assortment.temperatureRange.minimalCelsius)} do ${roundNumber(assortment.temperatureRange.maximalCelsius)}°C, waga: ${roundNumber(assortment.weightKg)}kg, rozmiary: ${roundNumber(assortment.size.lengthMillimeters)}x${roundNumber(assortment.size.widthMillimeters)}x${roundNumber(assortment.size.heightMillimeters)}mm, data przyjęcia: ${dateFormatter(assortment.storedAtTimestamp)}, ważny do: ${dateFormatter(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000)}`
-
-		this.document.fillColor(this.constants.colors.gray);
-		this.document.fontSize(compact ? 10 : 12).text(
-			contextString,
-			startingX + height + this.constants.margin,
-			startingY + firstSectionHeight + (this.constants.margin / 2),
-			{ width: lineWidth, align: "justify" },
-		);
-		this.document.fillColor(this.constants.colors.black);
-
-		const qrCodeUrl = assortment.qrCode.visibility.publicUrl;
-		if (qrCodeUrl) await this.remoteImage(
-			qrCodeUrl,
-			this.document.page.width - this.document.page.margins.right - height,
-			startingY - 3,
-			{
-				// The QR codes have some padding.
-				width: height + 5,
-				height: height + 5,
-			}
-		);
-
-		this.document.x = startingX;
-		this.document.y = startingY + height + this.constants.margin;
+	async assortment(
+		assortmentData: AssortmentVO,
+		index: string,
+		height?: number,
+		compact?: boolean,
+	) {
+		const context = this.getContext();
+		return await assortment(context, assortmentData, index, height, compact);
 	}
 
-	async assortments(assortments: AssortmentVO[], index?: string, height = 75) {
-		let i = 0;
-		for (const assortment of assortments) {
-			// If next Assortment doesn't fit on this page, create a new one.
-			if (this.document.y + height > this.document.page.height - this.constants.page.margins.bottom) this.document.addPage();
-
-			i += 1;
-			await this.assortment(assortment, `${index ?? ""}${i.toString()}.`, height);
-		}
+	async assortments(
+		assortmentsData: AssortmentVO[],
+		index?: string,
+		height?: number,
+	): Promise<void> {
+		const context = this.getContext();
+		return await assortments(context, assortmentsData, index, height);
 	}
 
-	async shelf(shelf: ShelfVO, index?: string, height = 75, compact = false) {
-		const startingX = this.document.x;
-		const startingY = this.document.y;
-
-		const seperatorHeight = 1 + (this.constants.margin / 2);
-		const heightToDistribute = height - seperatorHeight;
-		const firstSectionHeight = heightToDistribute * 0.3;
-
-		let widthOfIndexString = 0;
-		if (index) {
-			const heightOfIndexString = this.document.fontSize(20).heightOfString(index);
-			widthOfIndexString = this.document.widthOfString(index);
-
-			this.document.text(
-				index,
-				startingX,
-				startingY + (firstSectionHeight / 2) - (heightOfIndexString / 2),
-			);
-		}
-
-		const heightOfNameString = this.document.fontSize(16).heightOfString(shelf.name);
-		const widthOfNameString = this.document.widthOfString(shelf.name);
-
-		this.document.text(
-			shelf.name,
-			this.document.x + widthOfIndexString + this.constants.margin - (compact ? this.constants.margin : 0),
-			startingY + (firstSectionHeight / 2) - (heightOfNameString / 2),
-		);
-
-		const comment = lodash.truncate(shelf.comment, { length: 50 });
-		const heightOfCommentString = this.document.fontSize(14).heightOfString(comment);
-
-		this.document.fillColor(this.constants.colors.gray);
-		this.document.text(
-			comment,
-			this.document.x + widthOfNameString + this.constants.margin,
-			startingY + (firstSectionHeight / 2) - (heightOfCommentString / 2),
-		);
-		this.document.fillColor(this.constants.colors.black);
-
-		const lineStartX = startingX;
-		const lineEndX = this.document.page.width - this.document.page.margins.right;
-		const lineWidth = lineEndX - lineStartX;
-
-		this.document.moveTo(
-			lineStartX,
-			startingY + firstSectionHeight + (seperatorHeight / 2)
-		);
-		this.document.lineTo(
-			lineEndX,
-			startingY + firstSectionHeight + (seperatorHeight / 2)
-		);
-		this.document.stroke();
-
-		// TODO: Dear God.. refactor this later
-		const contextString = `zakres temperatur: ${roundNumber(shelf.temperatureRange.minimalCelsius)} do ${roundNumber(shelf.temperatureRange.maximalCelsius)}°C, obecna temperatura: ${roundNumber(shelf.currentTemperatureCelsius)}°C, wspierana waga: ${roundNumber(shelf.maxWeightKg)}kg, obecna waga: ${roundNumber(shelf.lastRecordedLegalWeightKg)}kg, maksymalny wspierany rozmiar: ${roundNumber(shelf.maxAssortmentSize.lengthMillimeters)}x${roundNumber(shelf.maxAssortmentSize.widthMillimeters)}x${roundNumber(shelf.maxAssortmentSize.heightMillimeters)}mm, wspiera niebezpieczne: ${shelf.supportsHazardous ? "Tak" : "Nie"}`;
-		this.document.fillColor(this.constants.colors.gray);
-		this.document.fontSize(compact ? 11 : 14).text(
-			contextString,
-			startingX,
-			startingY + firstSectionHeight + (this.constants.margin / 2),
-			{ width: lineWidth, lineGap: compact ? 1 : undefined, align: "justify" },
-		);
-		this.document.fillColor(this.constants.colors.black);
-
-
-		this.document.x = startingX;
-		this.document.y = startingY + height + this.constants.margin;
-
-		await this.assortments(shelf.assortments, index, height);
+	async shelf(
+		shelfData: ShelfVO,
+		index: string,
+		height?: number,
+		compact?: boolean,
+	) {
+		const context = this.getContext();
+		return await shelf(context, shelfData, index, height, compact);
 	}
 
-	async shelves(shelves: ShelfVO[], height = 75): Promise<void> {
-		let i = 0;
-		for (const shelf of shelves) {
-			if (this.document.y + height > this.document.page.height - this.constants.page.margins.bottom) this.document.addPage();
-
-			i += 1;
-			await this.shelf(shelf, `${i.toString()}.`, height);
-		}
+	async shelves(shelvesData: ShelfVO[], height?: number) {
+		const context = this.getContext();
+		return await shelves(context, shelvesData, height);
 	}
 
-	async temperatureExceeded(temperature: ReportTemperatureExceededData, height = 75): Promise<void> {
-		const startingX = this.document.x;
-		const startingY = this.document.y;
-
-		const cardWidth = height * 1.5;
-
-		const seperatorHeight = 1 + (this.constants.margin / 2);
-		const heightToDistribute = height - seperatorHeight;
-		const sectionHeight = heightToDistribute * 0.5;
-
-		const upperString = "Temperatura za:";
-		const widthOfUpperString = this.document.fontSize(12).widthOfString(upperString);
-		const heightOfUpperString = this.document.heightOfString(upperString);
-
-		this.document.fillColor(this.constants.colors.gray);
-		this.document.text(
-			upperString,
-			startingX + (cardWidth / 2) - (widthOfUpperString / 2),
-			startingY,
-		);
-		this.document.fillColor(this.constants.colors.black);
-
-		const statusString = temperature.details.temperatureCelsius > temperature.entity.temperatureRange.maximalCelsius
-			? "Wysoka"
-			: "Niska";
-		const widthOfStatusString = this.document.fontSize(16).widthOfString(statusString);
-
-		this.document.text(
-			statusString,
-			startingX + (cardWidth / 2) - (widthOfStatusString / 2),
-			startingY + heightOfUpperString,
-		);
-
-		this.document.moveTo(
-			startingX,
-			startingY + sectionHeight + (seperatorHeight / 2)
-		);
-		this.document.lineTo(
-			startingX + cardWidth,
-			startingY + sectionHeight + (seperatorHeight / 2)
-		);
-		this.document.stroke();
-
-		const dateFormatter = (dateTimestamp: number): string => formatDate(new Date(dateTimestamp));
-		const temperatureRounded = Number(temperature.details.temperatureCelsius.toFixed(3));
-		const contextString = `data: ${dateFormatter(temperature.details.dateTimestamp)}, temperatura: ${temperatureRounded}°C`;
-		const contextStringHeight = this.document.fontSize(12).heightOfString(contextString);
-
-		this.document.fillColor(this.constants.colors.gray);
-		this.document.fontSize(8).text(
-			contextString,
-			startingX,
-			startingY + sectionHeight + (seperatorHeight / 2) + (contextStringHeight / 2),
-			{ width: cardWidth, lineGap: 2, align: "justify" },
-		);
-		this.document.fillColor(this.constants.colors.black);
-
-		this.document.y = startingY;
-		this.document.x = startingX + cardWidth + this.constants.margin;
-
-		if (temperature.entityType === "shelf") {
-			await this.shelf(temperature.entity as ShelfVO, undefined, height, true);
-		} else {
-			await this.assortment(temperature.entity as AssortmentVO, undefined, height, true);
-		}
-
-		this.document.x = startingX;
-		this.document.y = startingY + height + this.constants.margin;
+	async temperatureExceeded(
+		temperature: ReportTemperatureExceededData,
+		height?: number
+	): Promise<void> {
+	    const context = this.getContext();
+		return await temperatureExceeded(context, temperature, height);
 	}
 
-	async temperaturesExceeded(temperatures: ReportTemperatureExceededData[], height = 75): Promise<void> {
-		for (const temperature of temperatures) {
-			if (this.document.y + height > this.document.page.height - this.constants.page.margins.bottom) this.document.addPage();
-
-			await this.temperatureExceeded(temperature, height);
-		}
+	async temperaturesExceeded(
+		temperatures: ReportTemperatureExceededData[],
+		height?: number,
+	): Promise<void> {
+	    const context = this.getContext();
+		return await temperaturesExceeded(context, temperatures, height);
 	}
 }

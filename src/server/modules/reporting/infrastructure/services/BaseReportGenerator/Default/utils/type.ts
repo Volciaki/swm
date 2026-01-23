@@ -1,7 +1,7 @@
 import { TemperatureReadingVO } from "@/server/modules/reporting/domain/vo/TemperatureReadingVO";
 import { AssortmentVO } from "@/server/modules/reporting/domain/vo/AssortmentVO";
 import { ShelfVO } from "@/server/modules/reporting/domain/vo/ShelfVO";
-import { PDFDocument } from "../type";
+import { PDFDocument, ReportGeneratorConstants } from "../type";
 
 // Yes, the library doesn't expose this type. We have to extract it ourselves using some method's signature...
 export type ImageOptions = NonNullable<Parameters<PDFDocument["image"]>[1]>;
@@ -22,4 +22,10 @@ export interface ReportGeneratorUtils {
 	shelves(shelves: ShelfVO[], height?: number): Promise<void>;
 	temperatureExceeded(temperature: ReportTemperatureExceededData, height?: number): Promise<void>;
 	temperaturesExceeded(temperatures: ReportTemperatureExceededData[], height?: number): Promise<void>;
+};
+
+export type SharedContext = {
+	document: PDFDocument;
+	constants: ReportGeneratorConstants;
+	remoteImage: ReportGeneratorUtils["remoteImage"];
 };
