@@ -9,7 +9,6 @@ export type UpdateShelfOptions = {
 	skipAuthentication: boolean;
 };
 
-// TODO: this should not accept `currentTemperature`...
 export class UpdateShelf {
 	constructor(
         private readonly shelfHelper: ShelfHelper,
