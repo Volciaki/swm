@@ -64,6 +64,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 				mimeType: "image/png",
 				metadata: { bucket: location },
 			},
+			undefined,
 			currentUser,
 		);
 		return FileReferenceMapper.fromDTOToEntity(fileReferenceDTO);

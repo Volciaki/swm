@@ -9,3 +9,6 @@ export * from "./identity";
 export * from "./time-frame";
 export * from "./errors";
 export * from "./enums";
+export * from "./numbers";
+export * from "./assets";
+export * from "./base64";

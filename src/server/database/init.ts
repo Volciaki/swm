@@ -15,7 +15,7 @@ export const appDataSource = new DataSource({
 	password: environment.database.password,
 	database: environment.database.name,
 	synchronize: environment.type === EnvironmentType.DEVELOPMENT,
-	logging: true,
+	logging: false,
 	migrations,
 	entities,
 });

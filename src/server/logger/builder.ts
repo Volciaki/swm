@@ -4,10 +4,10 @@ import { formatDateAsHumanReadable } from "../utils/dates";
 import chalk from "chalk";
 
 export enum LogLevel {
-    DEBUG,
-    LOG,
-    WARN,
-    ERROR,
+    DEBUG = "DEBUG",
+    LOG = "LOG",
+    WARN = "WARN",
+    ERROR = "ERROR",
 };
 
 export class LogBuilder {
