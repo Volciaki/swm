@@ -8,7 +8,7 @@
     "lint": "eslint",
     "dev": "concurrently --prefix 'none' 'yarn dev:app' 'yarn dev:schedule'",
     "dev:app": "next dev",
-    "dev:schedule": "tsx ./scripts/schedule/trigger-tasks.ts",
+    "dev:schedule": "tsx --env-file .env ./scripts/schedule/trigger-tasks.ts",
     "migrations:generate": "./scripts/migrations/generate.sh",
     "migrations:create": "./scripts/migrations/create.sh"
   },
