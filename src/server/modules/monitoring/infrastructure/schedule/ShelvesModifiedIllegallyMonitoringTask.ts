@@ -15,7 +15,6 @@ export class ShelvesModifiedIllegallyMonitoringTask implements SchedulerTask {
 	) { }
 
 	getName() { return "ShelvesModifiedIllegallyMonitoringTask" };
-	getIntervalMilliseconds() { return 30 * 1000 };
 
 	async execute() {
 		const allAssortments = await this.getAllAssortment.execute();

@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "dev": "concurrently --prefix 'none' 'yarn dev:app' 'yarn dev:schedule'",
+    "dev:app": "next dev",
+    "dev:schedule": "tsx ./scripts/schedule/trigger-tasks.ts",
     "migrations:generate": "./scripts/migrations/generate.sh",
     "migrations:create": "./scripts/migrations/create.sh"
   },
