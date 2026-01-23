@@ -1,9 +1,8 @@
-import { readFile } from "fs/promises";
+import { loadAssetByName } from "@/server/utils/assets";
 import { QRCode } from "../../domain/entities/QRCode";
 import { GenerateQRCodeOptions, QRCodeGenerator } from "../../domain/services/QRCodeGenerator";
 import qrcode from "qrcode";
 import sharp from "sharp";
-import path from "path";
 
 // Around 25-30% of the QR code can be damaged if using high correction level.
 // (This includes the white background margin around our logo asset).
@@ -44,8 +43,7 @@ export class DefaultQRCodeGenerator implements QRCodeGenerator {
 				.png()
 				.toBuffer()
 
-			const logoPath = path.join(process.cwd(), "src/server/assets/qr-logo.png");
-			const logoBuffer = await readFile(logoPath);
+			const logoBuffer = loadAssetByName("qr-logo.png");
 			const logoEditedBuffer = await sharp(logoBuffer)
 				.resize(logoSize, logoSize, { fit: "contain", kernel: sharp.kernel.nearest })
 				.png()

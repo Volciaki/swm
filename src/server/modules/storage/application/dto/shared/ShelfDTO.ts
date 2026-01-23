@@ -12,6 +12,9 @@ export const shelfDTOSchema = z.object({
 	maxAssortmentSize: dimensionsDTOSchema,
 	supportsHazardous: z.boolean(),
 	lastRecordedLegalWeightKg: z.number(),
+	temperatureReadingIds: z.string().array(),
+	currentTemperatureCelsius: z.number(),
+	hasBeenChangedIllegally: z.boolean(),
 });
 
 export type ShelfDTO = z.infer<typeof shelfDTOSchema>;

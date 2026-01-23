@@ -1,8 +1,10 @@
 import { Services } from "../get";
+
 import { getAssortmentFileHelperPresets } from "./AssortmentFileHelper";
 import { getAssortmentHelperPresets } from "./AssortmentHelper";
 import { getFileHelperPresets } from "./FileHelper";
 import { getFileManagerPresets } from "./FileManager";
+import { getReportHelperPresets } from "./ReportHelper";
 import { getShelfHelperPresets } from "./ShelfHelper";
 import { getStorageAssortmentHelperPresets } from "./StorageAssortmentHelper";
 
@@ -15,6 +17,7 @@ export const getPresets = (services: Services) => {
 		fileHelper: getFileHelperPresets(services),
 		assortmentFileHelper: getAssortmentFileHelperPresets(services),
 		fileManager: getFileManagerPresets(services),
+		reportHelper: getReportHelperPresets(services),
 	};
 };
 
