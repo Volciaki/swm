@@ -1,41 +1,32 @@
 import { environment } from "../environment";
-import { NextPhase } from "../environment/type";
 import { logger } from "../logger";
+import { SchedulerAuthorizationError } from "./errors/SchedulerAuthorizationError";
+import { SchedulerTaskNotFoundError } from "./errors/SchedulerTaskNotFoundError";
 import { SchedulerTask } from "./task";
 import { getSchedulerTasks } from "./tasks";
 
-// TODO: this doesn't work... it also won't work in serverless environments.
-let started = false;
-
 class Scheduler {
-	constructor(private readonly tasks: SchedulerTask[]) {}
+	constructor(private readonly tasks: SchedulerTask[]) { }
 
-	private async setupTask(task: SchedulerTask) {
-		setInterval(async () => {
-			try {
-				logger.log(`Running task ${task.getName()}...`);
-				await task.execute();
-				logger.log(`Task ${task.getName()} has finished!`);
-			} catch (error) {
-				logger.error(`An error has occurred while running task ${task.getName()}! Details: ${error}.`)
-			}
-		}, task.getIntervalMilliseconds());
-	}
+	async runTask(name: string) {
+		const task = this.tasks.find((t) => t.getName() === name)
 
-	async start() {
-		for (const task of this.tasks) {
-			await this.setupTask(task);
+		if (!task) throw new SchedulerTaskNotFoundError(name, this.tasks);
+
+		try {
+			logger.log(`Running task ${task.getName()}...`);
+			await task.execute();
+			logger.log(`Task ${task.getName()} has finished!`);
+		} catch (error) {
+			logger.error(`An error has occurred while running task ${task.getName()}! Details: ${error}.`)
 		}
 	}
 }
 
-export const startScheduler = () => {
-	// Prevents NextJS from attempting to resolve all the tasks during build time :facepalm:
-	if (environment.nextPhase === NextPhase.BUILD) return;
-	if (started) return;
+export const getScheduler = async (authenticationPassphrase: string) => {
+	if (authenticationPassphrase !== environment.schedule.authentication.passphrase)
+		throw new SchedulerAuthorizationError(authenticationPassphrase);
 
-	started = true;
 	const tasks = getSchedulerTasks();
-	const scheduler = new Scheduler(tasks);
-	void scheduler.start();
+	return new Scheduler(tasks);
 };

@@ -9,9 +9,6 @@ import { InvalidAuthenticationTokenError } from "../modules/identity/application
 import { InvalidUUIDError, UserDTO, UUID } from "../utils";
 import { appDataSource, initializeDatabase } from "../database/init";
 import { environment } from "../environment";
-import { startScheduler } from "../scheduler";
-
-startScheduler();
 
 export type APIContext = {
     db: DataSource;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { procedure, createRouter, createCallerFactory } from "./init";
-import { identityRouter, notificationsRouter, storageRouter, reportsRouter } from "./routers";
+import { identityRouter, notificationsRouter, storageRouter, reportsRouter, scheduleRouter } from "./routers";
 
 export const appRouter = createRouter({
 	// TODO: Dawid, remove this when you're ready xD
@@ -19,6 +19,7 @@ export const appRouter = createRouter({
 	storage: storageRouter,
 	notifications: notificationsRouter,
 	reports: reportsRouter,
+	schedule: scheduleRouter,
 });
 
 export type AppRouter = typeof appRouter;
