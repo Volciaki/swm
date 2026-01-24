@@ -3,15 +3,15 @@ import { UploadFileDTO } from "../dto/UploadFileDTO";
 import { FileManager } from "../../domain/services/FileManager";
 import { FileReferenceMapper } from "../../infrastructure/mappers/FileReferenceMapper";
 
-export type UploadShelfOptions = {
+export type UploadFileOptions = {
 	skipAuthentication: boolean;
 };
 
 export class UploadFile {
 	constructor(private readonly fileManager: FileManager) {}
 
-	async execute(dto: UploadFileDTO, optionsUnsafe?: UploadShelfOptions, currentUser?: UserDTO) {
-		const options: UploadShelfOptions = {
+	async execute(dto: UploadFileDTO, optionsUnsafe?: UploadFileOptions, currentUser?: UserDTO) {
+		const options: UploadFileOptions = {
 			skipAuthentication: false,
 			...optionsUnsafe,
 		};

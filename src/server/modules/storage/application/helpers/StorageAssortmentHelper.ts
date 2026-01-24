@@ -206,7 +206,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 						id: assortment.image?.id,
 						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
 					},
-					currentUser,
+					{ skipAuthentication: true },
 				)).base64
 				: null;
 			return { ...assortment, imageContentBase64 };

@@ -9,12 +9,14 @@ export enum S3FileStorageBucket {
 	QR_CODES = "qr-codes",
 	ASSORTMENT_IMAGES = "assortment-images",
 	REPORTS = "reports",
+	BACKUPS = "backups",
 };
 
 export const s3FileStorageBucketOptions: Record<S3FileStorageBucket, { isPublic: boolean }> = {
 	[S3FileStorageBucket.QR_CODES]: { isPublic: true },
 	[S3FileStorageBucket.ASSORTMENT_IMAGES]: { isPublic: true },
 	[S3FileStorageBucket.REPORTS]: { isPublic: environment.type === EnvironmentType.DEVELOPMENT },
+	[S3FileStorageBucket.BACKUPS]: { isPublic: environment.type === EnvironmentType.DEVELOPMENT },
 };
 
 export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage {

@@ -27,7 +27,7 @@ export class UpdateShelfAssortment {
 		return {
 			fetchAssortmentImage: async (id) => await this.fetchFileAction.execute(
 				{ id: id.value, metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES } },
-				currentUser,
+				{ skipAuthentication: true },
 			),
 			deleteProductImageByPath: async (path) => await this.deleteFileByPathAction.execute(
 				{
