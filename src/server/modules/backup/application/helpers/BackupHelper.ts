@@ -4,6 +4,7 @@ import { getStreamAsBuffer as streamToBuffer } from "get-stream";
 import { lookup as getMimeTypeByPath } from "mime-types";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import { FileStorageType } from "@/server/utils/files/domain/services/FileStorage";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
@@ -13,8 +14,13 @@ import { BackupRepository } from "../../domain/repositories/BackupRepository";
 import { AccessedFileStorageDataDump, FileStorageDataManager } from "../services/FileStorageDataManager";
 import { DatabaseDataDump, DatabaseDataManager } from "../services/DatabaseDataManager";
 import { BackupNotFoundError } from "../errors/NoBackupUtilitiesError";
-import { FileStorageType } from "@/server/utils/files/domain/services/FileStorage";
 import { InvalidBackupError } from "../errors/InvalidBackupError";
+import { BackupDTO } from "../dto/shared/BackupDTO";
+import { BackupMapper } from "../../infrastructure/mappers/BackupMapper";
+
+type FullBackup = BackupDTO & {
+	base64: Base64;
+};
 
 type BackupZIPUnpackedContent = {
 	database: DatabaseDataDump;
@@ -41,6 +47,49 @@ export class DefaultBackupHelper implements BackupHelper {
 		private readonly getFile: GetFile,
 		private readonly fetchBackupFile: FetchFile,
 	) { }
+
+	private async fileGetter(id: UUID) {
+		const dto = await this.getFile.execute({ id: id.value });
+		return FileReferenceMapper.fromDTOToEntity(dto);
+	}
+
+	private async fetchAllBackups(): Promise<FullBackup[]> {
+		const allBackups = await this.backupRepository.getAll(async (id) => await this.fileGetter(id));
+		const fullBackups = [];
+
+		for (const backup of allBackups) {
+			const { base64: base64String } = await this.fetchBackupFile.execute(
+				{
+					id: backup.file.id.value,
+					metadata: { bucket: S3FileStorageBucket.BACKUPS },
+				},
+				{ skipAuthentication: true }
+			);
+			fullBackups.push({
+				...BackupMapper.fromEntityToDTO(backup),
+				base64: Base64.fromString(base64String),
+			});
+		}
+
+		return fullBackups;
+	}
+
+	// The `backups` table is purposefully omitted from database dumps. We do have however to dump `file_references`, as other
+	// tables depend on it. Due to this, applying a backup can cause the newer ones to stop working. Calling this afterwards fixes it.
+	private async recreateAllBackupFileReferences(backups: FullBackup[]) {
+		for (const backup of backups) {
+			await this.uploadBackupFile.execute(
+				{
+					...backup.file,
+					contentBase64: backup.base64.value,
+				},
+				{
+					skipAuthentication: true,
+					predefinedId: UUID.fromString(backup.file.id),
+				},
+			);
+		}
+	}
 
 	private async handleReadableZipFile(zip: ZipFileReadable): Promise<BackupZIPUnpackedContent> {
 		let databaseDataDumpBuffer;
@@ -173,6 +222,8 @@ export class DefaultBackupHelper implements BackupHelper {
 	}
 
 	async apply(backup: Backup) {
+		const currentBackups = await this.fetchAllBackups();
+
 		const { base64: backupBase64 } = await this.fetchBackupFile.execute(
 			{
 				id: backup.file.id.value,
@@ -187,16 +238,15 @@ export class DefaultBackupHelper implements BackupHelper {
 
 		await this.databaseDataManager.restore(backupData.database);
 		await this.fileStorageDataManager.restore(backupData.fileStorageDump);
+
+		await this.recreateAllBackupFileReferences(currentBackups)
 	}
 
 	async getByIdStringOrThrow(id: string) {
 		const backupId = UUID.fromString(id);
 		const backup = await this.backupRepository.getById(
 			backupId,
-			async (uuid: UUID) => {
-				const dto = await this.getFile.execute({ id: uuid.value })
-				return FileReferenceMapper.fromDTOToEntity(dto);
-			},
+			async (id) => await this.fileGetter(id),
 		);
 
 		if (backup === null) throw new BackupNotFoundError(backupId);
