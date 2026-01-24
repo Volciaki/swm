@@ -8,7 +8,10 @@ export class DefaultFileManager extends FileManager {
 		const visibility = await this.storage.getVisibility(file.path);
 		const fileBuffer = Base64Mapper.toBuffer(Base64.fromString(file.contentBase64));
 
-		await this.storage.uploadFile(file.path, fileBuffer, file.mimeType);
+		let encryptedBuffer;
+		if (file.isEncrypted) encryptedBuffer = await this.encryptionManager.encrypt(fileBuffer);
+
+		await this.storage.uploadFile(file.path, encryptedBuffer ?? fileBuffer, file.mimeType);
 		return await this.helper.createByDTO(
 			file,
 			visibility,
@@ -26,7 +29,12 @@ export class DefaultFileManager extends FileManager {
 	}
 
 	async fetchFile(file: FileReference) {
-		return await this.storage.fetchFile(file.path);
+		const fileBuffer = await this.storage.fetchFile(file.path);
+		
+		let decryptedBuffer;
+		if (file.isEncrypted) decryptedBuffer = await this.encryptionManager.decrypt(fileBuffer);
+
+		return decryptedBuffer ?? fileBuffer;
 	}
 
 	getStorageType() {

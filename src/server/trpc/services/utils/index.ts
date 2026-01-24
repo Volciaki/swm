@@ -15,6 +15,7 @@ import { getFullStorageShowcaseReportGeneratorServices } from "./FullStorageShow
 import { getTemperatureExceededDetailsReportGeneratorServices } from "./TemperatureExceededDetailsReportGenerator";
 import { getFileStorageDataManagerServices } from "./FileStorageDataManager";
 import { getDatabaseDataManagerServices } from "./DatabaseDataManager";
+import { getEncryptionManagerServices } from "./EncryptionManager";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -33,5 +34,6 @@ export const getUtils = (ctx: GetServicesContext) => {
 		temperatureExceededDetailsReportGenerator: getTemperatureExceededDetailsReportGeneratorServices(ctx),
 		fileStorageDataManager: getFileStorageDataManagerServices(ctx),
 		databaseDataManager: getDatabaseDataManagerServices(ctx),
+		encryptionManager: getEncryptionManagerServices(ctx),
 	};
 };

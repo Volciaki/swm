@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import { isFileEncryptedByBucket, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { GetAllReports } from "@/server/modules/reporting/application/use-cases/GetAllReports";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
@@ -90,6 +90,7 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 			await uploadExecutor.execute(
 				{ 
 					contentBase64: entity.base64.value,
+					isEncrypted: isFileEncryptedByBucket(entity.metadata.bucket as S3FileStorageBucket),
 					metadata,
 					mimeType,
 					path,

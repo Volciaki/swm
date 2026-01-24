@@ -4,6 +4,7 @@ import { FileReferenceRepository } from "./FileReferenceRepository";
 import { FileStorage, FileStorageType } from "./FileStorage";
 import { FileHelper } from "../../application/helpers/FileHelper";
 import { UUID } from "@/server/utils/uuid";
+import { EncryptionManager } from "./EncryptionManager";
 
 export type UploadFileData = UploadFileDTO & {
 	predefinedId?: UUID,
@@ -15,6 +16,7 @@ export abstract class FileManager {
 		protected readonly storage: FileStorage,
 		protected readonly repository: FileReferenceRepository,
 		protected readonly helper: FileHelper,
+		protected readonly encryptionManager: EncryptionManager,
 	) {}
 
 	abstract uploadFile(file: UploadFileData): Promise<FileReference>;

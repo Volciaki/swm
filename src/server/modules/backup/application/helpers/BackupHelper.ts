@@ -3,7 +3,7 @@ import { fromBuffer as openZIPByBuffer, ZipFile as ZipFileReadable } from "yauzl
 import { getStreamAsBuffer as streamToBuffer } from "get-stream";
 import { lookup as getMimeTypeByPath } from "mime-types";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import { isFileEncryptedByBucket, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { FileStorageType } from "@/server/utils/files/domain/services/FileStorage";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
@@ -125,6 +125,7 @@ export class DefaultBackupHelper implements BackupHelper {
 					const data = {
 						metadata: { bucket, storageType: FileStorageType.S3 },
 						mimeType: getMimeTypeByPath(path) || "application/octet-stream",
+						isEncrypted: isFileEncryptedByBucket(bucket as S3FileStorageBucket),
 						base64,
 						path,
 					};
@@ -205,6 +206,7 @@ export class DefaultBackupHelper implements BackupHelper {
 				mimeType: "application/zip",
 				metadata: { bucket: S3FileStorageBucket.BACKUPS },
 				contentBase64: backupFileBase64.value,
+				isEncrypted: isFileEncryptedByBucket(S3FileStorageBucket.BACKUPS),
 			},
 			{ skipAuthentication: true },
 		);

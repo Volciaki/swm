@@ -12,12 +12,31 @@ export enum S3FileStorageBucket {
 	BACKUPS = "backups",
 };
 
-export const s3FileStorageBucketOptions: Record<S3FileStorageBucket, { isPublic: boolean }> = {
-	[S3FileStorageBucket.QR_CODES]: { isPublic: true },
-	[S3FileStorageBucket.ASSORTMENT_IMAGES]: { isPublic: true },
-	[S3FileStorageBucket.REPORTS]: { isPublic: environment.type === EnvironmentType.DEVELOPMENT },
-	[S3FileStorageBucket.BACKUPS]: { isPublic: environment.type === EnvironmentType.DEVELOPMENT },
+type BucketOptions = {
+	isPublic: boolean,
+	areFilesEncrypted: boolean,
 };
+
+export const s3FileStorageBucketOptions: Record<S3FileStorageBucket, BucketOptions> = {
+	[S3FileStorageBucket.QR_CODES]: {
+		isPublic: true,
+		areFilesEncrypted: false,
+	},
+	[S3FileStorageBucket.ASSORTMENT_IMAGES]: {
+		isPublic: true,
+		areFilesEncrypted: false,
+	},
+	[S3FileStorageBucket.REPORTS]: {
+		isPublic: environment.type === EnvironmentType.DEVELOPMENT,
+		areFilesEncrypted: false,
+	},
+	[S3FileStorageBucket.BACKUPS]: {
+		isPublic: environment.type === EnvironmentType.DEVELOPMENT,
+		areFilesEncrypted: true,
+	},
+};
+
+export const isFileEncryptedByBucket = (bucket: S3FileStorageBucket) => s3FileStorageBucketOptions[bucket].areFilesEncrypted;
 
 export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage {
 	constructor(

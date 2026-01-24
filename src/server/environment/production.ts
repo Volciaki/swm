@@ -4,6 +4,9 @@ export const productionEnvironment: Environment = {
 	type: EnvironmentType.PRODUCTION,
 	nextPhase: process.env.NEXT_PHASE === "phase-production-build" ? NextPhase.BUILD : null,
 	port: Number(process.env.PORT),
+	encryption: {
+		key: process.env.ENCRYPTION_KEY!,
+	},
 	schedule: {
 		authentication: {
 			passphrase: process.env.SCHEDULE_AUTHENTICATION_PASSPHRASE!,

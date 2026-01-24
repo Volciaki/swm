@@ -1,5 +1,5 @@
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import { isFileEncryptedByBucket, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFile";
 import { UUIDManager } from "@/server/utils";
@@ -29,6 +29,7 @@ export class DefaultReportHelper implements ReportHelper {
 				mimeType: "application/pdf",
 				metadata: { bucket: S3FileStorageBucket.REPORTS },
 				contentBase64: generatedReport.content.value,
+				isEncrypted: isFileEncryptedByBucket(S3FileStorageBucket.REPORTS),
 			},
 			{ skipAuthentication: true },
 		);

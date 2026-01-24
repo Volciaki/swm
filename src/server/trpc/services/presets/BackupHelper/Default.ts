@@ -12,18 +12,23 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 	const fileReferenceRepository = services.repositories.fileReference.db;
 	const uuidManager = services.utils.uuidManager.default;
 	const fileHelper = services.helpers.file.default.get(fileReferenceRepository, uuidManager);
+	const encryptionManager = services.utils.encryptionManager.default;
 
 	const reportFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.REPORTS);
-	const reportFileManager = services.utils.fileManager.default.get(reportFileStorage, fileReferenceRepository, fileHelper);
+	const reportFileManager =
+		services.utils.fileManager.default.get(reportFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
 
 	const backupsFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.BACKUPS);
-	const backupsFileManager = services.utils.fileManager.default.get(backupsFileStorage, fileReferenceRepository, fileHelper);
+	const backupsFileManager =
+		services.utils.fileManager.default.get(backupsFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
 
 	const assortmentImageFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.ASSORTMENT_IMAGES);
-	const assortmentImageFileManager = services.utils.fileManager.default.get(assortmentImageFileStorage, fileReferenceRepository, fileHelper);
+	const assortmentImageFileManager =
+		services.utils.fileManager.default.get(assortmentImageFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
 
 	const qrCodeFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.QR_CODES);
-	const qrCodeFileManager = services.utils.fileManager.default.get(qrCodeFileStorage, fileReferenceRepository, fileHelper);
+	const qrCodeFileManager =
+		services.utils.fileManager.default.get(qrCodeFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
 
 	const getFile = new GetFile(fileHelper);
 
