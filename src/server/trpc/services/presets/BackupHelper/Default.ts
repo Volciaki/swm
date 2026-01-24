@@ -48,5 +48,5 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 	const databaseDataManager = services.utils.databaseDataManager.default;
 	const uploadBackupFile = new UploadFile(backupsFileManager);
 	
-	return services.helpers.backup.default.get(fileStorageDataManager, databaseDataManager, uploadBackupFile, uuidManager, backupRepository);
+	return services.helpers.backup.default.get(fileStorageDataManager, databaseDataManager, uploadBackupFile, uuidManager, backupRepository, getFile);
 }

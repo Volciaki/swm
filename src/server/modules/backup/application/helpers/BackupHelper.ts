@@ -3,15 +3,18 @@ import { getStreamAsBuffer as streamToBuffer } from "get-stream";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
-import { Base64Mapper, UUIDManager } from "@/server/utils";
+import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
+import { UUID, UUIDManager, Base64Mapper } from "@/server/utils";
 import { Backup } from "../../domain/entities/Backup";
 import { BackupRepository } from "../../domain/repositories/BackupRepository";
 import { FileStorageDataManager } from "../services/FileStorageDataManager";
 import { DatabaseDataManager } from "../services/DatabaseDataManager";
+import { BackupNotFoundError } from "../errors/NoBackupUtilitiesError";
 
 export interface BackupHelper {
 	take(): Promise<Backup>;
 	apply(backup: Backup): Promise<void>;
+	getByIdStringOrThrow(id: string): Promise<Backup>;
 };
 
 export class DefaultBackupHelper implements BackupHelper {
@@ -21,6 +24,7 @@ export class DefaultBackupHelper implements BackupHelper {
 		private readonly uploadBackupFile: UploadFile,
 		private readonly uuidManager: UUIDManager,
 		private readonly backupRepository: BackupRepository,
+		private readonly getFile: GetFile,
 	) { }
 
 	async take(): Promise<Backup> {
@@ -66,7 +70,7 @@ export class DefaultBackupHelper implements BackupHelper {
 		const backupFileBase64 = Base64Mapper.fromBuffer(backupFileBuffer);
 
 		const backupId = this.uuidManager.generate();
-		
+
 		const backupFileReference = await this.uploadBackupFile.execute(
 			{
 				path: `${backupId.value}.zip`,
@@ -85,11 +89,26 @@ export class DefaultBackupHelper implements BackupHelper {
 		);
 
 		await this.backupRepository.create(backup);
-		
+
 		return backup;
 	}
 
 	async apply(backup: Backup) {
 
+	}
+
+	async getByIdStringOrThrow(id: string) {
+		const backupId = UUID.fromString(id);
+		const backup = await this.backupRepository.getById(
+			backupId,
+			async (uuid: UUID) => {
+				const dto = await this.getFile.execute({ id: uuid.value })
+				return FileReferenceMapper.fromDTOToEntity(dto);
+			},
+		);
+
+		if (backup === null) throw new BackupNotFoundError(backupId);
+
+		return backup;
 	}
 }
