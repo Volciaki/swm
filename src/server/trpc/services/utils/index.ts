@@ -14,6 +14,7 @@ import { getCloseToExpirationAssortmentReportGeneratorServices } from "./CloseTo
 import { getFullStorageShowcaseReportGeneratorServices } from "./FullStorageShowcaseReportGenerator";
 import { getTemperatureExceededDetailsReportGeneratorServices } from "./TemperatureExceededDetailsReportGenerator";
 import { getFileStorageDataManagerServices } from "./FileStorageDataManager";
+import { getDatabaseDataManagerServices } from "./DatabaseDataManager";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -31,5 +32,6 @@ export const getUtils = (ctx: GetServicesContext) => {
 		fullStorageShowcaseReportGenerator: getFullStorageShowcaseReportGeneratorServices(ctx),
 		temperatureExceededDetailsReportGenerator: getTemperatureExceededDetailsReportGeneratorServices(ctx),
 		fileStorageDataManager: getFileStorageDataManagerServices(ctx),
+		databaseDataManager: getDatabaseDataManagerServices(ctx),
 	};
 };

@@ -7,6 +7,7 @@ import { Base64Mapper, UUIDManager } from "@/server/utils";
 import { Backup } from "../../domain/entities/Backup";
 import { BackupRepository } from "../../domain/repositories/BackupRepository";
 import { FileStorageDataManager } from "../services/FileStorageDataManager";
+import { DatabaseDataManager } from "../services/DatabaseDataManager";
 
 export interface BackupHelper {
 	take(): Promise<Backup>;
@@ -16,6 +17,7 @@ export interface BackupHelper {
 export class DefaultBackupHelper implements BackupHelper {
 	constructor(
 		private readonly fileStorageDataManager: FileStorageDataManager,
+		private readonly databaseDataManager: DatabaseDataManager,
 		private readonly uploadBackupFile: UploadFile,
 		private readonly uuidManager: UUIDManager,
 		private readonly backupRepository: BackupRepository,
@@ -23,10 +25,13 @@ export class DefaultBackupHelper implements BackupHelper {
 
 	async take(): Promise<Backup> {
 		const fileStorageDataDump = await this.fileStorageDataManager.dump();
+		const databaseDataDump = await this.databaseDataManager.dump();
 
 		const backupFile = new ZipFile();
 
-		const fileStoragePathPrefix = `file-storage`
+		const databasePathPrefix = "database";
+
+		const fileStoragePathPrefix = "file-storage";
 		const assortmentImagesPath = `${fileStoragePathPrefix}/${S3FileStorageBucket.ASSORTMENT_IMAGES}`;
 		const qrCodesPath = `${fileStoragePathPrefix}/${S3FileStorageBucket.QR_CODES}`;
 		const reportsPath = `${fileStoragePathPrefix}/${S3FileStorageBucket.REPORTS}`;
@@ -35,6 +40,8 @@ export class DefaultBackupHelper implements BackupHelper {
 		backupFile.addEmptyDirectory(`${assortmentImagesPath}/`);
 		backupFile.addEmptyDirectory(`${qrCodesPath}/`);
 		backupFile.addEmptyDirectory(`${reportsPath}/`);
+
+		backupFile.addEmptyDirectory(`${databasePathPrefix}/`);
 
 		for (const assortmentImage of fileStorageDataDump.assortments.images) {
 			const fileBuffer = Base64Mapper.toBuffer(assortmentImage.base64);
@@ -50,6 +57,8 @@ export class DefaultBackupHelper implements BackupHelper {
 			const fileBuffer = Base64Mapper.toBuffer(report.base64);
 			backupFile.addBuffer(fileBuffer, `${reportsPath}/${report.path}`);
 		}
+
+		backupFile.addBuffer(databaseDataDump.sqlExportBuffer, `${databasePathPrefix}/dump.sql`);
 
 		backupFile.end();
 

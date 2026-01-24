@@ -4,16 +4,19 @@ import { BackupRepository } from "@/server/modules/backup/domain/repositories/Ba
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { UUIDManager } from "@/server/utils";
 import { GetServicesContext } from "../../context";
+import { DatabaseDataManager } from "@/server/modules/backup/application/services/DatabaseDataManager";
 
 export const getDefaultBackupHelper = (ctx: GetServicesContext) => {
 	return {
 		get: (
 			fileStorageDataManager: FileStorageDataManager,
+			databaseDataManager: DatabaseDataManager,
 			uploadBackupFile: UploadFile,
 			uuidManager: UUIDManager,
 			backupRepository: BackupRepository,
 		) => new DefaultBackupHelper(
 			fileStorageDataManager,
+			databaseDataManager,
 			uploadBackupFile,
 			uuidManager,
 			backupRepository,
