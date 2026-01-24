@@ -20,6 +20,7 @@
     "bcryptjs": "^3.0.3",
     "chalk": "^5.6.2",
     "date-fns": "^4.1.0",
+    "execa": "^9.6.1",
     "get-stream": "^9.0.1",
     "jsonwebtoken": "^9.0.3",
     "lodash": "^4.17.23",
