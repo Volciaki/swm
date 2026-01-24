@@ -10,7 +10,8 @@
     "dev:app": "next dev",
     "dev:schedule": "tsx --env-file .env ./scripts/schedule/trigger-tasks.ts",
     "migrations:generate": "./scripts/migrations/generate.sh",
-    "migrations:create": "./scripts/migrations/create.sh"
+    "migrations:create": "./scripts/migrations/create.sh",
+	"database:dump": "docker compose run --rm pgdump pg_dump -h postgres -U development-user db"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",

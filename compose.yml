@@ -9,6 +9,15 @@ services:
       POSTGRES_DB: db
     volumes:
       - postgres-storage:/var/lib/postgresql/data
+
+  pgdump:
+    image: postgres:17
+    profiles: ["tools"]
+    environment:
+      PGPASSWORD: development-password
+    depends_on:
+      - postgres
+
   adminer:
     image: michalhosna/adminer:4.8.1-en_v1
     ports:
@@ -24,12 +33,14 @@ services:
       - postgres:postgres
     depends_on:
       - postgres
+
   mailhog:
     image: mailhog/mailhog:v1.0.1
     container_name: mailhog
     ports:
       - "25:1025"
       - "3002:8025"
+
   minio:
     image: minio/minio:RELEASE.2024-11-07T00-52-20Z.fips
     command: server /data --console-address ":9001"
