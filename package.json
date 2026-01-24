@@ -11,7 +11,7 @@
     "dev:schedule": "tsx --env-file .env ./scripts/schedule/trigger-tasks.ts",
     "migrations:generate": "./scripts/migrations/generate.sh",
     "migrations:create": "./scripts/migrations/create.sh",
-	"database:dump": "docker compose run --rm pgdump pg_dump -h postgres -U development-user db"
+    "database:dump": "docker compose run --rm pgdump pg_dump -h postgres -U development-user db"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",
@@ -38,6 +38,7 @@
     "sharp": "^0.34.5",
     "typeorm": "^0.3.28",
     "uuid": "^13.0.0",
+    "yauzl": "^3.2.0",
     "yazl": "^3.3.1",
     "zod": "^4.2.1"
   },
