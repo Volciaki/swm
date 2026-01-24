@@ -1,4 +1,4 @@
-import { UtilsError } from "../../../error";
+import { UtilsError } from "@/server/utils/errors";
 import { CelsiusDegrees } from "../entity";
 
 export class InvalidTemperatureRangeError extends UtilsError {

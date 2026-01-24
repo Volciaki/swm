@@ -1,14 +1,15 @@
 import { z } from "zod";
 import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
+import { fileReferenceDTOSchema } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
+import { notificationVOSchema } from "../../../domain/vo/NotificationVO";
 
 export const assortmentDTOSchema = z.object({
 	id: z.string(),
 	cellId: z.string(),
 	shelfId: z.string(),
 	name: z.string(),
-	// TODO: Think what to do about those.
-	// qrCode: z.string(),
-	// image: z.string(),
+	qrCode: fileReferenceDTOSchema,
+	image: fileReferenceDTOSchema.nullable(),
 	temperatureRange: temperatureRangeDTOSchema,
 	weightKg: z.number(),
 	size: dimensionsDTOSchema,
@@ -16,6 +17,10 @@ export const assortmentDTOSchema = z.object({
 	storedAtTimestamp: z.number(),
 	expiresAfterSeconds: z.number(),
 	isHazardous: z.boolean(),
+	hasExpired: z.boolean(),
+	hasExpiredNotification: notificationVOSchema.nullable(),
+	isCloseToExpiration: z.boolean(),
+	isCloseToExpirationNotification: notificationVOSchema.nullable(),
 });
 
 export type AssortmentDTO = z.infer<typeof assortmentDTOSchema>;

@@ -7,7 +7,7 @@ export type TwoFactorAuthenticationFormOnClick = {
 };
 
 const Input2FACodeForm: FC<TwoFactorAuthenticationFormOnClick> = ({ onClick }) => {
-	const [twoFactorAuthenticationCode, settwoFactorAuthenticationCode] = useState("");
+	const [twoFactorAuthenticationCode, setTwoFactorAuthenticationCode] = useState("");
 
 	return(
 		<div
@@ -17,7 +17,7 @@ const Input2FACodeForm: FC<TwoFactorAuthenticationFormOnClick> = ({ onClick }) =
 				type="text"
 				placeholder="Please type your 2FA code here"
 				className={styles["form-style"]}
-				onChange={(e) => settwoFactorAuthenticationCode(e.target.value)}
+				onChange={(e) => setTwoFactorAuthenticationCode(e.target.value)}
 			/>
 			<button
 				className={styles["button-style"]}

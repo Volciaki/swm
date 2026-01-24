@@ -1,8 +1,14 @@
-import { type Environment, EnvironmentType } from "./type";
+import { type Environment, EnvironmentType, NextPhase } from "./type";
 
 export const productionEnvironment: Environment = {
 	type: EnvironmentType.PRODUCTION,
+	nextPhase: process.env.NEXT_PHASE === "phase-production-build" ? NextPhase.BUILD : null,
 	port: Number(process.env.PORT),
+	schedule: {
+		authentication: {
+			passphrase: process.env.SCHEDULE_AUTHENTICATION_PASSPHRASE!,
+		},
+	},
 	database: {
 		host: process.env.DATABASE_HOST!,
 		port: Number(process.env.DATABASE_PORT),
@@ -25,5 +31,13 @@ export const productionEnvironment: Environment = {
 			name: process.env.MAIL_USER_NAME!,
 			password: process.env.MAIL_USER_PASSWORD!,
 		},
+	},
+	storage: {
+		accessKey: process.env.STORAGE_ACCESS_KEY!,
+		secretKey: process.env.STORAGE_SECRET_KEY!,
+		endpoint: process.env.STORAGE_ENDPOINT!,
+		port: Number(process.env.STORAGE_PORT),
+		publicUrl: process.env.STORAGE_PUBLIC_URL!,
+		sslEnabled: Boolean(process.env.STORAGE_SSL_ENABLED),
 	},
 }

@@ -22,6 +22,7 @@ export class FillCell {
 			...dto.assortment,
 			id: assortmentId.value,
 		});
+		shelf.updateLastRecordedLegalWeight();
 
 		await this.shelfRepository.update(shelf);
 		return ShelfMapper.fromShelfToShelfDTO(shelf);

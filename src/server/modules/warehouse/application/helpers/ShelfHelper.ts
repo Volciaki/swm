@@ -6,6 +6,7 @@ import { AssortmentVO } from "../../domain/vo/AssortmentVO";
 import { CellDTO } from "../dto/shared/CellDTO";
 import { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
+import { ShelfThermometer } from "../../domain/services/ShelfThermometer";
 
 const generateCellDTOsForShape = (
 	shape: { columns: number; rows: number },
@@ -38,6 +39,7 @@ export class DefaultShelfHelper implements ShelfHelper {
 	constructor(
         private readonly shelfRepository: ShelfRepository,
         private readonly uuidManager: UUIDManager,
+        private readonly shelfThermometer: ShelfThermometer,
 	) {}
 
 	async getByIdStringOrThrow(id: string, assortmentContext?: AssortmentVO[]) {
@@ -56,7 +58,16 @@ export class DefaultShelfHelper implements ShelfHelper {
 			...dto,
 			id: shelfId.value,
 			cells: shelfCellDTOs,
+			lastRecordedLegalWeightKg: 0,
+			temperatureReadingIds: [],
+			currentTemperatureCelsius: dto.temperatureRange.minimalCelsius,
+			hasBeenChangedIllegally: false,
 		});
+
+		const initialShelfTemperature = await this.shelfThermometer.getInitialTemperatureForShelf(shelf);
+		shelf.currentTemperature = initialShelfTemperature === null
+			? await this.shelfThermometer.getTemperatureForShelf(shelf)
+			: initialShelfTemperature;
 
 		await this.shelfRepository.create(shelf);
 		return shelf;

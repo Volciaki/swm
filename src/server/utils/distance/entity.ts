@@ -1,8 +1,15 @@
+import { attempt } from "../errors";
+import { PositiveNumber } from "../numbers/positive";
 import { NegativeDistanceError } from "./error";
 
 export class Distance {
-	private constructor(private readonly _millimeters: number) {
-		if (_millimeters < 0) throw new NegativeDistanceError(_millimeters);
+	private readonly _millimeters: PositiveNumber;
+
+	private constructor(value: number) {
+		const positive = attempt(() => PositiveNumber.create(value));
+		if (positive instanceof Error) throw new NegativeDistanceError(value);
+
+		this._millimeters = positive;
 	}
 
 	get millimeters() { return this._millimeters };
@@ -12,7 +19,7 @@ export class Distance {
 	}
 
 	public toSringMillimeters() {
-		return `${this.millimeters}mm`;
+		return `${this.millimeters.value}mm`;
 	}
 
 	public valueOf() {

@@ -11,18 +11,23 @@ import { CellNotFoundError } from "../errors/CellNotFoundError";
 import { ShelfUnevenError } from "../../application/errors/ShelfUnevenError";
 import { AssortmentVO } from "../vo/AssortmentVO";
 import { Cell } from "./Cell";
+import { TemperatureReading } from "./TemperatureReading";
 
 export class Shelf {
 	private constructor(
-        private _id: UUID,
-        private _name: string,
-        private _comment: string,
-        private _cells: Cell[][],
-        private _temperatureRange: TemperatureRange,
-        private _maxWeight: Weight,
-        private _maxAssortmentSize: Dimensions,
-        private _supportsHazardous: boolean,
-	) {}
+		private _id: UUID,
+		private _name: string,
+		private _comment: string,
+		private _cells: Cell[][],
+		private _temperatureRange: TemperatureRange,
+		private _maxWeight: Weight,
+		private _maxAssortmentSize: Dimensions,
+		private _supportsHazardous: boolean,
+		private _lastRecordedLegalWeight: Weight,
+		private _temperatureReadingIds: UUID[],
+		private _currentTemperature: CelsiusDegrees,
+		private _hasBeenChangedIllegally: boolean,
+	) { }
 
 	get id() { return this._id };
 	get maxAssortmentSize() { return this._maxAssortmentSize };
@@ -32,6 +37,10 @@ export class Shelf {
 	get comment() { return this._comment };
 	get name() { return this._name };
 	get supportsHazardous() { return this._supportsHazardous };
+	get lastRecordedLegalWeight() { return this._lastRecordedLegalWeight };
+	get temperatureReadingIds() { return this._temperatureReadingIds };
+	get currentTemperature() { return this._currentTemperature };
+	get hasBeenChangedIllegally() { return this._hasBeenChangedIllegally };
 
 	set name(value: string) { this._name = value };
 	set comment(value: string) { this._comment = value };
@@ -40,6 +49,9 @@ export class Shelf {
 	set maxWeight(value: Weight) { this._maxWeight = value };
 	set temperatureRange(value: TemperatureRange) { this._temperatureRange = value };
 	set supportsHazardous(value: boolean) { this._supportsHazardous = value };
+	set currentTemperature(value: CelsiusDegrees) { this._currentTemperature = value };
+	set hasBeenChangedIllegally(value: boolean) { this._hasBeenChangedIllegally = value };
+	private set lastRecordedLegalWeight(value: Weight) { this._lastRecordedLegalWeight = value };
 
 	static create(
 		id: UUID,
@@ -50,6 +62,9 @@ export class Shelf {
 		maxWeight: Weight,
 		maxAssortmentSize: Dimensions,
 		supportsHazardous: boolean,
+		lastRecordedLegalWeight: Weight,
+		temperatureReadingIds: UUID[],
+		currentTemperature: CelsiusDegrees,
 	) {
 		const shelf = new Shelf(
 			id,
@@ -60,9 +75,14 @@ export class Shelf {
 			maxWeight,
 			maxAssortmentSize,
 			supportsHazardous,
+			lastRecordedLegalWeight,
+			temperatureReadingIds,
+			currentTemperature,
+			false,
 		);
 
 		shelf.validate();
+		shelf.updateHasBeenChangedIllegally();
 
 		return shelf;
 	}
@@ -84,19 +104,23 @@ export class Shelf {
 
 	private validateAssortment(assortment: AssortmentVO) {
 		const { widthMillimeters, heightMillimeters, lengthMillimeters } = assortment.size;
+
 		const assortmentWidth = Distance.fromMillimeters(widthMillimeters);
 		const assortmentHeight = Distance.fromMillimeters(heightMillimeters);
 		const assortmentLength = Distance.fromMillimeters(lengthMillimeters);
-		if (assortmentWidth > this.maxAssortmentSize.width)
+
+		if (assortmentWidth.millimeters > this.maxAssortmentSize.width.millimeters)
 			throw new AssortmentTooWideError(assortmentWidth, this.maxAssortmentSize.width);
-		if (assortmentHeight > this.maxAssortmentSize.height)
+		if (assortmentHeight.millimeters > this.maxAssortmentSize.height.millimeters)
 			throw new AssortmentTooTallError(assortmentHeight, this.maxAssortmentSize.height);
-		if (assortmentLength > this.maxAssortmentSize.length)
+		if (assortmentLength.millimeters > this.maxAssortmentSize.length.millimeters)
 			throw new AssortmentTooLongError(assortmentLength, this.maxAssortmentSize.length);
 
 		const { minimalCelsius, maximalCelsius } = assortment.temperatureRange;
+
 		const assortmentMinimalTemperature = CelsiusDegrees.fromNumber(minimalCelsius);
 		const assortmentMaximalTemperature = CelsiusDegrees.fromNumber(maximalCelsius);
+
 		if (assortmentMinimalTemperature > this.temperatureRange.maximal)
 			throw new ShelfTooColdForAssortmentError(assortmentMinimalTemperature, this.temperatureRange.maximal);
 		if (assortmentMaximalTemperature < this.temperatureRange.minimal)
@@ -114,17 +138,24 @@ export class Shelf {
 		}
 	}
 
+	private validateNewAssortment(assortment: AssortmentVO) {
+		const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
+		if (!emptyCell) throw new ShelfFullError(this.id);
+
+		this.validateAssortment(assortment);
+	}
+
 	public validate() {
 		this.validateCells();
 		this.validateAllAssortment();
 		this.validateWeight();
 	}
 
-	private validateNewAssortment(assortment: AssortmentVO) {
-		const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
-		if (!emptyCell) throw new ShelfFullError(this.id);
+	public updateHasBeenChangedIllegally() {
+		const lastRecordedWeight = this.lastRecordedLegalWeight;
+		const currentWeight = this.getTotalWeight();
 
-		this.validateAssortment(assortment);
+		this.hasBeenChangedIllegally = lastRecordedWeight.grams.value !== currentWeight.grams.value;
 	}
 
 	public setCellsAssortmentById(id: UUID, newAssortment: AssortmentVO | null) {
@@ -151,5 +182,14 @@ export class Shelf {
 		}
 
 		return Weight.fromKilograms(totalWeightKg);
+	}
+
+	public updateLastRecordedLegalWeight() {
+		const currentWeight = this.getTotalWeight();
+		this.lastRecordedLegalWeight = currentWeight;
+	}
+
+	public addTemperatureReading(temperatureReading: TemperatureReading) {
+		this._temperatureReadingIds.push(temperatureReading.id);
 	}
 }

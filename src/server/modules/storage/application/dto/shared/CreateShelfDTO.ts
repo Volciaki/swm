@@ -2,7 +2,14 @@ import { z } from "zod";
 import { shelfDTOSchema } from "./ShelfDTO";
 
 export const createShelfDTOSchema = shelfDTOSchema
-	.omit({ id: true, cells: true })
+	.omit({
+		id: true,
+		cells: true,
+		lastRecordedLegalWeightKg: true,
+		temperatureReadingIds: true,
+		hasBeenChangedIllegally: true,
+		currentTemperatureCelsius: true,
+	})
 	.extend({
 		cellsShape: z.object({
 			columns: z.number(),

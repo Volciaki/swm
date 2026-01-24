@@ -5,6 +5,7 @@ import { getServices } from "../../services";
 
 export const deleteUser = procedure.input(deleteUserDTOSchema).mutation<void>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
+
 	const userRepository = services.repositories.user.db;
 
 	const action = new DeleteUser(userRepository);
