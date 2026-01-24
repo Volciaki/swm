@@ -1,15 +1,25 @@
-import { ZipFile } from "yazl";
+import { ZipFile as ZipFileWritable } from "yazl";
+import { fromBuffer as openZIPByBuffer, ZipFile as ZipFileReadable } from "yauzl-promise";
 import { getStreamAsBuffer as streamToBuffer } from "get-stream";
+import { lookup as getMimeTypeByPath } from "mime-types";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
-import { UUID, UUIDManager, Base64Mapper } from "@/server/utils";
+import { UUID, UUIDManager, Base64Mapper, Base64 } from "@/server/utils";
 import { Backup } from "../../domain/entities/Backup";
 import { BackupRepository } from "../../domain/repositories/BackupRepository";
-import { FileStorageDataManager } from "../services/FileStorageDataManager";
-import { DatabaseDataManager } from "../services/DatabaseDataManager";
+import { AccessedFileStorageDataDump, FileStorageDataManager } from "../services/FileStorageDataManager";
+import { DatabaseDataDump, DatabaseDataManager } from "../services/DatabaseDataManager";
 import { BackupNotFoundError } from "../errors/NoBackupUtilitiesError";
+import { FileStorageType } from "@/server/utils/files/domain/services/FileStorage";
+import { InvalidBackupError } from "../errors/InvalidBackupError";
+
+type BackupZIPUnpackedContent = {
+	database: DatabaseDataDump;
+	fileStorageDump: AccessedFileStorageDataDump;
+};
 
 export interface BackupHelper {
 	take(): Promise<Backup>;
@@ -18,6 +28,10 @@ export interface BackupHelper {
 };
 
 export class DefaultBackupHelper implements BackupHelper {
+	private databasePathPrefix = "database";
+	private fileStoragePathPrefix = "file-storage";
+	private fileStorageBucketAndPathToIdPath = "bucket-and-path-to-id.json";
+
 	constructor(
 		private readonly fileStorageDataManager: FileStorageDataManager,
 		private readonly databaseDataManager: DatabaseDataManager,
@@ -25,27 +39,87 @@ export class DefaultBackupHelper implements BackupHelper {
 		private readonly uuidManager: UUIDManager,
 		private readonly backupRepository: BackupRepository,
 		private readonly getFile: GetFile,
+		private readonly fetchBackupFile: FetchFile,
 	) { }
+
+	private async handleReadableZipFile(zip: ZipFileReadable): Promise<BackupZIPUnpackedContent> {
+		let databaseDataDumpBuffer;
+		let fileStorageBucketAndPathToId;
+		const assortmentImagesDataDump = [];
+		const qrCodesDataDump = [];
+		const reportsDataDump = [];
+
+		try {
+			for await (const entry of zip) {
+				const isDirectory = entry.filename.endsWith("/");
+
+				if (isDirectory) continue;
+
+				const segments = entry.filename.split("/");
+
+				const stream = await entry.openReadStream();
+				const buffer = await streamToBuffer(stream);
+
+				if (segments[0] === this.databasePathPrefix) { databaseDataDumpBuffer = buffer }
+
+				if (segments[0] === this.fileStoragePathPrefix) {
+					const bucket = segments[1];
+					const path = segments[2];
+
+					if (bucket === this.fileStorageBucketAndPathToIdPath) {
+						fileStorageBucketAndPathToId = JSON.parse(buffer.toString("utf8"));
+						continue;
+					}
+
+					const base64 = Base64Mapper.fromBuffer(buffer);
+
+					const data = {
+						metadata: { bucket, storageType: FileStorageType.S3 },
+						mimeType: getMimeTypeByPath(path) || "application/octet-stream",
+						base64,
+						path,
+					};
+
+					if (bucket === S3FileStorageBucket.ASSORTMENT_IMAGES) assortmentImagesDataDump.push(data);
+					if (bucket === S3FileStorageBucket.QR_CODES) qrCodesDataDump.push(data);
+					if (bucket === S3FileStorageBucket.REPORTS) reportsDataDump.push(data);
+				}
+			}
+		} finally {
+			await zip.close();
+		}
+
+		if (!databaseDataDumpBuffer) throw new InvalidBackupError();
+
+		return {
+			database: { exportBuffer: databaseDataDumpBuffer },
+			fileStorageDump: {
+				assortments: {
+					images: assortmentImagesDataDump,
+					qrCodes: qrCodesDataDump,
+				},
+				reports: reportsDataDump,
+				context: { bucketAndPathToId: fileStorageBucketAndPathToId }
+			},
+		};
+	}
 
 	async take(): Promise<Backup> {
 		const fileStorageDataDump = await this.fileStorageDataManager.dump();
 		const databaseDataDump = await this.databaseDataManager.dump();
 
-		const backupFile = new ZipFile();
+		const backupFile = new ZipFileWritable();
 
-		const databasePathPrefix = "database";
+		const assortmentImagesPath = `${this.fileStoragePathPrefix}/${S3FileStorageBucket.ASSORTMENT_IMAGES}`;
+		const qrCodesPath = `${this.fileStoragePathPrefix}/${S3FileStorageBucket.QR_CODES}`;
+		const reportsPath = `${this.fileStoragePathPrefix}/${S3FileStorageBucket.REPORTS}`;
 
-		const fileStoragePathPrefix = "file-storage";
-		const assortmentImagesPath = `${fileStoragePathPrefix}/${S3FileStorageBucket.ASSORTMENT_IMAGES}`;
-		const qrCodesPath = `${fileStoragePathPrefix}/${S3FileStorageBucket.QR_CODES}`;
-		const reportsPath = `${fileStoragePathPrefix}/${S3FileStorageBucket.REPORTS}`;
-
-		backupFile.addEmptyDirectory(`${fileStoragePathPrefix}/`);
+		backupFile.addEmptyDirectory(`${this.fileStoragePathPrefix}/`);
 		backupFile.addEmptyDirectory(`${assortmentImagesPath}/`);
 		backupFile.addEmptyDirectory(`${qrCodesPath}/`);
 		backupFile.addEmptyDirectory(`${reportsPath}/`);
 
-		backupFile.addEmptyDirectory(`${databasePathPrefix}/`);
+		backupFile.addEmptyDirectory(`${this.databasePathPrefix}/`);
 
 		for (const assortmentImage of fileStorageDataDump.assortments.images) {
 			const fileBuffer = Base64Mapper.toBuffer(assortmentImage.base64);
@@ -62,7 +136,12 @@ export class DefaultBackupHelper implements BackupHelper {
 			backupFile.addBuffer(fileBuffer, `${reportsPath}/${report.path}`);
 		}
 
-		backupFile.addBuffer(databaseDataDump.sqlExportBuffer, `${databasePathPrefix}/dump.sql`);
+		backupFile.addBuffer(
+			Buffer.from(JSON.stringify(fileStorageDataDump.context.bucketAndPathToId)),
+			`${this.fileStoragePathPrefix}/${this.fileStorageBucketAndPathToIdPath}`,
+		);
+
+		backupFile.addBuffer(databaseDataDump.exportBuffer, `${this.databasePathPrefix}/backup.dump`);
 
 		backupFile.end();
 
@@ -94,7 +173,20 @@ export class DefaultBackupHelper implements BackupHelper {
 	}
 
 	async apply(backup: Backup) {
+		const { base64: backupBase64 } = await this.fetchBackupFile.execute(
+			{
+				id: backup.file.id.value,
+				metadata: { bucket: S3FileStorageBucket.BACKUPS },
+			},
+			{ skipAuthentication: true }
+		);
+		const backupBuffer = Base64Mapper.toBuffer(Base64.fromString(backupBase64));
 
+		const zip = await openZIPByBuffer(backupBuffer);
+		const backupData = await this.handleReadableZipFile(zip);
+
+		await this.databaseDataManager.restore(backupData.database);
+		await this.fileStorageDataManager.restore(backupData.fileStorageDump);
 	}
 
 	async getByIdStringOrThrow(id: string) {

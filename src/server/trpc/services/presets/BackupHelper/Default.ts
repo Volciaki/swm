@@ -1,11 +1,12 @@
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { BackupHelper } from "@/server/modules/backup/application/helpers/BackupHelper";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
-import { Services } from "../../get";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAllReports } from "@/server/modules/reporting/application/use-cases/GetAllReports";
-import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
+import { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFile";
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
+import { Services } from "../../get";
 
 export const getDefaultBackupHelperPreset = (services: Services): BackupHelper => {
 	const fileReferenceRepository = services.repositories.fileReference.db;
@@ -36,6 +37,12 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 	const fetchAssortmentImageFile = new FetchFile(fileHelper, assortmentImageFileManager);
 	const fetchAssortmentQRCodeFile = new FetchFile(fileHelper, qrCodeFileManager);
 	const fetchReportFile = new FetchFile(fileHelper, reportFileManager);
+	const uploadAssortmentImageFile = new UploadFile(assortmentImageFileManager);
+	const uploadAssortmentQRCodeFile = new UploadFile(qrCodeFileManager);
+	const uploadReportFile = new UploadFile(reportFileManager);
+	const deleteAssortmentImageFile = new DeleteFile(fileHelper, assortmentImageFileManager);
+	const deleteAssortmentQRCodeFile = new DeleteFile(fileHelper, qrCodeFileManager);
+	const deleteReportFile = new DeleteFile(fileHelper, reportFileManager);
 
 	const fileStorageDataManager = services.utils.fileStorageDataManager.default.get(
 		getAllAssortment,
@@ -44,9 +51,24 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 		fetchAssortmentImageFile,
 		fetchAssortmentQRCodeFile,
 		fetchReportFile,
+		uploadAssortmentImageFile,
+		uploadAssortmentQRCodeFile,
+		uploadReportFile,
+		deleteAssortmentImageFile,
+		deleteAssortmentQRCodeFile,
+		deleteReportFile,
 	);
 	const databaseDataManager = services.utils.databaseDataManager.default;
 	const uploadBackupFile = new UploadFile(backupsFileManager);
+	const fetchBackupFile = new FetchFile(fileHelper, backupsFileManager);
 	
-	return services.helpers.backup.default.get(fileStorageDataManager, databaseDataManager, uploadBackupFile, uuidManager, backupRepository, getFile);
+	return services.helpers.backup.default.get(
+		fileStorageDataManager,
+		databaseDataManager,
+		uploadBackupFile,
+		uuidManager,
+		backupRepository,
+		getFile,
+		fetchBackupFile,
+	);
 }

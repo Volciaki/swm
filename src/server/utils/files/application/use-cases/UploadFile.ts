@@ -1,10 +1,12 @@
+import { UUID } from "@/server/utils/uuid";
 import { UserDTO, UnauthorizedError } from "@/server/utils/identity";
 import { UploadFileDTO } from "../dto/UploadFileDTO";
 import { FileManager } from "../../domain/services/FileManager";
 import { FileReferenceMapper } from "../../infrastructure/mappers/FileReferenceMapper";
 
 export type UploadFileOptions = {
-	skipAuthentication: boolean;
+	skipAuthentication?: boolean;
+	predefinedId?: UUID;
 };
 
 export class UploadFile {
@@ -13,12 +15,16 @@ export class UploadFile {
 	async execute(dto: UploadFileDTO, optionsUnsafe?: UploadFileOptions, currentUser?: UserDTO) {
 		const options: UploadFileOptions = {
 			skipAuthentication: false,
+			predefinedId: undefined,
 			...optionsUnsafe,
 		};
 
 		if (!currentUser?.isAdmin && !options.skipAuthentication) throw new UnauthorizedError();
 
-		const fileReference = await this.fileManager.uploadFile(dto);
+		const fileReference = await this.fileManager.uploadFile({
+			...dto,
+			predefinedId: options.predefinedId,
+		});
 		return FileReferenceMapper.fromEntityToDTO(fileReference);
 	}
 }

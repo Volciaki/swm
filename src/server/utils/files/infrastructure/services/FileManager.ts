@@ -1,11 +1,10 @@
 import { Base64, Base64Mapper } from "@/server/utils/base64";
-import { UploadFileDTO } from "../../application/dto/UploadFileDTO";
 import { FileReference } from "../../domain/entities/FileReference";
-import { FileManager } from "../../domain/services/FileManager";
+import { FileManager, UploadFileData } from "../../domain/services/FileManager";
 import { FileMetadata } from "../../domain/entities/FileMetadata";
 
 export class DefaultFileManager extends FileManager {
-	async uploadFile(file: UploadFileDTO) {
+	async uploadFile(file: UploadFileData) {
 		const visibility = await this.storage.getVisibility(file.path);
 		const fileBuffer = Base64Mapper.toBuffer(Base64.fromString(file.contentBase64));
 
@@ -17,6 +16,7 @@ export class DefaultFileManager extends FileManager {
 				this.storage.getStorageType(),
 				file.metadata.bucket,
 			),
+			file.predefinedId,
 		);
 	}
 

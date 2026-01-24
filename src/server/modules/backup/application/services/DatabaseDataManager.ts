@@ -1,7 +1,8 @@
 export type DatabaseDataDump = {
-	sqlExportBuffer: Buffer;
+	exportBuffer: Buffer;
 };
 
 export interface DatabaseDataManager {
 	dump(): Promise<DatabaseDataDump>;
+	restore(dump: DatabaseDataDump): Promise<void>
 };

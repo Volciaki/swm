@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres-storage:/var/lib/postgresql/data
 
-  pgdump:
+  pgutils:
     image: postgres:17
     profiles: ["tools"]
     environment:
