@@ -6,7 +6,7 @@ export type TwoFactorAuthenticationFormOnClick = {
     onClick: (twoFactorAuthenticationCode: string) => void;
 };
 
-const Input2FACodeForm: FC<TwoFactorAuthenticationFormOnClick> = ({ onClick }) => {
+export const Input2FACodeForm: FC<TwoFactorAuthenticationFormOnClick> = ({ onClick }) => {
 	const [twoFactorAuthenticationCode, setTwoFactorAuthenticationCode] = useState("");
 
 	return(
@@ -28,5 +28,3 @@ const Input2FACodeForm: FC<TwoFactorAuthenticationFormOnClick> = ({ onClick }) =
 		</div>
 	);
 }
-
-export default Input2FACodeForm

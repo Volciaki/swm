@@ -6,7 +6,7 @@ export type LoginFormOnClick = {
     onClick: (login_username: string, login_password: string) => void;
 };
 
-const InputLoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
+export const LoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 	const [login_username, setLogin_username] = useState("");
 	const [login_password, setLogin_password] = useState("");
 
@@ -33,5 +33,3 @@ const InputLoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 		</div>
 	);
 }
-
-export default InputLoginForm

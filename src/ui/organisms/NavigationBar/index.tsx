@@ -2,7 +2,7 @@ import clsx from "clsx";
 import styles from  "./index.module.scss";
 import { defaultRoutes, loggedRoutes } from "./routes";
 
-const NavigationBar = () => {
+export const NavigationBar = () => {
 	// To Khenzii: Da się zrobić żeby w <h1> kontent był zależny od specyficznego atomu/konfiguracji/zmiennej?
 	// TODO: "Przycisk" 'zaloguj się' też jest routem ale konfliktuje on obecnie z automatyczną listą
 	return (
@@ -21,5 +21,3 @@ const NavigationBar = () => {
 		</nav>
 	)
 };
-
-export default NavigationBar;
