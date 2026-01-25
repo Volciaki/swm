@@ -1,16 +1,31 @@
-import { FC, ReactNode } from "react";
-import clsx from "clsx"
+import { FC, ButtonHTMLAttributes, ReactNode } from "react";
+import { clsx } from "clsx"
+import styles from "./index.module.scss";
 
-import styles from  "./index.module.scss";
-import { navbarRoutes } from "@/utils/routes";
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+	children: ReactNode;
+	variant?: "primary" | "secondary";
+};
 
-export type ButtonProps = {
-  variant: "primary" | "secondary",
-  children: ReactNode,
-}
-
-export const Button: FC<ButtonProps> = ({ variant, children }) => {
+export const Button: FC<ButtonProps> = ({
+	children,
+	variant = "primary",
+	className,
+	style,
+	...props
+}) => {
 	return (
-		<a href={navbarRoutes[0].path} className={clsx([styles["button"], styles[variant]])}>{children}</a>
+		<button
+			className={clsx([
+				styles["button"],
+				{ [styles["primary"]]: variant === "primary" },
+				{ [styles["secondary"]]: variant === "secondary" },
+				{ [className as string]: className !== undefined },
+			])}
+			style={style}
+			{...props}
+		>
+			{children}
+		</button>
 	)
 };

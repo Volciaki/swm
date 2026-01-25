@@ -14,20 +14,9 @@
     padding: 20px;
     font-size: 2rem;
     color: constants.$text;
-
     background-color: constants.$background-darkened;
+
     &:focus {
         background-color: constants.$border;
     }
-}
-
-.button-style {
-    margin-top: 10px;
-    width: 100px;
-    height: 50px;
-    font-size: 1.25rem;
-    background-color: constants.$background-darkened;
-    color: constants.$text;
-    border: 3px solid constants.$border;
-    border-radius: 10px;
 }

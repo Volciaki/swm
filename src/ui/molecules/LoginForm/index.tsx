@@ -1,16 +1,17 @@
-import {FC} from "react";
-import styles from "./index.module.scss";
+import { FC } from "react";
 import { useState } from "react";
+import { Button } from "@/ui/atoms";
+import styles from "./index.module.scss";
 
 export type LoginFormOnClick = {
-    onClick: (login_username: string, login_password: string) => void;
+	onClick: (login_username: string, login_password: string) => void;
 };
 
 export const LoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 	const [login_username, setLogin_username] = useState("");
 	const [login_password, setLogin_password] = useState("");
 
-	return(
+	return (
 		<div className={styles["container"]}>
 			<input
 				type="text"
@@ -24,12 +25,13 @@ export const LoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 				className={styles["form-style"]}
 				onChange={(e) => setLogin_password(e.target.value)}
 			/>
-			<button
+
+			<Button
 				className={styles["button-style"]}
-				onClick={() => {onClick(login_username, login_password)}}
+				onClick={() => { onClick(login_username, login_password) }}
 			>
-                Zaloguj się
-			</button>
+				{"Zaloguj się"}
+			</Button>
 		</div>
 	);
 }

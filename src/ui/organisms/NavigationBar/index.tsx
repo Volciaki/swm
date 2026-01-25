@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { useMemo } from "react";
 import { routes as routeDefinitions } from "@/utils/routes";
 import styles from "./index.module.scss";
