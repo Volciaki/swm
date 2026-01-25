@@ -7,11 +7,12 @@ import { Services } from "../../get";
 export const getDefaultReportHelperPreset = (services: Services): ReportHelper => {
 	const uuidManager = services.utils.uuidManager.default;
 	const reportRepository = services.repositories.report.db;
+	const encryptionManager = services.utils.encryptionManager.default;
 
 	const fileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.REPORTS);
 	const fileReferenceRepository = services.repositories.fileReference.db;
 	const fileHelper = services.helpers.file.default.get(fileReferenceRepository, uuidManager);
-	const fileManager = services.utils.fileManager.default.get(fileStorage, fileReferenceRepository, fileHelper);
+	const fileManager = services.utils.fileManager.default.get(fileStorage, fileReferenceRepository, fileHelper, encryptionManager);
 
 	const uploadFileAction = new UploadFile(fileManager);
 	const deleteFileAction = new DeleteFile(fileHelper, fileManager);

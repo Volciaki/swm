@@ -4,6 +4,9 @@ export const developmentEnvironment: Environment = {
 	type: EnvironmentType.DEVELOPMENT,
 	nextPhase: process.env.NEXT_PHASE === "phase-production-build" ? NextPhase.BUILD : null,
 	port: Number(process.env.PORT ?? 3000),
+	encryption: {
+		key: process.env.ENCRYPTION_KEY ?? "development-encryption-key",
+	},
 	schedule: {
 		authentication: {
 			passphrase: process.env.SCHEDULE_AUTHENTICATION_PASSPHRASE ?? "development-schedule-authentication-passphrase",

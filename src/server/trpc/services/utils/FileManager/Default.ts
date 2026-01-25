@@ -3,6 +3,7 @@ import { FileHelper } from "@/server/utils/files/application/helpers/FileHelper"
 import { FileReferenceRepository } from "@/server/utils/files/domain/services/FileReferenceRepository";
 import { FileStorage } from "@/server/utils/files/domain/services/FileStorage";
 import { GetServicesContext } from "../../context";
+import { EncryptionManager } from "@/server/utils/files/domain/services/EncryptionManager";
 
 export const getDefaultFileManager = (ctx: GetServicesContext) => {
 	return {
@@ -10,6 +11,7 @@ export const getDefaultFileManager = (ctx: GetServicesContext) => {
 			storage: FileStorage,
 			repository: FileReferenceRepository,
 			helper: FileHelper,
-		) => new DefaultFileManager(storage, repository, helper)
+			encryptionManager: EncryptionManager,
+		) => new DefaultFileManager(storage, repository, helper, encryptionManager)
 	};
 }

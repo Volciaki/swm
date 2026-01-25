@@ -35,4 +35,15 @@ export class DBReportRepository implements ReportRepository {
 		const fileContext = await fileContextGetter(UUID.fromString(dbObject.fileId));
 		return ReportMapper.fromDBToEntity(dbObject, fileContext);
 	}
+
+	async getAll(fileContextGetter: FileContextByIDGetter) {
+		const dbObjects = await this.db.find();
+		const objects = dbObjects.map(async (dbObject) => {
+			const dbObjectId = UUID.fromString(dbObject.id);
+			return await this.getById(dbObjectId, fileContextGetter);
+		});
+		const objectsFetched = await Promise.all(objects);
+
+		return objectsFetched.filter((object) => object !== null);
+	}
 }

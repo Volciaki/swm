@@ -1,15 +1,17 @@
 import { Base64, Base64Mapper } from "@/server/utils/base64";
-import { UploadFileDTO } from "../../application/dto/UploadFileDTO";
 import { FileReference } from "../../domain/entities/FileReference";
-import { FileManager } from "../../domain/services/FileManager";
+import { FileManager, UploadFileData } from "../../domain/services/FileManager";
 import { FileMetadata } from "../../domain/entities/FileMetadata";
 
 export class DefaultFileManager extends FileManager {
-	async uploadFile(file: UploadFileDTO) {
+	async uploadFile(file: UploadFileData) {
 		const visibility = await this.storage.getVisibility(file.path);
 		const fileBuffer = Base64Mapper.toBuffer(Base64.fromString(file.contentBase64));
 
-		await this.storage.uploadFile(file.path, fileBuffer, file.mimeType);
+		let encryptedBuffer;
+		if (file.isEncrypted) encryptedBuffer = await this.encryptionManager.encrypt(fileBuffer);
+
+		await this.storage.uploadFile(file.path, encryptedBuffer ?? fileBuffer, file.mimeType);
 		return await this.helper.createByDTO(
 			file,
 			visibility,
@@ -17,6 +19,7 @@ export class DefaultFileManager extends FileManager {
 				this.storage.getStorageType(),
 				file.metadata.bucket,
 			),
+			file.predefinedId,
 		);
 	}
 
@@ -26,7 +29,12 @@ export class DefaultFileManager extends FileManager {
 	}
 
 	async fetchFile(file: FileReference) {
-		return await this.storage.fetchFile(file.path);
+		const fileBuffer = await this.storage.fetchFile(file.path);
+		
+		let decryptedBuffer;
+		if (file.isEncrypted) decryptedBuffer = await this.encryptionManager.decrypt(fileBuffer);
+
+		return decryptedBuffer ?? fileBuffer;
 	}
 
 	getStorageType() {

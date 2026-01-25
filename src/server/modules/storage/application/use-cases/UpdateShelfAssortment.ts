@@ -7,7 +7,7 @@ import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile"
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
-import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import { isFileEncryptedByBucket, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { RefreshShelfLegalWeight } from "@/server/modules/warehouse/application/use-cases/RefreshShelfLegalWeight";
 import { UpdateShelfAssortmentDTO } from "../dto/UpdateShelfAssortmentDTO";
 
@@ -27,7 +27,7 @@ export class UpdateShelfAssortment {
 		return {
 			fetchAssortmentImage: async (id) => await this.fetchFileAction.execute(
 				{ id: id.value, metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES } },
-				currentUser,
+				{ skipAuthentication: true },
 			),
 			deleteProductImageByPath: async (path) => await this.deleteFileByPathAction.execute(
 				{
@@ -43,6 +43,7 @@ export class UpdateShelfAssortment {
 						contentBase64,
 						mimeType: "image/png",
 						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES },
+						isEncrypted: isFileEncryptedByBucket(S3FileStorageBucket.ASSORTMENT_IMAGES),
 					},
 					undefined,
 					currentUser,
