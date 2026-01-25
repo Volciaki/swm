@@ -1,29 +1,22 @@
 @use "@/styles" as *;
 
-.container {
-    box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: $navigation-height-desktop;
-    z-index: 1;
-    background-color: $background-lightened;
-}
-
 .text {
     margin-left: 10%;
 }
 
 .links-container {
-    height: 100%;
-    padding: 0 $padding;
+    max-height: 100%;
+    box-sizing: border-box;
+    padding: $padding;
     display: flex;
     direction: row;
     align-items: center;
+    gap: $gap;
 }
 
 .link-item {
     display: block;
+    max-height: 100%;
 
     & > a {
         text-decoration: none;

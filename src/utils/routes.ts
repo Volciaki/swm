@@ -5,6 +5,6 @@ const notifications: Route = { text: "Powiadomienia", href: "/powiadomienia" };
 const managementCenter: Route = { text: "Centrum zarządzania", href: "/centrum-zarzadzania" };
 
 export const routes = {
-	unaunthenticated: [home],
+	unauthenticated: [home],
 	loggedIn: [home, managementCenter, notifications],
 } as const;

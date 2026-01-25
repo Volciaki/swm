@@ -1,20 +1,16 @@
 "use client";
 
 import { type FC } from "react";
-import { LoginForm } from "@/ui/molecules";
+import { CenteredOnPage, LoginForm } from "@/ui/molecules";
 import { Flex } from "@/ui/atoms";
 import styles from "@/styles/login.module.scss";
 
 const Login: FC = () => {
 	return (
-		<Flex // TODO: This flex container is actually not needed here. We should create some shared `<CenteredContainer />` or something.
-			className={styles["container"]}
-			direction={"column"}
-			align={"center"}
-		>
+		<CenteredOnPage>
 			<LoginForm onClick={() => alert("Clicked")} />
-		</Flex>
-	)
+		</CenteredOnPage>
+	);
 };
 
 export default Login;

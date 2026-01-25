@@ -21,11 +21,11 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 	<Providers>
 		<html lang="pl">
 			<body className={interFont.className}>
-				<nav><NavigationBar /></nav>
+				<nav className={styles["navigation"]}><NavigationBar /></nav>	
 
-				<main>
-					<div className={styles["navigation-padding"]} />
+				<div className={styles["navigation-margin"]} />
 
+				<main className={styles["content"]}>
 					{children}
 				</main>
 			</body>
