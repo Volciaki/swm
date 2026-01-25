@@ -1,2 +1,2 @@
-export * from "./2FAForm";
+export * from "./TwoFactorAuthenticationForm";
 export * from "./LoginForm";
