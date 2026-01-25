@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Providers } from "@/ui/providers";
-import { ABeeZee } from "next/font/google";
+import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
 	title: "Simple Warehouse Management",
 	description: "Simple Warehouse Management (SWM) is a service specializing in managing your storage easily.. simple.",
 };
 
-const aBeeZee = ABeeZee({
-	variable: "--font-default",
-	weight: "400"
-})
+const interFont = Inter({
+	weight: "variable",
+	subsets: ["latin"],
+	display: "swap",
+});
 
 const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 	<Providers>
-		<html lang="en">
-			<body className={`${aBeeZee.variable}`}>
+		<html lang="pl">
+			<body className={interFont.className}>
 				{children}
 			</body>
 		</html>
