@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import { useState } from "react";
 import { Button, Flex, Input, Paragraph } from "@/ui/atoms";
