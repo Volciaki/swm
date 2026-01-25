@@ -1,0 +1,15 @@
+@import "../../../styles/constants";
+
+.anchor {
+    color: $text;
+
+    &:visited {
+        color: $text;
+    }
+}
+
+.darken-on-hover {
+    &:hover {
+        color: $text-darkened;
+    }
+}
