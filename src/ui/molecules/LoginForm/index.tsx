@@ -23,8 +23,8 @@ export const LoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 				onChange={(e) => setPassword(e.target.value)}
 			/>
 
-			<Button onClick={() => { onClick(email, password) }} variant={"secondary"}>
-				<Paragraph>{"Zaloguj się"}</Paragraph>
+			<Button onClick={() => { onClick(email, password) }}>
+				<Paragraph>{"Potwierdź"}</Paragraph>
 			</Button>
 		</Flex>
 	);

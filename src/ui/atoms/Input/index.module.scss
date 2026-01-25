@@ -1,18 +1,24 @@
 @use "@/styles" as *;
 
-// TODO: style this.
+$input-border-size: calc($border-size / 1.5);
 
 .input {
-    // border-radius: 10px;
-    // border: solid 3px $text-darkened;
-    // color: $text-darkened;
-    // background-color: transparent;
-    // transition: border-color $transition;
-    // font-family: inherit;
-    
+    border: solid $input-border-size $border;
+    background-color: transparent;
+    color: $text;
+    border-radius: 5px;
+    transition: all $transition;
+
     &:focus {
-        // border-color: $primary;
-        // color: $text;
         outline: none;
+        border: solid $input-border-size $primary;
+    }
+
+    &.danger {
+        border: solid $input-border-size $danger;
+    }
+
+    &:disabled {
+        border: solid $input-border-size $text-darkened;
     }
 }
