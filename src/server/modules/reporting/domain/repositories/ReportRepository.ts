@@ -7,4 +7,5 @@ export interface ReportRepository {
     update(report: Report): Promise<void>;
     delete(report: Report): Promise<void>;
     getById(id: UUID, fileContextGetter: FileContextByIDGetter): Promise<Report | null>;
+	getAll(fileContextGetter: FileContextByIDGetter): Promise<Report[]>;
 };

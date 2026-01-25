@@ -7,6 +7,8 @@ import { DBFileReference } from "../utils/files/infrastructure/entities/DBFileRe
 import { DBNotification } from "../modules/monitoring/infrastructure/entities/DBNotification";
 import { DBTemperatureReading } from "../modules/warehouse/infrastructure/entities/DBTemperatureReading";
 import { DBReport } from "../modules/reporting/infrastructure/entities/DBReport";
+import { DBBackup } from "../modules/backup/infrastructure/entities/DBBackup";
+import { DBBackupSettings } from "../modules/backup/infrastructure/entities/DBBackupSettings";
 
 export const entities = [
 	DBUser,
@@ -18,4 +20,6 @@ export const entities = [
 	DBNotification,
 	DBTemperatureReading,
 	DBReport,
+	DBBackup,
+	DBBackupSettings,
 ];

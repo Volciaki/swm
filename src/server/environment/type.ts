@@ -11,6 +11,9 @@ export type Environment = {
     type: EnvironmentType,
 	nextPhase: NextPhase | null,
     port: number,
+	encryption: {
+		key: string;
+	},
 	schedule: {
 		authentication: { passphrase: string };
 	};

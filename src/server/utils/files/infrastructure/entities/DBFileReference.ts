@@ -23,4 +23,7 @@ export class DBFileReference {
 
 	@Column({ type: "json" })
 	metadata!: FileMetadataDTO;
+
+	@Column({ name: "is_encrypted" })
+	isEncrypted!: boolean;
 }

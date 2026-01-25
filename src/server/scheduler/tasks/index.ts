@@ -4,6 +4,7 @@ import { getExpirationMonitoringPresets } from "./ExpirationMonitoring";
 import { getUpcomingExpiryMonitoringPresets } from "./UpcomingExpiryMonitoringTask";
 import { getShelvesModifiedIllegallyMonitoringPresets } from "./ShelvesModifiedIllegallyMonitoringTask";
 import { getUpdateShelfTemperaturesPresets } from "./UpdateShelfTemperaturesTask";
+import { getRoutinaryBackupCheckPresets } from "./RoutinaryBackupCheckTask";
 
 const getPresets = (ctx: GetServicesContext) => {
 	return {
@@ -11,6 +12,7 @@ const getPresets = (ctx: GetServicesContext) => {
 		upcomingExpiryMonitoring: getUpcomingExpiryMonitoringPresets(ctx),
 		shelvesModifiedIllegallyMonitoringTask: getShelvesModifiedIllegallyMonitoringPresets(ctx),
 		updateShelfTemperaturesTask: getUpdateShelfTemperaturesPresets(ctx),
+		routinaryBackupCheckTask: getRoutinaryBackupCheckPresets(ctx),
 	};
 };
 
@@ -21,11 +23,13 @@ export const getSchedulerTasks = (ctx: GetServicesContext) => {
 	const upcomingExpiryMonitoring = presets.upcomingExpiryMonitoring.default;
 	const shelvesModifiedIllegallyMonitoringTask = presets.shelvesModifiedIllegallyMonitoringTask.default;
 	const updateShelfTemperaturesTask = presets.updateShelfTemperaturesTask.default;
+	const routinaryBackupCheckTask = presets.routinaryBackupCheckTask.default;
 	
 	return [
 		epxirationMonitoring,
 		upcomingExpiryMonitoring,
 		shelvesModifiedIllegallyMonitoringTask,
 		updateShelfTemperaturesTask,
+		routinaryBackupCheckTask,
 	];
 };

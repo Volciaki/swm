@@ -10,6 +10,7 @@ export class FileReference {
 		private readonly _path: string,
 		private readonly _visibility: Visibility,
 		private readonly _metadata: FileMetadata,
+		private readonly _isEncrypted: boolean,
 	) {}
 
 	get id() { return this._id };
@@ -18,6 +19,7 @@ export class FileReference {
 	get path() { return this._path };
 	get visibility() { return this._visibility };
 	get metadata() { return this._metadata };
+	get isEncrypted() { return this._isEncrypted };
 
 	static create(
 		id: UUID,
@@ -26,7 +28,16 @@ export class FileReference {
 		path: string,
 		visibility: Visibility,
 		metadata: FileMetadata,
+		isEncrypted: boolean,
 	) {
-		return new FileReference(id, sizeBytes, mimeType, path, visibility, metadata);
+		return new FileReference(
+			id,
+			sizeBytes,
+			mimeType,
+			path,
+			visibility,
+			metadata,
+			isEncrypted,
+		);
 	}
 }

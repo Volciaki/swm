@@ -21,6 +21,7 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 	const qrCodeGenerator = services.utils.qrCodeGenerator.default;
 	const fileReferenceRepository = services.repositories.fileReference.db;
 	const shelfThermometer = services.utils.shelfThermometer.random;
+	const encryptionManager = services.utils.encryptionManager.default;
 
 	const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager, shelfThermometer);
 	const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
@@ -30,9 +31,11 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 
 	const assortmentFileHelper = services.helpers.assortmentFile.default.get(getFileAction);
 	const qrCodesFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.QR_CODES);
-	const qrCodesFileManager = services.utils.fileManager.default.get(qrCodesFileStorage, fileReferenceRepository, fileHelper);
+	const qrCodesFileManager =
+		services.utils.fileManager.default.get(qrCodesFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
 	const assortmentImagesFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.ASSORTMENT_IMAGES);
-	const assortmentImagesFileManager = services.utils.fileManager.default.get(assortmentImagesFileStorage, fileReferenceRepository, fileHelper);
+	const assortmentImagesFileManager =
+		services.utils.fileManager.default.get(assortmentImagesFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
 
 	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const getAssortmentAction = new GetAssortment(assortmentHelper, assortmentFileHelper);

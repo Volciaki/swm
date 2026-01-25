@@ -14,7 +14,7 @@ import { FileReference } from "@/server/utils/files/domain/entities/FileReferenc
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
-import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import { isFileEncryptedByBucket, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
 import { ShelfDTO } from "../dto/shared/ShelfDTO";
 import { CellAlreadyTakenError } from "../errors/CellAlreadyTakenError";
@@ -63,6 +63,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 				contentBase64: base64,
 				mimeType: "image/png",
 				metadata: { bucket: location },
+				isEncrypted: isFileEncryptedByBucket(location),
 			},
 			undefined,
 			currentUser,
@@ -206,7 +207,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 						id: assortment.image?.id,
 						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
 					},
-					currentUser,
+					{ skipAuthentication: true },
 				)).base64
 				: null;
 			return { ...assortment, imageContentBase64 };
