@@ -7,6 +7,7 @@ import { getStorageAssortmentHelperServices } from "./StorageAssortment";
 import { getAssortmentFileHelperServices } from "./AssortmentFile";
 import { getReportHelperServices } from "./Report";
 import { getBackupHelperServices } from "./Backup";
+import { getBackupSettingsHelperServices } from "./BackupSettings";
 
 export const getHelpers = (ctx: GetServicesContext) => {
 	return {
@@ -17,6 +18,7 @@ export const getHelpers = (ctx: GetServicesContext) => {
 		assortmentFile: getAssortmentFileHelperServices(ctx),
 		report: getReportHelperServices(ctx),
 		backup: getBackupHelperServices(ctx),
+		backupSettings: getBackupSettingsHelperServices(ctx),
 	};
 };
 

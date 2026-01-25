@@ -9,6 +9,7 @@ import { getNotificationRepositories } from "./Notification";
 import { getTemperatureReadingRepositories } from "./TemperatureReading";
 import { getReportRepositories } from "./Report";
 import { getBackupRepositories } from "./Backup";
+import { getBackupSettingsRepositories } from "./BackupSettings";
 
 export const getRepositories = (ctx: GetServicesContext) => {
 	return {
@@ -21,5 +22,6 @@ export const getRepositories = (ctx: GetServicesContext) => {
 		temperatureReading: getTemperatureReadingRepositories(ctx),
 		report: getReportRepositories(ctx),
 		backup: getBackupRepositories(ctx),
+		backupSettings: getBackupSettingsRepositories(ctx),
 	};
 };

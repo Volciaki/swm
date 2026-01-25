@@ -26,6 +26,10 @@ const tasks: Task[] = [
 		name: "UpdateShelfTemperaturesTask",
 		triggerFrequency: everyMinute,
 	},
+	{
+		name: "RoutinaryBackupCheckTask",
+		triggerFrequency: everyMinute,
+	},
 ];
 
 const AUTHENTICATION_PASSPHRASE = process.env.SCHEDULE_AUTHENTICATION_PASSPHRASE || "development-schedule-authentication-passphrase";
