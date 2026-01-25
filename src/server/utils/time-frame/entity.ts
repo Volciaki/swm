@@ -20,6 +20,6 @@ export class TimeFrame {
 	}
 
 	static fromMilliseconds(value: number) {
-		return new TimeFrame(value * 1000);
+		return new TimeFrame(value / 1000);
 	}
 }
