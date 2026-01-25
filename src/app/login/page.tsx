@@ -17,7 +17,7 @@ const Home: FC = () => {
 
 	// Make the login button a new atom instead. Same for It's styles.
 
-    // Daj tutaj jakiś interaktywny background, np. paczki na skos w tle
+	// Daj tutaj jakiś interaktywny background, np. paczki na skos w tle
 
 	return (
 		<>

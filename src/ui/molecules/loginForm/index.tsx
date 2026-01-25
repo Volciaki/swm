@@ -8,7 +8,7 @@ export type LoginFormOnClick = {
 
 const InputLoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 	const [login_username, setLogin_username] = useState("");
-    const [login_password, setLogin_password] = useState("");
+	const [login_password, setLogin_password] = useState("");
 
 	return(
 		<div className={styles["container"]}>
@@ -18,7 +18,7 @@ const InputLoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 				className={styles["form-style"]}
 				onChange={(e) => setLogin_username(e.target.value)}
 			/>
-            <input
+			<input
 				type="password"
 				placeholder="Hasło"
 				className={styles["form-style"]}
