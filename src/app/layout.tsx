@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Inter } from "next/font/google";
+import { ABeeZee } from "next/font/google";
 import { Providers } from "@/ui/providers";
 import { NavigationBar } from "@/ui/organisms";
 import styles from "../styles/layout.module.scss";
@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 	description: "Simple Warehouse Management (SWM) is a service specializing in managing your storage easily.. simple.",
 };
 
-const interFont = Inter({
-	weight: "variable",
+const interFont = ABeeZee({
+	weight: "400",
 	subsets: ["latin"],
 	display: "swap",
 });

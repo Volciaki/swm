@@ -13,21 +13,30 @@ export const LoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 	return (
 		<Flex direction={"column"} align={"center"} style={{ gap: "2rem" }}>
 			<Input
+				style={{ width: "100%" }}
 				type="text"
 				placeholder="e-mail"
 				onChange={(e) => setEmail(e.target.value)}
+				fontSize={1.5}
 			/>
 
 			<Input
+				style={{ width: "100%" }}
 				type="password"
 				placeholder="Hasło"
 				onChange={(e) => setPassword(e.target.value)}
+				fontSize={1.5}
 			/>
 
 			<Separator />
 
 			<Button onClick={() => { onClick(email, password) }}>
-				<Paragraph>{"Potwierdź"}</Paragraph>
+				<Paragraph
+					style={{ marginInline: "20px" }}
+					fontSize={1.5}
+				>
+					{"Potwierdź"}
+				</Paragraph>
 			</Button>
 		</Flex>
 	);
