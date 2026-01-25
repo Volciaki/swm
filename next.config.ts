@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
 	outputFileTracingIncludes: {
 		"/api/**": ["src/server/assets/**"],
 	},
-	serverExternalPackages: ["pdfkit"],
+	serverExternalPackages: ["pdfkit", "@node-rs/crc32"],
 };
 
 export default nextConfig;

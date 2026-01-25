@@ -9,6 +9,7 @@ export const fileReferenceDTOSchema = z.object({
 	path: z.string(),
 	visibility: visibilityDTOSchema,
 	metadata: fileMetadataDTOSchema,
+	isEncrypted: z.boolean(),
 });
 
 export type FileReferenceDTO = z.infer<typeof fileReferenceDTOSchema>;

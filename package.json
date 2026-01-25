@@ -10,7 +10,8 @@
     "dev:app": "next dev",
     "dev:schedule": "tsx --env-file .env ./scripts/schedule/trigger-tasks.ts",
     "migrations:generate": "./scripts/migrations/generate.sh",
-    "migrations:create": "./scripts/migrations/create.sh"
+    "migrations:create": "./scripts/migrations/create.sh",
+    "database:dump": "docker compose run --rm pgutils pg_dump -h postgres -U development-user db"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",
@@ -20,9 +21,11 @@
     "bcryptjs": "^3.0.3",
     "chalk": "^5.6.2",
     "date-fns": "^4.1.0",
+    "execa": "^9.6.1",
     "get-stream": "^9.0.1",
     "jsonwebtoken": "^9.0.3",
     "lodash": "^4.17.23",
+    "mime-types": "^3.0.2",
     "minio": "^8.0.6",
     "next": "16.1.1",
     "nodemailer": "^7.0.12",
@@ -36,12 +39,15 @@
     "sharp": "^0.34.5",
     "typeorm": "^0.3.28",
     "uuid": "^13.0.0",
+    "yauzl-promise": "^4.0.0",
+    "yazl": "^3.3.1",
     "zod": "^4.2.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
     "@types/jsonwebtoken": "^9",
     "@types/lodash": "^4",
+    "@types/mime-types": "^3",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.4",
     "@types/pdfkit": "^0.17.4",
@@ -50,6 +56,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/uuid": "^11.0.0",
+    "@types/yauzl-promise": "^4",
+    "@types/yazl": "^3",
     "babel-plugin-react-compiler": "1.0.0",
     "concurrently": "^9.2.1",
     "eslint": "^9",
