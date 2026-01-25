@@ -19,7 +19,12 @@ const getSizeBytesByBase64String = (content: string): number => {
 export interface FileHelper {
 	getByIdStringOrThrow(id: string): Promise<FileReference>;
 	getByPathOrThrow(path: string, metadata: FileMetadata): Promise<FileReference>;
-	createByDTO(dto: UploadFileDTO, visibility: Visibility, metadata: FileMetadata): Promise<FileReference>;
+	createByDTO(
+		dto: UploadFileDTO,
+		visibility: Visibility,
+		metadata: FileMetadata,
+		predefinedId?: UUID,
+	): Promise<FileReference>;
 };
 
 export class DefaultFileHelper implements FileHelper {
@@ -45,11 +50,16 @@ export class DefaultFileHelper implements FileHelper {
 		return entity;
 	}
 
-	async createByDTO(dto: UploadFileDTO, visibility: Visibility, metadata: FileMetadata) {
+	async createByDTO(
+		dto: UploadFileDTO,
+		visibility: Visibility,
+		metadata: FileMetadata,
+		predefinedId?: UUID,
+	) {
 		const sizeBytes = getSizeBytesByBase64String(dto.contentBase64);
 		const fileReference = FileReferenceMapper.fromDTOToEntity({
 			...dto,
-			id: this.uuidManager.generate().value,
+			id: predefinedId?.value ?? this.uuidManager.generate().value,
 			sizeBytes: sizeBytes,
 			visibility: VisibilityMapper.toDTO(visibility),
 			metadata: FileMetadataMapper.toDTO(metadata),

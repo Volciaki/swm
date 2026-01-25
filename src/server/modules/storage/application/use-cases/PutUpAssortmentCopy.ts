@@ -49,7 +49,7 @@ export class PutUpAssortmentCopy {
 					id: image.id,
 					metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
 				},
-				currentUser
+				{ skipAuthentication: true },
 			)).base64
 			: null;
 		const sharedData = {

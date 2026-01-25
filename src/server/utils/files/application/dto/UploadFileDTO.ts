@@ -6,6 +6,7 @@ export const uploadFileDTOSchema = z.object({
 	mimeType: z.string(),
 	contentBase64: z.string(),
 	metadata: fileMetadataDTOSchema.omit({ storageType: true }),
+	isEncrypted: z.boolean(),
 });
 
 export type UploadFileDTO = z.infer<typeof uploadFileDTOSchema>;

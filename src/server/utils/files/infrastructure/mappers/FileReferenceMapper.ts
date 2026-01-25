@@ -14,11 +14,12 @@ export class FileReferenceMapper {
 			dto.path,
 			VisibilityMapper.fromDTO(dto.visibility),
 			FileMetadataMapper.fromDTO(dto.metadata),
+			dto.isEncrypted,
 		);
 	}
 
 	static fromEntityToDTO(entity: FileReference): FileReferenceDTO {
-		const { mimeType, path, sizeBytes  } = entity;
+		const { mimeType, path, sizeBytes, isEncrypted } = entity;
 		return {
 			visibility: VisibilityMapper.toDTO(entity.visibility),
 			metadata: FileMetadataMapper.toDTO(entity.metadata),
@@ -26,6 +27,7 @@ export class FileReferenceMapper {
 			mimeType,
 			path,
 			sizeBytes,
+			isEncrypted,
 		};
 	}
 
@@ -40,6 +42,7 @@ export class FileReferenceMapper {
 		dbObject.id = entity.id.value;
 		dbObject.isPublic = entity.visibility.isPublic;
 		dbObject.publicUrl = entity.visibility.publicUrl ?? null;
+		dbObject.isEncrypted = entity.isEncrypted;
 
 		return dbObject;
 	}
@@ -55,6 +58,7 @@ export class FileReferenceMapper {
 				isPublic: db.isPublic,
 			}),
 			FileMetadataMapper.fromDTO(db.metadata),
+			db.isEncrypted,
 		);
 	}
 }

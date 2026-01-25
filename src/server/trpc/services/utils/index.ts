@@ -13,6 +13,9 @@ import { getShelfThermometerServices } from "./ShelfThermometer";
 import { getCloseToExpirationAssortmentReportGeneratorServices } from "./CloseToExpirationAssortmentReportGenerator";
 import { getFullStorageShowcaseReportGeneratorServices } from "./FullStorageShowcaseReportGenerator";
 import { getTemperatureExceededDetailsReportGeneratorServices } from "./TemperatureExceededDetailsReportGenerator";
+import { getFileStorageDataManagerServices } from "./FileStorageDataManager";
+import { getDatabaseDataManagerServices } from "./DatabaseDataManager";
+import { getEncryptionManagerServices } from "./EncryptionManager";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -29,5 +32,8 @@ export const getUtils = (ctx: GetServicesContext) => {
 		closeToExpirationAssortmentReportGenerator: getCloseToExpirationAssortmentReportGeneratorServices(ctx),
 		fullStorageShowcaseReportGenerator: getFullStorageShowcaseReportGeneratorServices(ctx),
 		temperatureExceededDetailsReportGenerator: getTemperatureExceededDetailsReportGeneratorServices(ctx),
+		fileStorageDataManager: getFileStorageDataManagerServices(ctx),
+		databaseDataManager: getDatabaseDataManagerServices(ctx),
+		encryptionManager: getEncryptionManagerServices(ctx),
 	};
 };
