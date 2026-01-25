@@ -11,7 +11,7 @@ const ellipsisOverflowStylesheet: CSSProperties = {
 
 export type ParagraphProps = {
 	children: ReactNode;
-	variant?: "primary";
+	variant?: "primary" | "secondary";
 	fontSize?: number;
 	ellipsisOverflow?: boolean;
 } & CustomStyles;
@@ -25,9 +25,8 @@ export const Paragraph: FC<ParagraphProps> = ({
 	style,
 }) => (
 	<p
-		className={clsx({
+		className={clsx(styles[variant], {
 			[className as string]: className !== undefined,
-			[styles["primary"]]: variant === "primary",
 		})}
 		style={{
 			fontSize: `${fontSize}rem`,
