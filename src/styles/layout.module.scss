@@ -1,0 +1,5 @@
+@use "." as *;
+
+.navigation-padding {
+    margin-top: calc($navigation-height-desktop + $padding);
+}

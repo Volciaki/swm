@@ -18,7 +18,7 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 			/>
 
 			<Button onClick={() => onSubmit(value)}>
-				<Paragraph>{"Submit"}</Paragraph>
+				<Paragraph>{"Potwierdź"}</Paragraph>
 			</Button>
 		</Flex>
 	);

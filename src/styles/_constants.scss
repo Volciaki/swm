@@ -8,10 +8,8 @@ $text: #FFFFFF;
 $text-darkened: #A7A7A7;
 $danger: #FF3333;
 
-$navigation-height-desktop: 50px;
-$root-padding-width: 1.75rem;
-$root-padding-height: 1rem;
-$root-padding-width-mobile: 1rem;
-$root-padding-height-mobile: 1rem;
-
+$navigation-height-desktop: 75px;
 $padding: 10px;
+$border-size: 5px;
+$transition-duration: 0.2s;
+$transition: $transition-duration ease;

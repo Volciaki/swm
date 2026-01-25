@@ -1,8 +1,78 @@
 @use "@/styles" as *;
 
-// TODO: finish styling this...
+$shadow-size: 3px;
+
+@function get-shadow($color) {
+  @return
+    0 calc(#{$shadow-size} / 2) #{$shadow-size} $color,
+    0 calc(#{$shadow-size} / 2) #{$shadow-size} $color,
+    0 calc(#{$shadow-size} / 2) #{$shadow-size} $color;
+}
 
 .button {
     border: none;
     cursor: pointer;
+    border-radius: 5px;
+    padding: $padding calc($padding * 4);
+    transition: all $transition;
+}
+
+.primary {
+    background-color: transparent;
+    border: solid $border-size $border;
+
+    &:hover {
+        border-color: $primary;
+        box-shadow: get-shadow($primary);
+    }
+
+    &:active {
+        background-color: $primary;
+        filter: none;
+    }
+
+    &.danger {
+        border: solid $border-size $danger !important;
+
+        &:hover {
+            border-color: $danger;
+            box-shadow: get-shadow($danger);
+        }
+
+        &:active {
+            background-color: $danger;
+            filter: none;
+        }
+    }
+
+    &:disabled {
+        border: solid $border-size $text-darkened !important;
+        color: $text-darkened !important;
+
+        &:hover {
+            box-shadow: get-shadow($text-darkened);
+        }
+
+        &:active {
+            background-color: transparent !important;
+        }
+
+        > * {
+            color: $text-darkened !important;
+        }
+    }
+}
+
+.secondary {
+    background-color: $primary;
+    border: solid $border-size $secondary;
+
+    &:hover {
+        box-shadow: get-shadow($primary);
+    }
+
+    &:active {
+        border: solid $border-size $primary;
+        background-color: $secondary;
+    }
 }

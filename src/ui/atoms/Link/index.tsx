@@ -1,10 +1,10 @@
-import Link from "next/link";
+import NextLink from "next/link";
 import { type ReactNode, type FC } from "react";
 import { type CustomStyles } from "@/ui/types";
 import clsx from "clsx";
 import styles from "./index.module.scss";
 
-export type AnchorProps = {
+export type LinkProps = {
 	href: string;
 	newTab?: boolean;
 	prefetch?: boolean;
@@ -13,8 +13,8 @@ export type AnchorProps = {
 	draggable?: boolean;
 } & CustomStyles;
 
-export const Anchor: FC<AnchorProps> = ({ newTab, children, className, darkenOnHover, style, ...props }) => (
-	<Link
+export const Link: FC<LinkProps> = ({ newTab, children, className, darkenOnHover, style, ...props }) => (
+	<NextLink
 		target={newTab ? "_blank" : undefined}
 		rel={newTab ? "noreferrer noopener" : undefined}
 		className={clsx(
@@ -26,5 +26,5 @@ export const Anchor: FC<AnchorProps> = ({ newTab, children, className, darkenOnH
 		{...props}
 	>
 		{children}
-	</Link>
+	</NextLink>
 );

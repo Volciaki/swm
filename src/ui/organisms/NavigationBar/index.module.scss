@@ -1,63 +1,31 @@
 @use "@/styles" as *;
 
-.navbar {
+.container {
+    box-sizing: border-box;
     position: fixed;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100vw;
-    height: 3.2rem;
+    top: 0;
+    left: 0;
+    height: $navigation-height-desktop;
     z-index: 1;
+    background-color: $background-lightened;
+}
 
-    .title {
-        height:100%;
-        width:fit-content;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 6%;
-        font-size: large;
-        padding: 0 2rem;
-    }
+.text {
+    margin-left: 10%;
+}
 
-    li {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        list-style: none;
+.links-container {
+    height: 100%;
+    padding: 0 $padding;
+    display: flex;
+    direction: row;
+    align-items: center;
+}
 
-        a {
-            padding: 0 2rem;
-            text-decoration: none;
+.link-item {
+    display: block;
 
-            &:hover {
-                transform: translate(0px, 0px);
-                box-shadow: 0 0 #000;
-            }
-        }
-    }
-
-    .topbarButton {
-        display: flex;
-        justify-content: center; /* Nie wiem dlaczego ale bez tego to nie działa poprawnie */
-        align-items: center;
-        width: 7rem;
-        height: 2.7rem;
-        color: #ffffff;
-        margin-right: 0.5rem;
+    & > a {
         text-decoration: none;
-        border-radius: 4px;
-        box-shadow: 4px 4px #000;
-        transform: translate(-3px, -3px);
-    }
-
-    .defaultButton {
-        border: solid 2px #0F2854;
-    }
-
-    .loggedButton {
-        background-color: #1F4B7A;
-        border: solid 2px #0F2854;
     }
 }

@@ -5,11 +5,13 @@ import styles from "./index.module.scss";
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	children: ReactNode;
 	variant?: "primary" | "secondary";
+	danger?: boolean;
 };
 
 export const Button: FC<ButtonProps> = ({
 	children,
 	variant = "primary",
+	danger = false,
 	className,
 	style,
 	...props
@@ -18,8 +20,8 @@ export const Button: FC<ButtonProps> = ({
 		<button
 			className={clsx([
 				styles["button"],
-				{ [styles["primary"]]: variant === "primary" },
-				{ [styles["secondary"]]: variant === "secondary" },
+				styles[variant],
+				{ [styles["danger"]]: danger },
 				{ [className as string]: className !== undefined },
 			])}
 			style={style}

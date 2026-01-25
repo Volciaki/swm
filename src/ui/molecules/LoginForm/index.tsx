@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Button, Flex, Input } from "@/ui/atoms";
+import { Button, Flex, Input, Paragraph } from "@/ui/atoms";
 
 export type LoginFormOnClick = {
 	onClick: (email: string, password: string) => void;
@@ -23,8 +23,8 @@ export const LoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 				onChange={(e) => setPassword(e.target.value)}
 			/>
 
-			<Button onClick={() => { onClick(email, password) }}>
-				{"Zaloguj się"}
+			<Button onClick={() => { onClick(email, password) }} variant={"secondary"}>
+				<Paragraph>{"Zaloguj się"}</Paragraph>
 			</Button>
 		</Flex>
 	);

@@ -1,6 +1,6 @@
-import { clsx } from "clsx";
 import { useMemo } from "react";
 import { routes as routeDefinitions } from "@/utils/routes";
+import { Button, Flex, Link, Paragraph } from "@/ui/atoms";
 import styles from "./index.module.scss";
 
 export const NavigationBar = () => {
@@ -11,25 +11,20 @@ export const NavigationBar = () => {
 	);
 
 	return (
-		<nav className={styles["navbar"]}>
-			<div className={styles["title"]}>
-				<h1>{"SWM"}</h1>
-			</div>
+		<Flex className={styles["container"]} align={"center"} justify={"space-between"} fullWidth>
+			<Paragraph className={styles["text"]} fontSize={3}>{"SWM"}</Paragraph>
 
-			<li>
+			<ul className={styles["links-container"]}>
 				{routes.map((route, index) => (
-					<a
-						href={route.href}
-						className={clsx(
-							styles["topbarButton"],
-							styles["defaultButton"],
-						)}
-						key={`route-${index}`}
-					>
-						{route.text}
-					</a>
+					<li className={styles["link-item"]} key={`route-${index}`}>
+						<Link href={route.href}>
+							<Button>
+								<Paragraph>{route.text}</Paragraph>
+							</Button>
+						</Link>
+					</li>
 				))}
-			</li>
-		</nav>
+			</ul>
+		</Flex>
 	);
 };
