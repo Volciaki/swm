@@ -18,7 +18,8 @@ export class DBBackupSettingsRepository implements BackupSettingsRepository {
 	}
 
 	async get() {
-		const dbObject = await this.db.findOne({ order: { id: "ASC" } });
+		const dbObjects = await this.db.find();
+		const dbObject = dbObjects[0];
 
 		if (!dbObject) return null;
 
