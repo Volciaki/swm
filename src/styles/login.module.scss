@@ -1,11 +1,4 @@
-@use "./constants.module.scss" as constants;
-
-body {
-    box-sizing: border-box;
-    margin: 0;
-    font-family: var(--font-default);
-    background-color: constants.$background;
-}
+@use "." as *;
 
 .container {
     position: absolute;

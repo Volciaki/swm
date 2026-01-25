@@ -1,4 +1,4 @@
-@use "@/styles/constants.module.scss" as constants;
+@use "@/styles" as *;
 
 .container {
     display: flex;
@@ -13,19 +13,19 @@
     border-radius: 4px;
     padding: 10px 20px;
     font-size: 1.2rem;
-    color: constants.$dark-text;
+    // color: constants.$dark-text;
     background-color: transparent;
-    border: constants.$border 2px solid;
+    // border: constants.$border 2px solid;
     margin-bottom: 1.2rem;
     transition: 0.2s;
 
     &:active {
-        border: constants.$border-active 2px solid;
-        color: constants.$text;
+        // border: constants.$border-active 2px solid;
+        // color: constants.$text;
     }
 
     &:hover {
-        border: constants.$border-active 2px solid;
+        // border: constants.$border-active 2px solid;
     }
 }
 
@@ -34,13 +34,13 @@
     width: 10rem;
     height: 50px;
     font-size: 1.25rem;
-    color: constants.$text;
+    // color: constants.$text;
     background-color: transparent;
-    border: 3px solid constants.$border;
+    // border: 3px solid constants.$border;
     border-radius: 4px;
     transition: 0.2s;
 
     &:hover {
-        color: constants.$dark-text;
+        // color: constants.$dark-text;
     }
 }

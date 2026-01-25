@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Providers } from "@/ui/providers";
 import { Inter } from "next/font/google";
+import { Providers } from "@/ui/providers";
+import { NavigationBar } from "@/ui/organisms";
+import "../styles/global.scss";
 
 export const metadata: Metadata = {
 	title: "Simple Warehouse Management",
@@ -18,6 +20,8 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 	<Providers>
 		<html lang="pl">
 			<body className={interFont.className}>
+				<NavigationBar />
+
 				{children}
 			</body>
 		</html>
