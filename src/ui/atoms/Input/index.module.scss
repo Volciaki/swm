@@ -1,0 +1,18 @@
+@use "@/styles" as *;
+
+// TODO: style this.
+
+.input {
+    // border-radius: 10px;
+    // border: solid 3px $text-darkened;
+    // color: $text-darkened;
+    // background-color: transparent;
+    // transition: border-color $transition;
+    // font-family: inherit;
+    
+    &:focus {
+        // border-color: $primary;
+        // color: $text;
+        outline: none;
+    }
+}

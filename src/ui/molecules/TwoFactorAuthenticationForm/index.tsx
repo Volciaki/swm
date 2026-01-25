@@ -1,7 +1,6 @@
-import {FC} from "react";
-import styles from "./index.module.scss";
+import { FC } from "react";
 import { useState } from "react";
-import { Button, Flex, Paragraph } from "@/ui/atoms";
+import { Button, Flex, Input, Paragraph } from "@/ui/atoms";
 
 export type TwoFactorAuthenticationFormProps = {
     onSubmit: (value: string) => void;
@@ -12,11 +11,9 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 
 	return(
 		<Flex direction={"column"} align={"center"}>
-			{/* TODO: replace with <Input /> component */}
-			<input
+			<Input
 				type="text"
 				placeholder="000000"
-				className={styles["form-style"]}
 				onChange={(e) => setValue(e.target.value)}
 			/>
 

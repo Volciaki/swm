@@ -1,37 +1,31 @@
-import { FC } from "react";
-import { useState } from "react";
-import { Button } from "@/ui/atoms";
-import styles from "./index.module.scss";
+import { FC, useState } from "react";
+import { Button, Flex, Input } from "@/ui/atoms";
 
 export type LoginFormOnClick = {
-	onClick: (login_username: string, login_password: string) => void;
+	onClick: (email: string, password: string) => void;
 };
 
 export const LoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
-	const [login_username, setLogin_username] = useState("");
-	const [login_password, setLogin_password] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 
 	return (
-		<div className={styles["container"]}>
-			<input
+		<Flex direction={"column"} align={"center"} style={{ gap: "2rem" }}>
+			<Input
 				type="text"
-				placeholder="Login albo e-mail"
-				className={styles["form-style"]}
-				onChange={(e) => setLogin_username(e.target.value)}
-			/>
-			<input
-				type="password"
-				placeholder="Hasło"
-				className={styles["form-style"]}
-				onChange={(e) => setLogin_password(e.target.value)}
+				placeholder="e-mail"
+				onChange={(e) => setEmail(e.target.value)}
 			/>
 
-			<Button
-				className={styles["button-style"]}
-				onClick={() => { onClick(login_username, login_password) }}
-			>
+			<Input
+				type="password"
+				placeholder="Hasło"
+				onChange={(e) => setPassword(e.target.value)}
+			/>
+
+			<Button onClick={() => { onClick(email, password) }}>
 				{"Zaloguj się"}
 			</Button>
-		</div>
+		</Flex>
 	);
 }
