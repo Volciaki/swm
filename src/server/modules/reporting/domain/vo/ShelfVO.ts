@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { assortmentVOSchema } from "./AssortmentVO";
 import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
+import { assortmentVOSchema } from "./AssortmentVO";
 
 export const shelfVO = z.object({
 	id: z.string(),

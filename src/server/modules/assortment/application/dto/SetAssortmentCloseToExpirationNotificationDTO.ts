@@ -6,4 +6,6 @@ export const setAssortmentCloseToExpirationNotificationDTOSchema = z.object({
 	notification: notificationVOSchema.nullable(),
 });
 
-export type SetAssortmentCloseToExpirationNotificationDTO = z.infer<typeof setAssortmentCloseToExpirationNotificationDTOSchema>;
+export type SetAssortmentCloseToExpirationNotificationDTO = z.infer<
+	typeof setAssortmentCloseToExpirationNotificationDTOSchema
+>;

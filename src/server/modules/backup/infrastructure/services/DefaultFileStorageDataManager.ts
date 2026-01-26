@@ -1,15 +1,16 @@
-/* eslint-disable indent */
-
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { isFileEncryptedByBucket, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
-import { GetAllReports } from "@/server/modules/reporting/application/use-cases/GetAllReports";
-import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
-import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
-import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
-import { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFile";
-import { Base64, UUID } from "@/server/utils";
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import {
-    AccessedFileDataDump,
+	isFileEncryptedByBucket,
+	S3FileStorageBucket,
+} from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import type { GetAllReports } from "@/server/modules/reporting/application/use-cases/GetAllReports";
+import type { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import type { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
+import type { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import type { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFile";
+import { Base64, UUID } from "@/server/utils";
+import type {
+	AccessedFileDataDump,
 	AccessedFileStorageDataDump,
 	FileStorageDataDumpContext,
 	FileStorageDataManager,
@@ -28,14 +29,14 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 		private readonly uploadReportFile: UploadFile,
 		private readonly deleteAssortmentImageFile: DeleteFile,
 		private readonly deleteAssortmentQRCodeFile: DeleteFile,
-		private readonly deleteReportFile: DeleteFile,
-	) { }
+		private readonly deleteReportFile: DeleteFile
+	) {}
 
 	private async getFilesDumpData<T>(
 		entities: T[],
 		getFileIdByEntity: (entity: T) => string | null,
 		bucket: S3FileStorageBucket,
-		fileFetcher: FetchFile,
+		fileFetcher: FetchFile
 	) {
 		const entitiesData = await Promise.all(
 			entities.map(async (entity) => {
@@ -43,19 +44,19 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 
 				if (fileId === null) return null;
 
-				const file = await this.getFile.execute({ id: fileId })
+				const file = await this.getFile.execute({ id: fileId });
 				const data = await fileFetcher.execute(
 					{
 						id: fileId,
 						metadata: { bucket },
 					},
-					{ skipAuthentication: true },
+					{ skipAuthentication: true }
 				);
 				return {
 					...file,
 					base64: Base64.fromString(data.base64),
 				};
-			}),
+			})
 		);
 		return entitiesData.filter((data) => data !== null);
 	}
@@ -63,24 +64,21 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 	private async deleteFiles<T>(
 		entities: T[],
 		getFileIdByEntity: (entity: T) => string | null,
-		deleteExecutor: DeleteFile,
+		deleteExecutor: DeleteFile
 	) {
 		for (const entity of entities) {
 			const fileId = getFileIdByEntity(entity);
 
 			if (fileId === null) continue;
 
-			await deleteExecutor.execute(
-				{ id: fileId },
-				{ skipAuthentication: true },
-			);
+			await deleteExecutor.execute({ id: fileId }, { skipAuthentication: true });
 		}
 	}
 
 	private async uploadFiles<T extends AccessedFileDataDump>(
 		entities: T[],
 		uploadExecutor: UploadFile,
-		context: FileStorageDataDumpContext,
+		context: FileStorageDataDumpContext
 	) {
 		for (const entity of entities) {
 			const { metadata, mimeType, path } = entity;
@@ -88,7 +86,7 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 			const id = context.bucketAndPathToId[`${entity.metadata.bucket}/${path}`];
 
 			await uploadExecutor.execute(
-				{ 
+				{
 					contentBase64: entity.base64.value,
 					isEncrypted: isFileEncryptedByBucket(entity.metadata.bucket as S3FileStorageBucket),
 					metadata,
@@ -98,7 +96,7 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 				{
 					skipAuthentication: true,
 					predefinedId: UUID.fromString(id),
-				},
+				}
 			);
 		}
 	}
@@ -111,26 +109,32 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 			assortments,
 			(entity) => entity.image?.id ?? null,
 			S3FileStorageBucket.ASSORTMENT_IMAGES,
-			this.fetchAssortmentImageFile,
+			this.fetchAssortmentImageFile
 		);
 		const assortmentQRCodeData = await this.getFilesDumpData<(typeof assortments)[number]>(
 			assortments,
 			(entity) => entity.qrCode.id,
 			S3FileStorageBucket.QR_CODES,
-			this.fetchAssortmentQRCodeFile,
+			this.fetchAssortmentQRCodeFile
 		);
 		const reportsFileData = await this.getFilesDumpData<(typeof reports)[number]>(
 			reports,
 			(entity) => entity.file.id,
 			S3FileStorageBucket.REPORTS,
-			this.fetchReportFile,
+			this.fetchReportFile
 		);
 
 		const bucketAndPathToId: Record<string, string> = {};
 
-		for (const data of assortmentImageData) { bucketAndPathToId[`${data.metadata.bucket}/${data.path}`] = data.id }
-		for (const data of assortmentQRCodeData) { bucketAndPathToId[`${data.metadata.bucket}/${data.path}`] = data.id }
-		for (const data of reportsFileData) { bucketAndPathToId[`${data.metadata.bucket}/${data.path}`] = data.id }
+		for (const data of assortmentImageData) {
+			bucketAndPathToId[`${data.metadata.bucket}/${data.path}`] = data.id;
+		}
+		for (const data of assortmentQRCodeData) {
+			bucketAndPathToId[`${data.metadata.bucket}/${data.path}`] = data.id;
+		}
+		for (const data of reportsFileData) {
+			bucketAndPathToId[`${data.metadata.bucket}/${data.path}`] = data.id;
+		}
 
 		return {
 			reports: reportsFileData,
@@ -146,21 +150,9 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 		const assortments = await this.getAllAssortment.execute();
 		const reports = await this.getAllReports.execute();
 
-		await this.deleteFiles(
-			assortments,
-			(entity) => entity.image?.id ?? null,
-			this.deleteAssortmentImageFile,
-		);
-		await this.deleteFiles(
-			assortments,
-			(entity) => entity.qrCode.id,
-			this.deleteAssortmentQRCodeFile,
-		);
-		await this.deleteFiles(
-			reports,
-			(entity) => entity.file.id,
-			this.deleteReportFile,
-		);
+		await this.deleteFiles(assortments, (entity) => entity.image?.id ?? null, this.deleteAssortmentImageFile);
+		await this.deleteFiles(assortments, (entity) => entity.qrCode.id, this.deleteAssortmentQRCodeFile);
+		await this.deleteFiles(reports, (entity) => entity.file.id, this.deleteReportFile);
 
 		await this.uploadFiles(dump.assortments.images, this.uploadAssortmentImageFile, dump.context);
 		await this.uploadFiles(dump.assortments.qrCodes, this.uploadAssortmentQRCodeFile, dump.context);

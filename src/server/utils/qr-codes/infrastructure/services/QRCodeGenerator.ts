@@ -1,8 +1,8 @@
-import { loadAssetByName } from "@/server/utils/assets";
-import { QRCode } from "../../domain/entities/QRCode";
-import { GenerateQRCodeOptions, QRCodeGenerator } from "../../domain/services/QRCodeGenerator";
 import qrcode from "qrcode";
 import sharp from "sharp";
+import { loadAssetByName } from "@/server/utils/assets";
+import type { QRCode } from "../../domain/entities/QRCode";
+import type { GenerateQRCodeOptions, QRCodeGenerator } from "../../domain/services/QRCodeGenerator";
 
 // Around 25-30% of the QR code can be damaged if using high correction level.
 // (This includes the white background margin around our logo asset).
@@ -30,25 +30,24 @@ export class DefaultQRCodeGenerator implements QRCodeGenerator {
 		if (options.addLogo) {
 			const backgroundSize = Math.floor(LOGO_SIZE_RATIO * code.size.value);
 			const logoSize = Math.floor(backgroundSize - 0.03 * code.size.value);
-	
-			const background = await sharp(
-				{
-					create: {
-						width: backgroundSize,
-						height: backgroundSize,
-						channels: 4,
-						background: { r: 255, g: 255, b: 255, alpha: 1 },
-					},
-				})
+
+			const background = await sharp({
+				create: {
+					width: backgroundSize,
+					height: backgroundSize,
+					channels: 4,
+					background: { r: 255, g: 255, b: 255, alpha: 1 },
+				},
+			})
 				.png()
-				.toBuffer()
+				.toBuffer();
 
 			const logoBuffer = loadAssetByName("qr-logo.png");
 			const logoEditedBuffer = await sharp(logoBuffer)
 				.resize(logoSize, logoSize, { fit: "contain", kernel: sharp.kernel.nearest })
 				.png()
-				.toBuffer()
-			
+				.toBuffer();
+
 			const backgroundOffset = getOffsetBySize(code.size.value, backgroundSize);
 			const logoOffset = getOffsetBySize(code.size.value, logoSize);
 			buffer = await sharp(buffer)

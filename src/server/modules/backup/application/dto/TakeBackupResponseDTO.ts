@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { z } from "zod";
 import { backupDTOSchema } from "./shared/BackupDTO";
 
 export const takeBackupResponseDTOSchema = backupDTOSchema;

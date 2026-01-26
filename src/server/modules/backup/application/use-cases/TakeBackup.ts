@@ -1,6 +1,7 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
-import { TakeBackupResponseDTO } from "../dto/TakeBackupResponseDTO";
-import { BackupHelper } from "../helpers/BackupHelper";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { TakeBackupResponseDTO } from "../dto/TakeBackupResponseDTO";
+import type { BackupHelper } from "../helpers/BackupHelper";
 import { BackupMapper } from "../../infrastructure/mappers/BackupMapper";
 
 export type TakeBackupOptions = {

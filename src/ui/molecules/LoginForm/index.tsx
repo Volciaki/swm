@@ -1,6 +1,7 @@
 "use client";
 
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { Button, Flex, Input, Paragraph } from "@/ui/atoms";
 import { Separator } from "@/ui/atoms/Separator";
 import { PageHeader } from "../PageHeader";
@@ -36,16 +37,16 @@ export const LoginForm: FC<LoginFormOnClick> = ({ onClick }) => {
 
 				<Separator />
 
-				<Button onClick={() => { onClick(email, password) }}>
-					<Paragraph
-						style={{ marginInline: "20px" }}
-						fontSize={1.5}
-					>
+				<Button
+					onClick={() => {
+						onClick(email, password);
+					}}
+				>
+					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
 						{"Potwierdź"}
 					</Paragraph>
 				</Button>
-
 			</Flex>
 		</Flex>
 	);
-}
+};

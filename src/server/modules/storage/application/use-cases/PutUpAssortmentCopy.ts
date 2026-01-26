@@ -1,14 +1,15 @@
-import { UserDTO, UnauthorizedError } from "@/server/utils";
-import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
-import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
-import { PutUpAssortmentCopyDTO } from "../dto/PutUpAssortmentCopyDTO";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
-import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
-import { ShelfDTO } from "../dto/shared/ShelfDTO";
-import { CellDTO } from "../dto/shared/CellDTO";
-import { AssortmentNoSpaceError } from "../errors/AssortmentNoSpaceError";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
+import type { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import type { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
+import type { PutUpAssortmentCopyDTO } from "../dto/PutUpAssortmentCopyDTO";
+import type { ShelfDTO } from "../dto/shared/ShelfDTO";
+import type { CellDTO } from "../dto/shared/CellDTO";
+import { AssortmentNoSpaceError } from "../errors/AssortmentNoSpaceError";
 
 const findEmptyCells = (shelf: ShelfDTO): CellDTO[] => {
 	const emptyCells: CellDTO[] = [];
@@ -34,22 +35,25 @@ export class PutUpAssortmentCopy {
 		private readonly getAssortmentAction: GetAssortment,
 		private readonly getAllShelvesAction: GetAllShelves,
 		private readonly getAllAssortmentAction: GetAllAssortment,
-		private readonly fetchFileAssortmentImages: FetchFile,
-	) { }
+		private readonly fetchFileAssortmentImages: FetchFile
+	) {}
 
 	async execute(dto: PutUpAssortmentCopyDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
 		const assortment = await this.getAssortmentAction.execute({ id: dto.id });
 		const { weightKg, name, size, comment, isHazardous, temperatureRange, expiresAfterSeconds, image } = assortment;
+		// prettier-ignore
 		const imageContentBase64 = image?.id
-			? (await this.fetchFileAssortmentImages.execute(
-				{
-					id: image.id,
-					metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
-				},
-				{ skipAuthentication: true },
-			)).base64
+			? (
+				await this.fetchFileAssortmentImages.execute(
+					{
+						id: image.id,
+						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES },
+					},
+					{ skipAuthentication: true }
+				)
+			).base64
 			: null;
 		const sharedData = {
 			weightKg,
@@ -79,7 +83,7 @@ export class PutUpAssortmentCopy {
 						cellId: cell.id,
 						assortment: { ...sharedData },
 					},
-					currentUser,
+					currentUser
 				);
 			} catch (err) {
 				const error = err as Error;

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { z } from "zod";
 import { fullShelfIdentificationDTOSchema } from "./shared/FullShelfIdentificationDTO";
 
 export const getShelfDTOSchema = fullShelfIdentificationDTOSchema;

@@ -1,6 +1,7 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
-import { ShelfHelper } from "../helpers/ShelfHelper";
-import { ValidateShelfDTO } from "../dto/ValidateShelfDTO";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { ShelfHelper } from "../helpers/ShelfHelper";
+import type { ValidateShelfDTO } from "../dto/ValidateShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
 
 export class ValidateShelf {

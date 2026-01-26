@@ -1,4 +1,4 @@
-import { StorageAssortmentHelper } from "@/server/modules/storage/application/helpers/StorageAssortmentHelper";
+import type { StorageAssortmentHelper } from "@/server/modules/storage/application/helpers/StorageAssortmentHelper";
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
@@ -11,8 +11,8 @@ import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/Ge
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
-import { Services } from "../../get";
 import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
+import type { Services } from "../../get";
 
 export const getDefaultStorageAssortmentHelperPreset = (services: Services): StorageAssortmentHelper => {
 	const assortmentRepository = services.repositories.assortment.db;
@@ -31,11 +31,19 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 
 	const assortmentFileHelper = services.helpers.assortmentFile.default.get(getFileAction);
 	const qrCodesFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.QR_CODES);
-	const qrCodesFileManager =
-		services.utils.fileManager.default.get(qrCodesFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
+	const qrCodesFileManager = services.utils.fileManager.default.get(
+		qrCodesFileStorage,
+		fileReferenceRepository,
+		fileHelper,
+		encryptionManager
+	);
 	const assortmentImagesFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.ASSORTMENT_IMAGES);
-	const assortmentImagesFileManager =
-		services.utils.fileManager.default.get(assortmentImagesFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
+	const assortmentImagesFileManager = services.utils.fileManager.default.get(
+		assortmentImagesFileStorage,
+		fileReferenceRepository,
+		fileHelper,
+		encryptionManager
+	);
 
 	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 	const getAssortmentAction = new GetAssortment(assortmentHelper, assortmentFileHelper);
@@ -64,6 +72,6 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 		uploadQRCodeFileAction,
 		deleteAssortmentImageFileAction,
 		deleteFileQRCode,
-		fetchAssortmentImageFileAction,
+		fetchAssortmentImageFileAction
 	);
-}
+};

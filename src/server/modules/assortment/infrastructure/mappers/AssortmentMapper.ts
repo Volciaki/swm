@@ -1,9 +1,9 @@
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
+import type { FileReference } from "@/server/utils/files/domain/entities/FileReference";
 import { DimensionsMapper, TemperatureRangeMapper, TimeFrame, UUID, Weight } from "@/server/utils";
 import { Assortment } from "../../domain/entities/Assortment";
 import { DBAssortment } from "../entities/DBAssortment";
-import { AssortmentDTO } from "../../application/dto/shared/AssortmentDTO";
+import type { AssortmentDTO } from "../../application/dto/shared/AssortmentDTO";
 
 export class AssortmentMapper {
 	static fromAssortmentToDBAssortment(assortment: Assortment): DBAssortment {
@@ -26,18 +26,20 @@ export class AssortmentMapper {
 		dbAssortment.imageFileReferenceId = assortment.image?.id.value ?? null;
 		dbAssortment.qrCodeFileReferenceId = assortment.qrCode.id.value;
 		dbAssortment.isCloseToExpiration = assortment.isCloseToExpiration;
-		dbAssortment.isCloseToExpirationNotificationId = assortment.isCloseToExpirationNotification === null
-			? null
-			: assortment.isCloseToExpirationNotification.id;
+		dbAssortment.isCloseToExpirationNotificationId =
+			assortment.isCloseToExpirationNotification === null ? null : assortment.isCloseToExpirationNotification.id;
 		dbAssortment.hasExpired = assortment.hasExpired;
-		dbAssortment.hasExpiredNotificationId = assortment.hasExpiredNotification === null
-			? null
-			: assortment.hasExpiredNotification.id;
+		dbAssortment.hasExpiredNotificationId =
+			assortment.hasExpiredNotification === null ? null : assortment.hasExpiredNotification.id;
 
 		return dbAssortment;
 	}
 
-	static fromDBAssortmentToAssortment(dbAssortment: DBAssortment, qrCode: FileReference, image: FileReference | null): Assortment {
+	static fromDBAssortmentToAssortment(
+		dbAssortment: DBAssortment,
+		qrCode: FileReference,
+		image: FileReference | null
+	): Assortment {
 		return Assortment.create(
 			UUID.fromString(dbAssortment.id),
 			UUID.fromString(dbAssortment.cellId),
@@ -62,7 +64,9 @@ export class AssortmentMapper {
 			dbAssortment.hasExpired,
 			dbAssortment.hasExpiredNotificationId === null ? null : { id: dbAssortment.hasExpiredNotificationId },
 			dbAssortment.isCloseToExpiration,
-			dbAssortment.isCloseToExpirationNotificationId === null ? null : { id: dbAssortment.isCloseToExpirationNotificationId },
+			dbAssortment.isCloseToExpirationNotificationId === null
+				? null
+				: { id: dbAssortment.isCloseToExpirationNotificationId }
 		);
 	}
 
@@ -82,13 +86,13 @@ export class AssortmentMapper {
 			image: assortment.image === null ? null : FileReferenceMapper.fromEntityToDTO(assortment.image),
 			qrCode: FileReferenceMapper.fromEntityToDTO(assortment.qrCode),
 			hasExpired: assortment.hasExpired,
-			hasExpiredNotification: assortment.hasExpiredNotification === null
-				? null
-				: { id: assortment.hasExpiredNotification.id },
+			hasExpiredNotification:
+				assortment.hasExpiredNotification === null ? null : { id: assortment.hasExpiredNotification.id },
 			isCloseToExpiration: assortment.isCloseToExpiration,
-			isCloseToExpirationNotification: assortment.isCloseToExpirationNotification === null
-				? null
-				: { id: assortment.isCloseToExpirationNotification.id },
+			isCloseToExpirationNotification:
+				assortment.isCloseToExpirationNotification === null
+					? null
+					: { id: assortment.isCloseToExpirationNotification.id },
 		};
 	}
 
@@ -110,7 +114,7 @@ export class AssortmentMapper {
 			assortmentDTO.hasExpired,
 			assortmentDTO.hasExpiredNotification,
 			assortmentDTO.isCloseToExpiration,
-			assortmentDTO.isCloseToExpirationNotification,
+			assortmentDTO.isCloseToExpirationNotification
 		);
 	}
 }

@@ -1,5 +1,5 @@
 import { UUID } from "@/server/utils/uuid";
-import { FileReferenceDTO } from "../../application/dto/shared/FileReferenceDTO";
+import type { FileReferenceDTO } from "../../application/dto/shared/FileReferenceDTO";
 import { FileReference } from "../../domain/entities/FileReference";
 import { VisibilityMapper } from "./VisibilityMapper";
 import { DBFileReference } from "../entities/DBFileReference";
@@ -8,13 +8,13 @@ import { FileMetadataMapper } from "./FileMetadataMapper";
 export class FileReferenceMapper {
 	static fromDTOToEntity(dto: FileReferenceDTO): FileReference {
 		return FileReference.create(
-		 	UUID.fromString(dto.id),
+			UUID.fromString(dto.id),
 			dto.sizeBytes,
 			dto.mimeType,
 			dto.path,
 			VisibilityMapper.fromDTO(dto.visibility),
 			FileMetadataMapper.fromDTO(dto.metadata),
-			dto.isEncrypted,
+			dto.isEncrypted
 		);
 	}
 
@@ -49,7 +49,7 @@ export class FileReferenceMapper {
 
 	static fromDBToEntity(db: DBFileReference): FileReference {
 		return FileReference.create(
-		 	UUID.fromString(db.id),
+			UUID.fromString(db.id),
 			db.sizeBytes,
 			db.mimeType,
 			db.path,
@@ -58,7 +58,7 @@ export class FileReferenceMapper {
 				isPublic: db.isPublic,
 			}),
 			FileMetadataMapper.fromDTO(db.metadata),
-			db.isEncrypted,
+			db.isEncrypted
 		);
 	}
 }

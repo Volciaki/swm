@@ -1,45 +1,45 @@
 export enum EnvironmentType {
-    PRODUCTION = "production",
-    DEVELOPMENT = "development",
-};
+	PRODUCTION = "production",
+	DEVELOPMENT = "development",
+}
 
 export enum NextPhase {
 	BUILD = "BUILD",
-};
+}
 
 export type Environment = {
-    type: EnvironmentType,
-	nextPhase: NextPhase | null,
-    port: number,
+	type: EnvironmentType;
+	nextPhase: NextPhase | null;
+	port: number;
 	encryption: {
 		key: string;
-	},
+	};
 	schedule: {
 		authentication: { passphrase: string };
 	};
-    database: {
-        host: string;
-        port: number;
-        username: string;
-        password: string;
-        name: string;
-    };
-    authentication: {
-        secret: string;
-        cookie: {
-            expiresIn: string;
-            name: string;
-        };
-    };
-    mail: {
-        host: string;
-        port: number;
-        sslEnabled: boolean;
-        user: {
-            name: string;
-            password: string;
-        };
-    };
+	database: {
+		host: string;
+		port: number;
+		username: string;
+		password: string;
+		name: string;
+	};
+	authentication: {
+		secret: string;
+		cookie: {
+			expiresIn: string;
+			name: string;
+		};
+	};
+	mail: {
+		host: string;
+		port: number;
+		sslEnabled: boolean;
+		user: {
+			name: string;
+			password: string;
+		};
+	};
 	storage: {
 		accessKey: string;
 		secretKey: string;

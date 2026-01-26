@@ -1,4 +1,4 @@
-import PDFKit from "pdfkit";
+import type PDFKit from "pdfkit";
 
 export type PDFDocument = typeof PDFKit;
 

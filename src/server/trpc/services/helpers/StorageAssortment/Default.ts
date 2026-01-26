@@ -1,16 +1,16 @@
 import { DefaultStorageAssortmentHelper } from "@/server/modules/storage/application/helpers/StorageAssortmentHelper";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
-import { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
-import { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
-import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
-import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
-import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
-import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/GenerateQRCode";
-import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
-import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
-import { GetServicesContext } from "../../context";
-import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
+import type { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
+import type { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
+import type { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
+import type { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
+import type { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
+import type { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/GenerateQRCode";
+import type { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import type { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import type { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
+import type { GetServicesContext } from "../../context";
 
 export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 	return {
@@ -27,21 +27,22 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 			uploadFileQRCode: UploadFile,
 			deleteFileProductImage: DeleteFileByPath,
 			deleteFileQRCode: DeleteFileByPath,
-			fetchFileProductImage: FetchFile,
-		) => new DefaultStorageAssortmentHelper(
-			getAllAssortment,
-			getAssortment,
-			createAssortment,
-			deleteAssortment,
-			getShelf,
-			fillCell,
-			emptyCell,
-			generateQRCode,
-			uploadFileProductImage,
-			uploadFileQRCode,
-			deleteFileProductImage,
-			deleteFileQRCode,
-			fetchFileProductImage,
-		)
+			fetchFileProductImage: FetchFile
+		) =>
+			new DefaultStorageAssortmentHelper(
+				getAllAssortment,
+				getAssortment,
+				createAssortment,
+				deleteAssortment,
+				getShelf,
+				fillCell,
+				emptyCell,
+				generateQRCode,
+				uploadFileProductImage,
+				uploadFileQRCode,
+				deleteFileProductImage,
+				deleteFileQRCode,
+				fetchFileProductImage
+			),
 	};
 };

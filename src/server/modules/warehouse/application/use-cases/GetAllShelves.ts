@@ -1,6 +1,6 @@
-import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
+import type { ShelfRepository } from "../../domain/repositories/ShelfRepository";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
-import { GetAllShelvesDTO } from "../dto/GetAllShelvesDTO";
+import type { GetAllShelvesDTO } from "../dto/GetAllShelvesDTO";
 
 export class GetAllShelves {
 	constructor(private readonly shelfRepository: ShelfRepository) {}

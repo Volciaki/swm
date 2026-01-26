@@ -1,13 +1,13 @@
-import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
-import { SetAssortmentCloseToExpirationNotificationDTO } from "../dto/SetAssortmentCloseToExpirationNotificationDTO";
-import { AssortmentHelper } from "../helpers/AssortmentHelper";
-import { AssortmentFileHelper } from "../services/AssortmentFileHelper";
+import type { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
+import type { SetAssortmentCloseToExpirationNotificationDTO } from "../dto/SetAssortmentCloseToExpirationNotificationDTO";
+import type { AssortmentHelper } from "../helpers/AssortmentHelper";
+import type { AssortmentFileHelper } from "../services/AssortmentFileHelper";
 
 export class SetAssortmentCloseToExpirationNotification {
 	constructor(
 		private readonly assortmentHelper: AssortmentHelper,
 		private readonly assortmentFileHelper: AssortmentFileHelper,
-		private readonly assortmentRepository: AssortmentRepository,
+		private readonly assortmentRepository: AssortmentRepository
 	) {}
 
 	async execute(dto: SetAssortmentCloseToExpirationNotificationDTO) {
@@ -16,4 +16,4 @@ export class SetAssortmentCloseToExpirationNotification {
 		assortment.isCloseToExpirationNotification = dto.notification;
 		await this.assortmentRepository.update(assortment);
 	}
-};
+}

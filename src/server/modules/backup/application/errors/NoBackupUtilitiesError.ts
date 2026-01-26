@@ -1,4 +1,4 @@
-import { UUID } from "@/server/utils";
+import type { UUID } from "@/server/utils";
 import { BackupApplicationError } from "./BackupInfrastructureError";
 
 export class BackupNotFoundError extends BackupApplicationError {

@@ -1,6 +1,6 @@
-import { GetServicesContext } from "@/server/trpc/services/context";
+import type { GetServicesContext } from "@/server/trpc/services/context";
 import { getScheduler } from "..";
-import { StartTaskByNameDTO } from "../dto/StartTaskByNameDTO";
+import type { StartTaskByNameDTO } from "../dto/StartTaskByNameDTO";
 
 export class StartTaskByName {
 	constructor() {}

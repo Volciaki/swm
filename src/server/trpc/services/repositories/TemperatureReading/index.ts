@@ -1,8 +1,8 @@
-import { GetServicesContext } from "../../context";
+import type { GetServicesContext } from "../../context";
 import { getDBTemperatureReadingRepository } from "./DB";
 
 export const getTemperatureReadingRepositories = (ctx: GetServicesContext) => {
 	return {
-		db: getDBTemperatureReadingRepository(ctx)
+		db: getDBTemperatureReadingRepository(ctx),
 	};
 };

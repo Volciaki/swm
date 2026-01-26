@@ -1,18 +1,20 @@
-import { SetAssortmentExpiredNotification } from "@/server/modules/assortment/application/use-cases/SetAssortmentExpiredNotification";
-import { GetExpiredAssortment } from "@/server/modules/assortment/application/use-cases/GetExpired";
-import { SchedulerTask } from "@/server/scheduler/task";
+import type { SetAssortmentExpiredNotification } from "@/server/modules/assortment/application/use-cases/SetAssortmentExpiredNotification";
+import type { GetExpiredAssortment } from "@/server/modules/assortment/application/use-cases/GetExpired";
+import type { SchedulerTask } from "@/server/scheduler/task";
 import { formatDateAsHumanReadable } from "@/server/utils";
-import { CreateNotification } from "../../application/use-cases/CreateNotification";
+import type { CreateNotification } from "../../application/use-cases/CreateNotification";
 import { NotificationType } from "../../domain/entities/Notification";
 
 export class ExpirationMonitoringTask implements SchedulerTask {
 	constructor(
 		private readonly createNotification: CreateNotification,
 		private readonly getExpiredAssortment: GetExpiredAssortment,
-		private readonly setAssortmentExpiredNotification: SetAssortmentExpiredNotification,
-	) { }
+		private readonly setAssortmentExpiredNotification: SetAssortmentExpiredNotification
+	) {}
 
-	getName() { return "ExpirationMonitoringTask" };
+	getName() {
+		return "ExpirationMonitoringTask";
+	}
 
 	async execute() {
 		const expiredAssortments = await this.getExpiredAssortment.execute();
@@ -23,14 +25,12 @@ export class ExpirationMonitoringTask implements SchedulerTask {
 			const notification = await this.createNotification.execute({
 				type: NotificationType.ALERT,
 				title: "Produkt przekroczył termin ważności",
-				message: `Produkt "${assortment.name}" (przyjęty ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}) przekroczył swój termin ważności. Najprawdopodobniej nie będzie już zdatny do użytku.`
+				message: `Produkt "${assortment.name}" (przyjęty ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}) przekroczył swój termin ważności. Najprawdopodobniej nie będzie już zdatny do użytku.`,
 			});
-			await this.setAssortmentExpiredNotification.execute(
-				{
-					id: assortment.id,
-					notification,
-				}
-			);
+			await this.setAssortmentExpiredNotification.execute({
+				id: assortment.id,
+				notification,
+			});
 		}
 	}
 }

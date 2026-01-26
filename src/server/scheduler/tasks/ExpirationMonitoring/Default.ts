@@ -2,7 +2,7 @@ import { SetAssortmentExpiredNotification } from "@/server/modules/assortment/ap
 import { ExpirationMonitoringTask } from "@/server/modules/monitoring/infrastructure/schedule/ExpirationMonitoringTask";
 import { CreateNotification } from "@/server/modules/monitoring/application/use-cases/CreateNotification";
 import { GetExpiredAssortment } from "@/server/modules/assortment/application/use-cases/GetExpired";
-import { GetServicesContext } from "@/server/trpc/services/context";
+import type { GetServicesContext } from "@/server/trpc/services/context";
 import { getPresets, getServices } from "@/server/trpc/services";
 
 export const getDefaultExpirationMonitoring = (ctx: GetServicesContext) => {

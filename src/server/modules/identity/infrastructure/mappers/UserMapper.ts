@@ -1,4 +1,5 @@
-import { UUID, UserDTO } from "@/server/utils";
+import type { UserDTO } from "@/server/utils";
+import { UUID } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { User } from "../../domain/entities/User";
 import { DBUser } from "../entities/DBUser";
@@ -12,7 +13,7 @@ export class UserMapper {
 			UUID.fromString(id),
 			name,
 			isAdmin,
-			twoFactorAuthenticationEnabled,
+			twoFactorAuthenticationEnabled
 		);
 	}
 

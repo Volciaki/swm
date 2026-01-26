@@ -1,4 +1,4 @@
-import { GetServicesContext } from "../context";
+import type { GetServicesContext } from "../context";
 
 import { getUserRepositories } from "./User";
 import { getTwoFactorAuthenticationSessionRepositories } from "./TwoFactorAuthenticationSession";

@@ -1,12 +1,12 @@
-import { Repository } from "typeorm";
-import { UUID } from "@/server/utils";
-import { NotificationRepository } from "../../domain/repositories/NotificationRepository";
-import { DBNotification } from "../entities/DBNotification";
-import { Notification } from "../../domain/entities/Notification";
+import type { Repository } from "typeorm";
+import type { UUID } from "@/server/utils";
+import type { NotificationRepository } from "../../domain/repositories/NotificationRepository";
+import type { DBNotification } from "../entities/DBNotification";
+import type { Notification } from "../../domain/entities/Notification";
 import { NotificationMapper } from "../mappers/NotificationMapper";
 
 export class DBNotificationRepository implements NotificationRepository {
-	constructor( private readonly db: Repository<DBNotification>) {}
+	constructor(private readonly db: Repository<DBNotification>) {}
 
 	async create(notification: Notification) {
 		const dbObject = NotificationMapper.fromEntityToDB(notification);
@@ -31,7 +31,7 @@ export class DBNotificationRepository implements NotificationRepository {
 
 		if (dbObject === null) return null;
 
-		return NotificationMapper.fromDBToEntity(dbObject );
+		return NotificationMapper.fromDBToEntity(dbObject);
 	}
 
 	async getAll() {

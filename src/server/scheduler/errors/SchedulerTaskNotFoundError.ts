@@ -1,4 +1,4 @@
-import { SchedulerTask } from "../task";
+import type { SchedulerTask } from "../task";
 import { SchedulerError } from "./SchedulerError";
 
 export class SchedulerTaskNotFoundError extends SchedulerError {

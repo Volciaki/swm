@@ -23,11 +23,14 @@ const Login: FC = () => {
 		},
 	});
 
-	const formSubmitHandler = useCallback((email: string, passwordRaw: string) => {
-		if (login.isPending) return;
+	const formSubmitHandler = useCallback(
+		(email: string, passwordRaw: string) => {
+			if (login.isPending) return;
 
-		login.mutate({ email, passwordRaw });
-	}, [login]);
+			login.mutate({ email, passwordRaw });
+		},
+		[login]
+	);
 
 	useEffect(() => {
 		if (authData !== null) router.push("/");

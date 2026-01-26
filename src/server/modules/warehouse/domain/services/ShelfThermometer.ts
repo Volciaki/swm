@@ -1,5 +1,5 @@
-import { CelsiusDegrees } from "@/server/utils";
-import { Shelf } from "../entities/Shelf";
+import type { CelsiusDegrees } from "@/server/utils";
+import type { Shelf } from "../entities/Shelf";
 
 export interface ShelfThermometer {
 	getTemperatureForShelf(shelf: Shelf): Promise<CelsiusDegrees>;

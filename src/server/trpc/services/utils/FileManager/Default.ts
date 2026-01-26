@@ -1,9 +1,9 @@
 import { DefaultFileManager } from "@/server/utils/files/infrastructure/services/FileManager";
-import { FileHelper } from "@/server/utils/files/application/helpers/FileHelper";
-import { FileReferenceRepository } from "@/server/utils/files/domain/services/FileReferenceRepository";
-import { FileStorage } from "@/server/utils/files/domain/services/FileStorage";
-import { GetServicesContext } from "../../context";
-import { EncryptionManager } from "@/server/utils/files/domain/services/EncryptionManager";
+import type { FileHelper } from "@/server/utils/files/application/helpers/FileHelper";
+import type { FileReferenceRepository } from "@/server/utils/files/domain/services/FileReferenceRepository";
+import type { FileStorage } from "@/server/utils/files/domain/services/FileStorage";
+import type { EncryptionManager } from "@/server/utils/files/domain/services/EncryptionManager";
+import type { GetServicesContext } from "../../context";
 
 export const getDefaultFileManager = (ctx: GetServicesContext) => {
 	return {
@@ -11,7 +11,7 @@ export const getDefaultFileManager = (ctx: GetServicesContext) => {
 			storage: FileStorage,
 			repository: FileReferenceRepository,
 			helper: FileHelper,
-			encryptionManager: EncryptionManager,
-		) => new DefaultFileManager(storage, repository, helper, encryptionManager)
+			encryptionManager: EncryptionManager
+		) => new DefaultFileManager(storage, repository, helper, encryptionManager),
 	};
-}
+};

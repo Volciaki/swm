@@ -1,10 +1,11 @@
 import PDFKit from "pdfkit";
 import { getStreamAsBuffer as streamToBuffer } from "get-stream";
 import { Base64Mapper, loadAssetByName } from "@/server/utils";
-import { GeneratedReport, ReportGenerator } from "@/server/modules/reporting/domain/services/ReportGenerator";
-import { ReportType } from "@/server/modules/reporting/domain/entities/Report";
-import { PDFDocument, ReportGeneratorConstants } from "./type";
-import { DefaultReportGeneratorUtils, ReportGeneratorUtils } from "./utils";
+import type { GeneratedReport, ReportGenerator } from "@/server/modules/reporting/domain/services/ReportGenerator";
+import type { ReportType } from "@/server/modules/reporting/domain/entities/Report";
+import type { PDFDocument, ReportGeneratorConstants } from "./type";
+import type { ReportGeneratorUtils } from "./utils";
+import { DefaultReportGeneratorUtils } from "./utils";
 
 export abstract class DefaultBaseReportGenerator<T extends ReportType> implements ReportGenerator<T> {
 	protected readonly document: PDFDocument;

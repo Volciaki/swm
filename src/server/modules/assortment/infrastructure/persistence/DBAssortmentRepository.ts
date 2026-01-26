@@ -1,13 +1,13 @@
-import { Repository } from "typeorm";
+import type { Repository } from "typeorm";
 import { UUID } from "@/server/utils";
-import { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
-import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
-import { DBAssortment } from "../entities/DBAssortment";
-import { Assortment } from "../../domain/entities/Assortment";
+import type { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
+import type { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
+import type { DBAssortment } from "../entities/DBAssortment";
+import type { Assortment } from "../../domain/entities/Assortment";
 import { AssortmentMapper } from "../mappers/AssortmentMapper";
 
 export class DBAssortmentRepository implements AssortmentRepository {
-	constructor(private readonly db: Repository<DBAssortment>) { }
+	constructor(private readonly db: Repository<DBAssortment>) {}
 
 	async create(assortment: Assortment) {
 		const dbAssortment = AssortmentMapper.fromAssortmentToDBAssortment(assortment);
@@ -37,7 +37,7 @@ export class DBAssortmentRepository implements AssortmentRepository {
 			await getFileContextById(UUID.fromString(dbAssortment.qrCodeFileReferenceId)),
 			dbAssortment.imageFileReferenceId === null
 				? null
-				: await getFileContextById(UUID.fromString(dbAssortment.imageFileReferenceId)),
+				: await getFileContextById(UUID.fromString(dbAssortment.imageFileReferenceId))
 		);
 	}
 

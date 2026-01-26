@@ -1,13 +1,14 @@
-import { UUID, UUIDManager } from "@/server/utils/uuid";
-import { FileReference } from "../../domain/entities/FileReference";
-import { FileReferenceRepository } from "../../domain/services/FileReferenceRepository";
-import { UploadFileDTO } from "../dto/UploadFileDTO";
-import { FileReferenceMapper } from "../../infrastructure/mappers/FileReferenceMapper";
+import type { UUIDManager } from "@/server/utils/uuid";
+import { UUID } from "@/server/utils/uuid";
 import { Base64, Base64Mapper } from "@/server/utils/base64";
-import { Visibility } from "../../domain/entities/Visibility";
+import type { FileReference } from "../../domain/entities/FileReference";
+import type { FileReferenceRepository } from "../../domain/services/FileReferenceRepository";
+import type { UploadFileDTO } from "../dto/UploadFileDTO";
+import { FileReferenceMapper } from "../../infrastructure/mappers/FileReferenceMapper";
+import type { Visibility } from "../../domain/entities/Visibility";
 import { VisibilityMapper } from "../../infrastructure/mappers/VisibilityMapper";
 import { FileNotFoundError } from "../errors/FileNotFoundError";
-import { FileMetadata } from "../../domain/entities/FileMetadata";
+import type { FileMetadata } from "../../domain/entities/FileMetadata";
 import { FileMetadataMapper } from "../../infrastructure/mappers/FileMetadataMapper";
 
 const getSizeBytesByBase64String = (content: string): number => {
@@ -23,15 +24,15 @@ export interface FileHelper {
 		dto: UploadFileDTO,
 		visibility: Visibility,
 		metadata: FileMetadata,
-		predefinedId?: UUID,
+		predefinedId?: UUID
 	): Promise<FileReference>;
-};
+}
 
 export class DefaultFileHelper implements FileHelper {
 	constructor(
 		private readonly fileReferenceRepository: FileReferenceRepository,
-		private readonly uuidManager: UUIDManager,
-	) { }
+		private readonly uuidManager: UUIDManager
+	) {}
 
 	async getByIdStringOrThrow(idString: string) {
 		const id = UUID.fromString(idString);
@@ -50,12 +51,7 @@ export class DefaultFileHelper implements FileHelper {
 		return entity;
 	}
 
-	async createByDTO(
-		dto: UploadFileDTO,
-		visibility: Visibility,
-		metadata: FileMetadata,
-		predefinedId?: UUID,
-	) {
+	async createByDTO(dto: UploadFileDTO, visibility: Visibility, metadata: FileMetadata, predefinedId?: UUID) {
 		const sizeBytes = getSizeBytesByBase64String(dto.contentBase64);
 		const fileReference = FileReferenceMapper.fromDTOToEntity({
 			...dto,

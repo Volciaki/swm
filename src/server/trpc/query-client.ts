@@ -7,10 +7,8 @@ export const makeQueryClient = () => {
 				staleTime: 30 * 1000,
 			},
 			dehydrate: {
-				shouldDehydrateQuery: (query) =>
-					defaultShouldDehydrateQuery(query) ||
-                    query.state.status === "pending",
+				shouldDehydrateQuery: (query) => defaultShouldDehydrateQuery(query) || query.state.status === "pending",
 			},
 		},
 	});
-}
+};

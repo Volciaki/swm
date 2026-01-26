@@ -1,4 +1,4 @@
-import { UUID } from "@/server/utils";
+import type { UUID } from "@/server/utils";
 import { WarehouseDomainError } from "./WarehouseDomainError";
 
 export class ShelfFullError extends WarehouseDomainError {

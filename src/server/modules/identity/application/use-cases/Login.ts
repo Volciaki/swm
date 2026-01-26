@@ -1,29 +1,29 @@
 import { serialize as serializeCookie } from "cookie";
 import { environment } from "@/server/environment";
-import { UserDTO, UUIDManager } from "@/server/utils";
+import type { UserDTO, UUIDManager } from "@/server/utils";
 import { EnvironmentType } from "@/server/environment/type";
 import { Email } from "../../domain/entities/Email";
 import { AlreadyLoggedInError } from "../../domain/errors/AlreadyLoggedInError";
 import { WrongPasswordError } from "../../domain/errors/WrongPasswordError";
-import { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
-import { UserRepository } from "../../domain/repositories/UserRepository";
-import { LoginDTO } from "../dto/LoginDTO";
+import type { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
+import type { UserRepository } from "../../domain/repositories/UserRepository";
+import type { LoginDTO } from "../dto/LoginDTO";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
-import { AuthenticationManager } from "../services/AuthenticationManager";
-import { StringHasher } from "../services/StringHasher";
-import { TwoFactorAuthenticationValueGenerator } from "../services/TwoFactorAuthenticationValueGenerator";
-import { TwoFactorAuthenticationValueSender } from "../services/TwoFactorAuthenticationValueSender";
-import { LoginResponseDTO } from "../dto/LoginResponseDTO";
+import type { AuthenticationManager } from "../services/AuthenticationManager";
+import type { StringHasher } from "../services/StringHasher";
+import type { TwoFactorAuthenticationValueGenerator } from "../services/TwoFactorAuthenticationValueGenerator";
+import type { TwoFactorAuthenticationValueSender } from "../services/TwoFactorAuthenticationValueSender";
+import type { LoginResponseDTO } from "../dto/LoginResponseDTO";
 
 export class Login {
 	constructor(
-        private readonly userRepository: UserRepository,
-        private readonly twoFactorAuthenticationSessionRepository: TwoFactorAuthenticationSessionRepository,
-        private readonly stringHasher: StringHasher,
-        private readonly authenticationManager: AuthenticationManager,
-        private readonly uuidManager: UUIDManager,
-        private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
-        private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender,
+		private readonly userRepository: UserRepository,
+		private readonly twoFactorAuthenticationSessionRepository: TwoFactorAuthenticationSessionRepository,
+		private readonly stringHasher: StringHasher,
+		private readonly authenticationManager: AuthenticationManager,
+		private readonly uuidManager: UUIDManager,
+		private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
+		private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender
 	) {}
 
 	async execute(dto: LoginDTO, currentUser?: UserDTO): Promise<LoginResponseDTO> {
@@ -41,7 +41,7 @@ export class Login {
 			const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
 				user,
 				this.uuidManager.generate(),
-				twoFactorAuthenticationValue,
+				twoFactorAuthenticationValue
 			);
 
 			if (this.twoFactorAuthenticationValueSender)
@@ -51,7 +51,7 @@ export class Login {
 		}
 
 		return {
-			authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)
+			authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user),
 		};
 	}
 

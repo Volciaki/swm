@@ -1,17 +1,13 @@
 import { UUID } from "@/server/utils";
-import { CellDTO } from "../../application/dto/shared/CellDTO";
+import type { CellDTO } from "../../application/dto/shared/CellDTO";
 import { Cell } from "../../domain/entities/Cell";
 import { DBCell } from "../entities/DBCell";
-import { AssortmentVO } from "../../domain/vo/AssortmentVO";
+import type { AssortmentVO } from "../../domain/vo/AssortmentVO";
 
 export class CellMapper {
 	static fromCellDTOToCell(cellDTO: CellDTO): Cell {
 		const { id, shelfId, assortment } = cellDTO;
-		return Cell.create(
-			UUID.fromString(id),
-			UUID.fromString(shelfId),
-			assortment,
-		);
+		return Cell.create(UUID.fromString(id), UUID.fromString(shelfId), assortment);
 	}
 
 	static fromCellToCellDTO(cell: Cell): CellDTO {
@@ -25,11 +21,7 @@ export class CellMapper {
 
 	static fromDBCellToCell(dbCell: DBCell, assortment: AssortmentVO | null): Cell {
 		const { id, shelfId } = dbCell;
-		return Cell.create(
-			UUID.fromString(id),
-			UUID.fromString(shelfId),
-			assortment,
-		);
+		return Cell.create(UUID.fromString(id), UUID.fromString(shelfId), assortment);
 	}
 
 	static fromCellToDBCell(cell: Cell): DBCell {

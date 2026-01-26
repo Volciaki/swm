@@ -1,9 +1,12 @@
-import { Repository } from "typeorm";
+import type { Repository } from "typeorm";
 import { UUID } from "@/server/utils";
-import { ShelfContextGetter, TemperatureReadingRepository } from "../../domain/repositories/TemperatureReadingRepository";
+import type {
+	ShelfContextGetter,
+	TemperatureReadingRepository,
+} from "../../domain/repositories/TemperatureReadingRepository";
 import { TemperatureReadingMapper } from "../mappers/TemperatureReadingMapper";
-import { TemperatureReading } from "../../domain/entities/TemperatureReading";
-import { DBTemperatureReading } from "../entities/DBTemperatureReading";
+import type { TemperatureReading } from "../../domain/entities/TemperatureReading";
+import type { DBTemperatureReading } from "../entities/DBTemperatureReading";
 
 export class DBTemperatureReadingRepository implements TemperatureReadingRepository {
 	constructor(private readonly db: Repository<DBTemperatureReading>) {}

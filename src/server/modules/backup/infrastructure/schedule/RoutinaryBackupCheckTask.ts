@@ -1,32 +1,33 @@
-import { SchedulerTask } from "@/server/scheduler/task";
+import type { SchedulerTask } from "@/server/scheduler/task";
 import { TimeFrame } from "@/server/utils";
-import { TakeBackup } from "../../application/use-cases/TakeBackup";
-import { GetBackupSettings } from "../../application/use-cases/GetBackupSettings";
-import { GetAllBackups } from "../../application/use-cases/GetAllBackups";
+import type { TakeBackup } from "../../application/use-cases/TakeBackup";
+import type { GetBackupSettings } from "../../application/use-cases/GetBackupSettings";
+import type { GetAllBackups } from "../../application/use-cases/GetAllBackups";
 
 // Checks if, according to currently defined schedule, we should take a new periodical backup, and if so takes it.
 export class RoutinaryBackupCheckTask implements SchedulerTask {
 	constructor(
 		private readonly getAllBackups: GetAllBackups,
 		private readonly getBackupSettings: GetBackupSettings,
-		private readonly takeBackup: TakeBackup,
-	) { }
+		private readonly takeBackup: TakeBackup
+	) {}
 
-	getName() { return "RoutinaryBackupCheckTask" };
+	getName() {
+		return "RoutinaryBackupCheckTask";
+	}
 
 	private async backup() {
-		await this.takeBackup.execute({ skipAuthentication: true })
+		await this.takeBackup.execute({ skipAuthentication: true });
 	}
 
 	async execute() {
 		const backups = await this.getAllBackups.execute({ skipAuthentication: true });
 		// By newest to oldest.
 		const sortedBackups = [...backups].sort(
-			(a, b) =>
-				new Date(b.dateTimestamp).getTime() - new Date(a.dateTimestamp).getTime()
+			(a, b) => new Date(b.dateTimestamp).getTime() - new Date(a.dateTimestamp).getTime()
 		);
 		const newest = sortedBackups[0];
-		
+
 		if (!newest) {
 			await this.backup();
 			return;

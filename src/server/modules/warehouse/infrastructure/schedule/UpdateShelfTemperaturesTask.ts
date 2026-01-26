@@ -1,10 +1,10 @@
-import { SchedulerTask } from "@/server/scheduler/task";
-import { StoreTemperatureReading } from "../../application/use-cases/StoreTemperatureReading";
-import { GetAllShelves } from "../../application/use-cases/GetAllShelves";
-import { ShelfThermometer } from "../../domain/services/ShelfThermometer";
+import type { SchedulerTask } from "@/server/scheduler/task";
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { StoreTemperatureReading } from "../../application/use-cases/StoreTemperatureReading";
+import type { GetAllShelves } from "../../application/use-cases/GetAllShelves";
+import type { ShelfThermometer } from "../../domain/services/ShelfThermometer";
 import { ShelfMapper } from "../mappers/ShelfMapper";
-import { UpdateShelf } from "../../application/use-cases/UpdateShelf";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { UpdateShelf } from "../../application/use-cases/UpdateShelf";
 
 export class UpdateShelfTemperaturesTask implements SchedulerTask {
 	constructor(
@@ -12,10 +12,12 @@ export class UpdateShelfTemperaturesTask implements SchedulerTask {
 		private readonly getAllAssortment: GetAllAssortment,
 		private readonly shelfThermometer: ShelfThermometer,
 		private readonly updateShelf: UpdateShelf,
-		private readonly storeTemperatureReading: StoreTemperatureReading,
-	) { }
+		private readonly storeTemperatureReading: StoreTemperatureReading
+	) {}
 
-	getName() { return "UpdateShelfTemperaturesTask" };
+	getName() {
+		return "UpdateShelfTemperaturesTask";
+	}
 
 	async execute() {
 		const shelfDTOs = await this.getAllShelves.execute();
@@ -33,7 +35,7 @@ export class UpdateShelfTemperaturesTask implements SchedulerTask {
 						currentTemperatureCelsius: newTemperature.value,
 					},
 				},
-				{ skipAuthentication: true },
+				{ skipAuthentication: true }
 			);
 
 			await this.storeTemperatureReading.execute({ id: shelf.id.value, assortmentContext });

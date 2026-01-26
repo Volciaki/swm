@@ -1,4 +1,4 @@
-import { UUID } from "@/server/utils";
+import type { UUID } from "@/server/utils";
 import { StorageApplicationError } from "./StorageApplicationError";
 
 export class CellAlreadyTakenError extends StorageApplicationError {

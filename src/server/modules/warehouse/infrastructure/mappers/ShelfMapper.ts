@@ -1,14 +1,14 @@
 import { CelsiusDegrees, DimensionsMapper, TemperatureRangeMapper, UUID, Weight } from "@/server/utils";
-import { ShelfDTO } from "../../application/dto/shared/ShelfDTO";
+import type { ShelfDTO } from "../../application/dto/shared/ShelfDTO";
 import { Shelf } from "../../domain/entities/Shelf";
 import { DBShelf } from "../entities/DBShelf";
-import { DBCell } from "../entities/DBCell";
+import type { DBCell } from "../entities/DBCell";
 import { CellMapper } from "./CellMapper";
-import { AssortmentVO } from "../../domain/vo/AssortmentVO";
+import type { AssortmentVO } from "../../domain/vo/AssortmentVO";
 
 export type CellWithContext = {
-    db: DBCell;
-    valueObject: AssortmentVO | null;
+	db: DBCell;
+	valueObject: AssortmentVO | null;
 };
 
 export class ShelfMapper {
@@ -24,7 +24,7 @@ export class ShelfMapper {
 			shelfDTO.supportsHazardous,
 			Weight.fromKilograms(shelfDTO.lastRecordedLegalWeightKg),
 			shelfDTO.temperatureReadingIds.map((id) => UUID.fromString(id)),
-			CelsiusDegrees.fromNumber(shelfDTO.currentTemperatureCelsius),
+			CelsiusDegrees.fromNumber(shelfDTO.currentTemperatureCelsius)
 		);
 	}
 
@@ -98,7 +98,7 @@ export class ShelfMapper {
 			dbShelf.supportsHazardous,
 			Weight.fromKilograms(dbShelf.lastRecordedLegalWeightKg),
 			dbShelf.temperatureReadingIds.map((id) => UUID.fromString(id)),
-			CelsiusDegrees.fromNumber(dbShelf.currentTemperatureCelsius),
+			CelsiusDegrees.fromNumber(dbShelf.currentTemperatureCelsius)
 		);
 	}
 }

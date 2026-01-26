@@ -20,16 +20,22 @@ const eslintConfig = defineConfig([
 			...prettierConfig.rules,
 			"prettier/prettier": "error",
 			quotes: ["error", "double", { avoidEscape: true }],
-			indent: [
-				"error",
-				"tab",
-				{
-					ignoredNodes: ["PropertyDefinition[decorators]"],
-				},
-			],
 			"import/no-duplicates": "error",
 			"object-curly-spacing": ["error", "always"],
 			"comma-spacing": ["error", { before: false, after: true }],
+			"@typescript-eslint/consistent-type-imports": [
+				"error",
+				{
+					prefer: "type-imports",
+					disallowTypeAnnotations: true,
+				},
+			],
+			"import/order": [
+				"error",
+				{
+					groups: ["external", "builtin", "internal", ["parent", "sibling", "index"]],
+				},
+			],
 		},
 	},
 ]);

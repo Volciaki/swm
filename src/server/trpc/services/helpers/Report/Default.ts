@@ -1,9 +1,9 @@
 import { DefaultReportHelper } from "@/server/modules/reporting/application/helpers/ReportHelper";
-import { ReportRepository } from "@/server/modules/reporting/domain/repositories/ReportRepository";
-import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
-import { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFile";
-import { UUIDManager } from "@/server/utils";
-import { GetServicesContext } from "../../context";
+import type { ReportRepository } from "@/server/modules/reporting/domain/repositories/ReportRepository";
+import type { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import type { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFile";
+import type { UUIDManager } from "@/server/utils";
+import type { GetServicesContext } from "../../context";
 
 export const getDefaultReportHelper = (ctx: GetServicesContext) => {
 	return {
@@ -11,7 +11,7 @@ export const getDefaultReportHelper = (ctx: GetServicesContext) => {
 			uuidManager: UUIDManager,
 			reportRepository: ReportRepository,
 			uploadReportFile: UploadFile,
-			deleteReportFile: DeleteFile,
-		) => new DefaultReportHelper(uuidManager, reportRepository, uploadReportFile, deleteReportFile)
+			deleteReportFile: DeleteFile
+		) => new DefaultReportHelper(uuidManager, reportRepository, uploadReportFile, deleteReportFile),
 	};
 };

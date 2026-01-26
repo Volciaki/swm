@@ -14,16 +14,7 @@ export type FlexProps = {
 	fullWidth?: boolean;
 } & CustomStyles;
 
-export const Flex: FC<FlexProps> = ({
-	children,
-	direction,
-	align,
-	justify,
-	gap,
-	fullWidth,
-	style,
-	className,
-}) => {
+export const Flex: FC<FlexProps> = ({ children, direction, align, justify, gap, fullWidth, style, className }) => {
 	const styleSheet = { ...style };
 	if (direction) styleSheet.flexDirection = direction;
 	if (align) styleSheet.alignItems = align;

@@ -43,4 +43,4 @@ export const developmentEnvironment: Environment = {
 		publicUrl: process.env.STORAGE_PUBLIC_URL ?? "http://localhost:9000",
 		sslEnabled: Boolean(process.env.STORAGE_SSL_ENABLED ?? false),
 	},
-}
+};

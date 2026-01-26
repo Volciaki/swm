@@ -1,5 +1,5 @@
 import { GetNotifications } from "@/server/modules/monitoring/application/use-cases/GetNotifications";
-import { NotificationDTO } from "@/server/modules/monitoring/application/dto/shared/NotificationDTO";
+import type { NotificationDTO } from "@/server/modules/monitoring/application/dto/shared/NotificationDTO";
 import { getServices } from "../../services";
 import { procedure } from "../../init";
 
@@ -11,4 +11,4 @@ export const getAll = procedure.query<NotificationDTO[]>(async ({ ctx }) => {
 
 	const action = new GetNotifications(notificationRepository);
 	return await action.execute(ctx.user ?? undefined);
-})
+});

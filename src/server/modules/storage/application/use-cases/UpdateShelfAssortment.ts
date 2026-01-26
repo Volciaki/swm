@@ -1,15 +1,22 @@
-import { UnauthorizedError, UserDTO, UUID } from "@/server/utils";
-import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
-import { UpdateAssortment, UpdateAssortmentOptions } from "@/server/modules/assortment/application/use-cases/UpdateAssortment";
-import { ValidateShelf } from "@/server/modules/warehouse/application/use-cases/ValidateShelf";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
-import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError, UUID } from "@/server/utils";
+import type { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
+import type {
+	UpdateAssortment,
+	UpdateAssortmentOptions,
+} from "@/server/modules/assortment/application/use-cases/UpdateAssortment";
+import type { ValidateShelf } from "@/server/modules/warehouse/application/use-cases/ValidateShelf";
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import type { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
-import { isFileEncryptedByBucket, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
-import { RefreshShelfLegalWeight } from "@/server/modules/warehouse/application/use-cases/RefreshShelfLegalWeight";
-import { UpdateShelfAssortmentDTO } from "../dto/UpdateShelfAssortmentDTO";
+import type { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
+import {
+	isFileEncryptedByBucket,
+	S3FileStorageBucket,
+} from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import type { RefreshShelfLegalWeight } from "@/server/modules/warehouse/application/use-cases/RefreshShelfLegalWeight";
+import type { UpdateShelfAssortmentDTO } from "../dto/UpdateShelfAssortmentDTO";
 
 export class UpdateShelfAssortment {
 	constructor(
@@ -20,22 +27,24 @@ export class UpdateShelfAssortment {
 		private readonly refreshShelfLegalWeight: RefreshShelfLegalWeight,
 		private readonly fetchFileAction: FetchFile,
 		private readonly deleteFileByPathAction: DeleteFileByPath,
-		private readonly uploadFileAction: UploadFile,
-	) { }
+		private readonly uploadFileAction: UploadFile
+	) {}
 
 	private getUpdateOptions(currentUser?: UserDTO): UpdateAssortmentOptions {
 		return {
-			fetchAssortmentImage: async (id) => await this.fetchFileAction.execute(
-				{ id: id.value, metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES } },
-				{ skipAuthentication: true },
-			),
-			deleteProductImageByPath: async (path) => await this.deleteFileByPathAction.execute(
-				{
-					path,
-					metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
-				},
-				currentUser
-			),
+			fetchAssortmentImage: async (id) =>
+				await this.fetchFileAction.execute(
+					{ id: id.value, metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES } },
+					{ skipAuthentication: true }
+				),
+			deleteProductImageByPath: async (path) =>
+				await this.deleteFileByPathAction.execute(
+					{
+						path,
+						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES },
+					},
+					currentUser
+				),
 			addAssortmentImageByBase64: async (path, contentBase64) => {
 				const file = await this.uploadFileAction.execute(
 					{
@@ -46,7 +55,7 @@ export class UpdateShelfAssortment {
 						isEncrypted: isFileEncryptedByBucket(S3FileStorageBucket.ASSORTMENT_IMAGES),
 					},
 					undefined,
-					currentUser,
+					currentUser
 				);
 				return FileReferenceMapper.fromDTOToEntity(file);
 			},
@@ -62,9 +71,10 @@ export class UpdateShelfAssortment {
 
 		const fullAssortment = {
 			...assortment,
-			imageContentBase64: assortment.image === null
-				? null
-				: (await updateOptions.fetchAssortmentImage(UUID.fromString(assortment.image.id))).base64
+			imageContentBase64:
+				assortment.image === null
+					? null
+					: (await updateOptions.fetchAssortmentImage(UUID.fromString(assortment.image.id))).base64,
 		};
 		const newAssortment = await this.updateAssortmentAction.execute(
 			{ id: dto.id, newData: dto.newData },
@@ -76,14 +86,14 @@ export class UpdateShelfAssortment {
 			const shelfIdentification = { id: assortment.shelfId, assortmentContext: allAssortment };
 
 			await this.validateShelfAction.execute(shelfIdentification, currentUser);
-			await this.refreshShelfLegalWeight.execute(shelfIdentification)
+			await this.refreshShelfLegalWeight.execute(shelfIdentification);
 
 			return newAssortment;
 		} catch (error) {
 			await this.updateAssortmentAction.execute(
 				{ id: newAssortment.id, newData: fullAssortment },
 				updateOptions,
-				currentUser,
+				currentUser
 			);
 
 			throw error;

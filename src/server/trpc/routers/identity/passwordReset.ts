@@ -10,10 +10,6 @@ export const passwordReset = procedure.input(passwordResetDTOSchema).mutation<vo
 	const twoFactorAuthenticationSessionRepository = services.repositories.twoFactorAuthenticationSession.db;
 	const stringHasher = services.utils.stringHasher.node;
 
-	const action = new PasswordReset(
-		userRepository,
-		twoFactorAuthenticationSessionRepository,
-		stringHasher,
-	);
+	const action = new PasswordReset(userRepository, twoFactorAuthenticationSessionRepository, stringHasher);
 	return await action.execute(input, ctx.user ?? undefined);
 });

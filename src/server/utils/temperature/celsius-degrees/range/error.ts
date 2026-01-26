@@ -1,5 +1,5 @@
 import { UtilsError } from "@/server/utils/errors";
-import { CelsiusDegrees } from "../entity";
+import type { CelsiusDegrees } from "../entity";
 
 export class InvalidTemperatureRangeError extends UtilsError {
 	constructor(minimal: CelsiusDegrees, maximal: CelsiusDegrees) {

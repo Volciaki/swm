@@ -1,5 +1,5 @@
-import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 import { z } from "zod";
+import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 
 // Fields of `Assortment` from `assortment` bounded context, which we need to validate a `Shelf`.
 export const assortmentVOSchema = z.object({

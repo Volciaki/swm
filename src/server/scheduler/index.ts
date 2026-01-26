@@ -1,16 +1,16 @@
 import { environment } from "../environment";
 import { logger } from "../logger";
-import { GetServicesContext } from "../trpc/services/context";
+import type { GetServicesContext } from "../trpc/services/context";
 import { SchedulerAuthorizationError } from "./errors/SchedulerAuthorizationError";
 import { SchedulerTaskNotFoundError } from "./errors/SchedulerTaskNotFoundError";
-import { SchedulerTask } from "./task";
+import type { SchedulerTask } from "./task";
 import { getSchedulerTasks } from "./tasks";
 
 class Scheduler {
-	constructor(private readonly tasks: SchedulerTask[]) { }
+	constructor(private readonly tasks: SchedulerTask[]) {}
 
 	async runTask(name: string) {
-		const task = this.tasks.find((t) => t.getName() === name)
+		const task = this.tasks.find((t) => t.getName() === name);
 
 		if (!task) throw new SchedulerTaskNotFoundError(name, this.tasks);
 
@@ -19,7 +19,7 @@ class Scheduler {
 			await task.execute();
 			logger.log(`Task ${task.getName()} has finished!`);
 		} catch (error) {
-			logger.error(`An error has occurred while running task ${task.getName()}! Details: ${error}.`)
+			logger.error(`An error has occurred while running task ${task.getName()}! Details: ${error}.`);
 		}
 	}
 }

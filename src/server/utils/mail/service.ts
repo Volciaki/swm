@@ -1,5 +1,5 @@
-import { EmailMessage } from "./entity";
+import type { EmailMessage } from "./entity";
 
 export interface EmailManager {
-    send(message: EmailMessage): Promise<void>;
-};
+	send(message: EmailMessage): Promise<void>;
+}

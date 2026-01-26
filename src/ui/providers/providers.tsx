@@ -3,13 +3,11 @@ import { TRPCProvider } from "./trpc";
 import { AuthDataProvider } from "./auth";
 
 type ProvidersProps = {
-    children: ReactNode;
+	children: ReactNode;
 };
 
 export const Providers: FC<ProvidersProps> = ({ children }) => (
 	<TRPCProvider>
-		<AuthDataProvider>
-			{children}
-		</AuthDataProvider>
+		<AuthDataProvider>{children}</AuthDataProvider>
 	</TRPCProvider>
 );

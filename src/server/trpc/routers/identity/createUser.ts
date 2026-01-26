@@ -1,5 +1,5 @@
 import { CreateUser } from "@/server/modules/identity/application/use-cases/CreateUser";
-import { UserDTO } from "@/server/utils";
+import type { UserDTO } from "@/server/utils";
 import { createUserDTOSchema } from "@/server/modules/identity/application/dto/CreateUserDTO";
 import { getServices } from "../../services";
 import { procedure } from "../../init";
@@ -13,4 +13,4 @@ export const createUser = procedure.input(createUserDTOSchema).mutation<UserDTO>
 
 	const action = new CreateUser(userRepository, stringHasher, uuidManager);
 	return await action.execute(input, ctx.user ?? undefined);
-})
+});

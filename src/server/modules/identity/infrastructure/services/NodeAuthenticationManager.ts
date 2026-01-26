@@ -1,9 +1,10 @@
+import type { SignOptions, Secret } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import { environment } from "@/server/environment";
-import { AuthenticationManager } from "../../application/services/AuthenticationManager";
-import { User } from "../../domain/entities/User";
-import { SignOptions, Secret, sign, verify } from "jsonwebtoken";
+import type { AuthenticationManager } from "../../application/services/AuthenticationManager";
+import type { User } from "../../domain/entities/User";
 import { InvalidAuthenticationTokenError } from "../../application/errors/InvalidAuthenticationTokenError";
-import { AuthenticationPayloadDTO } from "../../application/dto/AuthenticationPayload";
+import type { AuthenticationPayloadDTO } from "../../application/dto/AuthenticationPayload";
 
 export class NodeAuthenticationManager implements AuthenticationManager<AuthenticationPayloadDTO> {
 	generateAuthenticationTokenForUser(user: User) {

@@ -1,4 +1,4 @@
-import { GetServicesContext } from "@/server/trpc/services/context";
+import type { GetServicesContext } from "@/server/trpc/services/context";
 
 import { getExpirationMonitoringPresets } from "./ExpirationMonitoring";
 import { getUpcomingExpiryMonitoringPresets } from "./UpcomingExpiryMonitoringTask";
@@ -24,7 +24,7 @@ export const getSchedulerTasks = (ctx: GetServicesContext) => {
 	const shelvesModifiedIllegallyMonitoringTask = presets.shelvesModifiedIllegallyMonitoringTask.default;
 	const updateShelfTemperaturesTask = presets.updateShelfTemperaturesTask.default;
 	const routinaryBackupCheckTask = presets.routinaryBackupCheckTask.default;
-	
+
 	return [
 		epxirationMonitoring,
 		upcomingExpiryMonitoring,

@@ -1,11 +1,11 @@
-import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
+import type { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
-import { AssortmentFileHelper } from "../services/AssortmentFileHelper";
+import type { AssortmentFileHelper } from "../services/AssortmentFileHelper";
 
 export class GetExpiredAssortment {
 	constructor(
 		private readonly assortmentRepository: AssortmentRepository,
-		private readonly assortmentFileHelper: AssortmentFileHelper,
+		private readonly assortmentFileHelper: AssortmentFileHelper
 	) {}
 
 	async execute() {

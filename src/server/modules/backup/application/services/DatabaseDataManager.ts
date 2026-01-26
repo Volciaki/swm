@@ -4,5 +4,5 @@ export type DatabaseDataDump = {
 
 export interface DatabaseDataManager {
 	dump(): Promise<DatabaseDataDump>;
-	restore(dump: DatabaseDataDump): Promise<void>
-};
+	restore(dump: DatabaseDataDump): Promise<void>;
+}

@@ -1,13 +1,14 @@
-import { UserDTO, UnauthorizedError } from "@/server/utils/identity";
-import { FileManager } from "../../domain/services/FileManager";
-import { FileHelper } from "../helpers/FileHelper";
-import { DeleteFileByPathDTO } from "../dto/DeleteFileByPathDTO";
+import type { UserDTO } from "@/server/utils/identity";
+import { UnauthorizedError } from "@/server/utils/identity";
+import type { FileManager } from "../../domain/services/FileManager";
+import type { FileHelper } from "../helpers/FileHelper";
+import type { DeleteFileByPathDTO } from "../dto/DeleteFileByPathDTO";
 import { FileMetadataMapper } from "../../infrastructure/mappers/FileMetadataMapper";
 
 export class DeleteFileByPath {
 	constructor(
 		private readonly fileHelper: FileHelper,
-		private readonly fileManager: FileManager,
+		private readonly fileManager: FileManager
 	) {}
 
 	async execute(dto: DeleteFileByPathDTO, currentUser?: UserDTO) {

@@ -1,4 +1,4 @@
-import { UUID } from "@/server/utils";
+import type { UUID } from "@/server/utils";
 import { WarehouseApplicationError } from "./WarehouseApplicationError";
 
 export class ShelfNotFoundError extends WarehouseApplicationError {

@@ -3,7 +3,7 @@ import { RefreshShelfLegalWeight } from "@/server/modules/warehouse/application/
 import { CreateNotification } from "@/server/modules/monitoring/application/use-cases/CreateNotification";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
-import { GetServicesContext } from "@/server/trpc/services/context";
+import type { GetServicesContext } from "@/server/trpc/services/context";
 import { getPresets, getServices } from "@/server/trpc/services";
 
 export const getDefaultShelvesModifiedIllegallyMonitoring = (ctx: GetServicesContext) => {
@@ -27,6 +27,6 @@ export const getDefaultShelvesModifiedIllegallyMonitoring = (ctx: GetServicesCon
 		getAllAssortment,
 		getShelves,
 		createNotification,
-		refreshShelfLegalWeight,
+		refreshShelfLegalWeight
 	);
 };

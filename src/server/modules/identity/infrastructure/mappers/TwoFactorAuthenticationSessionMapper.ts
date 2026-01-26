@@ -5,11 +5,7 @@ import { DBTwoFactorAuthenticationSession } from "../entities/DBTwoFactorAuthent
 export class TwoFactorAuthenticationSessionMapper {
 	static fromDB(dbObject: DBTwoFactorAuthenticationSession): TwoFactorAuthenticationSession {
 		const { id, value, userId } = dbObject;
-		return TwoFactorAuthenticationSession.create(
-			UUID.fromString(id),
-			value,
-			UUID.fromString(userId),
-		);
+		return TwoFactorAuthenticationSession.create(UUID.fromString(id), value, UUID.fromString(userId));
 	}
 
 	static toDB(object: TwoFactorAuthenticationSession): DBTwoFactorAuthenticationSession {

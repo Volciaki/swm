@@ -1,4 +1,4 @@
-import { GetServicesContext } from "../context";
+import type { GetServicesContext } from "../context";
 
 import { getAssortmentHelperServices } from "./Assortment";
 import { getFileHelperServices } from "./File";
@@ -21,4 +21,3 @@ export const getHelpers = (ctx: GetServicesContext) => {
 		backupSettings: getBackupSettingsHelperServices(ctx),
 	};
 };
-

@@ -1,10 +1,11 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
-import { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
-import { ShelfHelper } from "../helpers/ShelfHelper";
+import type { ShelfHelper } from "../helpers/ShelfHelper";
 
 export class CreateShelf {
-	constructor( private readonly shelfHelper: ShelfHelper) {}
+	constructor(private readonly shelfHelper: ShelfHelper) {}
 
 	async execute(dto: CreateShelfDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();

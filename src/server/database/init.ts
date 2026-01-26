@@ -24,5 +24,5 @@ export const initializeDatabase = async () => {
 	if (appDataSource.isInitialized) return;
 
 	await appDataSource.initialize();
-	logger.log("Database connection initialized!")
+	logger.log("Database connection initialized!");
 };

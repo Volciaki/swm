@@ -1,17 +1,18 @@
-import { DeleteShelf } from "@/server/modules/warehouse/application/use-cases/DeleteShelf";
-import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
-import { ImportShelves } from "@/server/modules/warehouse/application/use-cases/ImportShelves";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { CreateShelf } from "@/server/modules/warehouse/application/use-cases/CreateShelf";
-import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import type { DeleteShelf } from "@/server/modules/warehouse/application/use-cases/DeleteShelf";
+import type { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
+import type { ImportShelves } from "@/server/modules/warehouse/application/use-cases/ImportShelves";
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { CreateShelf } from "@/server/modules/warehouse/application/use-cases/CreateShelf";
+import type { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
-import { UnauthorizedError, UserDTO } from "@/server/utils";
-import { ImportAndReplaceShelvesDTO } from "../dto/ImportAndReplaceShelvesDTO";
-import { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
-import { ShelfDTO } from "../dto/shared/ShelfDTO";
-import { AssortmentDTO } from "../dto/shared/AssortmentDTO";
-import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
-import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { ImportAndReplaceShelvesDTO } from "../dto/ImportAndReplaceShelvesDTO";
+import type { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
+import type { ShelfDTO } from "../dto/shared/ShelfDTO";
+import type { AssortmentDTO } from "../dto/shared/AssortmentDTO";
+import type { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
+import type { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 
 export class ImportAndReplaceShelves {
 	constructor(
@@ -21,28 +22,31 @@ export class ImportAndReplaceShelves {
 		private readonly createShelf: CreateShelf,
 		private readonly importShelves: ImportShelves,
 		private readonly storageAssortmentHelper: StorageAssortmentHelper,
-		private readonly fetchFile: FetchFile,
-	) { }
+		private readonly fetchFile: FetchFile
+	) {}
 
 	async execute(dto: ImportAndReplaceShelvesDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
 		const currentShelves = await this.getAllShelves.execute();
 		const currentAssortment = await this.getAllAssortment.execute();
-		const currentFullAssortment: CreateAssortmentDTO[] = await Promise.all(currentAssortment.map(async (assortment) => {
-			const imageContentBase64 = assortment.image?.id
-				? (await this.fetchFile.execute(
-					{
-						id: assortment.image?.id,
-						metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES }
-					},
-				)).base64
-				: null;
-			return {
-				...assortment,
-				imageContentBase64,
-			};
-		}));
+		const currentFullAssortment: CreateAssortmentDTO[] = await Promise.all(
+			currentAssortment.map(async (assortment) => {
+				// prettier-ignore
+				const imageContentBase64 = assortment.image?.id
+					? (
+						await this.fetchFile.execute({
+							id: assortment.image?.id,
+							metadata: { bucket: S3FileStorageBucket.ASSORTMENT_IMAGES },
+						})
+					).base64
+					: null;
+				return {
+					...assortment,
+					imageContentBase64,
+				};
+			})
+		);
 
 		try {
 			await this.deleteAllAssortment(currentUser);
@@ -60,10 +64,7 @@ export class ImportAndReplaceShelves {
 				},
 			}));
 			await this.createShelves(createCurrentShelveDTOs, currentUser);
-			await this.storageAssortmentHelper.importAndReplaceAssortment(
-				{ assortment: currentFullAssortment },
-				currentUser,
-			);
+			await this.storageAssortmentHelper.importAndReplaceAssortment({ assortment: currentFullAssortment }, currentUser);
 
 			throw error;
 		}
@@ -77,18 +78,13 @@ export class ImportAndReplaceShelves {
 
 	private async deleteShelves(shelves: ShelfDTO[], assortments: AssortmentDTO[], currentUser: UserDTO) {
 		for (const shelf of shelves) {
-			await this.deleteShelf.execute(
-				{ id: shelf.id, assortmentContext: assortments },
-				currentUser,
-				{ enforceMinimalAmountOfShelves: false },
-			);
+			await this.deleteShelf.execute({ id: shelf.id, assortmentContext: assortments }, currentUser, {
+				enforceMinimalAmountOfShelves: false,
+			});
 		}
 	}
 
 	private async deleteAllAssortment(currentUser: UserDTO) {
-		await this.storageAssortmentHelper.importAndReplaceAssortment(
-			{ assortment: [] },
-			currentUser,
-		);
+		await this.storageAssortmentHelper.importAndReplaceAssortment({ assortment: [] }, currentUser);
 	}
 }

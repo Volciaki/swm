@@ -9,7 +9,9 @@ const formatCelsiusDegreesAsString = (value: number): string => {
 export class CelsiusDegrees {
 	private constructor(private readonly _value: number) {}
 
-	get value() { return this._value };
+	get value() {
+		return this._value;
+	}
 
 	static fromNumber(value: number) {
 		if (value < ABSOLUTE_ZERO) throw new InvalidTemperatureValueError(formatCelsiusDegreesAsString(value));

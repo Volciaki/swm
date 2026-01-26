@@ -1,18 +1,14 @@
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
+import type { FileReference } from "@/server/utils/files/domain/entities/FileReference";
 import { UUID } from "@/server/utils";
-import { BackupDTO } from "../../application/dto/shared/BackupDTO";
+import type { BackupDTO } from "../../application/dto/shared/BackupDTO";
 import { Backup } from "../../domain/entities/Backup";
 import { DBBackup } from "../entities/DBBackup";
 
 export class BackupMapper {
 	static fromDTOToEntity(dto: BackupDTO): Backup {
 		const { id, dateTimestamp, file } = dto;
-		return Backup.create(
-			UUID.fromString(id),
-			new Date(dateTimestamp),
-			FileReferenceMapper.fromDTOToEntity(file),
-		);
+		return Backup.create(UUID.fromString(id), new Date(dateTimestamp), FileReferenceMapper.fromDTOToEntity(file));
 	}
 
 	static fromEntityToDTO(entity: Backup): BackupDTO {
@@ -26,11 +22,7 @@ export class BackupMapper {
 
 	static fromDBToEntity(db: DBBackup, file: FileReference): Backup {
 		const { id, date } = db;
-		return Backup.create(
-			UUID.fromString(id),
-			date,
-			file,
-		);
+		return Backup.create(UUID.fromString(id), date, file);
 	}
 
 	static fromEntityToDB(entity: Backup): DBBackup {

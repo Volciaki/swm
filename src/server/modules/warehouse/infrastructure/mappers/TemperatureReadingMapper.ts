@@ -1,8 +1,8 @@
 import { CelsiusDegrees, UUID } from "@/server/utils";
-import { TemperatureReadingDTO } from "../../application/dto/shared/TemperatureReadingDTO";
+import type { TemperatureReadingDTO } from "../../application/dto/shared/TemperatureReadingDTO";
 import { TemperatureReading } from "../../domain/entities/TemperatureReading";
 import { DBTemperatureReading } from "../entities/DBTemperatureReading";
-import { Shelf } from "../../domain/entities/Shelf";
+import type { Shelf } from "../../domain/entities/Shelf";
 import { ShelfMapper } from "./ShelfMapper";
 
 export class TemperatureReadingMapper {
@@ -14,7 +14,7 @@ export class TemperatureReadingMapper {
 			new Date(dateTimestamp),
 			CelsiusDegrees.fromNumber(temperatureCelsius),
 			temperatureWasTooHigh,
-			temperatureWasTooLow,
+			temperatureWasTooLow
 		);
 	}
 
@@ -38,7 +38,7 @@ export class TemperatureReadingMapper {
 			new Date(date),
 			CelsiusDegrees.fromNumber(temperatureCelsius),
 			temperatureWasTooHigh,
-			temperatureWasTooLow,
+			temperatureWasTooLow
 		);
 	}
 

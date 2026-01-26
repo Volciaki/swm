@@ -11,5 +11,7 @@ export class UUID {
 		return new UUID(value);
 	}
 
-	get value() { return this._value };
+	get value() {
+		return this._value;
+	}
 }

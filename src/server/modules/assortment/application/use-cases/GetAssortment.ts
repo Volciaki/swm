@@ -1,12 +1,12 @@
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
-import { GetAssortmentDTO } from "../dto/GetAssortmentDTO";
-import { AssortmentHelper } from "../helpers/AssortmentHelper";
-import { AssortmentFileHelper } from "../services/AssortmentFileHelper";
+import type { GetAssortmentDTO } from "../dto/GetAssortmentDTO";
+import type { AssortmentHelper } from "../helpers/AssortmentHelper";
+import type { AssortmentFileHelper } from "../services/AssortmentFileHelper";
 
 export class GetAssortment {
 	constructor(
 		private readonly assortmentHelper: AssortmentHelper,
-		private readonly assortmentFileHelper: AssortmentFileHelper,
+		private readonly assortmentFileHelper: AssortmentFileHelper
 	) {}
 
 	async execute(dto: GetAssortmentDTO) {

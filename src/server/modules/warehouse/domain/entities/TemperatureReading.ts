@@ -1,22 +1,34 @@
-import { CelsiusDegrees, UUID } from "@/server/utils";
-import { Shelf } from "./Shelf";
+import type { CelsiusDegrees, UUID } from "@/server/utils";
+import type { Shelf } from "./Shelf";
 
 export class TemperatureReading {
 	private constructor(
-        private readonly _id: UUID,
-        private readonly _shelf: Shelf,
+		private readonly _id: UUID,
+		private readonly _shelf: Shelf,
 		private readonly _date: Date,
 		private readonly _temperature: CelsiusDegrees,
 		private readonly _temperatureWasTooHigh: boolean,
-		private readonly _temperatureWasTooLow: boolean,
+		private readonly _temperatureWasTooLow: boolean
 	) {}
 
-	get id() { return this._id };
-	get shelf() { return this._shelf };
-	get date() { return this._date };
-	get temperature() { return this._temperature };
-	get temperatureWasTooLow() { return this._temperatureWasTooLow };
-	get temperatureWasTooHigh() { return this._temperatureWasTooHigh };
+	get id() {
+		return this._id;
+	}
+	get shelf() {
+		return this._shelf;
+	}
+	get date() {
+		return this._date;
+	}
+	get temperature() {
+		return this._temperature;
+	}
+	get temperatureWasTooLow() {
+		return this._temperatureWasTooLow;
+	}
+	get temperatureWasTooHigh() {
+		return this._temperatureWasTooHigh;
+	}
 
 	static createNew(id: UUID, shelf: Shelf, date: Date) {
 		return new TemperatureReading(
@@ -25,7 +37,7 @@ export class TemperatureReading {
 			date,
 			shelf.currentTemperature,
 			shelf.currentTemperature.value > shelf.temperatureRange.maximal.value,
-			shelf.currentTemperature.value < shelf.temperatureRange.minimal.value,
+			shelf.currentTemperature.value < shelf.temperatureRange.minimal.value
 		);
 	}
 
@@ -35,15 +47,8 @@ export class TemperatureReading {
 		date: Date,
 		temperature: CelsiusDegrees,
 		temperatureWasTooHigh: boolean,
-		temperatureWasTooLow: boolean,
+		temperatureWasTooLow: boolean
 	) {
-		return new TemperatureReading(
-			id,
-			shelf,
-			date,
-			temperature,
-			temperatureWasTooHigh,
-			temperatureWasTooLow,
-		);
+		return new TemperatureReading(id, shelf, date, temperature, temperatureWasTooHigh, temperatureWasTooLow);
 	}
 }

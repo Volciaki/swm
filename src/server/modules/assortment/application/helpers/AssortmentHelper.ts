@@ -1,12 +1,13 @@
-import { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
-import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
+import type { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
+import type { FileReference } from "@/server/utils/files/domain/entities/FileReference";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { FetchFileResponseDTO } from "@/server/utils/files/application/dto/FetchFileResponseDTO";
-import { UUID, UUIDManager } from "@/server/utils";
-import { Assortment } from "../../domain/entities/Assortment";
-import { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
+import type { FetchFileResponseDTO } from "@/server/utils/files/application/dto/FetchFileResponseDTO";
+import type { UUIDManager } from "@/server/utils";
+import { UUID } from "@/server/utils";
+import type { Assortment } from "../../domain/entities/Assortment";
+import type { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
 import { AssortmentNotFoundError } from "../errors/AssortmentNotFound";
-import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
+import type { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
 
 export type FileGetter = FileContextByIDGetter;
@@ -23,27 +24,24 @@ export interface AssortmentHelper {
 	createByDTO(
 		dto: CreateAssortmentDTO,
 		getQRCode: QRCodeGetter,
-		uploadBase64Image: Base64UploadFunction,
+		uploadBase64Image: Base64UploadFunction
 	): Promise<Assortment>;
 	delete(
 		assortment: Assortment,
 		deleteQRCodeByPath: DeleteQRCodeByPath,
-		deleteImageByPath: DeleteProductImageByPathFunction,
+		deleteImageByPath: DeleteProductImageByPathFunction
 	): Promise<void>;
-};
+}
 
 export class DefaultAssortmentHelper implements AssortmentHelper {
 	constructor(
 		private readonly assortmentRepository: AssortmentRepository,
-		private readonly uuidManager: UUIDManager,
-	) { }
+		private readonly uuidManager: UUIDManager
+	) {}
 
 	async getByIdStringOrThrow(id: string, getFile: FileGetter) {
 		const assortmentId = UUID.fromString(id);
-		const assortment = await this.assortmentRepository.getById(
-			assortmentId,
-			async (id) => getFile(id),
-		);
+		const assortment = await this.assortmentRepository.getById(assortmentId, async (id) => getFile(id));
 
 		if (assortment === null) throw new AssortmentNotFoundError(assortmentId);
 
@@ -53,27 +51,26 @@ export class DefaultAssortmentHelper implements AssortmentHelper {
 	async createByDTO(
 		dto: CreateAssortmentDTO,
 		getQRCode: QRCodeGetter,
-		addAssortmentImageByBase64: Base64UploadFunction,
+		addAssortmentImageByBase64: Base64UploadFunction
 	) {
 		const assortmentId = this.uuidManager.generate().value;
-		const image = dto.imageContentBase64 === null
-			? null
-			: await addAssortmentImageByBase64(`${assortmentId}.png`, dto.imageContentBase64);
+		const image =
+			dto.imageContentBase64 === null
+				? null
+				: await addAssortmentImageByBase64(`${assortmentId}.png`, dto.imageContentBase64);
 		const qrCode = await getQRCode(assortmentId);
 
-		const assortment = AssortmentMapper.fromAssortmentDTOToAssortment(
-			{
-				...dto,
-				id: assortmentId,
-				storedAtTimestamp: (new Date()).getTime(),
-				qrCode: FileReferenceMapper.fromEntityToDTO(qrCode),
-				image: image === null ? null : FileReferenceMapper.fromEntityToDTO(image),
-				hasExpired: false,
-				hasExpiredNotification: null,
-				isCloseToExpiration: false,
-				isCloseToExpirationNotification: null,
-			},
-		);
+		const assortment = AssortmentMapper.fromAssortmentDTOToAssortment({
+			...dto,
+			id: assortmentId,
+			storedAtTimestamp: new Date().getTime(),
+			qrCode: FileReferenceMapper.fromEntityToDTO(qrCode),
+			image: image === null ? null : FileReferenceMapper.fromEntityToDTO(image),
+			hasExpired: false,
+			hasExpiredNotification: null,
+			isCloseToExpiration: false,
+			isCloseToExpirationNotification: null,
+		});
 		await this.assortmentRepository.create(assortment);
 		return assortment;
 	}
@@ -81,11 +78,11 @@ export class DefaultAssortmentHelper implements AssortmentHelper {
 	async delete(
 		assortment: Assortment,
 		deleteQRCodeByPath: DeleteQRCodeByPath,
-		deleteImageByPath: DeleteProductImageByPathFunction,
+		deleteImageByPath: DeleteProductImageByPathFunction
 	) {
 		await this.assortmentRepository.delete(assortment);
 		await deleteQRCodeByPath(assortment.qrCode.path);
-		
+
 		if (assortment.image === null) return;
 
 		await deleteImageByPath(assortment.image.path);

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { UUID } from "./entity";
-import { UUIDManager } from "./service";
+import type { UUIDManager } from "./service";
 
 export class DefaultUUIDManager implements UUIDManager {
 	generate(): UUID {

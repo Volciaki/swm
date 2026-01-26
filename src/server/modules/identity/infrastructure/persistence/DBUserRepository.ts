@@ -1,14 +1,14 @@
-import { Repository } from "typeorm";
-import { UUID } from "@/server/utils";
-import { UserRepository } from "../../domain/repositories/UserRepository";
-import { User } from "../../domain/entities/User";
-import { Email } from "../../domain/entities/Email";
-import { DBUser } from "../entities/DBUser";
+import type { Repository } from "typeorm";
+import type { UUID } from "@/server/utils";
+import type { UserRepository } from "../../domain/repositories/UserRepository";
+import type { User } from "../../domain/entities/User";
+import type { Email } from "../../domain/entities/Email";
+import type { DBUser } from "../entities/DBUser";
 import { UserMapper } from "../mappers/UserMapper";
 
 export class DBUserRepository implements UserRepository {
 	constructor(private readonly db: Repository<DBUser>) {}
-    
+
 	async create(user: User) {
 		const dbUser = UserMapper.fromUserToDBUser(user);
 		await this.db.save(dbUser);

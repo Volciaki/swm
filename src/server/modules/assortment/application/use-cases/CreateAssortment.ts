@@ -1,21 +1,18 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
-import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
-import { AssortmentHelper, Base64UploadFunction, QRCodeGetter } from "../helpers/AssortmentHelper";
+import type { AssortmentHelper, Base64UploadFunction, QRCodeGetter } from "../helpers/AssortmentHelper";
 
 export type CreateAssortmentOptions = {
-	getQRCode: QRCodeGetter,
-	addAssortmentImageByBase64: Base64UploadFunction
+	getQRCode: QRCodeGetter;
+	addAssortmentImageByBase64: Base64UploadFunction;
 };
 
 export class CreateAssortment {
 	constructor(private readonly assortmentHelper: AssortmentHelper) {}
 
-	async execute(
-		dto: CreateAssortmentDTO,
-		options: CreateAssortmentOptions,
-		currentUser?: UserDTO,
-	) {
+	async execute(dto: CreateAssortmentDTO, options: CreateAssortmentOptions, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
 		const { getQRCode, addAssortmentImageByBase64 } = options;

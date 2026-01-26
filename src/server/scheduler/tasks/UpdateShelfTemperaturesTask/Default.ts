@@ -3,7 +3,7 @@ import { GetAllAssortment } from "@/server/modules/assortment/application/use-ca
 import { StoreTemperatureReading } from "@/server/modules/warehouse/application/use-cases/StoreTemperatureReading";
 import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
 import { UpdateShelf } from "@/server/modules/warehouse/application/use-cases/UpdateShelf";
-import { GetServicesContext } from "@/server/trpc/services/context";
+import type { GetServicesContext } from "@/server/trpc/services/context";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
 import { getPresets, getServices } from "@/server/trpc/services";
 
@@ -16,7 +16,7 @@ export const getDefaultUpdateShelfTemperaturesPreset = (ctx: GetServicesContext)
 
 	const getFileAction = new GetFile(fileHelper);
 
-	const assortmentFileHelper = services.helpers.assortmentFile.default.get(getFileAction)
+	const assortmentFileHelper = services.helpers.assortmentFile.default.get(getFileAction);
 	const temperatureReadingRepository = services.repositories.temperatureReading.db;
 	const shelfRepository = services.repositories.shelf.db;
 	const shelfThermometer = services.utils.shelfThermometer.random;
@@ -30,7 +30,7 @@ export const getDefaultUpdateShelfTemperaturesPreset = (ctx: GetServicesContext)
 		shelfHelper,
 		uuidManager,
 		temperatureReadingRepository,
-		shelfRepository,
+		shelfRepository
 	);
 
 	return new UpdateShelfTemperaturesTask(
@@ -38,6 +38,6 @@ export const getDefaultUpdateShelfTemperaturesPreset = (ctx: GetServicesContext)
 		getAllAssortment,
 		shelfThermometer,
 		updateShelf,
-		storeTemperatureReading,
+		storeTemperatureReading
 	);
 };

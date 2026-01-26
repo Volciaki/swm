@@ -1,5 +1,5 @@
 import { loginDTOSchema } from "@/server/modules/identity/application/dto/LoginDTO";
-import { LoginResponseDTO } from "@/server/modules/identity/application/dto/LoginResponseDTO";
+import type { LoginResponseDTO } from "@/server/modules/identity/application/dto/LoginResponseDTO";
 import { Login } from "@/server/modules/identity/application/use-cases/Login";
 import { getServices } from "../../services";
 import { procedure } from "../../init";
@@ -21,7 +21,7 @@ export const login = procedure.input(loginDTOSchema).mutation<LoginResponseDTO>(
 		authenticationManager,
 		uuidManager,
 		twoFactorAuthenticationValueGenerator,
-		twoFactorAuthenticationValueSender,
+		twoFactorAuthenticationValueSender
 	);
 
 	const response = await action.execute(input, ctx.user ?? undefined);

@@ -1,12 +1,12 @@
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
-import { BackupHelper } from "@/server/modules/backup/application/helpers/BackupHelper";
+import type { BackupHelper } from "@/server/modules/backup/application/helpers/BackupHelper";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAllReports } from "@/server/modules/reporting/application/use-cases/GetAllReports";
 import { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFile";
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
-import { Services } from "../../get";
+import type { Services } from "../../get";
 
 export const getDefaultBackupHelperPreset = (services: Services): BackupHelper => {
 	const fileReferenceRepository = services.repositories.fileReference.db;
@@ -15,20 +15,36 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 	const encryptionManager = services.utils.encryptionManager.default;
 
 	const reportFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.REPORTS);
-	const reportFileManager =
-		services.utils.fileManager.default.get(reportFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
+	const reportFileManager = services.utils.fileManager.default.get(
+		reportFileStorage,
+		fileReferenceRepository,
+		fileHelper,
+		encryptionManager
+	);
 
 	const backupsFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.BACKUPS);
-	const backupsFileManager =
-		services.utils.fileManager.default.get(backupsFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
+	const backupsFileManager = services.utils.fileManager.default.get(
+		backupsFileStorage,
+		fileReferenceRepository,
+		fileHelper,
+		encryptionManager
+	);
 
 	const assortmentImageFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.ASSORTMENT_IMAGES);
-	const assortmentImageFileManager =
-		services.utils.fileManager.default.get(assortmentImageFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
+	const assortmentImageFileManager = services.utils.fileManager.default.get(
+		assortmentImageFileStorage,
+		fileReferenceRepository,
+		fileHelper,
+		encryptionManager
+	);
 
 	const qrCodeFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.QR_CODES);
-	const qrCodeFileManager =
-		services.utils.fileManager.default.get(qrCodeFileStorage, fileReferenceRepository, fileHelper, encryptionManager);
+	const qrCodeFileManager = services.utils.fileManager.default.get(
+		qrCodeFileStorage,
+		fileReferenceRepository,
+		fileHelper,
+		encryptionManager
+	);
 
 	const getFile = new GetFile(fileHelper);
 
@@ -61,12 +77,12 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 		uploadReportFile,
 		deleteAssortmentImageFile,
 		deleteAssortmentQRCodeFile,
-		deleteReportFile,
+		deleteReportFile
 	);
 	const databaseDataManager = services.utils.databaseDataManager.default;
 	const uploadBackupFile = new UploadFile(backupsFileManager);
 	const fetchBackupFile = new FetchFile(fileHelper, backupsFileManager);
-	
+
 	return services.helpers.backup.default.get(
 		fileStorageDataManager,
 		databaseDataManager,
@@ -74,6 +90,6 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 		uuidManager,
 		backupRepository,
 		getFile,
-		fetchBackupFile,
+		fetchBackupFile
 	);
-}
+};

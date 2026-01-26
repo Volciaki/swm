@@ -2,7 +2,7 @@ import { GenerateTemperatureExceededDetailsReport } from "@/server/modules/repor
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
 import { GetShelfTemperatureReadings } from "@/server/modules/warehouse/application/use-cases/GetShelfTemperatureReading";
-import { ReportDTO } from "@/server/modules/reporting/application/dto/shared/ReportDTO";
+import type { ReportDTO } from "@/server/modules/reporting/application/dto/shared/ReportDTO";
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
@@ -21,13 +21,14 @@ export const generateTemperatureExceededDetails = procedure.mutation<ReportDTO>(
 	const getAllShelves = new GetAllShelves(shelfRepository);
 	const getShelfTemperatureReadings = new GetShelfTemperatureReadings(shelfHelper, temperatureReadingRepository);
 
-	const temperatureExceededDetailsReportGenerator = services.utils.temperatureExceededDetailsReportGenerator.default.get(
-		getAllAssortment,
-		getAllShelves,
-		getShelfTemperatureReadings,
-	);
+	const temperatureExceededDetailsReportGenerator =
+		services.utils.temperatureExceededDetailsReportGenerator.default.get(
+			getAllAssortment,
+			getAllShelves,
+			getShelfTemperatureReadings
+		);
 	const reportHelper = presets.reportHelper.default;
 
 	const action = new GenerateTemperatureExceededDetailsReport(temperatureExceededDetailsReportGenerator, reportHelper);
 	return await action.execute(ctx.user ?? undefined);
-})
+});

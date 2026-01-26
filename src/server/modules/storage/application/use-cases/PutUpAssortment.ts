@@ -1,6 +1,7 @@
-import { UserDTO, UnauthorizedError } from "@/server/utils";
-import { PutUpAssortmentDTO } from "../dto/PutUpAssortmentDTO";
-import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { PutUpAssortmentDTO } from "../dto/PutUpAssortmentDTO";
+import type { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
 
 export class PutUpAssortment {
 	constructor(private readonly storageHelper: StorageAssortmentHelper) {}

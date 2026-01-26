@@ -2,13 +2,13 @@ import { InvalidPublicVisibilityValue } from "../errors/InvalidPublicVisibilityV
 import { InvalidPrivateVisibilityValue } from "../errors/InvalidPrivateVisibilityValue";
 
 type Private = {
-	isPublic: false,
-	publicUrl: undefined,
+	isPublic: false;
+	publicUrl: undefined;
 };
 
 type Public = {
-	isPublic: true,
-	publicUrl: string,
+	isPublic: true;
+	publicUrl: string;
 };
 
 export type VisibilityValue = Private | Public;
@@ -16,8 +16,12 @@ export type VisibilityValue = Private | Public;
 export class Visibility<V extends VisibilityValue = VisibilityValue> {
 	private constructor(private readonly _value: V) {}
 
-	get publicUrl(): V["publicUrl"] { return this._value.publicUrl };
-	get isPublic(): V["isPublic"] { return this._value.isPublic };
+	get publicUrl(): V["publicUrl"] {
+		return this._value.publicUrl;
+	}
+	get isPublic(): V["isPublic"] {
+		return this._value.isPublic;
+	}
 
 	static create(isPublic: boolean, publicUrl?: string) {
 		if (!isPublic && publicUrl) throw new InvalidPrivateVisibilityValue();

@@ -1,4 +1,4 @@
-import { Services } from "../get";
+import type { Services } from "../get";
 
 import { getAssortmentFileHelperPresets } from "./AssortmentFileHelper";
 import { getAssortmentHelperPresets } from "./AssortmentHelper";

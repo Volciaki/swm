@@ -2,19 +2,20 @@ import { getStreamAsBuffer as streamToBuffer } from "get-stream";
 import { EnvironmentType } from "@/server/environment/type";
 import { environment } from "@/server/environment";
 import { Visibility } from "../../domain/entities/Visibility";
-import { FileStorage, FileStorageType } from "../../domain/services/FileStorage";
-import { S3StorageService } from "../services/S3StorageService";
+import type { FileStorage } from "../../domain/services/FileStorage";
+import { FileStorageType } from "../../domain/services/FileStorage";
+import type { S3StorageService } from "../services/S3StorageService";
 
 export enum S3FileStorageBucket {
 	QR_CODES = "qr-codes",
 	ASSORTMENT_IMAGES = "assortment-images",
 	REPORTS = "reports",
 	BACKUPS = "backups",
-};
+}
 
 type BucketOptions = {
-	isPublic: boolean,
-	areFilesEncrypted: boolean,
+	isPublic: boolean;
+	areFilesEncrypted: boolean;
 };
 
 export const s3FileStorageBucketOptions: Record<S3FileStorageBucket, BucketOptions> = {
@@ -36,15 +37,18 @@ export const s3FileStorageBucketOptions: Record<S3FileStorageBucket, BucketOptio
 	},
 };
 
-export const isFileEncryptedByBucket = (bucket: S3FileStorageBucket) => s3FileStorageBucketOptions[bucket].areFilesEncrypted;
+export const isFileEncryptedByBucket = (bucket: S3FileStorageBucket) =>
+	s3FileStorageBucketOptions[bucket].areFilesEncrypted;
 
 export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage {
 	constructor(
 		private readonly s3StorageService: S3StorageService,
-		private readonly bucket: T,
-	) { }
+		private readonly bucket: T
+	) {}
 
-	get client() { return this.s3StorageService.client };
+	get client() {
+		return this.s3StorageService.client;
+	}
 
 	async setup() {
 		for (const bucketName of Object.values(S3FileStorageBucket)) {
@@ -78,20 +82,15 @@ export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage
 		await this.client.setBucketPolicy(bucket, JSON.stringify(policy));
 	}
 
-	async uploadFile(
-		path: string,
-		buffer: Buffer,
-		mimeType?: string,
-	) {
+	async uploadFile(path: string, buffer: Buffer, mimeType?: string) {
 		await this.client.putObject(
 			this.bucket,
 			path,
 			buffer,
 			undefined,
+			// prettier-ignore
 			mimeType
-				? {
-					"Content-Type": mimeType,
-				}
+				? { "Content-Type": mimeType }
 				: undefined
 		);
 	}
@@ -103,7 +102,7 @@ export class S3FileStorage<T extends S3FileStorageBucket> implements FileStorage
 	async getVisibility(path: string) {
 		const bucketOptions = s3FileStorageBucketOptions[this.bucket];
 		const { isPublic } = bucketOptions;
-		const publicUrl = `${environment.storage.publicUrl}/${this.bucket}/${path}`
+		const publicUrl = `${environment.storage.publicUrl}/${this.bucket}/${path}`;
 
 		if (isPublic) return Visibility.create(isPublic, publicUrl);
 		return Visibility.create(isPublic, undefined);

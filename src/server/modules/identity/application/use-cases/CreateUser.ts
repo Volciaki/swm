@@ -1,16 +1,17 @@
-import { UnauthorizedError, UserDTO, UUIDManager } from "@/server/utils";
+import type { UserDTO, UUIDManager } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { User } from "../../domain/entities/User";
-import { UserRepository } from "../../domain/repositories/UserRepository";
-import { CreateUserDTO } from "../dto/CreateUserDTO";
-import { StringHasher } from "../services/StringHasher";
+import type { UserRepository } from "../../domain/repositories/UserRepository";
+import type { CreateUserDTO } from "../dto/CreateUserDTO";
+import type { StringHasher } from "../services/StringHasher";
 import { UserMapper } from "../../infrastructure/mappers/UserMapper";
 
 export class CreateUser {
 	constructor(
-        private readonly userRepository: UserRepository,
-        private readonly stringHasher: StringHasher,
-        private readonly uuidManager: UUIDManager,
+		private readonly userRepository: UserRepository,
+		private readonly stringHasher: StringHasher,
+		private readonly uuidManager: UUIDManager
 	) {}
 
 	async execute(dto: CreateUserDTO, currentUser?: UserDTO) {
@@ -22,7 +23,7 @@ export class CreateUser {
 			this.uuidManager.generate(),
 			dto.name,
 			dto.isAdmin,
-			dto.twoFactorAuthenticationEnabled,
+			dto.twoFactorAuthenticationEnabled
 		);
 		await this.userRepository.create(user);
 		return UserMapper.fromUserToUserDTO(user);

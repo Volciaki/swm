@@ -1,7 +1,7 @@
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
-import { UUID } from "@/server/utils";
-import { AssortmentFileHelper } from "../../application/services/AssortmentFileHelper";
+import type { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
+import type { UUID } from "@/server/utils";
+import type { AssortmentFileHelper } from "../../application/services/AssortmentFileHelper";
 
 export class DefaultAssortmentFileHelper implements AssortmentFileHelper {
 	constructor(private readonly getFile: GetFile) {

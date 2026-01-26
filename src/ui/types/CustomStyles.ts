@@ -1,6 +1,6 @@
 import { type CSSProperties } from "react";
 
 export type CustomStyles = {
-    className?: string;
-    style?: CSSProperties;
+	className?: string;
+	style?: CSSProperties;
 };

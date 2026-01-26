@@ -1,6 +1,6 @@
-import { UUID } from "@/server/utils/uuid";
-import { Visibility } from "./Visibility";
-import { FileMetadata } from "./FileMetadata";
+import type { UUID } from "@/server/utils/uuid";
+import type { Visibility } from "./Visibility";
+import type { FileMetadata } from "./FileMetadata";
 
 export class FileReference {
 	private constructor(
@@ -10,16 +10,30 @@ export class FileReference {
 		private readonly _path: string,
 		private readonly _visibility: Visibility,
 		private readonly _metadata: FileMetadata,
-		private readonly _isEncrypted: boolean,
+		private readonly _isEncrypted: boolean
 	) {}
 
-	get id() { return this._id };
-	get sizeBytes() { return this._sizeBytes };
-	get mimeType() { return this._mimeType };
-	get path() { return this._path };
-	get visibility() { return this._visibility };
-	get metadata() { return this._metadata };
-	get isEncrypted() { return this._isEncrypted };
+	get id() {
+		return this._id;
+	}
+	get sizeBytes() {
+		return this._sizeBytes;
+	}
+	get mimeType() {
+		return this._mimeType;
+	}
+	get path() {
+		return this._path;
+	}
+	get visibility() {
+		return this._visibility;
+	}
+	get metadata() {
+		return this._metadata;
+	}
+	get isEncrypted() {
+		return this._isEncrypted;
+	}
 
 	static create(
 		id: UUID,
@@ -28,16 +42,8 @@ export class FileReference {
 		path: string,
 		visibility: Visibility,
 		metadata: FileMetadata,
-		isEncrypted: boolean,
+		isEncrypted: boolean
 	) {
-		return new FileReference(
-			id,
-			sizeBytes,
-			mimeType,
-			path,
-			visibility,
-			metadata,
-			isEncrypted,
-		);
+		return new FileReference(id, sizeBytes, mimeType, path, visibility, metadata, isEncrypted);
 	}
 }

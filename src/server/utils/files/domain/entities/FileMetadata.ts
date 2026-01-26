@@ -7,16 +7,17 @@ const stringIsFileStorageType = (value: string) => isValidEnumValue(FileStorageT
 export class FileMetadata {
 	constructor(
 		private readonly _storageType: FileStorageType,
-		private readonly _bucket: string | null,
+		private readonly _bucket: string | null
 	) {}
 
-	get storageType() { return this._storageType };
-	get bucket() { return this._bucket };
+	get storageType() {
+		return this._storageType;
+	}
+	get bucket() {
+		return this._bucket;
+	}
 
-	static create(
-		storageType: string,
-		bucket: string | null,
-	) {
+	static create(storageType: string, bucket: string | null) {
 		const storageTypeIsValid = stringIsFileStorageType(storageType);
 		if (!storageTypeIsValid) throw new InvalidStorageTypeValue(storageType);
 

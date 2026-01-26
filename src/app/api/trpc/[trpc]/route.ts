@@ -17,6 +17,6 @@ const handler = (req: Request) => {
 		},
 	});
 	return res;
-}
+};
 
 export { handler as GET, handler as POST };

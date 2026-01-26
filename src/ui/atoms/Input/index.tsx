@@ -16,10 +16,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 				padding: `${padding}px`,
 				...style,
 			}}
-			className={clsx([
-				styles["input"],
-				{ [styles["danger"]]: danger },
-			])}
+			className={clsx([styles["input"], { [styles["danger"]]: danger }])}
 			ref={ref}
 			{...props}
 		>

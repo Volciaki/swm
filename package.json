@@ -60,6 +60,7 @@
     "@types/uuid": "^11.0.0",
     "@types/yauzl-promise": "^4",
     "@types/yazl": "^3",
+    "@typescript-eslint/eslint-plugin": "^8.53.1",
     "babel-plugin-react-compiler": "1.0.0",
     "concurrently": "^9.2.1",
     "eslint": "^9",

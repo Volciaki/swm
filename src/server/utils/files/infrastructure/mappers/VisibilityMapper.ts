@@ -1,12 +1,9 @@
-import { VisibilityDTO } from "../../application/dto/shared/VisbilityDTO";
+import type { VisibilityDTO } from "../../application/dto/shared/VisbilityDTO";
 import { Visibility } from "../../domain/entities/Visibility";
 
 export class VisibilityMapper {
 	static fromDTO(dto: VisibilityDTO): Visibility {
-		return Visibility.create(
-			dto.isPublic,
-			dto.publicUrl ?? undefined,
-		);
+		return Visibility.create(dto.isPublic, dto.publicUrl ?? undefined);
 	}
 
 	static toDTO(entity: Visibility): VisibilityDTO {

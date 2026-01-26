@@ -1,4 +1,4 @@
-import { GetServicesContext } from "../../context";
+import type { GetServicesContext } from "../../context";
 import { getDefaultAssortmentFileHelper } from "./Default";
 
 export const getAssortmentFileHelperServices = (ctx: GetServicesContext) => {

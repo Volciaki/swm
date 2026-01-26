@@ -1,6 +1,7 @@
 import { Base64, Base64Mapper } from "@/server/utils/base64";
-import { FileReference } from "../../domain/entities/FileReference";
-import { FileManager, UploadFileData } from "../../domain/services/FileManager";
+import type { FileReference } from "../../domain/entities/FileReference";
+import type { UploadFileData } from "../../domain/services/FileManager";
+import { FileManager } from "../../domain/services/FileManager";
 import { FileMetadata } from "../../domain/entities/FileMetadata";
 
 export class DefaultFileManager extends FileManager {
@@ -15,11 +16,8 @@ export class DefaultFileManager extends FileManager {
 		return await this.helper.createByDTO(
 			file,
 			visibility,
-			FileMetadata.create(
-				this.storage.getStorageType(),
-				file.metadata.bucket,
-			),
-			file.predefinedId,
+			FileMetadata.create(this.storage.getStorageType(), file.metadata.bucket),
+			file.predefinedId
 		);
 	}
 
@@ -30,7 +28,7 @@ export class DefaultFileManager extends FileManager {
 
 	async fetchFile(file: FileReference) {
 		const fileBuffer = await this.storage.fetchFile(file.path);
-		
+
 		let decryptedBuffer;
 		if (file.isEncrypted) decryptedBuffer = await this.encryptionManager.decrypt(fileBuffer);
 

@@ -1,4 +1,4 @@
-import { GetServicesContext } from "@/server/trpc/services/context";
+import type { GetServicesContext } from "@/server/trpc/services/context";
 import { getDefaultExpirationMonitoring } from "./Default";
 
 export const getExpirationMonitoringPresets = (ctx: GetServicesContext) => {

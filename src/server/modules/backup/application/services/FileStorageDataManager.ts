@@ -1,8 +1,8 @@
-import { Base64 } from "@/server/utils";
-import { FileReferenceDTO } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
+import type { Base64 } from "@/server/utils";
+import type { FileReferenceDTO } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
 
 export type FileDataDump = FileReferenceDTO & {
-	base64: Base64,
+	base64: Base64;
 };
 
 export type AccessedFileDataDump = Omit<FileDataDump, "visibility" | "id" | "sizeBytes">;
@@ -14,10 +14,10 @@ export type FileStorageDataDumpContext = {
 
 type GenericFileStorageDataDump<T> = {
 	assortments: {
-		images: T[],
-		qrCodes: T[],
-	},
-	reports: T[],
+		images: T[];
+		qrCodes: T[];
+	};
+	reports: T[];
 	context: FileStorageDataDumpContext;
 };
 
@@ -28,4 +28,4 @@ export type AccessedFileStorageDataDump = GenericFileStorageDataDump<AccessedFil
 export interface FileStorageDataManager {
 	dump(): Promise<FileStorageDataDump>;
 	restore(dump: AccessedFileStorageDataDump): Promise<void>;
-};
+}

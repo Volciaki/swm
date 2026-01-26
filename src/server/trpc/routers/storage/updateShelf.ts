@@ -1,5 +1,5 @@
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { ShelfDTO } from "@/server/modules/warehouse/application/dto/shared/ShelfDTO";
+import type { ShelfDTO } from "@/server/modules/warehouse/application/dto/shared/ShelfDTO";
 import { UpdateShelf } from "@/server/modules/warehouse/application/use-cases/UpdateShelf";
 import { UpdateFullShelf } from "@/server/modules/storage/application/use-cases/UpdateFullShelf";
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";

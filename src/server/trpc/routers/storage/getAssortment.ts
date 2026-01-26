@@ -1,5 +1,5 @@
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
-import { AssortmentDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDTO";
+import type { AssortmentDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDTO";
 import { getAssortmentDTOSchema } from "@/server/modules/assortment/application/dto/GetAssortmentDTO";
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";

@@ -1,14 +1,14 @@
-import { Repository } from "typeorm";
-import { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
+import type { Repository } from "typeorm";
+import type { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
 import { UUID } from "@/server/utils";
-import { DBReport } from "../entities/DBReport";
-import { ReportRepository } from "../../domain/repositories/ReportRepository";
+import type { DBReport } from "../entities/DBReport";
+import type { ReportRepository } from "../../domain/repositories/ReportRepository";
 import { ReportMapper } from "../mappers/ReportMapper";
-import { Report } from "../../domain/entities/Report";
+import type { Report } from "../../domain/entities/Report";
 
 export class DBReportRepository implements ReportRepository {
 	constructor(private readonly db: Repository<DBReport>) {}
-    
+
 	async create(report: Report) {
 		const dbUser = ReportMapper.fromEntityToDB(report);
 		await this.db.save(dbUser);

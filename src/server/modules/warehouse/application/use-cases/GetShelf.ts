@@ -1,6 +1,6 @@
-import { GetShelfDTO } from "../dto/GetShelfDTO";
+import type { GetShelfDTO } from "../dto/GetShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
-import { ShelfHelper } from "../helpers/ShelfHelper";
+import type { ShelfHelper } from "../helpers/ShelfHelper";
 
 export class GetShelf {
 	constructor(private readonly shelfHelper: ShelfHelper) {}

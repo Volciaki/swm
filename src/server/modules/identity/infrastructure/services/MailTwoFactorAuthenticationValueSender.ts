@@ -1,7 +1,7 @@
 import { DefaultEmailManager, EmailMessage } from "@/server/utils";
-import { TwoFactorAuthenticationValueSender } from "../../application/services/TwoFactorAuthenticationValueSender";
-import { TwoFactorAuthenticationSession } from "../../domain/entities/TwoFactorAuthenticationSession";
-import { User } from "../../domain/entities/User";
+import type { TwoFactorAuthenticationValueSender } from "../../application/services/TwoFactorAuthenticationValueSender";
+import type { TwoFactorAuthenticationSession } from "../../domain/entities/TwoFactorAuthenticationSession";
+import type { User } from "../../domain/entities/User";
 
 export class MailTwoFactorAuthenticationValueSender implements TwoFactorAuthenticationValueSender {
 	async deliverToUser(user: User, authenticationSession: TwoFactorAuthenticationSession) {
@@ -18,7 +18,7 @@ export class MailTwoFactorAuthenticationValueSender implements TwoFactorAuthenti
 	                <p style="font-size: 2rem; font-family: 'Arial', serif">You may use it to finish logging in, or reset your password.</p>
                 </div>
             `,
-			`Your 2FA code is:\n\n${authenticationSession.value}\n\nYou may use it to finish logging in, or reset your password.`,
+			`Your 2FA code is:\n\n${authenticationSession.value}\n\nYou may use it to finish logging in, or reset your password.`
 		);
 		await mailManager.send(message);
 	}

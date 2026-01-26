@@ -10,4 +10,4 @@ export const deleteUser = procedure.input(deleteUserDTOSchema).mutation<void>(as
 
 	const action = new DeleteUser(userRepository);
 	return await action.execute(input, ctx.user ?? undefined);
-})
+});

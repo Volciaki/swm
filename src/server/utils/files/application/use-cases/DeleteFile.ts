@@ -1,7 +1,8 @@
-import { UserDTO, UnauthorizedError } from "@/server/utils/identity";
-import { FileManager } from "../../domain/services/FileManager";
-import { DeleteFileDTO } from "../dto/DeleteFile";
-import { FileHelper } from "../helpers/FileHelper";
+import type { UserDTO } from "@/server/utils/identity";
+import { UnauthorizedError } from "@/server/utils/identity";
+import type { FileManager } from "../../domain/services/FileManager";
+import type { DeleteFileDTO } from "../dto/DeleteFile";
+import type { FileHelper } from "../helpers/FileHelper";
 
 export type DeleteFileOptions = {
 	skipAuthentication: boolean;
@@ -10,7 +11,7 @@ export type DeleteFileOptions = {
 export class DeleteFile {
 	constructor(
 		private readonly fileHelper: FileHelper,
-		private readonly fileManager: FileManager,
+		private readonly fileManager: FileManager
 	) {}
 
 	async execute(dto: DeleteFileDTO, optionsUnsafe?: DeleteFileOptions, currentUser?: UserDTO) {

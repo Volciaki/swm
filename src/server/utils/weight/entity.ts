@@ -12,8 +12,12 @@ export class Weight {
 		this._grams = positive;
 	}
 
-	get grams() { return this._grams };
-	get kilograms() { return PositiveNumber.create(this.grams.value / 1000) };
+	get grams() {
+		return this._grams;
+	}
+	get kilograms() {
+		return PositiveNumber.create(this.grams.value / 1000);
+	}
 
 	static fromGrams(value: number) {
 		return new Weight(value);

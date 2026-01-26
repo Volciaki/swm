@@ -2,8 +2,8 @@
 
 import NextLink from "next/link";
 import { type ReactNode, type FC } from "react";
-import { type CustomStyles } from "@/ui/types";
 import clsx from "clsx";
+import { type CustomStyles } from "@/ui/types";
 import styles from "./index.module.scss";
 
 export type LinkProps = {
@@ -19,11 +19,7 @@ export const Link: FC<LinkProps> = ({ newTab, children, className, darkenOnHover
 	<NextLink
 		target={newTab ? "_blank" : undefined}
 		rel={newTab ? "noreferrer noopener" : undefined}
-		className={clsx(
-			[className],
-			[styles.anchor],
-			{ [styles["darken-on-hover"]]: darkenOnHover }
-		)}
+		className={clsx([className], [styles.anchor], { [styles["darken-on-hover"]]: darkenOnHover })}
 		style={style}
 		{...props}
 	>

@@ -1,5 +1,6 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
-import { NotificationRepository } from "../../domain/repositories/NotificationRepository";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { NotificationRepository } from "../../domain/repositories/NotificationRepository";
 import { NotificationMapper } from "../../infrastructure/mappers/NotificationMapper";
 
 export class GetNotifications {

@@ -1,5 +1,5 @@
 import { CelsiusDegrees } from "../entity";
-import { TemperatureRangeDTO } from "./dto";
+import type { TemperatureRangeDTO } from "./dto";
 import { TemperatureRange } from "./entity";
 
 export class TemperatureRangeMapper {

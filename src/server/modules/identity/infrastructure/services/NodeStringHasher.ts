@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { StringHasher } from "../../application/services/StringHasher";
+import type { StringHasher } from "../../application/services/StringHasher";
 
 export class NodeStringHasher implements StringHasher {
 	async hash(value: string) {

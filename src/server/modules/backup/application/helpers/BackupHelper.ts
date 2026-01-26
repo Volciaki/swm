@@ -1,21 +1,26 @@
 import { ZipFile as ZipFileWritable } from "yazl";
-import { fromBuffer as openZIPByBuffer, ZipFile as ZipFileReadable } from "yauzl-promise";
+import type { ZipFile as ZipFileReadable } from "yauzl-promise";
+import { fromBuffer as openZIPByBuffer } from "yauzl-promise";
 import { getStreamAsBuffer as streamToBuffer } from "get-stream";
 import { lookup as getMimeTypeByPath } from "mime-types";
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { isFileEncryptedByBucket, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import {
+	isFileEncryptedByBucket,
+	S3FileStorageBucket,
+} from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { FileStorageType } from "@/server/utils/files/domain/services/FileStorage";
-import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
-import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
-import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
-import { UUID, UUIDManager, Base64Mapper, Base64 } from "@/server/utils";
+import type { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
+import type { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
+import type { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
+import type { UUIDManager } from "@/server/utils";
+import { UUID, Base64Mapper, Base64 } from "@/server/utils";
 import { Backup } from "../../domain/entities/Backup";
-import { BackupRepository } from "../../domain/repositories/BackupRepository";
-import { AccessedFileStorageDataDump, FileStorageDataManager } from "../services/FileStorageDataManager";
-import { DatabaseDataDump, DatabaseDataManager } from "../services/DatabaseDataManager";
+import type { BackupRepository } from "../../domain/repositories/BackupRepository";
+import type { AccessedFileStorageDataDump, FileStorageDataManager } from "../services/FileStorageDataManager";
+import type { DatabaseDataDump, DatabaseDataManager } from "../services/DatabaseDataManager";
 import { BackupNotFoundError } from "../errors/NoBackupUtilitiesError";
 import { InvalidBackupError } from "../errors/InvalidBackupError";
-import { BackupDTO } from "../dto/shared/BackupDTO";
+import type { BackupDTO } from "../dto/shared/BackupDTO";
 import { BackupMapper } from "../../infrastructure/mappers/BackupMapper";
 
 type FullBackup = BackupDTO & {
@@ -31,7 +36,7 @@ export interface BackupHelper {
 	take(): Promise<Backup>;
 	apply(backup: Backup): Promise<void>;
 	getByIdStringOrThrow(id: string): Promise<Backup>;
-};
+}
 
 export class DefaultBackupHelper implements BackupHelper {
 	private databasePathPrefix = "database";
@@ -45,8 +50,8 @@ export class DefaultBackupHelper implements BackupHelper {
 		private readonly uuidManager: UUIDManager,
 		private readonly backupRepository: BackupRepository,
 		private readonly getFile: GetFile,
-		private readonly fetchBackupFile: FetchFile,
-	) { }
+		private readonly fetchBackupFile: FetchFile
+	) {}
 
 	private async fileGetter(id: UUID) {
 		const dto = await this.getFile.execute({ id: id.value });
@@ -86,7 +91,7 @@ export class DefaultBackupHelper implements BackupHelper {
 				{
 					skipAuthentication: true,
 					predefinedId: UUID.fromString(backup.file.id),
-				},
+				}
 			);
 		}
 	}
@@ -109,7 +114,9 @@ export class DefaultBackupHelper implements BackupHelper {
 				const stream = await entry.openReadStream();
 				const buffer = await streamToBuffer(stream);
 
-				if (segments[0] === this.databasePathPrefix) { databaseDataDumpBuffer = buffer }
+				if (segments[0] === this.databasePathPrefix) {
+					databaseDataDumpBuffer = buffer;
+				}
 
 				if (segments[0] === this.fileStoragePathPrefix) {
 					const bucket = segments[1];
@@ -149,7 +156,7 @@ export class DefaultBackupHelper implements BackupHelper {
 					qrCodes: qrCodesDataDump,
 				},
 				reports: reportsDataDump,
-				context: { bucketAndPathToId: fileStorageBucketAndPathToId }
+				context: { bucketAndPathToId: fileStorageBucketAndPathToId },
 			},
 		};
 	}
@@ -188,7 +195,7 @@ export class DefaultBackupHelper implements BackupHelper {
 
 		backupFile.addBuffer(
 			Buffer.from(JSON.stringify(fileStorageDataDump.context.bucketAndPathToId)),
-			`${this.fileStoragePathPrefix}/${this.fileStorageBucketAndPathToIdPath}`,
+			`${this.fileStoragePathPrefix}/${this.fileStorageBucketAndPathToIdPath}`
 		);
 
 		backupFile.addBuffer(databaseDataDump.exportBuffer, `${this.databasePathPrefix}/backup.dump`);
@@ -208,15 +215,11 @@ export class DefaultBackupHelper implements BackupHelper {
 				contentBase64: backupFileBase64.value,
 				isEncrypted: isFileEncryptedByBucket(S3FileStorageBucket.BACKUPS),
 			},
-			{ skipAuthentication: true },
+			{ skipAuthentication: true }
 		);
 
 		const now = new Date();
-		const backup = Backup.create(
-			backupId,
-			now,
-			FileReferenceMapper.fromDTOToEntity(backupFileReference),
-		);
+		const backup = Backup.create(backupId, now, FileReferenceMapper.fromDTOToEntity(backupFileReference));
 
 		await this.backupRepository.create(backup);
 
@@ -241,15 +244,12 @@ export class DefaultBackupHelper implements BackupHelper {
 		await this.databaseDataManager.restore(backupData.database);
 		await this.fileStorageDataManager.restore(backupData.fileStorageDump);
 
-		await this.recreateAllBackupFileReferences(currentBackups)
+		await this.recreateAllBackupFileReferences(currentBackups);
 	}
 
 	async getByIdStringOrThrow(id: string) {
 		const backupId = UUID.fromString(id);
-		const backup = await this.backupRepository.getById(
-			backupId,
-			async (id) => await this.fileGetter(id),
-		);
+		const backup = await this.backupRepository.getById(backupId, async (id) => await this.fileGetter(id));
 
 		if (backup === null) throw new BackupNotFoundError(backupId);
 

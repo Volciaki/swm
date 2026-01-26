@@ -5,7 +5,7 @@ const isStringValidEmail = (value: string): boolean => {
 	const emailSchema = z.email();
 	const result = emailSchema.safeParse(value);
 	return result.success;
-}
+};
 
 export class Email {
 	private constructor(public readonly value: string) {}

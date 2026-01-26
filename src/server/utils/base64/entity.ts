@@ -5,7 +5,7 @@ const isStringValidBase64 = (value: string): boolean => {
 	const base64Schema = z.base64();
 	const result = base64Schema.safeParse(value);
 	return result.success;
-}
+};
 
 export class Base64 {
 	private constructor(public readonly value: string) {}

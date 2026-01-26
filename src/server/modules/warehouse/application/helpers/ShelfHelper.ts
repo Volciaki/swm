@@ -1,17 +1,18 @@
-import { UUID, UUIDManager } from "@/server/utils";
-import { Shelf } from "../../domain/entities/Shelf";
-import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
+import type { UUIDManager } from "@/server/utils";
+import { UUID } from "@/server/utils";
+import type { Shelf } from "../../domain/entities/Shelf";
+import type { ShelfRepository } from "../../domain/repositories/ShelfRepository";
 import { ShelfNotFoundError } from "../errors/ShelfNotFoundError";
-import { AssortmentVO } from "../../domain/vo/AssortmentVO";
-import { CellDTO } from "../dto/shared/CellDTO";
-import { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
+import type { AssortmentVO } from "../../domain/vo/AssortmentVO";
+import type { CellDTO } from "../dto/shared/CellDTO";
+import type { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
-import { ShelfThermometer } from "../../domain/services/ShelfThermometer";
+import type { ShelfThermometer } from "../../domain/services/ShelfThermometer";
 
 const generateCellDTOsForShape = (
 	shape: { columns: number; rows: number },
 	uuidGenerator: () => UUID,
-	shelfId: UUID,
+	shelfId: UUID
 ): CellDTO[][] => {
 	const shelfCellDTOs: CellDTO[][] = [];
 
@@ -31,15 +32,15 @@ const generateCellDTOsForShape = (
 };
 
 export interface ShelfHelper {
-    getByIdStringOrThrow(id: string, assortmentContext?: AssortmentVO[]): Promise<Shelf>;
-    createByDTO(dto: CreateShelfDTO): Promise<Shelf>;
-};
+	getByIdStringOrThrow(id: string, assortmentContext?: AssortmentVO[]): Promise<Shelf>;
+	createByDTO(dto: CreateShelfDTO): Promise<Shelf>;
+}
 
 export class DefaultShelfHelper implements ShelfHelper {
 	constructor(
-        private readonly shelfRepository: ShelfRepository,
-        private readonly uuidManager: UUIDManager,
-        private readonly shelfThermometer: ShelfThermometer,
+		private readonly shelfRepository: ShelfRepository,
+		private readonly uuidManager: UUIDManager,
+		private readonly shelfThermometer: ShelfThermometer
 	) {}
 
 	async getByIdStringOrThrow(id: string, assortmentContext?: AssortmentVO[]) {
@@ -65,9 +66,10 @@ export class DefaultShelfHelper implements ShelfHelper {
 		});
 
 		const initialShelfTemperature = await this.shelfThermometer.getInitialTemperatureForShelf(shelf);
-		shelf.currentTemperature = initialShelfTemperature === null
-			? await this.shelfThermometer.getTemperatureForShelf(shelf)
-			: initialShelfTemperature;
+		shelf.currentTemperature =
+			initialShelfTemperature === null
+				? await this.shelfThermometer.getTemperatureForShelf(shelf)
+				: initialShelfTemperature;
 
 		await this.shelfRepository.create(shelf);
 		return shelf;

@@ -1,4 +1,4 @@
-import { TwoFactorAuthenticationValueGenerator } from "../../application/services/TwoFactorAuthenticationValueGenerator";
+import type { TwoFactorAuthenticationValueGenerator } from "../../application/services/TwoFactorAuthenticationValueGenerator";
 
 // Generates a random digit in range 0-9, including both ends.
 const getRandomDigit = () => Math.floor(Math.random() * 10);

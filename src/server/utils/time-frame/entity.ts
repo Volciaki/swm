@@ -12,8 +12,12 @@ export class TimeFrame {
 		this._seconds = PositiveNumber.create(seconds);
 	}
 
-	get seconds() { return this._seconds };
-	get milliseconds() { return PositiveNumber.create(this.seconds.value * 1000) };
+	get seconds() {
+		return this._seconds;
+	}
+	get milliseconds() {
+		return PositiveNumber.create(this.seconds.value * 1000);
+	}
 
 	static fromSeconds(value: number) {
 		return new TimeFrame(value);

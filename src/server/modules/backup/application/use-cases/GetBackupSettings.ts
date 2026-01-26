@@ -1,5 +1,6 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
-import { BackupSettingsHelper } from "../helpers/BackupSettingsHelper";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { BackupSettingsHelper } from "../helpers/BackupSettingsHelper";
 import { BackupSettingsMapper } from "../../infrastructure/mappers/BackupSettingsMapper";
 
 export type GetBackupSettingsOptions = {
@@ -16,7 +17,7 @@ export class GetBackupSettings {
 		};
 
 		if (!currentUser && !options.skipAuthentication) throw new UnauthorizedError();
-		
+
 		const backupSettings = await this.backupSettingsHelper.getOrCreate();
 		return BackupSettingsMapper.fromEntityToDTO(backupSettings);
 	}

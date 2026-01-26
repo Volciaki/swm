@@ -1,18 +1,12 @@
 import { UUID } from "@/server/utils";
-import { NotificationDTO } from "../../application/dto/shared/NotificationDTO";
+import type { NotificationDTO } from "../../application/dto/shared/NotificationDTO";
 import { Notification } from "../../domain/entities/Notification";
 import { DBNotification } from "../entities/DBNotification";
 
 export class NotificationMapper {
 	static fromDTOToEntity(dto: NotificationDTO): Notification {
 		const { id, type, issuedDateTimestamp, title, message } = dto;
-		return Notification.create(
-			UUID.fromString(id),
-			type,
-			new Date(issuedDateTimestamp),
-			title,
-			message,
-		);
+		return Notification.create(UUID.fromString(id), type, new Date(issuedDateTimestamp), title, message);
 	}
 
 	static fromEntityToDTO(entity: Notification): NotificationDTO {
@@ -40,12 +34,6 @@ export class NotificationMapper {
 	}
 
 	static fromDBToEntity(db: DBNotification): Notification {
-		return Notification.create(
-			UUID.fromString(db.id),
-			db.type,
-			db.issuedDate,
-			db.title,
-			db.message,
-		);
+		return Notification.create(UUID.fromString(db.id), db.type, db.issuedDate, db.title, db.message);
 	}
 }

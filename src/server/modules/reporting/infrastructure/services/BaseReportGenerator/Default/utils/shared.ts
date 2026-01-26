@@ -1,5 +1,5 @@
 import { format as formatDateExternal } from "date-fns";
-import { SharedContext } from "./type";
+import type { SharedContext } from "./type";
 
 export const formatDate = (date: Date) => formatDateExternal(date, "HH:mm:ss dd.MM.yyyy");
 
@@ -11,4 +11,4 @@ export const shouldWrapToNewPage = (ctx: SharedContext, height: number): boolean
 	ctx.document.y + height > ctx.document.page.height - ctx.constants.page.margins.bottom;
 
 export const centeredInContainer = (containerHeight: number, objectHeight: number): number =>
-	(containerHeight / 2) - (objectHeight / 2);
+	containerHeight / 2 - objectHeight / 2;

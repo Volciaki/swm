@@ -12,7 +12,9 @@ export class Distance {
 		this._millimeters = positive;
 	}
 
-	get millimeters() { return this._millimeters };
+	get millimeters() {
+		return this._millimeters;
+	}
 
 	static fromMillimeters(value: number) {
 		return new Distance(value);

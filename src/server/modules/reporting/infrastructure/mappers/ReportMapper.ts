@@ -1,7 +1,7 @@
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
-import { FileReference } from "@/server/utils/files/domain/entities/FileReference";
+import type { FileReference } from "@/server/utils/files/domain/entities/FileReference";
 import { UUID } from "@/server/utils";
-import { ReportDTO } from "../../application/dto/shared/ReportDTO";
+import type { ReportDTO } from "../../application/dto/shared/ReportDTO";
 import { Report } from "../../domain/entities/Report";
 import { DBReport } from "../entities/DBReport";
 
@@ -12,7 +12,7 @@ export class ReportMapper {
 			UUID.fromString(id),
 			type,
 			new Date(generationDateTimestamp),
-			FileReferenceMapper.fromDTOToEntity(file),
+			FileReferenceMapper.fromDTOToEntity(file)
 		);
 	}
 
@@ -39,11 +39,6 @@ export class ReportMapper {
 	}
 
 	static fromDBToEntity(db: DBReport, file: FileReference): Report {
-		return Report.create(
-			UUID.fromString(db.id),
-			db.type,
-			db.generationDate,
-			file,
-		);
+		return Report.create(UUID.fromString(db.id), db.type, db.generationDate, file);
 	}
 }

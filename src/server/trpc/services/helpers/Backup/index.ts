@@ -1,4 +1,4 @@
-import { GetServicesContext } from "../../context";
+import type { GetServicesContext } from "../../context";
 import { getDefaultBackupHelper } from "./Default";
 
 export const getBackupHelperServices = (ctx: GetServicesContext) => {

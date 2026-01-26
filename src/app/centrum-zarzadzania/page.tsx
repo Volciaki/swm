@@ -13,7 +13,9 @@ const ManagementCenterCard: FC<ManagementCenterCardProps> = ({ text, description
 	<Link href={`/centrum-zarzadzania/${href}`} style={{ width: "100%", height: "100%" }}>
 		<Button variant={"secondary"} style={{ width: "100%", height: "100%", paddingBlock: "2rem" }}>
 			<Paragraph fontSize={1.5}>{text}</Paragraph>
-			<Paragraph variant={"secondary"} fontSize={1}>{description}</Paragraph>
+			<Paragraph variant={"secondary"} fontSize={1}>
+				{description}
+			</Paragraph>
 		</Button>
 	</Link>
 );
@@ -41,11 +43,7 @@ const ManagementCenter: FC = () => (
 				href={"kopie-zapasowe"}
 			/>
 
-			<ManagementCenterCard
-				text={"raporty"}
-				description={"generuj raporty i przeglądaj raporty"}
-				href={"raporty"}
-			/>
+			<ManagementCenterCard text={"raporty"} description={"generuj raporty i przeglądaj raporty"} href={"raporty"} />
 		</div>
 	</Flex>
 );

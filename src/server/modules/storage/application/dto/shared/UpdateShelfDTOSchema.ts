@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { z } from "zod";
 import { shelfDTOSchema } from "./ShelfDTO";
 
 export const updateShelfDTOSchema = shelfDTOSchema.omit({

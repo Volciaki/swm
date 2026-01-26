@@ -1,4 +1,4 @@
-import { GetServicesContext } from "../context";
+import type { GetServicesContext } from "../context";
 
 import { getStringHasherServices } from "./StringHasher";
 import { getUUIDManagerServices } from "./UUIDManager";

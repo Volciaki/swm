@@ -1,13 +1,13 @@
-import { Repository } from "typeorm";
+import type { Repository } from "typeorm";
 import { UUID } from "@/server/utils";
-import { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
-import { BackupRepository } from "../../domain/repositories/BackupRepository";
-import { DBBackup } from "../entities/DBBackup";
-import { Backup } from "../../domain/entities/Backup";
+import type { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
+import type { BackupRepository } from "../../domain/repositories/BackupRepository";
+import type { DBBackup } from "../entities/DBBackup";
+import type { Backup } from "../../domain/entities/Backup";
 import { BackupMapper } from "../mappers/BackupMapper";
 
 export class DBBackupRepository implements BackupRepository {
-	constructor(private readonly db: Repository<DBBackup>) { }
+	constructor(private readonly db: Repository<DBBackup>) {}
 
 	async create(backup: Backup) {
 		const dbObject = BackupMapper.fromEntityToDB(backup);
@@ -32,10 +32,7 @@ export class DBBackupRepository implements BackupRepository {
 
 		if (dbObject === null) return null;
 
-		return BackupMapper.fromDBToEntity(
-			dbObject,
-			await getFileContextById(UUID.fromString(dbObject.fileId)),
-		);
+		return BackupMapper.fromDBToEntity(dbObject, await getFileContextById(UUID.fromString(dbObject.fileId)));
 	}
 
 	async getAll(getFileContextById: FileContextByIDGetter) {

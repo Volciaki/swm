@@ -11,4 +11,4 @@ export const applyById = procedure.input(applyBackupByIdDTOSchema).mutation<void
 
 	const action = new ApplyBackupById(backupHelper);
 	return await action.execute(input, ctx.user ?? undefined);
-})
+});

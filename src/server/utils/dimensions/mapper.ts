@@ -1,5 +1,5 @@
 import { Distance } from "../distance";
-import { DimensionsDTO } from "./dto";
+import type { DimensionsDTO } from "./dto";
 import { Dimensions } from "./entity";
 
 export class DimensionsMapper {
@@ -8,7 +8,7 @@ export class DimensionsMapper {
 		return Dimensions.create(
 			Distance.fromMillimeters(widthMillimeters),
 			Distance.fromMillimeters(heightMillimeters),
-			Distance.fromMillimeters(lengthMillimeters),
+			Distance.fromMillimeters(lengthMillimeters)
 		);
 	}
 

@@ -43,4 +43,4 @@ export const productionEnvironment: Environment = {
 		publicUrl: process.env.STORAGE_PUBLIC_URL!,
 		sslEnabled: Boolean(process.env.STORAGE_SSL_ENABLED),
 	},
-}
+};

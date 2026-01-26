@@ -2,7 +2,7 @@ import { SetAssortmentCloseToExpirationNotification } from "@/server/modules/ass
 import { GetCloseToExpirationAssortment } from "@/server/modules/assortment/application/use-cases/GetCloseToExpirationAssortment";
 import { UpcomingExpiryMonitoringTask } from "@/server/modules/monitoring/infrastructure/schedule/UpcomingExpiryMonitoringTask";
 import { CreateNotification } from "@/server/modules/monitoring/application/use-cases/CreateNotification";
-import { GetServicesContext } from "@/server/trpc/services/context";
+import type { GetServicesContext } from "@/server/trpc/services/context";
 import { getPresets, getServices } from "@/server/trpc/services";
 
 export const getDefaultUpcomingExpiryMonitoring = (ctx: GetServicesContext) => {
@@ -27,6 +27,6 @@ export const getDefaultUpcomingExpiryMonitoring = (ctx: GetServicesContext) => {
 	return new UpcomingExpiryMonitoringTask(
 		createNotification,
 		getCloseToExpirationAssortment,
-		setAssortmentExpiredNotification,
+		setAssortmentExpiredNotification
 	);
 };

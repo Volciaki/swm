@@ -1,5 +1,12 @@
 import { createRouter, createCallerFactory } from "./init";
-import { identityRouter, notificationsRouter, storageRouter, reportsRouter, scheduleRouter, backupsRouter } from "./routers";
+import {
+	identityRouter,
+	notificationsRouter,
+	storageRouter,
+	reportsRouter,
+	scheduleRouter,
+	backupsRouter,
+} from "./routers";
 
 export const appRouter = createRouter({
 	identity: identityRouter,

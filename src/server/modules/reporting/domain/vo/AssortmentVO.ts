@@ -1,6 +1,6 @@
+import { z } from "zod";
 import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 import { fileReferenceDTOSchema } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
-import { z } from "zod";
 
 export const assortmentVOSchema = z.object({
 	name: z.string(),

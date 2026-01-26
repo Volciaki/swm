@@ -1,13 +1,14 @@
-import { UnauthorizedError, UserDTO, UUID } from "@/server/utils";
-import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
-import { EmptyCellDTO } from "../dto/EmptyCellDTO";
-import { ShelfHelper } from "../helpers/ShelfHelper";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError, UUID } from "@/server/utils";
+import type { ShelfRepository } from "../../domain/repositories/ShelfRepository";
+import type { EmptyCellDTO } from "../dto/EmptyCellDTO";
+import type { ShelfHelper } from "../helpers/ShelfHelper";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
 
 export class EmptyCell {
 	constructor(
-        private readonly shelfRepository: ShelfRepository,
-        private readonly shelfHelper: ShelfHelper,
+		private readonly shelfRepository: ShelfRepository,
+		private readonly shelfHelper: ShelfHelper
 	) {}
 
 	async execute(dto: EmptyCellDTO, currentUser?: UserDTO) {

@@ -2612,7 +2612,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:8.53.1":
+"@typescript-eslint/eslint-plugin@npm:8.53.1, @typescript-eslint/eslint-plugin@npm:^8.53.1":
   version: 8.53.1
   resolution: "@typescript-eslint/eslint-plugin@npm:8.53.1"
   dependencies:
@@ -6551,6 +6551,7 @@ __metadata:
     "@types/uuid": "npm:^11.0.0"
     "@types/yauzl-promise": "npm:^4"
     "@types/yazl": "npm:^3"
+    "@typescript-eslint/eslint-plugin": "npm:^8.53.1"
     babel-plugin-react-compiler: "npm:1.0.0"
     bcryptjs: "npm:^3.0.3"
     chalk: "npm:^5.6.2"

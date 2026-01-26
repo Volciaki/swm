@@ -1,6 +1,6 @@
-import { TwoFactorAuthenticationSession } from "../../domain/entities/TwoFactorAuthenticationSession";
-import { User } from "../../domain/entities/User";
+import type { TwoFactorAuthenticationSession } from "../../domain/entities/TwoFactorAuthenticationSession";
+import type { User } from "../../domain/entities/User";
 
 export interface TwoFactorAuthenticationValueSender {
-    deliverToUser(user: User, authenticationSession: TwoFactorAuthenticationSession): Promise<void>;
-};
+	deliverToUser(user: User, authenticationSession: TwoFactorAuthenticationSession): Promise<void>;
+}

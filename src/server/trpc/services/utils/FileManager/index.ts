@@ -1,8 +1,8 @@
-import { GetServicesContext } from "../../context";
+import type { GetServicesContext } from "../../context";
 import { getDefaultFileManager } from "./Default";
 
 export const getFileManagerServices = (ctx: GetServicesContext) => {
 	return {
-		default: getDefaultFileManager(ctx)
+		default: getDefaultFileManager(ctx),
 	};
-}
+};

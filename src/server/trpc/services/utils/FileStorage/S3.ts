@@ -1,6 +1,7 @@
-import { S3FileStorage, S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import type { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import { S3FileStorage } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { S3StorageService } from "@/server/utils/files/infrastructure/services/S3StorageService";
-import { GetServicesContext } from "../../context";
+import type { GetServicesContext } from "../../context";
 
 export const getS3FileStorage = <T extends S3FileStorageBucket>(ctx: GetServicesContext) => {
 	return {
@@ -14,4 +15,4 @@ export const getS3FileStorage = <T extends S3FileStorageBucket>(ctx: GetServices
 			return s3FileStorage;
 		},
 	};
-}
+};

@@ -1,9 +1,10 @@
-import { UnauthorizedError, UserDTO } from "@/server/utils";
-import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
-import { UpdateShelfDTO } from "../dto/UpdateShelfDTO";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { ShelfRepository } from "../../domain/repositories/ShelfRepository";
+import type { UpdateShelfDTO } from "../dto/UpdateShelfDTO";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
 import { CellMapper } from "../../infrastructure/mappers/CellMapper";
-import { ShelfHelper } from "../helpers/ShelfHelper";
+import type { ShelfHelper } from "../helpers/ShelfHelper";
 
 export type UpdateShelfOptions = {
 	skipAuthentication: boolean;
@@ -11,8 +12,8 @@ export type UpdateShelfOptions = {
 
 export class UpdateShelf {
 	constructor(
-        private readonly shelfHelper: ShelfHelper,
-        private readonly shelfRepository: ShelfRepository,
+		private readonly shelfHelper: ShelfHelper,
+		private readonly shelfRepository: ShelfRepository
 	) {}
 
 	async execute(dto: UpdateShelfDTO, optionsUnsafe?: UpdateShelfOptions, currentUser?: UserDTO) {
@@ -34,7 +35,8 @@ export class UpdateShelf {
 			hasBeenChangedIllegally: false,
 		});
 
-		const { name, comment, maxAssortmentSize, maxWeight, temperatureRange, supportsHazardous, currentTemperature } = newShelf
+		const { name, comment, maxAssortmentSize, maxWeight, temperatureRange, supportsHazardous, currentTemperature } =
+			newShelf;
 		shelf.name = name;
 		shelf.comment = comment;
 		shelf.maxAssortmentSize = maxAssortmentSize;

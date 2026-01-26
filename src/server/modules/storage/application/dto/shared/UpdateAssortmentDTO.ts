@@ -1,5 +1,5 @@
-import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 import { z } from "zod";
+import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 
 export const updateAssortmentDTOSchema = z.object({
 	id: z.string(),

@@ -1,9 +1,10 @@
-import { UserDTO, UnauthorizedError } from "@/server/utils/identity";
+import type { UserDTO } from "@/server/utils/identity";
+import { UnauthorizedError } from "@/server/utils/identity";
 import { Base64Mapper } from "@/server/utils/base64";
-import { FileHelper } from "../helpers/FileHelper";
-import { FileManager } from "../../domain/services/FileManager";
-import { FetchFileResponseDTO } from "../dto/FetchFileResponseDTO";
-import { FetchFileDTO } from "../dto/FetchFileDTO";
+import type { FileHelper } from "../helpers/FileHelper";
+import type { FileManager } from "../../domain/services/FileManager";
+import type { FetchFileResponseDTO } from "../dto/FetchFileResponseDTO";
+import type { FetchFileDTO } from "../dto/FetchFileDTO";
 
 export type UpdateShelfOptions = {
 	skipAuthentication: boolean;
@@ -12,10 +13,14 @@ export type UpdateShelfOptions = {
 export class FetchFile {
 	constructor(
 		private readonly fileHelper: FileHelper,
-		private readonly fileManager: FileManager,
-	) { }
+		private readonly fileManager: FileManager
+	) {}
 
-	async execute(dto: FetchFileDTO, optionsUnsafe?: UpdateShelfOptions, currentUser?: UserDTO): Promise<FetchFileResponseDTO> {
+	async execute(
+		dto: FetchFileDTO,
+		optionsUnsafe?: UpdateShelfOptions,
+		currentUser?: UserDTO
+	): Promise<FetchFileResponseDTO> {
 		const options: UpdateShelfOptions = {
 			skipAuthentication: false,
 			...optionsUnsafe,

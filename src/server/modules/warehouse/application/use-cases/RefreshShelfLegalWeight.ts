@@ -1,12 +1,12 @@
-import { ShelfHelper } from "../helpers/ShelfHelper";
-import { RefreshShelfLegalWeightDTO } from "../dto/RefreshShelfLegalWeightDTO";
-import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
+import type { ShelfHelper } from "../helpers/ShelfHelper";
+import type { RefreshShelfLegalWeightDTO } from "../dto/RefreshShelfLegalWeightDTO";
+import type { ShelfRepository } from "../../domain/repositories/ShelfRepository";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
 
 export class RefreshShelfLegalWeight {
 	constructor(
 		private readonly shelfHelper: ShelfHelper,
-		private readonly shelfRepository: ShelfRepository,
+		private readonly shelfRepository: ShelfRepository
 	) {}
 
 	async execute(dto: RefreshShelfLegalWeightDTO) {

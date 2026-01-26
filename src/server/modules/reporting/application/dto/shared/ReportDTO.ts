@@ -1,5 +1,5 @@
-import { fileReferenceDTOSchema } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
 import { z } from "zod";
+import { fileReferenceDTOSchema } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
 
 export const reportDTOSchema = z.object({
 	id: z.string(),

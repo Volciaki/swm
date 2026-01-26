@@ -1,8 +1,8 @@
 import { GenerateCloseToExpirationAssortmentReport } from "@/server/modules/reporting/application/use-cases/GenerateCloseToExpirationAssortmentReport";
-import { ReportDTO } from "@/server/modules/reporting/application/dto/shared/ReportDTO";
+import type { ReportDTO } from "@/server/modules/reporting/application/dto/shared/ReportDTO";
+import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 
 export const generateCloseToExpirationAssortment = procedure.mutation<ReportDTO>(async ({ ctx }) => {
 	const services = getServices(ctx);
@@ -14,9 +14,13 @@ export const generateCloseToExpirationAssortment = procedure.mutation<ReportDTO>
 
 	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
 
-	const closeToExpirationAssortmenrReportGenerator = services.utils.closeToExpirationAssortmentReportGenerator.default.get(getAllAssortmentAction);
+	const closeToExpirationAssortmenrReportGenerator =
+		services.utils.closeToExpirationAssortmentReportGenerator.default.get(getAllAssortmentAction);
 	const reportHelper = presets.reportHelper.default;
 
-	const action = new GenerateCloseToExpirationAssortmentReport(closeToExpirationAssortmenrReportGenerator, reportHelper);
+	const action = new GenerateCloseToExpirationAssortmentReport(
+		closeToExpirationAssortmenrReportGenerator,
+		reportHelper
+	);
 	return await action.execute(ctx.user ?? undefined);
-})
+});

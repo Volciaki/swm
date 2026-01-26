@@ -1,16 +1,20 @@
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
 import { ReportType } from "../../domain/entities/Report";
-import { ShelfVO } from "../../domain/vo/ShelfVO";
+import type { ShelfVO } from "../../domain/vo/ShelfVO";
 import { DefaultBaseReportGenerator } from "./BaseReportGenerator/Default";
 
 export class DefaultFullStorageShowcaseReportGenerator extends DefaultBaseReportGenerator<ReportType.FULL_STORAGE_SHOWCASE> {
 	constructor(
 		private readonly getAllAssortment: GetAllAssortment,
-		private readonly getShelves: GetAllShelves,
-	) { super() }
+		private readonly getShelves: GetAllShelves
+	) {
+		super();
+	}
 
-	protected getType() { return ReportType.FULL_STORAGE_SHOWCASE as const };
+	protected getType() {
+		return ReportType.FULL_STORAGE_SHOWCASE as const;
+	}
 
 	private async getData() {
 		const assortmentContext = await this.getAllAssortment.execute();
@@ -35,12 +39,14 @@ export class DefaultFullStorageShowcaseReportGenerator extends DefaultBaseReport
 		this.utils.date();
 		this.utils.header("Inwentaryzacja stanu magazynu");
 
-		this.document.fontSize(12).text(
-			"Regały i asortymenty wymienione niżej były całą zawartością magazynu w czasie generowania raportu.",
-			this.document.x,
-			this.document.y + this.constants.margin,
-			{ align: "justify", lineGap: 2 }
-		);
+		this.document
+			.fontSize(12)
+			.text(
+				"Regały i asortymenty wymienione niżej były całą zawartością magazynu w czasie generowania raportu.",
+				this.document.x,
+				this.document.y + this.constants.margin,
+				{ align: "justify", lineGap: 2 }
+			);
 
 		this.document.y += this.constants.margin;
 

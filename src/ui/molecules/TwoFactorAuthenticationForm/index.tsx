@@ -1,6 +1,7 @@
 "use client";
 
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { Button, Flex, Input, Paragraph } from "@/ui/atoms";
 
 export type TwoFactorAuthenticationFormProps = {
@@ -12,15 +13,11 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 
 	return (
 		<Flex direction={"column"} align={"center"}>
-			<Input
-				type="text"
-				placeholder="000000"
-				onChange={(e) => setValue(e.target.value)}
-			/>
+			<Input type="text" placeholder="000000" onChange={(e) => setValue(e.target.value)} />
 
 			<Button onClick={() => onSubmit(value)}>
 				<Paragraph>{"Potwierdź"}</Paragraph>
 			</Button>
 		</Flex>
 	);
-}
+};

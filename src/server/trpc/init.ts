@@ -1,20 +1,21 @@
 import { initTRPC } from "@trpc/server";
 import { cookies } from "next/headers";
-import { DataSource } from "typeorm";
+import type { DataSource } from "typeorm";
 import { NodeAuthenticationManager } from "../modules/identity/infrastructure/services/NodeAuthenticationManager";
 import { DBUser } from "../modules/identity/infrastructure/entities/DBUser";
 import { DBUserRepository } from "../modules/identity/infrastructure/persistence/DBUserRepository";
 import { UserMapper } from "../modules/identity/infrastructure/mappers/UserMapper";
 import { InvalidAuthenticationTokenError } from "../modules/identity/application/errors/InvalidAuthenticationTokenError";
-import { InvalidUUIDError, UserDTO, UUID } from "../utils";
+import type { UserDTO } from "../utils";
+import { InvalidUUIDError, UUID } from "../utils";
 import { appDataSource, initializeDatabase } from "../database/init";
 import { environment } from "../environment";
 
 export type APIContext = {
-    db: DataSource;
-    // This DTO is guaranteed to be valid if present, it provides the same guarantees as the `User` aggregate.
-    // The reason it's used however is to not expose aggregates to other bounded contexts.
-    user: UserDTO | null;
+	db: DataSource;
+	// This DTO is guaranteed to be valid if present, it provides the same guarantees as the `User` aggregate.
+	// The reason it's used however is to not expose aggregates to other bounded contexts.
+	user: UserDTO | null;
 	cookie?: string;
 };
 
@@ -35,14 +36,14 @@ const getUserBasedOnAuthCookie = async (cookie?: { value: string }): Promise<Use
 	let userId;
 	try {
 		userId = UUID.fromString(cookieValue.userId);
-	} catch(error) {
+	} catch (error) {
 		if (error instanceof InvalidUUIDError) return null;
 		throw error;
 	}
 
 	const userAggregate = await userRepository.getById(userId);
 	if (userAggregate === null) return null;
-    
+
 	return UserMapper.fromUserToUserDTO(userAggregate);
 };
 

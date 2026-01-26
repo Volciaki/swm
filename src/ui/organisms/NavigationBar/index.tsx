@@ -3,20 +3,22 @@
 import { useMemo } from "react";
 import { routes as routeDefinitions } from "@/utils/routes";
 import { Button, Flex, Link, Paragraph } from "@/ui/atoms";
-import styles from "./index.module.scss";
 import { useAuthData } from "@/ui/providers";
+import styles from "./index.module.scss";
 
 export const NavigationBar = () => {
 	const { authData } = useAuthData();
-	const isAuthenticated = useMemo(() => authData !== null, [authData])
+	const isAuthenticated = useMemo(() => authData !== null, [authData]);
 	const routes = useMemo(
-		() => isAuthenticated ? routeDefinitions.loggedIn : routeDefinitions.unauthenticated,
+		() => (isAuthenticated ? routeDefinitions.loggedIn : routeDefinitions.unauthenticated),
 		[isAuthenticated]
 	);
 
 	return (
 		<Flex align={"center"} justify={"space-between"} style={{ height: "100%" }} fullWidth>
-			<Paragraph className={styles["text"]} fontSize={3}>{"SWM"}</Paragraph>
+			<Paragraph className={styles["text"]} fontSize={3}>
+				{"SWM"}
+			</Paragraph>
 
 			<ul className={styles["links-container"]}>
 				{routes.map((route, index) => (
@@ -37,9 +39,7 @@ export const NavigationBar = () => {
 					</Link>
 				)}
 
-				{isAuthenticated && (
-					<Paragraph>{authData?.name}</Paragraph>
-				)}
+				{isAuthenticated && <Paragraph>{authData?.name}</Paragraph>}
 			</ul>
 		</Flex>
 	);

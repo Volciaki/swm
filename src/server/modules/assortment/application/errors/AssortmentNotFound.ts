@@ -1,4 +1,4 @@
-import { UUID } from "@/server/utils";
+import type { UUID } from "@/server/utils";
 import { AssortmentApplicationError } from "./AssortmentApplicationError";
 
 export class AssortmentNotFoundError extends AssortmentApplicationError {

@@ -1,19 +1,20 @@
-import { UserDTO, UUID, UUIDManager } from "@/server/utils";
-import { UserRepository } from "../../domain/repositories/UserRepository";
-import { RequestPasswordResetDTO } from "../dto/RequestPasswordResetDTO";
+import type { UserDTO, UUIDManager } from "@/server/utils";
+import { UUID } from "@/server/utils";
+import type { UserRepository } from "../../domain/repositories/UserRepository";
+import type { RequestPasswordResetDTO } from "../dto/RequestPasswordResetDTO";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { AlreadyLoggedInError } from "../../domain/errors/AlreadyLoggedInError";
-import { TwoFactorAuthenticationValueGenerator } from "../services/TwoFactorAuthenticationValueGenerator";
-import { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
-import { TwoFactorAuthenticationValueSender } from "../services/TwoFactorAuthenticationValueSender";
+import type { TwoFactorAuthenticationValueGenerator } from "../services/TwoFactorAuthenticationValueGenerator";
+import type { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
+import type { TwoFactorAuthenticationValueSender } from "../services/TwoFactorAuthenticationValueSender";
 
 export class RequestPasswordReset {
 	constructor(
-        private readonly userRepository: UserRepository,
-        private readonly twoFactorAuthenticationSessionRepository: TwoFactorAuthenticationSessionRepository,
-        private readonly uuidManager: UUIDManager,
-        private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
-        private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender,
+		private readonly userRepository: UserRepository,
+		private readonly twoFactorAuthenticationSessionRepository: TwoFactorAuthenticationSessionRepository,
+		private readonly uuidManager: UUIDManager,
+		private readonly twoFactorAuthenticationValueGenerator: TwoFactorAuthenticationValueGenerator,
+		private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender
 	) {}
 
 	async execute(dto: RequestPasswordResetDTO, currentUser?: UserDTO) {
@@ -28,7 +29,7 @@ export class RequestPasswordReset {
 		const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(
 			user,
 			this.uuidManager.generate(),
-			twoFactorAuthenticationValue,
+			twoFactorAuthenticationValue
 		);
 
 		if (this.twoFactorAuthenticationValueSender)

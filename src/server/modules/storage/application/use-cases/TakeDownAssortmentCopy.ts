@@ -1,9 +1,10 @@
-import { UserDTO, UnauthorizedError } from "@/server/utils";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
-import { TakeDownAssortmentCopyDTO } from "../dto/TakeDownAssortmentCopyDTO";
-import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
-import { AssortmentDTO } from "../dto/shared/AssortmentDTO";
+import type { UserDTO } from "@/server/utils";
+import { UnauthorizedError } from "@/server/utils";
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
+import type { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
+import type { TakeDownAssortmentCopyDTO } from "../dto/TakeDownAssortmentCopyDTO";
+import type { AssortmentDTO } from "../dto/shared/AssortmentDTO";
 
 const isAlikeAssortment = (a: AssortmentDTO, b: AssortmentDTO): boolean => {
 	if (a.size.lengthMillimeters !== b.size.lengthMillimeters) return false;
@@ -16,14 +17,13 @@ const isAlikeAssortment = (a: AssortmentDTO, b: AssortmentDTO): boolean => {
 	if (a.expiresAfterSeconds !== b.expiresAfterSeconds) return false;
 
 	return true;
-}
+};
 
 const findAlikeAssortment = (originalAssortment: AssortmentDTO, allAssortments: AssortmentDTO[]): AssortmentDTO[] => {
 	const similarAssortment = [];
 
 	for (const assortment of allAssortments) {
-		if (isAlikeAssortment(assortment, originalAssortment))
-			similarAssortment.push(assortment);
+		if (isAlikeAssortment(assortment, originalAssortment)) similarAssortment.push(assortment);
 	}
 
 	return similarAssortment;
@@ -33,7 +33,7 @@ export class TakeDownAssortmentCopy {
 	constructor(
 		private readonly storageHelper: StorageAssortmentHelper,
 		private readonly getAssortmentAction: GetAssortment,
-		private readonly getAllAssortmentAction: GetAllAssortment,
+		private readonly getAllAssortmentAction: GetAllAssortment
 	) {}
 
 	async execute(dto: TakeDownAssortmentCopyDTO, currentUser?: UserDTO) {
@@ -45,17 +45,13 @@ export class TakeDownAssortmentCopy {
 		const similarAssortment = findAlikeAssortment(assortment, allAssortments);
 		// By oldest to newest.
 		const sortedSimilarAssortment = [...similarAssortment].sort(
-			(a, b) =>
-				new Date(a.storedAtTimestamp).getTime() - new Date(b.storedAtTimestamp).getTime()
+			(a, b) => new Date(a.storedAtTimestamp).getTime() - new Date(b.storedAtTimestamp).getTime()
 		);
-		
+
 		let oldest;
 		oldest = sortedSimilarAssortment[0];
 		// If possible, don't delete the assortment which we've just scanned.
-		if (
-			oldest.id === assortment.id &&
-			sortedSimilarAssortment.length > 1
-		) oldest = sortedSimilarAssortment[1];
+		if (oldest.id === assortment.id && sortedSimilarAssortment.length > 1) oldest = sortedSimilarAssortment[1];
 
 		await this.storageHelper.takeDownAssortmentByDTO(oldest, currentUser);
 

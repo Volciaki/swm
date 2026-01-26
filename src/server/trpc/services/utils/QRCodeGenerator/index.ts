@@ -1,8 +1,8 @@
-import { GetServicesContext } from "../../context";
+import type { GetServicesContext } from "../../context";
 import { getDefaultQRCodeGenerator } from "./Default";
 
 export const getQRCodeGeneratorServices = (ctx: GetServicesContext) => {
 	return {
-		default: getDefaultQRCodeGenerator(ctx)
+		default: getDefaultQRCodeGenerator(ctx),
 	};
-}
+};

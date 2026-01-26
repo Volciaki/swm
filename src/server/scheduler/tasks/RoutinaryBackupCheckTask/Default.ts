@@ -1,4 +1,4 @@
-import { GetServicesContext } from "@/server/trpc/services/context";
+import type { GetServicesContext } from "@/server/trpc/services/context";
 import { RoutinaryBackupCheckTask } from "@/server/modules/backup/infrastructure/schedule/RoutinaryBackupCheckTask";
 import { GetAllBackups } from "@/server/modules/backup/application/use-cases/GetAllBackups";
 import { GetBackupSettings } from "@/server/modules/backup/application/use-cases/GetBackupSettings";

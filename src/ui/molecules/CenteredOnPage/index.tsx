@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import { Flex } from "@/ui/atoms";
 import styles from "./index.module.scss";
 

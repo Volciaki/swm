@@ -1,15 +1,15 @@
-import { Repository } from "typeorm";
-import { UUID } from "@/server/utils";
-import { FileReferenceRepository } from "../../domain/services/FileReferenceRepository";
-import { DBFileReference } from "../entities/DBFileReference";
+import type { Repository } from "typeorm";
+import type { UUID } from "@/server/utils";
+import type { FileReferenceRepository } from "../../domain/services/FileReferenceRepository";
+import type { DBFileReference } from "../entities/DBFileReference";
 import { FileReferenceMapper } from "../mappers/FileReferenceMapper";
-import { FileReference } from "../../domain/entities/FileReference";
-import { FileMetadata } from "../../domain/entities/FileMetadata";
+import type { FileReference } from "../../domain/entities/FileReference";
+import type { FileMetadata } from "../../domain/entities/FileMetadata";
 import { FileStorageType } from "../../domain/services/FileStorage";
 
 export class DBFileReferenceRepository implements FileReferenceRepository {
 	constructor(private readonly db: Repository<DBFileReference>) {}
-    
+
 	async create(fileReference: FileReference) {
 		const dbObject = FileReferenceMapper.fromEntityToDB(fileReference);
 		const saved = await this.db.save(dbObject);
@@ -31,9 +31,7 @@ export class DBFileReferenceRepository implements FileReferenceRepository {
 
 	async getAll() {
 		const dbObjects = await this.db.find();
-		const objects = dbObjects.map(
-			(object) => FileReferenceMapper.fromDBToEntity(object)
-		);
+		const objects = dbObjects.map((object) => FileReferenceMapper.fromDBToEntity(object));
 		return objects;
 	}
 

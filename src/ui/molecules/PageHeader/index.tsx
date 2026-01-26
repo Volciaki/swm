@@ -1,5 +1,5 @@
+import type { FC } from "react";
 import { Flex, Paragraph } from "@/ui/atoms";
-import { FC } from "react";
 
 export type PageHeaderProps = {
 	title: string;

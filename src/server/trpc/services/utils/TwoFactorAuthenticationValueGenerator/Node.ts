@@ -1,6 +1,8 @@
 import { NodeTwoFactorAuthenticationValueGenerator } from "@/server/modules/identity/infrastructure/services/NodeTwoFactorAuthenticationValueGenerator";
-import { GetServicesContext } from "../../context";
+import type { GetServicesContext } from "../../context";
 
-export const getNodeTwoFactorAuthenticationValueGenerator = (ctx: GetServicesContext): NodeTwoFactorAuthenticationValueGenerator => {
+export const getNodeTwoFactorAuthenticationValueGenerator = (
+	ctx: GetServicesContext
+): NodeTwoFactorAuthenticationValueGenerator => {
 	return new NodeTwoFactorAuthenticationValueGenerator();
-}
+};

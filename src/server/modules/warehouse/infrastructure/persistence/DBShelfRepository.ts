@@ -1,18 +1,20 @@
-import { In, Repository } from "typeorm";
+import type { Repository } from "typeorm";
+import { In } from "typeorm";
 import { UUID } from "@/server/utils";
-import { ShelfRepository } from "../../domain/repositories/ShelfRepository";
-import { Shelf } from "../../domain/entities/Shelf";
-import { DBShelf } from "../entities/DBShelf";
-import { CellWithContext, ShelfMapper } from "../mappers/ShelfMapper";
-import { DBCell } from "../entities/DBCell";
+import type { ShelfRepository } from "../../domain/repositories/ShelfRepository";
+import type { Shelf } from "../../domain/entities/Shelf";
+import type { DBShelf } from "../entities/DBShelf";
+import type { CellWithContext } from "../mappers/ShelfMapper";
+import { ShelfMapper } from "../mappers/ShelfMapper";
+import type { DBCell } from "../entities/DBCell";
 import { CellMapper } from "../mappers/CellMapper";
-import { AssortmentVO } from "../../domain/vo/AssortmentVO";
+import type { AssortmentVO } from "../../domain/vo/AssortmentVO";
 
 export class DBShelfRepository implements ShelfRepository {
 	constructor(
 		private readonly db: Repository<DBShelf>,
-		private readonly cells: Repository<DBCell>,
-	) { }
+		private readonly cells: Repository<DBCell>
+	) {}
 
 	async create(shelf: Shelf) {
 		const dbShelf = ShelfMapper.fromShelfToDBShelf(shelf);
@@ -54,9 +56,10 @@ export class DBShelfRepository implements ShelfRepository {
 			const rowDBCells = await this.cells.find({ where: { id: In(cellRowIds) } });
 			const rowCells = rowDBCells.map((dbCell) => ({
 				db: dbCell,
-				valueObject: assortmentContext === undefined
-					? null
-					: assortmentContext.find((valueObject) => valueObject.id === dbCell.assortmentId) ?? null,
+				valueObject:
+					assortmentContext === undefined
+						? null
+						: (assortmentContext.find((valueObject) => valueObject.id === dbCell.assortmentId) ?? null),
 			}));
 			cells.push(rowCells);
 		}

@@ -1,9 +1,9 @@
 import { FileReferenceMapper } from "../../infrastructure/mappers/FileReferenceMapper";
-import { FileHelper } from "../helpers/FileHelper";
-import { GetFileDTO } from "../dto/GetFileDTO";
+import type { FileHelper } from "../helpers/FileHelper";
+import type { GetFileDTO } from "../dto/GetFileDTO";
 
 export class GetFile {
-	constructor(private readonly fileHelper: FileHelper) { }
+	constructor(private readonly fileHelper: FileHelper) {}
 
 	async execute(dto: GetFileDTO) {
 		const file = await this.fileHelper.getByIdStringOrThrow(dto.id);

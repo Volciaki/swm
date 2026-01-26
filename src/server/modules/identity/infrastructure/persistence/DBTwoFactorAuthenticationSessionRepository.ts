@@ -1,10 +1,10 @@
-import { Repository } from "typeorm";
-import { UUID } from "@/server/utils";
-import { User } from "../../domain/entities/User";
-import { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
+import type { Repository } from "typeorm";
+import type { UUID } from "@/server/utils";
+import type { User } from "../../domain/entities/User";
+import type { TwoFactorAuthenticationSessionRepository } from "../../domain/repositories/TwoFactorAuthenticationSessionRepository";
 import { DBTwoFactorAuthenticationSession } from "../entities/DBTwoFactorAuthenticationSession";
 import { TwoFactorAuthenticationSessionMapper } from "../mappers/TwoFactorAuthenticationSessionMapper";
-import { TwoFactorAuthenticationSession } from "../../domain/entities/TwoFactorAuthenticationSession";
+import type { TwoFactorAuthenticationSession } from "../../domain/entities/TwoFactorAuthenticationSession";
 
 export class DBTwoFactorAuthenticationSessionRepository implements TwoFactorAuthenticationSessionRepository {
 	constructor(private readonly db: Repository<DBTwoFactorAuthenticationSession>) {}

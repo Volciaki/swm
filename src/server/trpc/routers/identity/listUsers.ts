@@ -1,4 +1,4 @@
-import { ListUsersResponseDTO } from "@/server/modules/identity/application/dto/ListUsersResponseDTO";
+import type { ListUsersResponseDTO } from "@/server/modules/identity/application/dto/ListUsersResponseDTO";
 import { ListUsers } from "@/server/modules/identity/application/use-cases/ListUsers";
 import { procedure } from "../../init";
 import { getServices } from "../../services";

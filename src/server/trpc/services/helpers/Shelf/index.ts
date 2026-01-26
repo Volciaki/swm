@@ -1,4 +1,4 @@
-import { GetServicesContext } from "../../context";
+import type { GetServicesContext } from "../../context";
 import { getDefaultShelfHelper } from "./Default";
 
 export const getShelfHelperServices = (ctx: GetServicesContext) => {
