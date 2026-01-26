@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "start": "next start",
+	"docker": "docker build -t ghcr.io/volciaki/primus-inter-pares-2026/primus-inter-pares-2026:latest .",
     "lint": "eslint",
+    "start": "concurrently --prefix 'none' 'yarn start:app' 'yarn start:schedule'",
+    "start:app": "next start",
+    "start:schedule": "tsx --env-file .env ./scripts/schedule/trigger-tasks.ts",
     "dev": "concurrently --prefix 'none' 'yarn dev:app' 'yarn dev:schedule'",
     "dev:app": "next dev",
     "dev:schedule": "tsx --env-file .env ./scripts/schedule/trigger-tasks.ts",

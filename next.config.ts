@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
 		"/api/**": ["src/server/assets/**"],
 	},
 	serverExternalPackages: ["pdfkit", "@node-rs/crc32"],
+	output: "standalone",
 };
 
 export default nextConfig;
