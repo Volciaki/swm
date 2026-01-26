@@ -1,5 +1,4 @@
-import { UnauthorizedError } from "@/server/utils";
-import { UserDTO } from "@/server/utils";
+import { UnauthorizedError, UserDTO } from "@/server/utils";
 import { CreateAssortmentDTO } from "../dto/shared/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
 import { AssortmentHelper, Base64UploadFunction, QRCodeGetter } from "../helpers/AssortmentHelper";

@@ -10,9 +10,9 @@ import { AssortmentVO } from "../../domain/vo/AssortmentVO";
 
 export class DBShelfRepository implements ShelfRepository {
 	constructor(
-        private readonly db: Repository<DBShelf>,
-        private readonly cells: Repository<DBCell>,
-	) {}
+		private readonly db: Repository<DBShelf>,
+		private readonly cells: Repository<DBCell>,
+	) { }
 
 	async create(shelf: Shelf) {
 		const dbShelf = ShelfMapper.fromShelfToDBShelf(shelf);
@@ -30,7 +30,7 @@ export class DBShelfRepository implements ShelfRepository {
 	}
 
 	async delete(shelf: Shelf) {
-		const dbCells = await this.cells.find({ where: { shelfId: shelf.id.value }});
+		const dbCells = await this.cells.find({ where: { shelfId: shelf.id.value } });
 		for (const dbCell of dbCells) {
 			await this.cells.remove(dbCell);
 		}
@@ -51,7 +51,7 @@ export class DBShelfRepository implements ShelfRepository {
 		for (const cellRowIds of dbShelf.cellIds) {
 			// TODO: does this keep the ordering of cells? This will be well visible after the frontend is written.
 			// 16/01/2026: They're getting shifted after updates :flame:
-			const rowDBCells = await this.cells.find({ where: { id: In(cellRowIds) }});
+			const rowDBCells = await this.cells.find({ where: { id: In(cellRowIds) } });
 			const rowCells = rowDBCells.map((dbCell) => ({
 				db: dbCell,
 				valueObject: assortmentContext === undefined

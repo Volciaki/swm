@@ -6497,6 +6497,7 @@ __metadata:
     date-fns: "npm:^4.1.0"
     eslint: "npm:^9"
     eslint-config-next: "npm:16.1.1"
+    eslint-plugin-import: "npm:^2.32.0"
     execa: "npm:^9.6.1"
     get-stream: "npm:^9.0.1"
     jsonwebtoken: "npm:^9.0.3"

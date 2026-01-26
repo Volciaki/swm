@@ -64,6 +64,7 @@
     "concurrently": "^9.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "eslint-plugin-import": "^2.32.0",
     "node-cron": "^4.2.1",
     "sass": "^1.97.1",
     "tsc-alias": "^1.8.16",

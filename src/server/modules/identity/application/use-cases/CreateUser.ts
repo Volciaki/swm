@@ -1,5 +1,4 @@
-import { UnauthorizedError } from "@/server/utils";
-import { UserDTO, UUIDManager } from "@/server/utils";
+import { UnauthorizedError, UserDTO, UUIDManager } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { User } from "../../domain/entities/User";
 import { UserRepository } from "../../domain/repositories/UserRepository";
