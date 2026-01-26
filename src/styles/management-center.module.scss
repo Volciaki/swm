@@ -1,0 +1,12 @@
+@use "." as *;
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: $content-width;
+    gap: 2rem;
+    padding: 1rem;
+    background-color: $background-lightened;
+    border: solid $border-size $border;
+    border-radius: 5px;
+}

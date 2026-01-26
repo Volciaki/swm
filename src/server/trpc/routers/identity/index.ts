@@ -7,6 +7,7 @@ import { login } from "./login";
 import { passwordReset } from "./passwordReset";
 import { requestPasswordReset } from "./requestPasswordReset";
 import { twoFactorAuthentication } from "./twoFactorAuthentication";
+import { getSession } from "./getSession";
 
 export const identityRouter = createRouter({
 	createUser,
@@ -16,4 +17,5 @@ export const identityRouter = createRouter({
 	passwordReset,
 	requestPasswordReset,
 	twoFactorAuthentication,
+	getSession,
 });

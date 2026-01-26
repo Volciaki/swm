@@ -1,0 +1,24 @@
+@use "@/styles" as *;
+
+.text {
+    margin-left: 10%;
+}
+
+.links-container {
+    max-height: 100%;
+    box-sizing: border-box;
+    padding: $padding;
+    display: flex;
+    direction: row;
+    align-items: center;
+    gap: $gap;
+}
+
+.link-item {
+    display: block;
+    max-height: 100%;
+
+    & > a {
+        text-decoration: none;
+    }
+}

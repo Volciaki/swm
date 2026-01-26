@@ -1,0 +1,25 @@
+@use "." as *;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: $background;
+}
+
+html {
+    scrollbar-color: $border transparent;
+}
+
+::selection {
+    color: $background;
+    background-color: $text-darkened;
+}
+
+img {
+    color: $text;
+    max-width: 100%;
+}

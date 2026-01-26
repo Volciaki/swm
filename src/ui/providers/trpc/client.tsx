@@ -28,7 +28,7 @@ const getBaseUrl = () => {
 };
 
 type TRPCProviderProps = {
-    children: Readonly<ReactNode>;
+	children: Readonly<ReactNode>;
 };
 
 export const TRPCProvider: FC<TRPCProviderProps> = ({ children }) => {
@@ -38,6 +38,8 @@ export const TRPCProvider: FC<TRPCProviderProps> = ({ children }) => {
 			links: [
 				httpBatchLink({
 					url: `${getBaseUrl()}/api/trpc`,
+					fetch: (input, init) =>
+						fetch(input, { ...init, credentials: "include" }),
 				}),
 			],
 		}),

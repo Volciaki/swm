@@ -1,0 +1,21 @@
+@use "." as *;
+
+.navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: $navigation-height-desktop;
+    width: 100%;
+    z-index: 1;
+    background-color: $background-lightened;
+}
+
+.navigation-margin {
+    height: $navigation-height-desktop;
+}
+
+.content {
+    min-height: calc(100vh - $navigation-height-desktop);
+    box-sizing: border-box;
+    padding: $padding;
+}

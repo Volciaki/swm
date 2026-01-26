@@ -1,19 +1,33 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { ABeeZee } from "next/font/google";
 import { Providers } from "@/ui/providers";
-// TODO: Choose a font later.
-// import { Geist, Geist_Mono } from "next/font/google";
+import { NavigationBar } from "@/ui/organisms";
+import styles from "../styles/layout.module.scss";
+import "../styles/global.scss";
 
 export const metadata: Metadata = {
-	title: "Magazyn (?)",
-	description: "???",
+	title: "Simple Warehouse Management",
+	description: "Simple Warehouse Management (SWM) is a service specializing in managing your storage easily.. simple.",
 };
+
+const interFont = ABeeZee({
+	weight: "400",
+	subsets: ["latin"],
+	display: "swap",
+});
 
 const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 	<Providers>
-		<html lang="en">
-			<body>
-				{children}
+		<html lang="pl">
+			<body className={interFont.className}>
+				<nav className={styles["navigation"]}><NavigationBar /></nav>	
+
+				<div className={styles["navigation-margin"]} />
+
+				<main className={styles["content"]}>
+					{children}
+				</main>
 			</body>
 		</html>
 	</Providers>
