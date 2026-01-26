@@ -1,4 +1,7 @@
+import { serialize as serializeCookie } from "cookie";
+import { environment } from "@/server/environment";
 import { UserDTO, UUIDManager } from "@/server/utils";
+import { EnvironmentType } from "@/server/environment/type";
 import { Email } from "../../domain/entities/Email";
 import { AlreadyLoggedInError } from "../../domain/errors/AlreadyLoggedInError";
 import { WrongPasswordError } from "../../domain/errors/WrongPasswordError";
@@ -10,6 +13,7 @@ import { AuthenticationManager } from "../services/AuthenticationManager";
 import { StringHasher } from "../services/StringHasher";
 import { TwoFactorAuthenticationValueGenerator } from "../services/TwoFactorAuthenticationValueGenerator";
 import { TwoFactorAuthenticationValueSender } from "../services/TwoFactorAuthenticationValueSender";
+import { LoginResponseDTO } from "../dto/LoginResponseDTO";
 
 export class Login {
 	constructor(
@@ -22,7 +26,7 @@ export class Login {
         private readonly twoFactorAuthenticationValueSender?: TwoFactorAuthenticationValueSender,
 	) {}
 
-	async execute(dto: LoginDTO, currentUser?: UserDTO) {
+	async execute(dto: LoginDTO, currentUser?: UserDTO): Promise<LoginResponseDTO> {
 		if (currentUser) throw new AlreadyLoggedInError();
 
 		const email = Email.fromString(dto.email);
@@ -49,5 +53,19 @@ export class Login {
 		return {
 			authenticationToken: this.authenticationManager.generateAuthenticationTokenForUser(user)
 		};
+	}
+
+	getCookieByDTO(dto: LoginResponseDTO): string | null {
+		if (!("authenticationToken" in dto)) return null;
+
+		const authToken = dto.authenticationToken;
+		const cookie = serializeCookie({
+			name: environment.authentication.cookie.name,
+			value: authToken,
+			sameSite: "strict",
+			secure: environment.type === EnvironmentType.PRODUCTION,
+		});
+
+		return cookie;
 	}
 }

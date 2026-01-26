@@ -1,3 +1,5 @@
+"use client";
+
 import NextLink from "next/link";
 import { type ReactNode, type FC } from "react";
 import { type CustomStyles } from "@/ui/types";

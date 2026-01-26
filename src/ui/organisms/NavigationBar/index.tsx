@@ -1,10 +1,14 @@
+"use client";
+
 import { useMemo } from "react";
 import { routes as routeDefinitions } from "@/utils/routes";
 import { Button, Flex, Link, Paragraph } from "@/ui/atoms";
 import styles from "./index.module.scss";
+import { useAuthData } from "@/ui/providers";
 
 export const NavigationBar = () => {
-	const isAuthenticated = false;
+	const { authData } = useAuthData();
+	const isAuthenticated = useMemo(() => authData !== null, [authData])
 	const routes = useMemo(
 		() => isAuthenticated ? routeDefinitions.loggedIn : routeDefinitions.unauthenticated,
 		[isAuthenticated]
@@ -31,6 +35,10 @@ export const NavigationBar = () => {
 							<Paragraph fontSize={1.5}>{"Zaloguj się"}</Paragraph>
 						</Button>
 					</Link>
+				)}
+
+				{isAuthenticated && (
+					<Paragraph>{authData?.name}</Paragraph>
 				)}
 			</ul>
 		</Flex>

@@ -1,27 +1,37 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FC } from "react";
-import { LoginResponseDTO } from "@/server/modules/identity/application/dto/LoginResponseDTO";
+import { type FC, useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { CenteredOnPage, LoginForm } from "@/ui/molecules";
 import { Flex, Paragraph } from "@/ui/atoms";
-import { apiClient } from "@/ui/providers";
+import { apiClient, useAuthData } from "@/ui/providers";
 
 const Login: FC = () => {
-	const [loginData, setLoginData] = useState<LoginResponseDTO>();
+	const router = useRouter();
+	const { refreshAuthData, authData } = useAuthData();
+
 	const login = apiClient.identity.login.useMutation({
-		onSuccess: (data) => setLoginData(data),
+		onSuccess: async (data) => {
+			if ("authenticationToken" in data) {
+				await refreshAuthData();
+				router.push("/");
+			}
+
+			if ("authenticationId" in data) {
+				router.push(`/2fa?id=${data.authenticationId}`);
+			}
+		},
 	});
 
-	const onClickHandler = useCallback((email: string, passwordRaw: string) => {
+	const formSubmitHandler = useCallback((email: string, passwordRaw: string) => {
 		if (login.isPending) return;
 
 		login.mutate({ email, passwordRaw });
 	}, [login]);
 
 	useEffect(() => {
-		console.log("Login data updated!");
-		console.log(loginData);
-	}, [loginData]);
+		if (authData !== null) router.push("/");
+	}, [authData, router]);
 
 	return (
 		<CenteredOnPage>
@@ -35,7 +45,7 @@ const Login: FC = () => {
 				</Paragraph>
 
 				<div style={{ width: "75%" }}>
-					<LoginForm onClick={onClickHandler} />
+					<LoginForm onClick={formSubmitHandler} />
 				</div>
 
 				{login.isPending && (

@@ -25,6 +25,7 @@ export const Button: FC<ButtonProps> = ({
 				{ [className as string]: className !== undefined },
 			])}
 			style={style}
+			draggable={false}
 			{...props}
 		>
 			{children}
