@@ -15,6 +15,7 @@ export type APIContext = {
     // This DTO is guaranteed to be valid if present, it provides the same guarantees as the `User` aggregate.
     // The reason it's used however is to not expose aggregates to other bounded contexts.
     user: UserDTO | null;
+	cookie?: string;
 };
 
 const getUserBasedOnAuthCookie = async (cookie?: { value: string }): Promise<UserDTO | null> => {
@@ -53,8 +54,8 @@ export const createTRPCContext = async (): Promise<APIContext> => {
 
 	const cookieStore = await cookies();
 	const authCookie = cookieStore.get(environment.authentication.cookie.name);
-
 	const user = await getUserBasedOnAuthCookie(authCookie);
+
 	return { db: appDataSource, user };
 };
 

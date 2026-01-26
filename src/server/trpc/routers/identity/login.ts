@@ -23,5 +23,10 @@ export const login = procedure.input(loginDTOSchema).mutation<LoginResponseDTO>(
 		twoFactorAuthenticationValueGenerator,
 		twoFactorAuthenticationValueSender,
 	);
-	return await action.execute(input, ctx.user ?? undefined);
+
+	const response = await action.execute(input, ctx.user ?? undefined);
+	const cookie = action.getCookieByDTO(response);
+	ctx.cookie = cookie ?? undefined;
+
+	return response;
 });
