@@ -36,17 +36,7 @@ const Login: FC = () => {
 	return (
 		<CenteredOnPage>
 			<Flex direction={"column"} align={"center"} style={{ gap: "2rem" }}>
-				<Paragraph style={{ textAlign: "center"}} fontSize={3}>
-					{"Login"}
-				</Paragraph>
-
-				<Paragraph style={{ textAlign: "center"}} fontSize={2} variant={"secondary"}>
-					{"Wypełnij swoje dane logowania poniżej."}
-				</Paragraph>
-
-				<div style={{ width: "75%" }}>
-					<LoginForm onClick={formSubmitHandler} />
-				</div>
+				<LoginForm onClick={formSubmitHandler} />
 
 				{login.isPending && (
 					// TODO: replace with some `Loading` component
