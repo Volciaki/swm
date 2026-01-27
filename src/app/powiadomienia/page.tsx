@@ -1,10 +1,13 @@
 import { type FC } from "react";
-import { Paragraph } from "@/ui/atoms";
+import { Protected } from "@/ui/organisms/Protected";
 import { CenteredOnPage } from "@/ui/molecules";
+import { Paragraph } from "@/ui/atoms";
 
 const Notifications: FC = () => (
 	<CenteredOnPage>
-		<Paragraph>{"powiadomienia"}</Paragraph>
+		<Protected>
+			<Paragraph>{"powiadomienia"}</Paragraph>
+		</Protected>
 	</CenteredOnPage>
 );
 

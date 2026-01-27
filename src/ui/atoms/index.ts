@@ -5,3 +5,4 @@ export * from "./Link";
 export * from "./Input";
 export * from "./FormError";
 export * from "./Separator";
+export * from "./Loading";
