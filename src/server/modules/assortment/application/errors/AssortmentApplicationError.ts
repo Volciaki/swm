@@ -1,6 +1,4 @@
-export class AssortmentApplicationError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = "AssortmentApplicationError";
-	}
-}
+import type { ErrorName } from "@/server/utils";
+import { BaseError } from "@/server/utils";
+
+export abstract class AssortmentApplicationError<T extends ErrorName> extends BaseError<T> {}

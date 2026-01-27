@@ -43,7 +43,7 @@ export class DefaultAssortmentHelper implements AssortmentHelper {
 		const assortmentId = UUID.fromString(id);
 		const assortment = await this.assortmentRepository.getById(assortmentId, async (id) => getFile(id));
 
-		if (assortment === null) throw new AssortmentNotFoundError(assortmentId);
+		if (assortment === null) throw new AssortmentNotFoundError({ id: assortmentId.value });
 
 		return assortment;
 	}

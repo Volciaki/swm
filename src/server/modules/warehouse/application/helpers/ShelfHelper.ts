@@ -47,7 +47,7 @@ export class DefaultShelfHelper implements ShelfHelper {
 		const shelfId = UUID.fromString(id);
 		const shelf = await this.shelfRepository.getById(shelfId, assortmentContext);
 
-		if (shelf === null) throw new ShelfNotFoundError(shelfId);
+		if (shelf === null) throw new ShelfNotFoundError({ id: shelfId.value });
 
 		return shelf;
 	}

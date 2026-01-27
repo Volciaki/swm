@@ -1,7 +1,8 @@
 import type { ErrorMetadataValue } from "@/server/utils/errors";
-import { ErrorName, BaseError } from "@/server/utils/errors";
+import { ErrorName } from "@/server/utils/errors";
+import { IdentityApplicationError } from "./IdentityApplicationError";
 
-export class UserNotFoundError extends BaseError<ErrorName.USER_NOT_FOUND> {
+export class UserNotFoundError extends IdentityApplicationError<ErrorName.USER_NOT_FOUND> {
 	constructor(value: ErrorMetadataValue[ErrorName.USER_NOT_FOUND]) {
 		super({
 			error: {

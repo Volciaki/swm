@@ -28,7 +28,7 @@ export class DeleteShelf {
 
 		const currentShelves = await this.shelfRepository.getAll();
 		if (options.enforceMinimalAmountOfShelves && currentShelves.length <= MINIMAL_AMOUNT_OF_SHELVES)
-			throw new NotEnoughShelves(MINIMAL_AMOUNT_OF_SHELVES);
+			throw new NotEnoughShelves({ minimalAmountOfShelves: MINIMAL_AMOUNT_OF_SHELVES });
 
 		const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id, dto.assortmentContext);
 		await this.shelfRepository.delete(shelf);

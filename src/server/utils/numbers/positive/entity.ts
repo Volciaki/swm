@@ -8,7 +8,7 @@ export class PositiveNumber {
 	}
 
 	static create(value: number) {
-		if (value < 0) throw new NegativeNumberError(value);
+		if (value < 0) throw new NegativeNumberError({ value });
 		return new PositiveNumber(value);
 	}
 

@@ -19,7 +19,7 @@ export class Notification {
 	) {}
 
 	static create(id: UUID, type: string, issuedDate: Date, title: string, message: string) {
-		if (!stringIsNotificationType(type)) throw new InvalidNotificationTypeValue(type);
+		if (!stringIsNotificationType(type)) throw new InvalidNotificationTypeValue({ type });
 
 		return new Notification(id, type, issuedDate, title, message);
 	}

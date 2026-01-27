@@ -1,5 +1,5 @@
-import { InvalidPublicVisibilityValue } from "../errors/InvalidPublicVisibilityValue";
-import { InvalidPrivateVisibilityValue } from "../errors/InvalidPrivateVisibilityValue";
+import { InvalidPublicVisibilityValueError } from "../errors/InvalidPublicVisibilityValueError";
+import { InvalidPrivateVisibilityValueError } from "../errors/InvalidPrivateVisibilityValueError";
 
 type Private = {
 	isPublic: false;
@@ -24,9 +24,9 @@ export class Visibility<V extends VisibilityValue = VisibilityValue> {
 	}
 
 	static create(isPublic: boolean, publicUrl?: string) {
-		if (!isPublic && publicUrl) throw new InvalidPrivateVisibilityValue();
+		if (!isPublic && publicUrl) throw new InvalidPrivateVisibilityValueError();
 		if (!isPublic) return new Visibility<Private>({ isPublic, publicUrl: undefined });
-		if (!publicUrl) throw new InvalidPublicVisibilityValue();
+		if (!publicUrl) throw new InvalidPublicVisibilityValueError();
 
 		return new Visibility<Public>({ isPublic, publicUrl });
 	}

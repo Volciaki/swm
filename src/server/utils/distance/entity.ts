@@ -7,7 +7,7 @@ export class Distance {
 
 	private constructor(value: number) {
 		const positive = attempt(() => PositiveNumber.create(value));
-		if (positive instanceof Error) throw new NegativeDistanceError(value);
+		if (positive instanceof Error) throw new NegativeDistanceError({ value });
 
 		this._millimeters = positive;
 	}
@@ -20,7 +20,7 @@ export class Distance {
 		return new Distance(value);
 	}
 
-	public toSringMillimeters() {
+	public toStringMillimeters() {
 		return `${this.millimeters.value}mm`;
 	}
 

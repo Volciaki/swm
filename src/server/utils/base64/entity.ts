@@ -11,7 +11,7 @@ export class Base64 {
 	private constructor(public readonly value: string) {}
 
 	static fromString(value: string) {
-		if (!isStringValidBase64(value)) throw new InvalidBase64(value);
+		if (!isStringValidBase64(value)) throw new InvalidBase64({ value });
 
 		return new Base64(value);
 	}

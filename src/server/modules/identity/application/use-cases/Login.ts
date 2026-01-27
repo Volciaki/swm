@@ -34,7 +34,7 @@ export class Login {
 		if (!user) throw new UserNotFoundError({ fieldName: "mail", value: dto.email });
 
 		const passwordMatches = await this.stringHasher.verify(dto.passwordRaw, user.passwordHash);
-		if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);
+		if (!passwordMatches) throw new WrongPasswordError({ password: dto.passwordRaw, email: dto.email });
 
 		if (user.twoFactorAuthenticationEnabled) {
 			const twoFactorAuthenticationValue = this.twoFactorAuthenticationValueGenerator.generate();

@@ -1,6 +1,4 @@
-export class MonitoringDomainError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = "MonitoringDomainError";
-	}
-}
+import type { ErrorName } from "@/server/utils";
+import { BaseError } from "@/server/utils";
+
+export abstract class MonitoringDomainError<T extends ErrorName> extends BaseError<T> {}

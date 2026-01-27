@@ -1,6 +1,4 @@
-export class WarehouseApplicationError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = "IdentityApplicationError";
-	}
-}
+import type { ErrorName } from "@/server/utils";
+import { BaseError } from "@/server/utils";
+
+export abstract class WarehouseApplicationError<T extends ErrorName> extends BaseError<T> {}

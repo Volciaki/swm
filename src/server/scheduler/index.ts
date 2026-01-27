@@ -12,7 +12,7 @@ class Scheduler {
 	async runTask(name: string) {
 		const task = this.tasks.find((t) => t.getName() === name);
 
-		if (!task) throw new SchedulerTaskNotFoundError(name, this.tasks);
+		if (!task) throw new SchedulerTaskNotFoundError({ name, availableTasks: this.tasks.map((task) => task.getName()) });
 
 		try {
 			logger.log(`Running task ${task.getName()}...`);
@@ -26,7 +26,7 @@ class Scheduler {
 
 export const getScheduler = async (authenticationPassphrase: string, ctx: GetServicesContext) => {
 	if (authenticationPassphrase !== environment.schedule.authentication.passphrase)
-		throw new SchedulerAuthorizationError(authenticationPassphrase);
+		throw new SchedulerAuthorizationError({ passedPassphrase: authenticationPassphrase });
 
 	const tasks = getSchedulerTasks(ctx);
 	return new Scheduler(tasks);

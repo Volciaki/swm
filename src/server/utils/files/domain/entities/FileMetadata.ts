@@ -1,5 +1,5 @@
 import { isValidEnumValue } from "@/server/utils/enums";
-import { InvalidStorageTypeValue } from "../errors/InvalidStorageTypeValue";
+import { InvalidStorageTypeValueError } from "../errors/InvalidStorageTypeValueError";
 import { FileStorageType } from "../services/FileStorage";
 
 const stringIsFileStorageType = (value: string) => isValidEnumValue(FileStorageType, value);
@@ -19,7 +19,7 @@ export class FileMetadata {
 
 	static create(storageType: string, bucket: string | null) {
 		const storageTypeIsValid = stringIsFileStorageType(storageType);
-		if (!storageTypeIsValid) throw new InvalidStorageTypeValue(storageType);
+		if (!storageTypeIsValid) throw new InvalidStorageTypeValueError({ type: storageType });
 
 		return new FileMetadata(storageType, bucket);
 	}

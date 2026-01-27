@@ -24,7 +24,7 @@ export class NodeAuthenticationManager implements AuthenticationManager<Authenti
 	async decodeAuthenticationToken(token: string) {
 		return new Promise<AuthenticationPayloadDTO>((resolve, reject) => {
 			verify(token, environment.authentication.secret, (err, decoded) => {
-				if (err) return reject(new InvalidAuthenticationTokenError(token));
+				if (err) return reject(new InvalidAuthenticationTokenError({ token }));
 
 				resolve(decoded as AuthenticationPayloadDTO);
 			});

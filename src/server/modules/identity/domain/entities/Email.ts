@@ -11,7 +11,7 @@ export class Email {
 	private constructor(public readonly value: string) {}
 
 	static fromString(value: string) {
-		if (!isStringValidEmail(value)) throw new InvalidEmailError(value);
+		if (!isStringValidEmail(value)) throw new InvalidEmailError({ email: value });
 
 		return new Email(value);
 	}

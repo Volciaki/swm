@@ -14,7 +14,7 @@ export class CelsiusDegrees {
 	}
 
 	static fromNumber(value: number) {
-		if (value < ABSOLUTE_ZERO) throw new InvalidTemperatureValueError(formatCelsiusDegreesAsString(value));
+		if (value < ABSOLUTE_ZERO) throw new InvalidTemperatureValueError({ celsius: formatCelsiusDegreesAsString(value) });
 
 		return new CelsiusDegrees(value);
 	}

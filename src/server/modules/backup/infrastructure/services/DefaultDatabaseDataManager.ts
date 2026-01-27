@@ -36,8 +36,10 @@ export class DefaultDatabaseDataManager implements DatabaseDataManager {
 		this.backupUtility = ["pg_dump"];
 		this.restoreUtility = ["pg_restore"];
 
-		if (!shellCommandAccessible(this.backupUtility[0])) throw new NoBackupUtilitiesError(this.backupUtility[0]);
-		if (!shellCommandAccessible(this.restoreUtility[0])) throw new NoBackupUtilitiesError(this.restoreUtility[0]);
+		if (!shellCommandAccessible(this.backupUtility[0]))
+			throw new NoBackupUtilitiesError({ binary: this.backupUtility[0] });
+		if (!shellCommandAccessible(this.restoreUtility[0]))
+			throw new NoBackupUtilitiesError({ binary: this.restoreUtility[0] });
 
 		const additionalDevelopmentArgs = ["docker", "compose", "run", "--rm", "-i", "pgutils"];
 
