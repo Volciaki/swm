@@ -1,15 +1,17 @@
 "use client";
 
-import { type FC, useCallback, useEffect } from "react";
+import { type FC, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoginForm } from "@/ui/organisms";
 import { CenteredOnPage } from "@/ui/molecules";
 import { Flex, Paragraph } from "@/ui/atoms";
 import { apiClient, useAuthData } from "@/ui/providers";
+import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 
 const Login: FC = () => {
 	const router = useRouter();
 	const { refreshAuthData, authData } = useAuthData();
+	const [error, setError] = useState<string | undefined>();
 
 	const login = apiClient.identity.login.useMutation({
 		onSuccess: async (data) => {
@@ -21,6 +23,12 @@ const Login: FC = () => {
 			if ("authenticationId" in data) {
 				router.push(`/2fa?id=${data.authenticationId}`);
 			}
+		},
+		onError: async (error) => {
+			if (!error?.data) return;
+
+			const errorMessage = getPolishErrorMessageByMetadata(error.data.metadata);
+			setError(errorMessage);
 		},
 	});
 
@@ -40,7 +48,7 @@ const Login: FC = () => {
 	return (
 		<CenteredOnPage>
 			<Flex direction={"column"} align={"center"} style={{ gap: "2rem" }}>
-				<LoginForm onSubmit={({ email, password }) => formSubmitHandler(email, password)} />
+				<LoginForm onSubmit={({ email, password }) => formSubmitHandler(email, password)} error={error} />
 
 				{login.isPending && (
 					// TODO: replace with some `Loading` component

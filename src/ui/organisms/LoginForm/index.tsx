@@ -3,7 +3,7 @@
 import type { FC } from "react";
 import { useForm } from "react-hook-form";
 import { PageHeader, FormInput } from "@/ui/molecules";
-import { Button, Flex, Input, Paragraph, Separator } from "@/ui/atoms";
+import { Button, Flex, FormError, Input, Paragraph, Separator } from "@/ui/atoms";
 
 type LoginFormBody = {
 	email: string;
@@ -12,9 +12,10 @@ type LoginFormBody = {
 
 export type LoginFormProps = {
 	onSubmit: (value: LoginFormBody) => void;
+	error?: string;
 };
 
-export const LoginForm: FC<LoginFormProps> = ({ onSubmit }) => {
+export const LoginForm: FC<LoginFormProps> = ({ onSubmit, error }) => {
 	const { register, handleSubmit, formState } = useForm<LoginFormBody>({
 		mode: "onChange",
 		defaultValues: {},
@@ -60,6 +61,8 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit }) => {
 						{"Potwierdź"}
 					</Paragraph>
 				</Button>
+
+				<FormError>{error}</FormError>
 			</Flex>
 		</Flex>
 	);

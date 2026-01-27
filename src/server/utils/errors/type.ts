@@ -1,3 +1,4 @@
+// TODO: split this into multiple files.
 export enum ErrorName {
 	USER_NOT_FOUND = "UserNotFound",
 	ALREADY_LOGGED_IN = "AlreadyLoggedIn",
@@ -46,6 +47,8 @@ export enum ErrorName {
 }
 
 export type FullErrorName = `${ErrorName}Error`;
+
+export type ErrorNameToFullErrorName<T extends ErrorName> = `${T}Error`;
 
 // prettier-ignore
 export type ErrorMetadataValue = {

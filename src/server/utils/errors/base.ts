@@ -1,24 +1,26 @@
 import { TRPCError } from "@trpc/server";
-import type { ErrorName, FullErrorName, ErrorMetadataValue } from "./type";
+import type { ErrorName, ErrorMetadataValue, ErrorNameToFullErrorName } from "./type";
 
 type TRPCErrorNew = ConstructorParameters<typeof TRPCError>[0];
 
-type BaseErrorMetadata<T extends ErrorName> = { value: ErrorMetadataValue[T]; name: T };
+export type BaseErrorMetadata<T extends ErrorName = ErrorName> = {
+	value: ErrorMetadataValue[T];
+	name: T;
+	fullName: ErrorNameToFullErrorName<T>;
+};
 
 export abstract class BaseError<T extends ErrorName> extends TRPCError {
-	private readonly metadata: {
-		name: FullErrorName;
-		value: ErrorMetadataValue[T];
-	};
+	private readonly metadata: BaseErrorMetadata<T>;
 
-	constructor({ error, metadata }: { error: TRPCErrorNew; metadata: BaseErrorMetadata<T> }) {
+	constructor({ error, metadata }: { error: TRPCErrorNew; metadata: Omit<BaseErrorMetadata<T>, "fullName"> }) {
 		super(error);
 
 		const fullErrorName = `${metadata.name}Error` as const;
 
 		this.metadata = {
 			value: metadata.value,
-			name: fullErrorName,
+			name: metadata.name,
+			fullName: fullErrorName,
 		};
 		this.name = fullErrorName;
 	}

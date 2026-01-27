@@ -7,7 +7,7 @@ import { DBUser } from "../modules/identity/infrastructure/entities/DBUser";
 import { DBUserRepository } from "../modules/identity/infrastructure/persistence/DBUserRepository";
 import { UserMapper } from "../modules/identity/infrastructure/mappers/UserMapper";
 import { InvalidAuthenticationTokenError } from "../modules/identity/application/errors/InvalidAuthenticationTokenError";
-import type { UserDTO } from "../utils";
+import type { BaseErrorMetadata, UserDTO } from "../utils";
 import { InvalidUUIDError, UUID } from "../utils";
 import { appDataSource, initializeDatabase } from "../database/init";
 import { environment } from "../environment";
@@ -61,8 +61,7 @@ export const createTRPCContext = async (): Promise<APIContext> => {
 	return { db: appDataSource, user };
 };
 
-// TODO: can we leave this as `unknown`?
-type TRPCErrorWithMetadata = TRPCError & { getMetadata(): unknown };
+type TRPCErrorWithMetadata = TRPCError & { getMetadata(): BaseErrorMetadata };
 
 const t = initTRPC.context<APIContext>().create({
 	errorFormatter: (options) => {
