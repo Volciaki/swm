@@ -8,6 +8,7 @@ type AuthDataValue = UserDTO;
 
 type AuthDataContextValue = {
 	authData: AuthDataValue | null;
+	isLoadingAuthData: boolean;
 	refreshAuthData: () => Promise<void>;
 };
 
@@ -24,6 +25,7 @@ export const AuthDataProvider: FC<AuthDataProviderProps> = ({ children }) => {
 		<AuthDataContext.Provider
 			value={{
 				authData: getSession.data?.user ?? null,
+				isLoadingAuthData: getSession.isLoading,
 				refreshAuthData: async () => {
 					await getSession.refetch();
 				},

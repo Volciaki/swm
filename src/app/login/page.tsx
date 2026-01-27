@@ -10,7 +10,7 @@ import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 
 const Login: FC = () => {
 	const router = useRouter();
-	const { refreshAuthData, authData } = useAuthData();
+	const { refreshAuthData, authData, isLoadingAuthData } = useAuthData();
 	const [error, setError] = useState<string | undefined>();
 
 	const login = apiClient.identity.login.useMutation({
@@ -42,8 +42,10 @@ const Login: FC = () => {
 	);
 
 	useEffect(() => {
-		if (authData !== null) router.push("/");
+		if (authData !== null) router.replace("/");
 	}, [authData, router]);
+
+	if (isLoadingAuthData || authData !== null) return null;
 
 	return (
 		<CenteredOnPage>

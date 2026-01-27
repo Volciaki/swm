@@ -7,12 +7,14 @@ import { useAuthData } from "@/ui/providers";
 import styles from "./index.module.scss";
 
 export const NavigationBar = () => {
-	const { authData } = useAuthData();
+	const { authData, isLoadingAuthData } = useAuthData();
 	const isAuthenticated = useMemo(() => authData !== null, [authData]);
 	const routes = useMemo(
 		() => (isAuthenticated ? routeDefinitions.loggedIn : routeDefinitions.unauthenticated),
 		[isAuthenticated]
 	);
+
+	if (isLoadingAuthData) return null;
 
 	return (
 		<Flex align={"center"} justify={"space-between"} style={{ height: "100%" }} fullWidth>
