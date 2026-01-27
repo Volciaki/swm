@@ -22,3 +22,14 @@
         text-decoration: none;
     }
 }
+
+.user-details-container {
+    background-color: $background-lightened;
+    position: absolute;
+    top: calc($navigation-height-desktop + (2 * $padding));
+    right: calc(2 * $padding);
+    padding: $padding;
+    z-index: 2;
+    width: 15%;
+    gap: $gap !important;
+}

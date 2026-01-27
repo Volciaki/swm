@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { routes as routeDefinitions } from "@/utils/routes";
 import { Button, Flex, Link, Paragraph } from "@/ui/atoms";
 import { useAuthData } from "@/ui/providers";
@@ -8,6 +8,7 @@ import styles from "./index.module.scss";
 
 export const NavigationBar = () => {
 	const { authData, isLoadingAuthData } = useAuthData();
+	const [areUserDetailsShown, setAreUserDetailsShown] = useState(false);
 	const isAuthenticated = useMemo(() => authData !== null, [authData]);
 	const routes = useMemo(
 		() => (isAuthenticated ? routeDefinitions.loggedIn : routeDefinitions.unauthenticated),
@@ -41,7 +42,34 @@ export const NavigationBar = () => {
 					</Link>
 				)}
 
-				{isAuthenticated && <Paragraph>{authData?.name}</Paragraph>}
+				{isAuthenticated && (
+					<Button onClick={() => setAreUserDetailsShown((current) => !current)}>
+						<Paragraph fontSize={1.5}>{authData?.name}</Paragraph>
+					</Button>
+				)}
+
+				{areUserDetailsShown && authData && (
+					<Flex direction={"column"} className={styles["user-details-container"]}>
+						<Link href={`/centrum-zarzadzania/uzytkownicy/${authData.id}`}>
+							<Button style={{ width: "100%" }}>
+								<Paragraph fontSize={1.25}>{authData.name}</Paragraph>
+							</Button>
+						</Link>
+
+						<Paragraph fontSize={1.25}>{`Login: ${authData.name}`}</Paragraph>
+						<Paragraph fontSize={1.25}>{`Email: ${authData.email}`}</Paragraph>
+						<Paragraph fontSize={1.25}>{`Typ konta: ${authData.isAdmin ? "Administrator" : "Użytkownik"}`}</Paragraph>
+
+						{/* Redirect to 2FA flow after which password is changed. */}
+						<Button variant={"secondary"}>
+							<Paragraph fontSize={1.25}>{"Zmień hasło"}</Paragraph>
+						</Button>
+
+						<Button danger>
+							<Paragraph fontSize={1.25}>{"Wyloguj"}</Paragraph>
+						</Button>
+					</Flex>
+				)}
 			</ul>
 		</Flex>
 	);
