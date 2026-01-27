@@ -1,4 +1,4 @@
-import { BackupApplicationError } from "./BackupInfrastructureError";
+import { BackupApplicationError } from "./BackupApplicationError";
 
 export class InvalidBackupError extends BackupApplicationError {
 	constructor() {

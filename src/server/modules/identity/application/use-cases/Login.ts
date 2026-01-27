@@ -31,7 +31,7 @@ export class Login {
 
 		const email = Email.fromString(dto.email);
 		const user = await this.userRepository.getByEmail(email);
-		if (!user) throw new UserNotFoundError("mail", dto.email);
+		if (!user) throw new UserNotFoundError({ fieldName: "mail", value: dto.email });
 
 		const passwordMatches = await this.stringHasher.verify(dto.passwordRaw, user.passwordHash);
 		if (!passwordMatches) throw new WrongPasswordError(dto.passwordRaw, dto.email);

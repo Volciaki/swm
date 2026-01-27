@@ -1,3 +1,4 @@
+import type { TRPCError } from "@trpc/server";
 import { initTRPC } from "@trpc/server";
 import { cookies } from "next/headers";
 import type { DataSource } from "typeorm";
@@ -60,7 +61,25 @@ export const createTRPCContext = async (): Promise<APIContext> => {
 	return { db: appDataSource, user };
 };
 
-const t = initTRPC.context<APIContext>().create();
+// TODO: can we leave this as `unknown`?
+type TRPCErrorWithMetadata = TRPCError & { getMetadata(): unknown };
+
+const t = initTRPC.context<APIContext>().create({
+	errorFormatter: (options) => {
+		const { shape, error } = options;
+
+		const appError = error as TRPCErrorWithMetadata;
+		const metadata = appError.getMetadata();
+
+		return {
+			...shape,
+			data: {
+				...shape.data,
+				metadata,
+			},
+		};
+	},
+});
 
 export const createRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;

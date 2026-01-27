@@ -23,7 +23,7 @@ export class RequestPasswordReset {
 		const userId = UUID.fromString(dto.userId);
 		const user = await this.userRepository.getById(userId);
 
-		if (!user) throw new UserNotFoundError("UUID", dto.userId);
+		if (!user) throw new UserNotFoundError({ fieldName: "UUID", value: dto.userId });
 
 		const twoFactorAuthenticationValue = this.twoFactorAuthenticationValueGenerator.generate();
 		const authenticationSession = await this.twoFactorAuthenticationSessionRepository.setupForUser(

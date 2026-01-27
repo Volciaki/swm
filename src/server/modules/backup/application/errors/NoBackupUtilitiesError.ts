@@ -1,5 +1,5 @@
 import type { UUID } from "@/server/utils";
-import { BackupApplicationError } from "./BackupInfrastructureError";
+import { BackupApplicationError } from "./BackupApplicationError";
 
 export class BackupNotFoundError extends BackupApplicationError {
 	constructor(id: UUID) {
