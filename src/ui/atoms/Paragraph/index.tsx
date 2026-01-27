@@ -11,7 +11,7 @@ const ellipsisOverflowStylesheet: CSSProperties = {
 
 export type ParagraphProps = {
 	children: ReactNode;
-	variant?: "primary" | "secondary";
+	variant?: "primary" | "secondary" | "danger";
 	fontSize?: number;
 	ellipsisOverflow?: boolean;
 } & CustomStyles;

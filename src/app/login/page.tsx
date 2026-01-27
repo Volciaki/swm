@@ -2,7 +2,8 @@
 
 import { type FC, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { CenteredOnPage, LoginForm } from "@/ui/molecules";
+import { LoginForm } from "@/ui/organisms";
+import { CenteredOnPage } from "@/ui/molecules";
 import { Flex, Paragraph } from "@/ui/atoms";
 import { apiClient, useAuthData } from "@/ui/providers";
 
@@ -39,7 +40,7 @@ const Login: FC = () => {
 	return (
 		<CenteredOnPage>
 			<Flex direction={"column"} align={"center"} style={{ gap: "2rem" }}>
-				<LoginForm onClick={formSubmitHandler} />
+				<LoginForm onSubmit={({ email, password }) => formSubmitHandler(email, password)} />
 
 				{login.isPending && (
 					// TODO: replace with some `Loading` component
