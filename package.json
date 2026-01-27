@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-	"docker": "docker build -t ghcr.io/volciaki/primus-inter-pares-2026:latest .",
+    "docker": "docker build -t ghcr.io/volciaki/primus-inter-pares-2026:latest .",
     "lint": "eslint",
     "start": "concurrently --prefix 'none' 'yarn start:app' 'yarn start:schedule'",
     "start:app": "next start",
@@ -39,6 +39,7 @@
     "qrcode": "^1.5.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hook-form": "^7.71.1",
     "reflect-metadata": "^0.2.2",
     "server-only": "^0.0.1",
     "sharp": "^0.34.5",
