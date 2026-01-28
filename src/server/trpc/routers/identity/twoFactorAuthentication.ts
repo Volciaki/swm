@@ -1,6 +1,7 @@
 import type { AuthenticationTokenResponseDTO } from "@/server/modules/identity/application/dto/LoginResponseDTO";
 import { TwoFactorAuthentication } from "@/server/modules/identity/application/use-cases/TwoFactorAuthentication";
 import { twoFactorAuthenticationDTOSchema } from "@/server/modules/identity/application/dto/TwoFactorAuthenticationDTO";
+import { generateAuthCookieByTokenValue } from "@/server/utils";
 import { getServices } from "../../services";
 import { procedure } from "../../init";
 
@@ -18,5 +19,10 @@ export const twoFactorAuthentication = procedure
 			twoFactorAuthenticationSessionRepository,
 			authenticationManager
 		);
-		return await action.execute(input, ctx.user ?? undefined);
+		const response = await action.execute(input, ctx.user ?? undefined);
+
+		const cookie = generateAuthCookieByTokenValue(response.authenticationToken);
+		ctx.cookie = cookie;
+
+		return response;
 	});

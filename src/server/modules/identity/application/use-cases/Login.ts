@@ -1,7 +1,4 @@
-import { serialize as serializeCookie } from "cookie";
-import { environment } from "@/server/environment";
-import type { UserDTO, UUIDManager } from "@/server/utils";
-import { EnvironmentType } from "@/server/environment/type";
+import { generateAuthCookieByTokenValue, type UserDTO, type UUIDManager } from "@/server/utils";
 import { Email } from "../../domain/entities/Email";
 import { AlreadyLoggedInError } from "../../domain/errors/AlreadyLoggedInError";
 import { WrongPasswordError } from "../../domain/errors/WrongPasswordError";
@@ -58,14 +55,7 @@ export class Login {
 	getCookieByDTO(dto: LoginResponseDTO): string | null {
 		if (!("authenticationToken" in dto)) return null;
 
-		const authToken = dto.authenticationToken;
-		const cookie = serializeCookie({
-			name: environment.authentication.cookie.name,
-			value: authToken,
-			sameSite: "strict",
-			secure: environment.type === EnvironmentType.PRODUCTION,
-		});
-
+		const cookie = generateAuthCookieByTokenValue(dto.authenticationToken);
 		return cookie;
 	}
 }
