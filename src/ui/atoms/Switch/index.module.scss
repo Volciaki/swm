@@ -1,0 +1,42 @@
+@use "@/styles" as *;
+
+$container-padding: 0.2rem;
+
+.container {
+    background-color: $border;
+    padding: $container-padding;
+    box-sizing: content-box;
+    position: relative;
+    transition: all $transition;
+
+    &.checked {
+        background-color: $primary;
+    }
+
+    &.disabled {
+        cursor: not-allowed;
+        background-color: $text-darkened;
+    }
+}
+
+.checkbox {
+    display: none;
+}
+
+.slider {
+    border-radius: 50%;
+    background-color: $text-darkened;
+    position: absolute;
+    transition: all $transition;
+    left: calc(0% + $container-padding);
+
+    &.checked {
+        left: calc(100% - $container-padding);
+        transform: translateX(-100%);
+        background-color: $secondary;
+    }
+
+    &.disabled {
+        background-color: $border;
+    }
+}

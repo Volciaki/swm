@@ -46,6 +46,7 @@ $shadow-size: 3px;
     }
 
     &:disabled {
+        cursor: not-allowed;
         border: solid $border-size $text-darkened !important;
         color: $text-darkened !important;
 

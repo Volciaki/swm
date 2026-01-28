@@ -1,9 +1,9 @@
 "use client";
 
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import { useForm } from "react-hook-form";
 import { FormInput } from "@/ui/molecules";
-import { Flex, Input, Paragraph, Button } from "@/ui/atoms";
+import { Flex, Input, Paragraph, Button, Switch } from "@/ui/atoms";
 import styles from "./index.module.scss";
 
 type UserFormData = {
@@ -32,6 +32,10 @@ export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existi
 		mode: "onChange",
 		values: data,
 	});
+	const [twoFactorAuthenticationEnabled, setTwoFactorAuthenticationEnabled] = useState(
+		formState.defaultValues?.twoFactorAuthenticationEnabled ?? false
+	);
+	const [isAdmin, setIsAdmin] = useState(formState.defaultValues?.isAdmin);
 
 	return (
 		<Flex className={styles["container"]} direction={"column"} align={"center"} fullWidth>
@@ -86,6 +90,8 @@ export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existi
 							})}
 						/>
 					</FormInput>
+
+					<Switch checked={twoFactorAuthenticationEnabled} setChecked={setTwoFactorAuthenticationEnabled} />
 				</Flex>
 
 				<Flex direction={"column"} align={"center"} justify={"center"} style={{ gap: "1rem", width: "50%" }}>

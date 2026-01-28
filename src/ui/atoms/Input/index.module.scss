@@ -20,5 +20,6 @@ $input-border-size: calc($border-size / 1.5);
 
     &:disabled {
         border: solid $input-border-size $text-darkened;
+        cursor: not-allowed;
     }
 }

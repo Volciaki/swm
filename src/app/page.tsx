@@ -1,6 +1,12 @@
 import { type FC } from "react";
-import { Paragraph } from "@/ui/atoms";
+import { Loading, Paragraph } from "@/ui/atoms";
 
-const Home: FC = () => <Paragraph>{":3"}</Paragraph>;
+const Home: FC = () => (
+	<>
+		<Loading />
+
+		<Paragraph>{":3"}</Paragraph>
+	</>
+);
 
 export default Home;
