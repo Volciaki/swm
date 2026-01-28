@@ -1,11 +1,6 @@
 import { type FC } from "react";
 import { Paragraph } from "@/ui/atoms";
-import { CenteredOnPage } from "@/ui/molecules";
 
-const Visualisation: FC = () => (
-	<CenteredOnPage>
-		<Paragraph>{"wizualizacja"}</Paragraph>
-	</CenteredOnPage>
-);
+const Visualisation: FC = () => <Paragraph>{"wizualizacja"}</Paragraph>;
 
 export default Visualisation;

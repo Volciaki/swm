@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { ABeeZee } from "next/font/google";
 import { Providers } from "@/ui/providers";
 import { NavigationBar } from "@/ui/organisms";
+import { CenteredOnPage } from "@/ui/molecules";
 import styles from "../styles/layout.module.scss";
 import "../styles/global.scss";
 
@@ -27,7 +28,9 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 
 				<div className={styles["navigation-margin"]} />
 
-				<main className={styles["content"]}>{children}</main>
+				<main className={styles["content"]}>
+					<CenteredOnPage>{children}</CenteredOnPage>
+				</main>
 			</body>
 		</html>
 	</Providers>

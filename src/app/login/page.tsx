@@ -3,7 +3,6 @@
 import { type FC, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { LoginFlow } from "@/ui/templates";
-import { CenteredOnPage } from "@/ui/molecules";
 import { useAuthData } from "@/ui/providers";
 
 const Login: FC = () => {
@@ -16,11 +15,7 @@ const Login: FC = () => {
 
 	if (isLoadingAuthData || authData !== null) return null;
 
-	return (
-		<CenteredOnPage>
-			<LoginFlow />
-		</CenteredOnPage>
-	);
+	return <LoginFlow />;
 };
 
 export default Login;
