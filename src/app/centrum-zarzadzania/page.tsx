@@ -22,7 +22,7 @@ const ManagementCenterCard: FC<ManagementCenterCardProps> = ({ text, description
 
 const ManagementCenter: FC = () => (
 	<FullHeight>
-		<Flex direction={"column"} align={"center"} style={{ gap: "1rem", height: "100%" }}>
+		<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
 			<PageHeader title={"Centrum Zarządzania"} description={"Stąd znawigujesz do większości funkcji magazynu."} />
 
 			<div className={styles["container"]}>

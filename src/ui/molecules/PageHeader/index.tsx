@@ -8,7 +8,7 @@ export type PageHeaderProps = {
 };
 
 export const PageHeader: FC<PageHeaderProps> = ({ title, description, wrapDescription = true }) => (
-	<Flex direction={"column"} fullWidth>
+	<Flex direction={"column"} style={{ gap: "1rem" }} fullWidth>
 		<Paragraph style={{ textAlign: "center" }} fontSize={3}>
 			{title}
 		</Paragraph>
@@ -19,7 +19,7 @@ export const PageHeader: FC<PageHeaderProps> = ({ title, description, wrapDescri
 					textAlign: "center",
 					textWrap: wrapDescription ? "wrap" : "nowrap",
 				}}
-				fontSize={2}
+				fontSize={1.5}
 				variant={"secondary"}
 			>
 				{description}

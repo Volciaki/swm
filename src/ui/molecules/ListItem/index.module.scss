@@ -1,0 +1,14 @@
+@use "@/styles" as *;
+
+.container {
+    background-color: $background-lightened;
+    border: solid $border-size $border;
+    border-radius: 5px;
+    padding: $padding;
+    transition: $transition;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    box-shadow: 3px 3px 6px $border;
+}

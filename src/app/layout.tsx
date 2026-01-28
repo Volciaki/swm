@@ -28,8 +28,10 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 
 				<div className={styles["navigation-margin"]} />
 
-				<main className={styles["content"]}>
-					<CenteredOnPage>{children}</CenteredOnPage>
+				<main className={styles["content-container"]}>
+					<div className={styles["content-wrapper"]}>
+						<CenteredOnPage>{children}</CenteredOnPage>{" "}
+					</div>
 				</main>
 			</body>
 		</html>

@@ -19,7 +19,7 @@ type AuthDataProviderProps = {
 };
 
 export const AuthDataProvider: FC<AuthDataProviderProps> = ({ children }) => {
-	const getSession = apiClient.identity.getSession.useQuery(undefined);
+	const getSession = apiClient.identity.getSession.useQuery();
 
 	return (
 		<AuthDataContext.Provider
