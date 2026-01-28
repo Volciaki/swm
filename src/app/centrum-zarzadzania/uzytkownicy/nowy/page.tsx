@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { UserForm } from "@/ui/organisms";
 import { PageHeader } from "@/ui/molecules";
-import { FullHeight, Flex } from "@/ui/atoms";
+import { FullHeight, Flex, Separator, Button, Paragraph, Link } from "@/ui/atoms";
 
 const UsersNew: FC = () => (
 	<FullHeight>
@@ -12,6 +12,16 @@ const UsersNew: FC = () => (
 			/>
 
 			<UserForm />
+
+			<Separator />
+
+			<Link href={"/centrum-zarzadzania/uzytkownicy"}>
+				<Button>
+					<Paragraph variant={"secondary"} style={{ marginInline: "20px" }}>
+						{"Powrót"}
+					</Paragraph>
+				</Button>
+			</Link>
 		</Flex>
 	</FullHeight>
 );

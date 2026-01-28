@@ -12,7 +12,7 @@ export type SwitchProps = {
 	disabled?: boolean;
 };
 
-export const Switch: FC<SwitchProps> = ({ checked, setChecked, size = 1, disabled }) => (
+export const Switch: FC<SwitchProps> = ({ checked, setChecked, size = 1.5, disabled }) => (
 	<label
 		className={clsx([styles["container"], { [styles["checked"]]: checked }, { [styles["disabled"]]: disabled }])}
 		style={{

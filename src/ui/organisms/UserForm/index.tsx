@@ -2,6 +2,7 @@
 
 import { useState, type FC } from "react";
 import { useForm } from "react-hook-form";
+import { styleText } from "util";
 import { FormInput } from "@/ui/molecules";
 import { Flex, Input, Paragraph, Button, Switch } from "@/ui/atoms";
 import styles from "./index.module.scss";
@@ -35,7 +36,7 @@ export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existi
 	const [twoFactorAuthenticationEnabled, setTwoFactorAuthenticationEnabled] = useState(
 		formState.defaultValues?.twoFactorAuthenticationEnabled ?? false
 	);
-	const [isAdmin, setIsAdmin] = useState(formState.defaultValues?.isAdmin);
+	const [isAdmin, setIsAdmin] = useState(formState.defaultValues?.isAdmin ?? false);
 
 	return (
 		<Flex className={styles["container"]} direction={"column"} align={"center"} fullWidth>
@@ -91,7 +92,21 @@ export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existi
 						/>
 					</FormInput>
 
-					<Switch checked={twoFactorAuthenticationEnabled} setChecked={setTwoFactorAuthenticationEnabled} />
+					<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
+						<Switch checked={isAdmin} setChecked={setIsAdmin} />
+
+						<Paragraph fontSize={1.5} variant={"secondary"}>
+							{"Administrator"}
+						</Paragraph>
+					</Flex>
+
+					<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
+						<Switch checked={twoFactorAuthenticationEnabled} setChecked={setTwoFactorAuthenticationEnabled} />
+
+						<Paragraph fontSize={1.5} variant={"secondary"} ellipsisOverflow>
+							{"Weryfikacja dwuetapowa"}
+						</Paragraph>
+					</Flex>
 				</Flex>
 
 				<Flex direction={"column"} align={"center"} justify={"center"} style={{ gap: "1rem", width: "50%" }}>
