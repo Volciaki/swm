@@ -3,7 +3,7 @@
 .container {
     background-color: $background-lightened;
     border: solid $border-size $border;
-    border-radius: 5px;
+    border-radius: $border-radius;
     padding: $padding;
     transition: $transition;
 }

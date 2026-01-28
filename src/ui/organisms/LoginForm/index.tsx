@@ -57,8 +57,8 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId }) => {
 			<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
 				<FormInput error={formState.errors.email}>
 					<Input
-						type="text"
-						placeholder="e-mail"
+						type={"email"}
+						placeholder={"e-mail"}
 						fontSize={1.5}
 						{...register("email", {
 							required: {
@@ -71,8 +71,8 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId }) => {
 
 				<FormInput error={formState.errors.password}>
 					<Input
-						type="password"
-						placeholder="hasło"
+						type={"password"}
+						placeholder={"hasło"}
 						fontSize={1.5}
 						{...register("password", {
 							required: {

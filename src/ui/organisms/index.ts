@@ -3,3 +3,4 @@ export * from "./LoginForm";
 export * from "./Protected";
 export * from "./TwoFactorAuthenticationForm";
 export * from "./UserCard";
+export * from "./UserForm";

@@ -12,6 +12,7 @@ $navigation-height-desktop: 75px;
 $padding: 10px;
 $gap: 10px;
 $border-size: 5px;
+$border-radius: calc($border-size / 2);
 $transition-duration: 0.2s;
 $transition: $transition-duration ease;
 $content-width: 1200px;
