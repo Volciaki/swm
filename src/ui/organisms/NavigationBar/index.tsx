@@ -1,19 +1,26 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { routes as routeDefinitions } from "@/utils/routes";
 import { Button, Flex, Link, Paragraph } from "@/ui/atoms";
-import { useAuthData } from "@/ui/providers";
+import { apiClient, useAuthData } from "@/ui/providers";
 import styles from "./index.module.scss";
 
 export const NavigationBar = () => {
-	const { authData, isLoadingAuthData } = useAuthData();
+	const logout = apiClient.identity.logout.useMutation();
+	const { authData, isLoadingAuthData, refreshAuthData } = useAuthData();
 	const [areUserDetailsShown, setAreUserDetailsShown] = useState(false);
 	const isAuthenticated = useMemo(() => authData !== null, [authData]);
 	const routes = useMemo(
 		() => (isAuthenticated ? routeDefinitions.loggedIn : routeDefinitions.unauthenticated),
 		[isAuthenticated]
 	);
+
+	const logoutButtonClickHandler = useCallback(async () => {
+		await logout.mutateAsync();
+		refreshAuthData();
+		setAreUserDetailsShown(false);
+	}, [logout, refreshAuthData]);
 
 	if (isLoadingAuthData) return null;
 
@@ -60,12 +67,12 @@ export const NavigationBar = () => {
 						<Paragraph fontSize={1.25}>{`Email: ${authData.email}`}</Paragraph>
 						<Paragraph fontSize={1.25}>{`Typ konta: ${authData.isAdmin ? "Administrator" : "Użytkownik"}`}</Paragraph>
 
-						{/* Redirect to 2FA flow after which password is changed. */}
+						{/* TODO: Redirect to 2FA flow after which password is changed. */}
 						<Button variant={"secondary"}>
 							<Paragraph fontSize={1.25}>{"Zmień hasło"}</Paragraph>
 						</Button>
 
-						<Button danger>
+						<Button onClick={async () => logoutButtonClickHandler()} danger>
 							<Paragraph fontSize={1.25}>{"Wyloguj"}</Paragraph>
 						</Button>
 					</Flex>
