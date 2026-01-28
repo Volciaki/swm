@@ -6,13 +6,6 @@ export class ListUsers {
 
 	async execute() {
 		const users = await this.userRepository.getAll();
-		return users
-			.map((user) => UserMapper.fromUserToUserDTO(user))
-			.map((user) => ({
-				id: user.id,
-				isAdmin: user.isAdmin,
-				email: user.email,
-				name: user.name,
-			}));
+		return users.map((user) => UserMapper.fromUserToPublicUserDTO(user));
 	}
 }

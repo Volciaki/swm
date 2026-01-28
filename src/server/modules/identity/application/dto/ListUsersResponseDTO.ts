@@ -1,11 +1,6 @@
 import { z } from "zod";
-import { userDTOSchema } from "@/server/utils";
+import { publicUserDTO } from "./shared/PublicUserDTO";
 
-export const listUsersResponseDTOSchema = z.array(
-	userDTOSchema.omit({
-		twoFactorAuthenticationEnabled: true,
-		passwordHash: true,
-	})
-);
+export const listUsersResponseDTOSchema = z.array(publicUserDTO);
 
 export type ListUsersResponseDTO = z.infer<typeof listUsersResponseDTOSchema>;
