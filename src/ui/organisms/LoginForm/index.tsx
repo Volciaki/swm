@@ -2,7 +2,6 @@
 
 import { type FC, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { PageHeader, FormInput } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Paragraph, Separator, Loading } from "@/ui/atoms";
 import { apiClient, useAuthData } from "@/ui/providers";
@@ -13,8 +12,11 @@ type LoginFormBody = {
 	password: string;
 };
 
-export const LoginForm: FC = () => {
-	const router = useRouter();
+export type LoginFormProps = {
+	onAuthenticationId: (id: string) => void;
+};
+
+export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId }) => {
 	const { register, handleSubmit, formState } = useForm<LoginFormBody>({
 		mode: "onChange",
 		defaultValues: { email: "", password: "" },
@@ -29,7 +31,7 @@ export const LoginForm: FC = () => {
 				return;
 			}
 
-			if ("authenticationId" in data) router.push(`/2fa?id=${data.authenticationId}`);
+			if ("authenticationId" in data) onAuthenticationId(data.authenticationId);
 		},
 		onError: async (error) => {
 			if (!error?.data) return;

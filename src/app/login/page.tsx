@@ -2,7 +2,7 @@
 
 import { type FC, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LoginForm } from "@/ui/organisms";
+import { LoginFlow } from "@/ui/templates";
 import { CenteredOnPage } from "@/ui/molecules";
 import { useAuthData } from "@/ui/providers";
 
@@ -18,7 +18,7 @@ const Login: FC = () => {
 
 	return (
 		<CenteredOnPage>
-			<LoginForm />
+			<LoginFlow />
 		</CenteredOnPage>
 	);
 };

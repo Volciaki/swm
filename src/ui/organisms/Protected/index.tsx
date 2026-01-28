@@ -2,9 +2,8 @@
 
 import type { FC, ReactNode } from "react";
 import { useAuthData } from "@/ui/providers";
-import { Flex } from "@/ui/atoms";
-import { Loading } from "@/ui/atoms/Loading";
-import { LoginForm } from "../LoginForm";
+import { LoginFlow } from "@/ui/templates";
+import { Flex, Loading } from "@/ui/atoms";
 
 type AuthDataStatus = "loading" | "unauthorized" | "authorized";
 
@@ -20,7 +19,7 @@ export const Protected: FC<ProtectedProps> = ({ children }) => {
 		<Flex direction={"column"} align={"center"} fullWidth>
 			{authDataStatus === "loading" && <Loading />}
 
-			{authDataStatus === "unauthorized" && <LoginForm />}
+			{authDataStatus === "unauthorized" && <LoginFlow />}
 
 			{authDataStatus === "authorized" && children}
 		</Flex>
