@@ -1,7 +1,7 @@
 import chalk from "chalk";
+import { formatDateAsHumanReadable } from "@/utils";
 import { EnvironmentType } from "../environment/type";
 import { environment } from "../environment";
-import { formatDateAsHumanReadable } from "../utils/dates";
 
 export enum LogLevel {
 	DEBUG = "DEBUG",

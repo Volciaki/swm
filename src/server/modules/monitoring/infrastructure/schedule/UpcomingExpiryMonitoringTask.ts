@@ -1,7 +1,7 @@
 import type { SetAssortmentCloseToExpirationNotification } from "@/server/modules/assortment/application/use-cases/SetAssortmentCloseToExpirationNotification";
 import type { GetCloseToExpirationAssortment } from "@/server/modules/assortment/application/use-cases/GetCloseToExpirationAssortment";
 import type { SchedulerTask } from "@/server/scheduler/task";
-import { formatDateAsHumanReadable } from "@/server/utils";
+import { formatDateAsHumanReadable } from "@/utils";
 import type { CreateNotification } from "../../application/use-cases/CreateNotification";
 import { NotificationType } from "../../domain/entities/Notification";
 

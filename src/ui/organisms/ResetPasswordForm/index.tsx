@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { FormInput, PageHeader } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
-import { defaultErrorHandler, getPolishErrorMessageByErrorObject } from "@/ui/utils";
+import { defaultErrorHandler } from "@/ui/utils";
 import styles from "./index.module.scss";
 
 type PasswordResetFormBody = {
