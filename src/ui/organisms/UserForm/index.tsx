@@ -5,10 +5,11 @@ import { useForm, Controller } from "react-hook-form";
 import { FormInput } from "@/ui/molecules";
 import { Flex, Input, Paragraph, Button, Switch, Loading, FormError } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
-import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { APIError, defaultErrorHandler, getPolishErrorMessageByErrorObject, getPolishErrorMessageByMetadata } from "@/ui/utils";
 import type { BaseErrorMetadata } from "@/server/utils/errors/base";
 import type { UserDTO } from "@/server/utils";
 import type { PublicUserDTO } from "@/server/modules/identity/application/dto/shared/PublicUserDTO";
+import commonStyles from "../../../styles/common.module.scss";
 import styles from "./index.module.scss";
 
 type UserFormData = {
@@ -43,12 +44,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 
 			apiUtils.identity.invalidate();
 		},
-		onError: (error: { data?: { metadata: unknown } | null }) => {
-			if (!error?.data) return;
-
-			const errorMessage = getPolishErrorMessageByMetadata(error.data.metadata as BaseErrorMetadata);
-			setError(errorMessage);
-		},
+		onError: (e: APIError) => defaultErrorHandler(e, (errorMessage) => setError(errorMessage)),
 	};
 	const createUser = apiClient.identity.createUser.useMutation(sharedMutationOptions);
 	const updateUser = apiClient.identity.updateUser.useMutation(sharedMutationOptions);
@@ -97,12 +93,12 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 	}, [userId, deleteUser]);
 
 	return (
-		<Flex className={styles["container"]} direction={"column"} align={"center"} fullWidth>
+		<Flex className={commonStyles["form-container"]} direction={"column"} align={"center"} fullWidth>
 			<Paragraph style={{ textAlign: "center" }} fontSize={2.5}>
 				{existing ? "Edytuj" : "Dodaj"}
 			</Paragraph>
 
-			<Flex direction={"column"} align={"center"} className={styles["form-container"]}>
+			<Flex direction={"column"} align={"center"} className={styles["form-wrapper"]}>
 				<FormInput error={formState.errors.name} gap={1}>
 					<Input
 						placeholder={"nazwa"}

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { FormInput, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { useAuthData, apiClient } from "@/ui/providers";
-import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { defaultErrorHandler } from "@/ui/utils";
 
 type TwoFactorAuthenticationFormBody = {
 	code: string;
@@ -25,12 +25,7 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 
 	const twoFactorAuthentication = apiClient.identity.twoFactorAuthentication.useMutation({
 		onSuccess: async (data) => refreshAuthData(),
-		onError: async (error) => {
-			if (!error?.data) return;
-
-			const errorMessage = getPolishErrorMessageByMetadata(error.data.metadata);
-			setError(errorMessage);
-		},
+		onError: (e) => defaultErrorHandler(e, (errorMessage) => setError(errorMessage)),
 	});
 
 	const formSubmitHandler = useCallback(
