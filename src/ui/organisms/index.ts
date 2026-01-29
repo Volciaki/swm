@@ -4,3 +4,5 @@ export * from "./Protected";
 export * from "./TwoFactorAuthenticationForm";
 export * from "./UserCard";
 export * from "./UserForm";
+export * from "./ResetPasswordForm";
+export * from "./ResetPasswordEmailForm";

@@ -6,6 +6,7 @@ import { PageHeader, FormInput } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Paragraph, Separator, Loading } from "@/ui/atoms";
 import { apiClient, useAuthData } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import type { UseStateSetter } from "@/ui/types";
 
 type LoginFormBody = {
 	email: string;
@@ -14,9 +15,10 @@ type LoginFormBody = {
 
 export type LoginFormProps = {
 	onAuthenticationId: (id: string) => void;
+	setPasswordResetFlowShown: UseStateSetter<boolean>;
 };
 
-export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId }) => {
+export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordResetFlowShown }) => {
 	const { register, handleSubmit, formState } = useForm<LoginFormBody>({
 		mode: "onChange",
 		defaultValues: { email: "", password: "" },
@@ -69,7 +71,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId }) => {
 					/>
 				</FormInput>
 
-				<FormInput error={formState.errors.password}>
+				<FormInput error={formState.errors.password} gap={1}>
 					<Input
 						type={"password"}
 						placeholder={"hasło"}
@@ -81,6 +83,23 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId }) => {
 							},
 						})}
 					/>
+
+					<div
+						style={{ cursor: "pointer", marginBottom: formState.errors.password && "1rem" }}
+						onClick={() => setPasswordResetFlowShown(true)}
+					>
+						<Paragraph
+							variant={"secondary"}
+							style={{
+								textDecoration: "underline",
+								width: "100%",
+								textAlign: "right",
+							}}
+							fontSize={1}
+						>
+							{"Nie pamiętasz swojego hasła?"}
+						</Paragraph>
+					</div>
 				</FormInput>
 
 				<Separator />

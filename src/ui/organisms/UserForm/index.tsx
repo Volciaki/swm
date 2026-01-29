@@ -7,9 +7,9 @@ import { Flex, Input, Paragraph, Button, Switch, Loading, FormError } from "@/ui
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 import type { BaseErrorMetadata } from "@/server/utils/errors/base";
+import type { UserDTO } from "@/server/utils";
+import type { PublicUserDTO } from "@/server/modules/identity/application/dto/shared/PublicUserDTO";
 import styles from "./index.module.scss";
-import { UserDTO } from "@/server/utils";
-import { PublicUserDTO } from "@/server/modules/identity/application/dto/shared/PublicUserDTO";
 
 type UserFormData = {
 	name: string;
