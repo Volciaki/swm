@@ -58,7 +58,7 @@ export const NavigationBar = () => {
 				{areUserDetailsShown && authData && (
 					<Flex direction={"column"} className={styles["user-details-container"]}>
 						<Link href={`/centrum-zarzadzania/uzytkownicy/${authData.id}`}>
-							<Button style={{ width: "100%" }}>
+							<Button style={{ width: "100%" }} onClick={() => setAreUserDetailsShown(false)}>
 								<Paragraph fontSize={1.25}>{authData.name}</Paragraph>
 							</Button>
 						</Link>
@@ -66,11 +66,6 @@ export const NavigationBar = () => {
 						<Paragraph fontSize={1.25}>{`Login: ${authData.name}`}</Paragraph>
 						<Paragraph fontSize={1.25}>{`Email: ${authData.email}`}</Paragraph>
 						<Paragraph fontSize={1.25}>{`Typ konta: ${authData.isAdmin ? "Administrator" : "Użytkownik"}`}</Paragraph>
-
-						{/* TODO: Redirect to 2FA flow after which password is changed. */}
-						<Button variant={"secondary"}>
-							<Paragraph fontSize={1.25}>{"Zmień hasło"}</Paragraph>
-						</Button>
 
 						<Button onClick={async () => logoutButtonClickHandler()} danger>
 							<Paragraph fontSize={1.25}>{"Wyloguj"}</Paragraph>

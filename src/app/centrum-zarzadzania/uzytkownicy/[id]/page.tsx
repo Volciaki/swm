@@ -17,7 +17,7 @@ const UsersExisting = () => {
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader
 					title={"Edytuj użytkownika"}
-					description={"Używając poniższego formularza możesz zedytować istniejącego już użytkownika."}
+					description={"Używając poniższego formularza możesz edytować istniejącego już użytkownika."}
 				/>
 
 				<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]}>

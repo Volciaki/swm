@@ -105,7 +105,7 @@ export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId
 				<Button
 					onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
 					style={{ width: "75%" }}
-					disabled={passwordReset.isPending}
+					disabled={passwordReset.isPending || !formState.isValid}
 				>
 					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
 						{"Potwierdź"}

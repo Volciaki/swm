@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useState, type FC } from "react";
+import { useCallback, useEffect, useMemo, useState, type FC } from "react";
 import { useForm } from "react-hook-form";
 import type { UseStateSetter } from "@/ui/types";
 import { apiClient } from "@/ui/providers";
-import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { FormInput, PageHeader } from "@/ui/molecules";
+import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 
 type ResetPasswordEmailFormBody = {
@@ -18,43 +18,45 @@ export type ResetPasswordEmailFormProps = {
 };
 
 export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ setEmail, setAuthenticationId }) => {
-	const [error, setError] = useState<string | undefined>();
-	const [lastSubmitedEmail, setLastSubmitedEmail] = useState<string | undefined>();
-	// TODO: add an endpoint to get user by email.
-	const users = apiClient.identity.listUsers.useQuery();
+	const [lastEmail, setLastEmail] = useState<string | undefined>();
+	const getUserByEmail = apiClient.identity.getUserByEmail.useQuery(
+		{ email: lastEmail ?? "" },
+		{
+			enabled: lastEmail !== undefined,
+		}
+	);
 	const requestPasswordReset = apiClient.identity.requestPasswordReset.useMutation({
 		onSuccess: (data) => {
-			setEmail(lastSubmitedEmail);
+			setEmail(getUserByEmail.data?.email);
 			setAuthenticationId(data.authenticationId);
-		},
-		onError: (e) => {
-			if (!e.data?.metadata) return;
-
-			const errorMessage = getPolishErrorMessageByMetadata(e.data.metadata);
-			setError(errorMessage);
 		},
 	});
 	const { formState, register, handleSubmit } = useForm<ResetPasswordEmailFormBody>({
 		mode: "onChange",
 		defaultValues: { email: "" },
 	});
+	const loading = getUserByEmail.isLoading || requestPasswordReset.isPending;
+	const getUserByEmailError = useMemo(() => {
+		if (!getUserByEmail.error?.data?.metadata) return undefined;
 
-	const formSubmitHandler = useCallback(
-		(data: ResetPasswordEmailFormBody) => {
-			if (!users.data) return;
+		return getPolishErrorMessageByMetadata(getUserByEmail.error?.data?.metadata);
+	}, [getUserByEmail.error]);
+	const requestPasswordResetError = useMemo(() => {
+		if (!requestPasswordReset.error?.data?.metadata) return undefined;
 
-			const user = users.data.find((user) => user.email === data.email);
+		return getPolishErrorMessageByMetadata(requestPasswordReset.error?.data?.metadata);
+	}, [requestPasswordReset.error]);
+	const error = getUserByEmailError ?? requestPasswordResetError;
 
-			if (!user) {
-				setError(`Użytkownik z adresem e-mail ${data.email} nie istnieje!`);
-				return;
-			}
+	const formSubmitHandler = useCallback(async (data: ResetPasswordEmailFormBody) => {
+		setLastEmail(data.email);
+	}, []);
 
-			setLastSubmitedEmail(user.email);
-			requestPasswordReset.mutate({ userId: user.id });
-		},
-		[users, requestPasswordReset]
-	);
+	useEffect(() => {
+		if (!getUserByEmail.data) return;
+
+		requestPasswordReset.mutate({ userId: getUserByEmail.data.id });
+	}, [getUserByEmail.data, requestPasswordReset.mutate]);
 
 	return (
 		<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "fit-content" }}>
@@ -64,41 +66,37 @@ export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ setEma
 				wrapDescription={false}
 			/>
 
-			{users.isLoading ? (
-				<Loading />
-			) : (
-				<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
-					<FormInput error={formState.errors.email}>
-						<Input
-							type={"email"}
-							placeholder={"e-mail"}
-							fontSize={1.5}
-							{...register("email", {
-								required: {
-									value: true,
-									message: "Podanie e-mail'u jest wymagane.",
-								},
-							})}
-						/>
-					</FormInput>
+			<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
+				<FormInput error={formState.errors.email}>
+					<Input
+						type={"email"}
+						placeholder={"e-mail"}
+						fontSize={1.5}
+						{...register("email", {
+							required: {
+								value: true,
+								message: "Podanie e-mail'u jest wymagane.",
+							},
+						})}
+					/>
+				</FormInput>
 
-					<Separator />
+				<Separator />
 
-					<Button
-						onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
-						style={{ width: "75%" }}
-						disabled={requestPasswordReset.isPending}
-					>
-						<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
-							{"Potwierdź"}
-						</Paragraph>
-					</Button>
+				<Button
+					onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
+					style={{ width: "75%" }}
+					disabled={loading || !formState.isValid}
+				>
+					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
+						{"Potwierdź"}
+					</Paragraph>
+				</Button>
 
-					<FormError>{error}</FormError>
+				{error && <FormError>{error}</FormError>}
 
-					{requestPasswordReset.isPending && <Loading />}
-				</Flex>
-			)}
+				{loading && <Loading />}
+			</Flex>
 		</Flex>
 	);
 };
