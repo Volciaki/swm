@@ -38,7 +38,7 @@ export class DefaultFileHelper implements FileHelper {
 		const id = UUID.fromString(idString);
 		const entity = await this.fileReferenceRepository.getById(id);
 
-		if (entity === null) throw new FileNotFoundError("ID", id.value);
+		if (entity === null) throw new FileNotFoundError({ field: "ID", value: id.value });
 
 		return entity;
 	}
@@ -46,7 +46,7 @@ export class DefaultFileHelper implements FileHelper {
 	async getByPathOrThrow(path: string, metadata: FileMetadata) {
 		const entity = await this.fileReferenceRepository.getByPath(path, metadata);
 
-		if (entity === null) throw new FileNotFoundError("path", path);
+		if (entity === null) throw new FileNotFoundError({ field: "path", value: path });
 
 		return entity;
 	}

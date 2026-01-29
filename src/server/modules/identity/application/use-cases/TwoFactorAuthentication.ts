@@ -22,14 +22,17 @@ export class TwoFactorAuthentication {
 		const authenticationID = UUID.fromString(dto.authenticationId);
 		const authentication = await this.twoFactorAuthenticationSessionRepository.getById(authenticationID);
 
-		if (!authentication) throw new TwoFactorAuthenticationSessionNotFoundError(dto.authenticationId);
+		if (!authentication) throw new TwoFactorAuthenticationSessionNotFoundError({ id: dto.authenticationId });
 
-		if (dto.value !== authentication.value) throw new WrongTwoFactorAuthenticationValueError(dto.value);
+		if (dto.value !== authentication.value) throw new WrongTwoFactorAuthenticationValueError({ value: dto.value });
 
 		const user = await this.userRepository.getById(authentication.userId);
 
 		if (!user)
-			throw new InvalidTwoFactorAuthenticationSessionError(authentication.id.value, authentication.userId.value);
+			throw new InvalidTwoFactorAuthenticationSessionError({
+				id: authentication.id.value,
+				userId: authentication.userId.value,
+			});
 
 		await this.twoFactorAuthenticationSessionRepository.delete(authentication);
 

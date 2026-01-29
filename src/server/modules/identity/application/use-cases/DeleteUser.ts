@@ -13,7 +13,7 @@ export class DeleteUser {
 		const userId = UUID.fromString(dto.id);
 		const user = await this.userRepository.getById(userId);
 
-		if (!user) throw new UserNotFoundError("UUID", dto.id);
+		if (!user) throw new UserNotFoundError({ fieldName: "UUID", value: "dto.id" });
 
 		await this.userRepository.delete(user);
 	}

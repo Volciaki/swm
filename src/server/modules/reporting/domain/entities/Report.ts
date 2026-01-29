@@ -1,7 +1,7 @@
 import type { UUID } from "@/server/utils";
 import { isValidEnumValue } from "@/server/utils";
 import type { FileReference } from "@/server/utils/files/domain/entities/FileReference";
-import { InvalidReportTypeValue } from "../errors/InvalidNotificationTypeValue";
+import { InvalidReportTypeValue } from "../errors/InvalidReportTypeValue";
 
 export enum ReportType {
 	CLOSE_TO_EXPIRATION_ASSORTMENT = "CLOSE_TO_EXPIRATION_ASSORTMENT",
@@ -20,7 +20,7 @@ export class Report<T extends ReportType = ReportType> {
 	) {}
 
 	static create(id: UUID, type: string, generationDate: Date, file: FileReference) {
-		if (!stringIsReportType(type)) throw new InvalidReportTypeValue(type);
+		if (!stringIsReportType(type)) throw new InvalidReportTypeValue({ type });
 
 		return new Report(id, type, generationDate, file);
 	}

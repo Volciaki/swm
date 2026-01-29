@@ -22,14 +22,15 @@ export class PasswordReset {
 		const sessionId = UUID.fromString(dto.authenticationId);
 		const session = await this.twoFactorAuthenticationSessionRepository.getById(sessionId);
 
-		if (!session) throw new TwoFactorAuthenticationSessionNotFoundError(dto.authenticationId);
+		if (!session) throw new TwoFactorAuthenticationSessionNotFoundError({ id: dto.authenticationId });
 
 		if (session.value !== dto.authenticationValue)
-			throw new WrongTwoFactorAuthenticationValueError(dto.authenticationValue);
+			throw new WrongTwoFactorAuthenticationValueError({ value: dto.authenticationValue });
 
 		const user = await this.userRepository.getById(session.userId);
 
-		if (!user) throw new InvalidTwoFactorAuthenticationSessionError(session.id.value, session.userId.value);
+		if (!user)
+			throw new InvalidTwoFactorAuthenticationSessionError({ id: session.id.value, userId: session.userId.value });
 
 		const newPasswordHash = await this.stringHasher.hash(dto.newPasswordRaw);
 		user.passwordHash = newPasswordHash;

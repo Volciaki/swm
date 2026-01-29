@@ -15,7 +15,11 @@ export class TemperatureRange {
 	}
 
 	static create({ minimal, maximal }: { minimal: CelsiusDegrees; maximal: CelsiusDegrees }) {
-		if (minimal > maximal) throw new InvalidTemperatureRangeError(minimal, maximal);
+		if (minimal > maximal)
+			throw new InvalidTemperatureRangeError({
+				minimalTemperatureCelsius: minimal.toString(),
+				maximalTemperatureCelsius: maximal.toString(),
+			});
 
 		return new TemperatureRange(minimal, maximal);
 	}

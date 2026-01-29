@@ -12,3 +12,4 @@ export * from "./enums";
 export * from "./numbers";
 export * from "./assets";
 export * from "./base64";
+export * from "./cookies";

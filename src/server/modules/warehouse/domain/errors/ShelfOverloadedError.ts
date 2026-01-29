@@ -1,10 +1,18 @@
-import type { UUID, Weight } from "@/server/utils";
+import type { ErrorMetadataValue } from "@/server/utils/errors";
+import { ErrorName } from "@/server/utils/errors";
 import { WarehouseDomainError } from "./WarehouseDomainError";
 
-export class ShelfOverloadedError extends WarehouseDomainError {
-	constructor(shelfId: UUID, maxWeight: Weight, attemptedWeight: Weight) {
-		super(
-			`Shelf with an ID of ${shelfId.value} supports up to ${maxWeight.toStringKilograms()} of weight. After adding requested assortment it would weight ${attemptedWeight.toStringKilograms()}.`
-		);
+export class ShelfOverloadedError extends WarehouseDomainError<ErrorName.SHELF_OVERLOADED> {
+	constructor(value: ErrorMetadataValue[ErrorName.SHELF_OVERLOADED]) {
+		super({
+			error: {
+				code: "BAD_REQUEST",
+				message: `Shelf with an ID of ${value.id} supports up to ${value.maxWeightKg} of weight. After adding requested assortment it would weight ${value.attemptedWeightKg}.`,
+			},
+			metadata: {
+				name: ErrorName.SHELF_OVERLOADED,
+				value,
+			},
+		});
 	}
 }

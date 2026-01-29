@@ -12,7 +12,7 @@ $shadow-size: 3px;
 .button {
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: $border-radius;
     padding: $padding calc($padding * 2);
     transition: all $transition;
 }
@@ -46,6 +46,7 @@ $shadow-size: 3px;
     }
 
     &:disabled {
+        cursor: not-allowed;
         border: solid $border-size $text-darkened !important;
         color: $text-darkened !important;
 

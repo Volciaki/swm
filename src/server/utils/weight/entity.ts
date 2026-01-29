@@ -7,7 +7,7 @@ export class Weight {
 
 	private constructor(value: number) {
 		const positive = attempt(() => PositiveNumber.create(value));
-		if (positive instanceof Error) throw new NegativeWeightError(value);
+		if (positive instanceof Error) throw new NegativeWeightError({ grams: value });
 
 		this._grams = positive;
 	}

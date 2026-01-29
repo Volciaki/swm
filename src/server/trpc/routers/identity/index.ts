@@ -8,6 +8,10 @@ import { passwordReset } from "./passwordReset";
 import { requestPasswordReset } from "./requestPasswordReset";
 import { twoFactorAuthentication } from "./twoFactorAuthentication";
 import { getSession } from "./getSession";
+import { logout } from "./logout";
+import { updateUser } from "./updateUser";
+import { getUserById } from "./getUserById";
+import { getUserByEmail } from "./getUserByEmail";
 
 export const identityRouter = createRouter({
 	createUser,
@@ -18,4 +22,8 @@ export const identityRouter = createRouter({
 	requestPasswordReset,
 	twoFactorAuthentication,
 	getSession,
+	logout,
+	updateUser,
+	getUserById,
+	getUserByEmail,
 });

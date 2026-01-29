@@ -18,7 +18,7 @@ import { Backup } from "../../domain/entities/Backup";
 import type { BackupRepository } from "../../domain/repositories/BackupRepository";
 import type { AccessedFileStorageDataDump, FileStorageDataManager } from "../services/FileStorageDataManager";
 import type { DatabaseDataDump, DatabaseDataManager } from "../services/DatabaseDataManager";
-import { BackupNotFoundError } from "../errors/NoBackupUtilitiesError";
+import { BackupNotFoundError } from "../errors/BackupNotFoundError";
 import { InvalidBackupError } from "../errors/InvalidBackupError";
 import type { BackupDTO } from "../dto/shared/BackupDTO";
 import { BackupMapper } from "../../infrastructure/mappers/BackupMapper";
@@ -251,7 +251,7 @@ export class DefaultBackupHelper implements BackupHelper {
 		const backupId = UUID.fromString(id);
 		const backup = await this.backupRepository.getById(backupId, async (id) => await this.fileGetter(id));
 
-		if (backup === null) throw new BackupNotFoundError(backupId);
+		if (backup === null) throw new BackupNotFoundError({ id: backupId.value });
 
 		return backup;
 	}

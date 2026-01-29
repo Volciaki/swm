@@ -1,6 +1,4 @@
-export class UtilsError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = "UtilsError";
-	}
-}
+import type { ErrorName } from "@/server/utils";
+import { BaseError } from "@/server/utils";
+
+export abstract class UtilsError<T extends ErrorName> extends BaseError<T> {}

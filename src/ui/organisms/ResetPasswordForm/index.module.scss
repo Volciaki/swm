@@ -1,0 +1,7 @@
+@use "@/styles" as *;
+
+.container {
+    max-width: calc($content-width / 2);
+    width: fit-content;
+    gap: 2rem !important;
+}

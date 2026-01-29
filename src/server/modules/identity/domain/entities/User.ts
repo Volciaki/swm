@@ -44,4 +44,20 @@ export class User {
 	set passwordHash(value: string) {
 		this._passwordHash = value;
 	}
+
+	set isAdmin(value: boolean) {
+		this._isAdmin = value;
+	}
+
+	set twoFactorAuthenticationEnabled(value: boolean) {
+		this._twoFactorAuthenticationEnabled = value;
+	}
+
+	set email(value: Email) {
+		this._email = value;
+	}
+
+	set name(value: string) {
+		this._name = value;
+	}
 }

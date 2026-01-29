@@ -1,0 +1,16 @@
+@use "@/styles" as *;
+
+.container {
+    border: solid calc($border-size * 0.75) $secondary;
+    border-radius: $border-radius;
+    padding: $padding;
+    gap: 1rem !important;
+}
+
+.form-container {
+    width: 100%;
+    padding: $padding;
+    border-radius: $border-radius;
+    background-color: $background-lightened;
+    gap: 1rem !important;
+}

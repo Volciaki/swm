@@ -1,3 +1,4 @@
+import type { TRPCError } from "@trpc/server";
 import { initTRPC } from "@trpc/server";
 import { cookies } from "next/headers";
 import type { DataSource } from "typeorm";
@@ -6,7 +7,7 @@ import { DBUser } from "../modules/identity/infrastructure/entities/DBUser";
 import { DBUserRepository } from "../modules/identity/infrastructure/persistence/DBUserRepository";
 import { UserMapper } from "../modules/identity/infrastructure/mappers/UserMapper";
 import { InvalidAuthenticationTokenError } from "../modules/identity/application/errors/InvalidAuthenticationTokenError";
-import type { UserDTO } from "../utils";
+import type { BaseErrorMetadata, UserDTO } from "../utils";
 import { InvalidUUIDError, UUID } from "../utils";
 import { appDataSource, initializeDatabase } from "../database/init";
 import { environment } from "../environment";
@@ -60,7 +61,24 @@ export const createTRPCContext = async (): Promise<APIContext> => {
 	return { db: appDataSource, user };
 };
 
-const t = initTRPC.context<APIContext>().create();
+type TRPCErrorWithMetadata = TRPCError & { getMetadata(): BaseErrorMetadata };
+
+const t = initTRPC.context<APIContext>().create({
+	errorFormatter: (options) => {
+		const { shape, error } = options;
+
+		const appError = error as TRPCErrorWithMetadata;
+		const metadata = appError.getMetadata();
+
+		return {
+			...shape,
+			data: {
+				...shape.data,
+				metadata,
+			},
+		};
+	},
+});
 
 export const createRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;

@@ -7,7 +7,7 @@ export class TimeFrame {
 
 	private constructor(seconds: number) {
 		const positive = attempt(() => PositiveNumber.create(seconds));
-		if (positive instanceof Error) throw new InvalidTimeFrameError(seconds);
+		if (positive instanceof Error) throw new InvalidTimeFrameError({ value: seconds });
 
 		this._seconds = PositiveNumber.create(seconds);
 	}

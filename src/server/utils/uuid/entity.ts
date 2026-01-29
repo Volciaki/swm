@@ -6,7 +6,7 @@ export class UUID {
 
 	static fromString(value: string) {
 		const uuidManager = new DefaultUUIDManager();
-		if (!uuidManager.validate(value)) throw new InvalidUUIDError(value);
+		if (!uuidManager.validate(value)) throw new InvalidUUIDError({ value });
 
 		return new UUID(value);
 	}

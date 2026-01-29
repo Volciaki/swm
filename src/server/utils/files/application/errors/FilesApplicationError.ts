@@ -1,8 +1,4 @@
+import type { ErrorName } from "@/server/utils/errors";
 import { UtilsError } from "@/server/utils/errors";
 
-export class FilesApplicationError extends UtilsError {
-	constructor(message: string) {
-		super(message);
-		this.name = "FilesApplicationError";
-	}
-}
+export abstract class FilesApplicationError<T extends ErrorName> extends UtilsError<T> {}

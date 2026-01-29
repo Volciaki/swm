@@ -1,18 +1,28 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { routes as routeDefinitions } from "@/utils/routes";
 import { Button, Flex, Link, Paragraph } from "@/ui/atoms";
-import { useAuthData } from "@/ui/providers";
+import { apiClient, useAuthData } from "@/ui/providers";
 import styles from "./index.module.scss";
 
 export const NavigationBar = () => {
-	const { authData } = useAuthData();
+	const logout = apiClient.identity.logout.useMutation();
+	const { authData, isLoadingAuthData, refreshAuthData } = useAuthData();
+	const [areUserDetailsShown, setAreUserDetailsShown] = useState(false);
 	const isAuthenticated = useMemo(() => authData !== null, [authData]);
 	const routes = useMemo(
 		() => (isAuthenticated ? routeDefinitions.loggedIn : routeDefinitions.unauthenticated),
 		[isAuthenticated]
 	);
+
+	const logoutButtonClickHandler = useCallback(async () => {
+		await logout.mutateAsync();
+		refreshAuthData();
+		setAreUserDetailsShown(false);
+	}, [logout, refreshAuthData]);
+
+	if (isLoadingAuthData) return null;
 
 	return (
 		<Flex align={"center"} justify={"space-between"} style={{ height: "100%" }} fullWidth>
@@ -39,7 +49,29 @@ export const NavigationBar = () => {
 					</Link>
 				)}
 
-				{isAuthenticated && <Paragraph>{authData?.name}</Paragraph>}
+				{isAuthenticated && (
+					<Button onClick={() => setAreUserDetailsShown((current) => !current)}>
+						<Paragraph fontSize={1.5}>{authData?.name}</Paragraph>
+					</Button>
+				)}
+
+				{areUserDetailsShown && authData && (
+					<Flex direction={"column"} className={styles["user-details-container"]}>
+						<Link href={`/centrum-zarzadzania/uzytkownicy/${authData.id}`}>
+							<Button style={{ width: "100%" }} onClick={() => setAreUserDetailsShown(false)}>
+								<Paragraph fontSize={1.25}>{authData.name}</Paragraph>
+							</Button>
+						</Link>
+
+						<Paragraph fontSize={1.25}>{`Login: ${authData.name}`}</Paragraph>
+						<Paragraph fontSize={1.25}>{`Email: ${authData.email}`}</Paragraph>
+						<Paragraph fontSize={1.25}>{`Typ konta: ${authData.isAdmin ? "Administrator" : "Użytkownik"}`}</Paragraph>
+
+						<Button onClick={async () => logoutButtonClickHandler()} danger>
+							<Paragraph fontSize={1.25}>{"Wyloguj"}</Paragraph>
+						</Button>
+					</Flex>
+				)}
 			</ul>
 		</Flex>
 	);

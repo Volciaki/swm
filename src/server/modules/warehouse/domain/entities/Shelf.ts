@@ -143,7 +143,11 @@ export class Shelf {
 	private validateWeight() {
 		const totalWeight = this.getTotalWeight();
 		if (totalWeight.kilograms > this.maxWeight.kilograms)
-			throw new ShelfOverloadedError(this.id, this.maxWeight, totalWeight);
+			throw new ShelfOverloadedError({
+				id: this.id.value,
+				maxWeightKg: this.maxWeight.toStringKilograms(),
+				attemptedWeightKg: totalWeight.toStringKilograms(),
+			});
 	}
 
 	private validateAssortment(assortment: AssortmentVO) {
@@ -154,11 +158,20 @@ export class Shelf {
 		const assortmentLength = Distance.fromMillimeters(lengthMillimeters);
 
 		if (assortmentWidth.millimeters > this.maxAssortmentSize.width.millimeters)
-			throw new AssortmentTooWideError(assortmentWidth, this.maxAssortmentSize.width);
+			throw new AssortmentTooWideError({
+				passedWidthMillimeters: assortmentWidth.toStringMillimeters(),
+				maxWidthMillimeters: this.maxAssortmentSize.width.toStringMillimeters(),
+			});
 		if (assortmentHeight.millimeters > this.maxAssortmentSize.height.millimeters)
-			throw new AssortmentTooTallError(assortmentHeight, this.maxAssortmentSize.height);
+			throw new AssortmentTooTallError({
+				passedHeightMillimeters: assortmentHeight.toStringMillimeters(),
+				maxHeightMillimeters: this.maxAssortmentSize.height.toStringMillimeters(),
+			});
 		if (assortmentLength.millimeters > this.maxAssortmentSize.length.millimeters)
-			throw new AssortmentTooLongError(assortmentLength, this.maxAssortmentSize.length);
+			throw new AssortmentTooLongError({
+				passedLengthMillimeters: assortmentLength.toStringMillimeters(),
+				maxLengthMillimeters: this.maxAssortmentSize.length.toStringMillimeters(),
+			});
 
 		const { minimalCelsius, maximalCelsius } = assortment.temperatureRange;
 
@@ -166,11 +179,18 @@ export class Shelf {
 		const assortmentMaximalTemperature = CelsiusDegrees.fromNumber(maximalCelsius);
 
 		if (assortmentMinimalTemperature > this.temperatureRange.maximal)
-			throw new ShelfTooColdForAssortmentError(assortmentMinimalTemperature, this.temperatureRange.maximal);
+			throw new ShelfTooColdForAssortmentError({
+				assortmentMinimalTemperatureCelsius: assortmentMinimalTemperature.toString(),
+				shelfMaximalTemperatureCelsius: this.temperatureRange.maximal.toString(),
+			});
 		if (assortmentMaximalTemperature < this.temperatureRange.minimal)
-			throw new ShelfTooHotForAssortmentError(assortmentMaximalTemperature, this.temperatureRange.minimal);
+			throw new ShelfTooHotForAssortmentError({
+				assortmentMaximalTemperatureCelsius: assortmentMaximalTemperature.toString(),
+				shelfMinimalTemperatureCelsius: this.temperatureRange.minimal.toString(),
+			});
 
-		if (assortment.isHazardous && !this.supportsHazardous) throw new AssortmentIsHazardousError(this.id);
+		if (assortment.isHazardous && !this.supportsHazardous)
+			throw new AssortmentIsHazardousError({ shelfId: this.id.value });
 	}
 
 	private validateAllAssortment() {
@@ -184,7 +204,7 @@ export class Shelf {
 
 	private validateNewAssortment(assortment: AssortmentVO) {
 		const emptyCell = this.cells.flat().find((cell) => cell.assortment === null);
-		if (!emptyCell) throw new ShelfFullError(this.id);
+		if (!emptyCell) throw new ShelfFullError({ id: this.id.value });
 
 		this.validateAssortment(assortment);
 	}
@@ -214,7 +234,7 @@ export class Shelf {
 			}
 		}
 
-		throw new CellNotFoundError(id);
+		throw new CellNotFoundError({ id: id.value });
 	}
 
 	public getTotalWeight(): Weight {

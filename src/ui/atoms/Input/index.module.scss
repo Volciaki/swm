@@ -6,7 +6,7 @@ $input-border-size: calc($border-size / 1.5);
     border: solid $input-border-size $border;
     background-color: transparent;
     color: $text;
-    border-radius: 5px;
+    border-radius: $border-radius;
     transition: all $transition;
 
     &:focus {
@@ -20,5 +20,6 @@ $input-border-size: calc($border-size / 1.5);
 
     &:disabled {
         border: solid $input-border-size $text-darkened;
+        cursor: not-allowed;
     }
 }

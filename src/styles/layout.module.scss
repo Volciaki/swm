@@ -14,8 +14,14 @@
     height: $navigation-height-desktop;
 }
 
-.content {
+.content-container {
     min-height: calc(100vh - $navigation-height-desktop);
-    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    justify-content: center;
     padding: $padding;
+}
+
+.content-wrapper {
+    width: $content-width;
 }

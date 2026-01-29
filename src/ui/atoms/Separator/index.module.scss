@@ -3,5 +3,12 @@
 .separator {
     color: $border;
     border: solid 1px $border;
+}
+
+.vertical {
+    height: 100%;
+}
+
+.horizontal {
     width: 100%;
 }

@@ -92,6 +92,6 @@ export class PutUpAssortmentCopy {
 			}
 		}
 
-		throw new AssortmentNoSpaceError(formatErrorDetails(errorDetails));
+		throw new AssortmentNoSpaceError({ details: formatErrorDetails(errorDetails) });
 	}
 }

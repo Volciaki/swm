@@ -134,7 +134,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		const cellId = UUID.fromString(dto.cellId);
 		const cellToUpdate = shelf.cells.flat().find((cell) => cell.id === cellId.value);
 		if (cellToUpdate?.assortment !== null && cellToUpdate?.assortment !== undefined)
-			throw new CellAlreadyTakenError(cellId);
+			throw new CellAlreadyTakenError({ id: cellId.value });
 
 		const assortment = await this.createAssortment.execute(
 			{
@@ -183,8 +183,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 
 		const cellToUpdate = shelf.cells.flat().find((cell) => cell.id === assortment.cellId);
 
-		if (!cellToUpdate)
-			throw new AssortmentNoCellError(UUID.fromString(assortment.id), UUID.fromString(assortment.cellId));
+		if (!cellToUpdate) throw new AssortmentNoCellError({ assortmentId: assortment.id, cellId: assortment.cellId });
 
 		if (cellToUpdate.assortment === null) return shelf;
 
