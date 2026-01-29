@@ -4,3 +4,8 @@
     gap: 2rem !important;
     width: $content-width;
 }
+
+.schedule-configuration-container {
+    max-width: calc($content-width / 2);
+    box-sizing: content-box;
+}

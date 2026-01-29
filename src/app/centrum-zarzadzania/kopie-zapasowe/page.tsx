@@ -11,6 +11,7 @@ import type { APIError } from "@/ui/utils";
 import { defaultErrorHandler } from "@/ui/utils";
 import type { CustomStyles } from "@/ui/types";
 import { formatDateAsHumanReadable } from "@/utils";
+import { DialogButton } from "@/ui/organisms/DialogButton";
 
 type BackupsFormProps = {
 	children: ReactNode;
@@ -88,7 +89,7 @@ const Backups: FC = () => {
 				<PageHeader
 					title={"Kopie zapasowe"}
 					description={
-						"Twórz, przywracaj oraz konfiguruj harmongram kopii zapasowych. Każda kopia zapasowa zawiera w sobie aktualny stan magazynu."
+						"Twórz, przywracaj oraz konfiguruj harmonogram kopii zapasowych. Każda kopia zapasowa zawiera w sobie aktualny stan magazynu."
 					}
 				/>
 
@@ -150,9 +151,13 @@ const Backups: FC = () => {
 					<BackupsForm style={{ width: "25%" }}>
 						<Paragraph style={{ textAlign: "center" }}>{"Skonfiguruj harmongram"}</Paragraph>
 
-						<Button>
-							<Paragraph fontSize={1.5}>{"Konfiguruj"}</Paragraph>
-						</Button>
+						<DialogButton buttonContent={<Paragraph fontSize={1.5}>{"Konfiguruj"}</Paragraph>}>
+							<Flex className={styles["schedule-configuration-container"]}>
+								<Paragraph style={{ textAlign: "center" }} fontSize={1.75}>
+									{"Konfiguracja harmonogramu tworzenia kopii zapasowych"}
+								</Paragraph>
+							</Flex>
+						</DialogButton>
 					</BackupsForm>
 				</Flex>
 			</Flex>

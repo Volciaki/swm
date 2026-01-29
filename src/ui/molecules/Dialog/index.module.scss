@@ -1,0 +1,40 @@
+@use "@/styles" as *;
+
+.overlay {
+    z-index: 3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 75%);
+    display: grid;
+    place-items: center;
+    transition: opacity $transition;
+
+    &.open {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    &:not(.open) {
+        transition: opacity $transition, visibility 0s ease $transition-duration;
+    }
+}
+
+.dialog {
+    z-index: 4;
+    position: relative;
+    background-color: transparent;
+    border: none;
+}
+
+.standard-children-container {
+    background-color: $background-lightened;
+    border: solid $border-size $border;
+    border-radius: $border-radius;
+    padding: $padding;
+    gap: 1rem !important;
+}
