@@ -2,6 +2,7 @@ import { type FC } from "react";
 import { UserForm } from "@/ui/organisms";
 import { PageHeader } from "@/ui/molecules";
 import { FullHeight, Flex, Separator, Button, Paragraph, Link } from "@/ui/atoms";
+import styles from "@/styles/user.module.scss";
 
 const UsersNew: FC = () => (
 	<FullHeight>
@@ -11,7 +12,7 @@ const UsersNew: FC = () => (
 				description={"Używając poniższego formularza możesz dodać nowego użytkownika."}
 			/>
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem", width: "75%" }}>
+			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]}>
 				<UserForm />
 
 				<Separator />

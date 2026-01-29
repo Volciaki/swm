@@ -85,7 +85,11 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId }) => {
 
 				<Separator />
 
-				<Button onClick={handleSubmit((formBody) => formSubmitHandler(formBody))} style={{ width: "75%" }}>
+				<Button
+					onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
+					style={{ width: "75%" }}
+					disabled={login.isPending}
+				>
 					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
 						{"Potwierdź"}
 					</Paragraph>

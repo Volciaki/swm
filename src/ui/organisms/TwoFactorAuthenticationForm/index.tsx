@@ -67,7 +67,11 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 
 				<Separator />
 
-				<Button onClick={handleSubmit((formBody) => formSubmitHandler(formBody))} style={{ width: "75%" }}>
+				<Button
+					onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
+					style={{ width: "75%" }}
+					disabled={twoFactorAuthentication.isPending}
+				>
 					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
 						{"Potwierdź"}
 					</Paragraph>

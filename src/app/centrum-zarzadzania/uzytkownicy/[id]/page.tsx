@@ -6,6 +6,7 @@ import { PageHeader } from "@/ui/molecules";
 import { Button, Flex, FullHeight, Paragraph, Separator, Link, Loading } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import styles from "@/styles/user.module.scss";
 
 const UsersExisting = () => {
 	const params = useParams();
@@ -19,8 +20,8 @@ const UsersExisting = () => {
 					description={"Używając poniższego formularza możesz zedytować istniejącego już użytkownika."}
 				/>
 
-				<Flex direction={"column"} align={"center"} style={{ gap: "1rem", width: "75%" }}>
-					{user.data && <UserForm data={{ ...user.data, password: "" }} existing />}
+				<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]}>
+					{user.data && <UserForm userData={{ ...user.data, password: "" }} />}
 
 					{user.isLoading && <Loading />}
 

@@ -1,10 +1,15 @@
 "use client";
 
-import { type FC } from "react";
+import { useCallback, useState, type FC } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { FormInput } from "@/ui/molecules";
-import { Flex, Input, Paragraph, Button, Switch } from "@/ui/atoms";
+import { Flex, Input, Paragraph, Button, Switch, Loading, FormError } from "@/ui/atoms";
+import { apiClient } from "@/ui/providers";
+import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import type { BaseErrorMetadata } from "@/server/utils/errors/base";
 import styles from "./index.module.scss";
+import { UserDTO } from "@/server/utils";
+import { PublicUserDTO } from "@/server/modules/identity/application/dto/shared/PublicUserDTO";
 
 type UserFormData = {
 	name: string;
@@ -23,15 +28,73 @@ const defaultUserFormData: UserFormData = {
 };
 
 export type UserFormProps = {
-	existing?: boolean;
-	data?: UserFormData;
+	userData?: UserFormData & { id?: string };
 };
 
-export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existing = false }) => {
-	const { register, control, formState } = useForm<UserFormData>({
+export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) => {
+	const [error, setError] = useState<string | undefined>();
+	const [data, setData] = useState<UserFormData & { id?: string }>(userData);
+	const userId = data.id;
+
+	const apiUtils = apiClient.useUtils();
+	const sharedMutationOptions = {
+		onSuccess: (data: UserDTO | PublicUserDTO) => {
+			updateFormState(data);
+
+			apiUtils.identity.invalidate();
+		},
+		onError: (error: { data?: { metadata: unknown } | null }) => {
+			if (!error?.data) return;
+
+			const errorMessage = getPolishErrorMessageByMetadata(error.data.metadata as BaseErrorMetadata);
+			setError(errorMessage);
+		},
+	};
+	const createUser = apiClient.identity.createUser.useMutation(sharedMutationOptions);
+	const updateUser = apiClient.identity.updateUser.useMutation(sharedMutationOptions);
+	const deleteUser = apiClient.identity.deleteUser.useMutation(sharedMutationOptions);
+	const { register, control, formState, handleSubmit, reset } = useForm<UserFormData>({
 		mode: "onChange",
-		values: data,
+		values: userData,
 	});
+
+	const existing = userId !== undefined;
+	const loading = deleteUser.isPending || createUser.isPending || updateUser.isPending;
+
+	const updateFormState = useCallback(
+		(newData: Omit<UserFormData, "password">) => {
+			const newFormData = { ...newData, password: "" };
+			setData(newFormData);
+			reset(newFormData);
+		},
+		[reset]
+	);
+
+	const formSubmitHandler = useCallback(
+		async (data: UserFormData) => {
+			const newData = {
+				passwordRaw: data.password,
+				...data,
+			};
+
+			if (userId) {
+				updateUser.mutate({
+					id: userId,
+					newData,
+				});
+				return;
+			}
+
+			createUser.mutate(newData);
+		},
+		[userId, updateUser, createUser]
+	);
+
+	const handleDeletion = useCallback(async () => {
+		if (!userId) return;
+
+		await deleteUser.mutateAsync({ id: userId });
+	}, [userId, deleteUser]);
 
 	return (
 		<Flex className={styles["container"]} direction={"column"} align={"center"} fullWidth>
@@ -70,21 +133,23 @@ export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existi
 
 				<FormInput error={formState.errors.password} gap={1}>
 					<Input
-						placeholder={"hasło"}
+						placeholder={`hasło ${existing ? "*" : ""}`}
 						type={"password"}
 						fontSize={1.5}
 						{...register("password", {
 							required: {
-								value: true,
+								value: !existing,
 								message: "Podanie hasła jest wymagane.",
-							},
-							minLength: {
-								value: 3,
-								message: "Wybierz dłuższe hasło.",
 							},
 						})}
 					/>
 				</FormInput>
+
+				{existing && (
+					<Paragraph variant={"secondary"} fontSize={1.25} style={{ width: "100%" }}>
+						{"* Zostaw puste, jeśli nie chcesz zmieniać"}
+					</Paragraph>
+				)}
 
 				<Controller
 					control={control}
@@ -115,18 +180,33 @@ export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existi
 						</Flex>
 					)}
 				/>
+
 				<Flex direction={"row"} align={"center"} justify={"space-around"} fullWidth>
-					<Button style={{ width: !existing ? "auto" : "25%" }}>
+					<Button
+						style={{ width: !existing ? "auto" : "30%" }}
+						onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
+						disabled={loading || !formState.isValid}
+					>
 						<Paragraph>{"Zapisz"}</Paragraph>
 					</Button>
 
+					{/* TODO: add a dialog confirmation deleting data */}
 					{existing && (
-						<Button style={{ width: "25%" }} danger>
+						<Button
+							style={{ width: "30%" }}
+							onClick={() => handleDeletion()}
+							disabled={loading || !formState.isValid}
+							danger
+						>
 							<Paragraph>{"Usuń"}</Paragraph>
 						</Button>
 					)}
 				</Flex>
 			</Flex>
+
+			{loading && <Loading />}
+
+			{error && <FormError>{error}</FormError>}
 		</Flex>
 	);
 };

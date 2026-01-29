@@ -20,7 +20,8 @@ export class UpdateUser {
 
 		if (!user) throw new UserNotFoundError({ fieldName: "UUID", value: dto.id });
 
-		user.passwordHash = await this.stringHasher.hash(dto.newData.passwordRaw);
+		user.passwordHash =
+			dto.newData.passwordRaw === "" ? user.passwordHash : await this.stringHasher.hash(dto.newData.passwordRaw);
 		user.email = Email.fromString(dto.newData.email);
 		user.twoFactorAuthenticationEnabled = dto.newData.twoFactorAuthenticationEnabled;
 		user.isAdmin = dto.newData.isAdmin;
