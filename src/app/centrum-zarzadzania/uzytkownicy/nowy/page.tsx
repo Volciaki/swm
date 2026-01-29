@@ -5,23 +5,23 @@ import { FullHeight, Flex, Separator, Button, Paragraph, Link } from "@/ui/atoms
 
 const UsersNew: FC = () => (
 	<FullHeight>
-		<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
+		<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 			<PageHeader
 				title={"Dodaj użytkownika"}
 				description={"Używając poniższego formularza możesz dodać nowego użytkownika."}
 			/>
 
-			<UserForm />
+			<Flex direction={"column"} align={"center"} style={{ gap: "1rem", width: "75%" }}>
+				<UserForm />
 
-			<Separator />
+				<Separator />
 
-			<Link href={"/centrum-zarzadzania/uzytkownicy"}>
-				<Button>
-					<Paragraph variant={"secondary"} style={{ marginInline: "20px" }}>
-						{"Powrót"}
-					</Paragraph>
-				</Button>
-			</Link>
+				<Link href={"/centrum-zarzadzania/uzytkownicy"}>
+					<Button>
+						<Paragraph style={{ marginInline: "20px" }}>{"Powrót"}</Paragraph>
+					</Button>
+				</Link>
+			</Flex>
 		</Flex>
 	</FullHeight>
 );

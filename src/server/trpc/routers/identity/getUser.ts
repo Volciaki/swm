@@ -4,7 +4,7 @@ import type { PublicUserDTO } from "@/server/modules/identity/application/dto/sh
 import { getServices } from "../../services";
 import { procedure } from "../../init";
 
-export const getUser = procedure.input(getUserDTOSchema).mutation<PublicUserDTO>(async ({ input, ctx }) => {
+export const getUser = procedure.input(getUserDTOSchema).query<PublicUserDTO>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
 
 	const userRepository = services.repositories.user.db;

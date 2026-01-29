@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, type FC } from "react";
-import { useForm } from "react-hook-form";
-import { styleText } from "util";
+import { type FC } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { FormInput } from "@/ui/molecules";
 import { Flex, Input, Paragraph, Button, Switch } from "@/ui/atoms";
 import styles from "./index.module.scss";
@@ -29,14 +28,10 @@ export type UserFormProps = {
 };
 
 export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existing = false }) => {
-	const { register, formState } = useForm<UserFormData>({
+	const { register, control, formState } = useForm<UserFormData>({
 		mode: "onChange",
 		values: data,
 	});
-	const [twoFactorAuthenticationEnabled, setTwoFactorAuthenticationEnabled] = useState(
-		formState.defaultValues?.twoFactorAuthenticationEnabled ?? false
-	);
-	const [isAdmin, setIsAdmin] = useState(formState.defaultValues?.isAdmin ?? false);
 
 	return (
 		<Flex className={styles["container"]} direction={"column"} align={"center"} fullWidth>
@@ -44,81 +39,89 @@ export const UserForm: FC<UserFormProps> = ({ data = defaultUserFormData, existi
 				{existing ? "Edytuj" : "Dodaj"}
 			</Paragraph>
 
-			<Flex className={styles["form-container"]}>
-				<Flex direction={"column"} style={{ gap: "1rem", width: "50%" }}>
-					<FormInput error={formState.errors.name} gap={1}>
-						<Input
-							placeholder={"nazwa"}
-							type={"text"}
-							fontSize={1.5}
-							{...register("name", {
-								required: {
-									value: true,
-									message: "Podanie nazwy użytkownika jest wymagane.",
-								},
-							})}
-						/>
-					</FormInput>
+			<Flex direction={"column"} align={"center"} className={styles["form-container"]}>
+				<FormInput error={formState.errors.name} gap={1}>
+					<Input
+						placeholder={"nazwa"}
+						type={"text"}
+						fontSize={1.5}
+						{...register("name", {
+							required: {
+								value: true,
+								message: "Podanie nazwy użytkownika jest wymagane.",
+							},
+						})}
+					/>
+				</FormInput>
 
-					<FormInput error={formState.errors.email} gap={1}>
-						<Input
-							placeholder={"e-mail"}
-							type={"email"}
-							fontSize={1.5}
-							{...register("email", {
-								required: {
-									value: true,
-									message: "Podanie e-mail'a jest wymagane.",
-								},
-							})}
-						/>
-					</FormInput>
+				<FormInput error={formState.errors.email} gap={1}>
+					<Input
+						placeholder={"e-mail"}
+						type={"email"}
+						fontSize={1.5}
+						{...register("email", {
+							required: {
+								value: true,
+								message: "Podanie e-mail'a jest wymagane.",
+							},
+						})}
+					/>
+				</FormInput>
 
-					<FormInput error={formState.errors.password} gap={1}>
-						<Input
-							placeholder={"hasło"}
-							type={"password"}
-							fontSize={1.5}
-							{...register("password", {
-								required: {
-									value: true,
-									message: "Podanie hasła jest wymagane.",
-								},
-								minLength: {
-									value: 3,
-									message: "Wybierz dłuższe hasło.",
-								},
-							})}
-						/>
-					</FormInput>
+				<FormInput error={formState.errors.password} gap={1}>
+					<Input
+						placeholder={"hasło"}
+						type={"password"}
+						fontSize={1.5}
+						{...register("password", {
+							required: {
+								value: true,
+								message: "Podanie hasła jest wymagane.",
+							},
+							minLength: {
+								value: 3,
+								message: "Wybierz dłuższe hasło.",
+							},
+						})}
+					/>
+				</FormInput>
 
-					<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-						<Switch checked={isAdmin} setChecked={setIsAdmin} />
+				<Controller
+					control={control}
+					name={"isAdmin"}
+					defaultValue={data.isAdmin}
+					render={({ field }) => (
+						<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
+							<Switch checked={field.value} setChecked={field.onChange} />
 
-						<Paragraph fontSize={1.5} variant={"secondary"}>
-							{"Administrator"}
-						</Paragraph>
-					</Flex>
+							<Paragraph fontSize={1.5} variant={"secondary"}>
+								{"Administrator"}
+							</Paragraph>
+						</Flex>
+					)}
+				/>
 
-					<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-						<Switch checked={twoFactorAuthenticationEnabled} setChecked={setTwoFactorAuthenticationEnabled} />
+				<Controller
+					control={control}
+					name={"twoFactorAuthenticationEnabled"}
+					defaultValue={data.isAdmin}
+					render={({ field }) => (
+						<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
+							<Switch checked={field.value} setChecked={field.onChange} />
 
-						<Paragraph fontSize={1.5} variant={"secondary"} ellipsisOverflow>
-							{"Weryfikacja dwuetapowa"}
-						</Paragraph>
-					</Flex>
-				</Flex>
-
-				<Flex direction={"column"} align={"center"} justify={"center"} style={{ gap: "1rem", width: "50%" }}>
-					<Button>
-						<Paragraph style={{ marginInline: "20px" }}>{"Zapisz"}</Paragraph>
-					</Button>
-					<Button>
-						<Paragraph style={{ marginInline: "20px" }}>{"Anuluj"}</Paragraph>
+							<Paragraph fontSize={1.5} variant={"secondary"} ellipsisOverflow>
+								{"Weryfikacja dwuetapowa"}
+							</Paragraph>
+						</Flex>
+					)}
+				/>
+				<Flex direction={"row"} align={"center"} justify={"space-around"} fullWidth>
+					<Button style={{ width: !existing ? "auto" : "25%" }}>
+						<Paragraph>{"Zapisz"}</Paragraph>
 					</Button>
 
 					{existing && (
-						<Button danger>
+						<Button style={{ width: "25%" }} danger>
 							<Paragraph>{"Usuń"}</Paragraph>
 						</Button>
 					)}
