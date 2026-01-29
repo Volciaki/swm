@@ -10,7 +10,10 @@ import styles from "@/styles/user.module.scss";
 
 const UsersExisting = () => {
 	const params = useParams();
-	const user = apiClient.identity.getUser.useQuery({ id: params.id as string }, { enabled: params.id !== undefined });
+	const user = apiClient.identity.getUserById.useQuery(
+		{ id: params.id as string },
+		{ enabled: params.id !== undefined }
+	);
 
 	return (
 		<FullHeight>
