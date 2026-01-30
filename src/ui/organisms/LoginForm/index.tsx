@@ -38,6 +38,13 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 		onError: (e) => defaultErrorHandler(e, (errorMessage) => setError(errorMessage)),
 	});
 
+	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === "Enter") {
+			handleSubmit((formBody) => formSubmitHandler(formBody))();
+		}
+	};
+
+
 	const formSubmitHandler = useCallback(
 		(data: LoginFormBody) => {
 			if (login.isPending) return;
@@ -57,6 +64,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 						type={"email"}
 						placeholder={"e-mail"}
 						fontSize={1.5}
+						onKeyDown={handleKeyDown}
 						{...register("email", {
 							required: {
 								value: true,
@@ -71,6 +79,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 						type={"password"}
 						placeholder={"hasło"}
 						fontSize={1.5}
+						onKeyDown={handleKeyDown}
 						{...register("password", {
 							required: {
 								value: true,
