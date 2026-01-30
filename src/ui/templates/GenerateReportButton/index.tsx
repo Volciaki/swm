@@ -1,19 +1,42 @@
-import { ReactNode, useState, type FC } from "react";
-import { Button, Paragraph, Loading, FormError } from "@/ui/atoms";
+import { useCallback, useState } from "react";
+import { Button, FormError, Loading, Paragraph } from "@/ui/atoms";
+import type { TRPCMutation } from "@/ui/types";
+import type { APIError } from "@/ui/utils";
+import { defaultErrorHandler } from "@/ui/utils";
 
-export type GenerateReportButtonProps = {
-	buttonName: string;
+export type GenerateReportButtonProps<T extends TRPCMutation = TRPCMutation> = {
+	mutation: T;
+	onSuccess: (data: T["data"]) => void;
+	text?: string;
 };
 
-export const GenerateReportButton: FC<GenerateReportButtonProps> = ({buttonName}) => {
-	// Tutaj pole do popisu dla khenziiegoo
-	// Taka sugestia dla cb żebyś zrobił switcha() dla buttonName żeby to później fajnie śmigało razem a nie osobno instancje
+export const GenerateReportButton = <T extends TRPCMutation = TRPCMutation>({
+	mutation,
+	onSuccess,
+	text = "Generuj",
+}: GenerateReportButtonProps<T>) => {
+	const [error, setError] = useState<string | undefined>();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const onClickHandler = useCallback(async () => {
+		setIsLoading(true);
+
+		mutation.mutate(undefined, {
+			onError: (e) => defaultErrorHandler(e as APIError, (message) => setError(message)),
+			onSuccess: (data) => onSuccess(data),
+			onSettled: () => setIsLoading(false),
+		});
+	}, [mutation, onSuccess]);
 
 	return (
 		<>
-			<Button>
-				<Paragraph fontSize={1.5}>{buttonName}</Paragraph>
+			<Button onClick={async () => await onClickHandler()}>
+				<Paragraph fontSize={1.5}>{text}</Paragraph>
 			</Button>
+
+			{error && <FormError>{error}</FormError>}
+
+			{isLoading && <Loading />}
 		</>
 	);
 };

@@ -4,7 +4,7 @@ export class UnauthorizedError extends BaseError<ErrorName.UNAUTHORIZED> {
 	constructor() {
 		super({
 			error: {
-				code: "NOT_FOUND",
+				code: "UNAUTHORIZED",
 				message: "You're lacking permissions to perform this action.",
 			},
 			metadata: {

@@ -31,10 +31,10 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return `Na serwerze brakuje narzędzi (${metadata.binary}) wymaganych do sporządzenia lub zastosowania kopii zapasowej. Skontaktuj się z administratorem serwisu.`;
 	},
 	[ErrorName.INVALID_TWO_FACTOR_AUTHENTICATION_SESSION]: (metadata) => {
-		return "Użyta sesja dwuetapowej weryfikacji nie posiada powiązanego użytkownika. Prosimy spróbować ponownie się zalogować.";
+		return "Użyta sesja dwuetapowej weryfikacji nie posiada powiązanego użytkownika. Spróbuj wygenerować nową.";
 	},
 	[ErrorName.TWO_FACTOR_AUTHENTICATION_SESSION_NOT_FOUND]: (metadata) => {
-		return "Nie udało się znaleść wybranej sesji dwuetapowej weryfikacji. Prosimy spróbować ponownie się zalogować.";
+		return "Nie udało się znaleść wybranej sesji dwuetapowej weryfikacji.";
 	},
 	[ErrorName.INVALID_EMAIL]: (metadata) => {
 		return `${metadata.email} nie jest prawidłowym e-mail'em!`;
@@ -43,7 +43,7 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return "Podane hasło jest nieprawidłowe.";
 	},
 	[ErrorName.WRONG_TWO_FACTOR_AUTHENTICATION_VALUE]: (metadata) => {
-		return "Podany kod do weryfikacji dwuetapowej jest niepoprawny. Prosimy spróbować ponownie.";
+		return "Podany kod weryfikacji dwuetapowej jest niepoprawny. Spróbuj ponownie.";
 	},
 	[ErrorName.INVALID_AUTHENTICATION_TOKEN]: (metadata) => {
 		return "Twoje ciasteczko autoryzacji jest nieprawidłowe. Wyczyść pamięć przeglądarki oraz zaloguj się ponownie.";

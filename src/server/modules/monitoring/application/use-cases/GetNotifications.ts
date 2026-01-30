@@ -10,6 +10,8 @@ export class GetNotifications {
 		if (!currentUser) throw new UnauthorizedError();
 
 		const notifications = await this.notificationsRepository.getAll();
-		return notifications.map((notification) => NotificationMapper.fromEntityToDTO(notification));
+		return notifications
+			.sort((a, b) => b.issuedDate.getTime() - a.issuedDate.getTime())
+			.map((notification) => NotificationMapper.fromEntityToDTO(notification));
 	}
 }

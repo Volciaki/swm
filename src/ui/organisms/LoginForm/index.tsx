@@ -38,12 +38,6 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 		onError: (e) => defaultErrorHandler(e, (errorMessage) => setError(errorMessage)),
 	});
 
-	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-		if (event.key === "Enter") {
-			handleSubmit((formBody) => formSubmitHandler(formBody))();
-		}
-	};
-
 	const formSubmitHandler = useCallback(
 		(data: LoginFormBody) => {
 			if (login.isPending) return;
@@ -54,73 +48,73 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 	);
 
 	return (
-		<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "fit-content" }}>
-			<PageHeader title={"Login"} description={"Wypełnij swoje dane logowania poniżej."} wrapDescription={false} />
+		<form onSubmit={() => handleSubmit(formSubmitHandler)}>
+			<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "fit-content" }}>
+				<PageHeader title={"Login"} description={"Wypełnij swoje dane logowania poniżej."} wrapDescription={false} />
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
-				<FormInput error={formState.errors.email}>
-					<Input
-						type={"email"}
-						placeholder={"e-mail"}
-						fontSize={1.5}
-						onKeyDown={handleKeyDown}
-						{...register("email", {
-							required: {
-								value: true,
-								message: "Podanie e-mail'u jest wymagane.",
-							},
-						})}
-					/>
-				</FormInput>
+				<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
+					<FormInput error={formState.errors.email}>
+						<Input
+							type={"email"}
+							placeholder={"e-mail"}
+							fontSize={1.5}
+							{...register("email", {
+								required: {
+									value: true,
+									message: "Podanie e-mail'u jest wymagane.",
+								},
+							})}
+						/>
+					</FormInput>
 
-				<FormInput error={formState.errors.password} gap={1}>
-					<Input
-						type={"password"}
-						placeholder={"hasło"}
-						fontSize={1.5}
-						onKeyDown={handleKeyDown}
-						{...register("password", {
-							required: {
-								value: true,
-								message: "Podanie hasła jest wymagane.",
-							},
-						})}
-					/>
+					<FormInput error={formState.errors.password} gap={1}>
+						<Input
+							type={"password"}
+							placeholder={"hasło"}
+							fontSize={1.5}
+							{...register("password", {
+								required: {
+									value: true,
+									message: "Podanie hasła jest wymagane.",
+								},
+							})}
+						/>
 
-					<div
-						style={{ cursor: "pointer", marginBottom: formState.errors.password && "1rem" }}
-						onClick={() => setPasswordResetFlowShown(true)}
-					>
-						<Paragraph
-							variant={"secondary"}
-							style={{
-								textDecoration: "underline",
-								width: "100%",
-								textAlign: "right",
-							}}
-							fontSize={1}
+						<div
+							style={{ cursor: "pointer", marginBottom: formState.errors.password && "1rem" }}
+							onClick={() => setPasswordResetFlowShown(true)}
 						>
-							{"Nie pamiętasz swojego hasła?"}
+							<Paragraph
+								variant={"secondary"}
+								style={{
+									textDecoration: "underline",
+									width: "100%",
+									textAlign: "right",
+								}}
+								fontSize={1}
+							>
+								{"Nie pamiętasz swojego hasła?"}
+							</Paragraph>
+						</div>
+					</FormInput>
+
+					<Separator />
+
+					<Button
+						onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
+						style={{ width: "75%" }}
+						disabled={login.isPending || !formState.isValid}
+					>
+						<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
+							{"Potwierdź"}
 						</Paragraph>
-					</div>
-				</FormInput>
+					</Button>
 
-				<Separator />
+					<FormError>{error}</FormError>
 
-				<Button
-					onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
-					style={{ width: "75%" }}
-					disabled={login.isPending || !formState.isValid}
-				>
-					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
-						{"Potwierdź"}
-					</Paragraph>
-				</Button>
-
-				<FormError>{error}</FormError>
-
-				{login.isPending && <Loading />}
+					{login.isPending && <Loading />}
+				</Flex>
 			</Flex>
-		</Flex>
+		</form>
 	);
 };
