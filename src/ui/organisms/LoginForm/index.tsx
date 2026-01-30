@@ -44,7 +44,6 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 		}
 	};
 
-
 	const formSubmitHandler = useCallback(
 		(data: LoginFormBody) => {
 			if (login.isPending) return;
