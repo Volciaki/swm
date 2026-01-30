@@ -19,7 +19,7 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return "Nie znaleziono asortymentu.";
 	},
 	[ErrorName.UNAUTHORIZED]: () => {
-		return "Nie posiadasz wystarczających persmisji, aby wykonać tę akcję.";
+		return "Nie posiadasz wystarczających permisji, aby wykonać tę akcję.";
 	},
 	[ErrorName.INVALID_BACKUP]: () => {
 		return "Wybrana kopia zapasowa jest nieprawidłowa. Mogło dojść do uszkodzenia danych, czym prędzej przywróć inną kopie.";
@@ -28,13 +28,13 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return "Nie znaleziono wybranej kopii zapasowej.";
 	},
 	[ErrorName.NO_BACKUP_UTILITIES]: (metadata) => {
-		return `Na serverze brakuje narzędzi (${metadata.binary}) wymaganych do sporządzenia lub zastosowania kopii zapasowej. Skontaktuj się z administratorem serwisu.`;
+		return `Na serwerze brakuje narzędzi (${metadata.binary}) wymaganych do sporządzenia lub zastosowania kopii zapasowej. Skontaktuj się z administratorem serwisu.`;
 	},
 	[ErrorName.INVALID_TWO_FACTOR_AUTHENTICATION_SESSION]: (metadata) => {
-		return "Użyta sesja dwuetapowej weryfikacji nie posiada powiązanego użytkownika. Spróbuj wygenerować nową.";
+		return "Użyta sesja dwuetapowej weryfikacji nie posiada powiązanego użytkownika. Prosimy spróbować ponownie się zalogować.";
 	},
 	[ErrorName.TWO_FACTOR_AUTHENTICATION_SESSION_NOT_FOUND]: (metadata) => {
-		return "Nie udało się znaleść wybranej sesji dwuetapowej weryfikacji.";
+		return "Nie udało się znaleść wybranej sesji dwuetapowej weryfikacji. Prosimy spróbować ponownie się zalogować.";
 	},
 	[ErrorName.INVALID_EMAIL]: (metadata) => {
 		return `${metadata.email} nie jest prawidłowym e-mail'em!`;
@@ -43,7 +43,7 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return "Podane hasło jest nieprawidłowe.";
 	},
 	[ErrorName.WRONG_TWO_FACTOR_AUTHENTICATION_VALUE]: (metadata) => {
-		return "Podana wartość weryfikacji dwuetapowej jest nieprawidłowa.";
+		return "Podany kod do weryfikacji dwuetapowej jest niepoprawny. Prosimy spróbować ponownie.";
 	},
 	[ErrorName.INVALID_AUTHENTICATION_TOKEN]: (metadata) => {
 		return "Twoje ciasteczko autoryzacji jest nieprawidłowe. Wyczyść pamięć przeglądarki oraz zaloguj się ponownie.";
