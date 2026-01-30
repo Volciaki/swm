@@ -34,7 +34,7 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return "Użyta sesja dwuetapowej weryfikacji nie posiada powiązanego użytkownika. Spróbuj wygenerować nową.";
 	},
 	[ErrorName.TWO_FACTOR_AUTHENTICATION_SESSION_NOT_FOUND]: (metadata) => {
-		return "Nie udało się znaleść wybranej sesji dwuetapowej weryfikacji. Prosimy spróbować ponownie się zalogować.";
+		return "Nie udało się znaleść wybranej sesji dwuetapowej weryfikacji.";
 	},
 	[ErrorName.INVALID_EMAIL]: (metadata) => {
 		return `${metadata.email} nie jest prawidłowym e-mail'em!`;
