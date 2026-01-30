@@ -2,8 +2,8 @@
 
 import type { ReactNode, FC } from "react";
 import { useCallback, useState } from "react";
-import { Button, Flex, FormError, FullHeight, Loading, Paragraph, Separator } from "@/ui/atoms";
-import { List, ListItem, PageHeader } from "@/ui/molecules";
+import { Button, Flex, FormError, FullHeight, Loading, Paragraph, Separator, RadioGroupItem } from "@/ui/atoms";
+import { List, ListItem, PageHeader, RadioGroup } from "@/ui/molecules";
 import commonStyles from "@/styles/common.module.scss";
 import styles from "@/styles/backup.module.scss";
 import { apiClient } from "@/ui/providers";
@@ -12,6 +12,36 @@ import { defaultErrorHandler } from "@/ui/utils";
 import type { CustomStyles } from "@/ui/types";
 import { formatDateAsHumanReadable } from "@/utils";
 import { DialogButton } from "@/ui/organisms/DialogButton";
+
+const backupScheduleConfigurationPresets: Array<{ text: string; value: string; frequencySeconds: number }> = [
+	{
+		text: "co godzine",
+		value: "every-hour",
+		frequencySeconds: 60 * 60,
+	},
+	{
+		text: "co 12 godzin",
+		value: "every-12-hours",
+		frequencySeconds: 12 * 60 * 60,
+	},
+	{
+		text: "codziennie",
+		value: "every-day",
+		frequencySeconds: 24 * 60 * 60,
+	},
+	{
+		text: "co tydzień",
+		value: "every-week",
+		frequencySeconds: 7 * 24 * 60 * 60,
+	},
+	{
+		text: "co miesiąc",
+		value: "every-month",
+		frequencySeconds: 4 * 7 * 24 * 60 * 60,
+	},
+];
+
+type BackupScheduleConfigurationPreset = (typeof backupScheduleConfigurationPresets)[number];
 
 type BackupsFormProps = {
 	children: ReactNode;
@@ -38,7 +68,7 @@ const Backups: FC = () => {
 		onError: (e) => defaultErrorHandler(e, (errorMessage) => setTakeBackupError(errorMessage)),
 	});
 	const applyBackupById = apiClient.backups.applyById.useMutation({
-		// TODO: show a toast in the future?
+		// TODO: show a toast here?
 		onSuccess: () => {},
 	});
 	const backups = apiClient.backups.getAll.useQuery();
@@ -46,6 +76,8 @@ const Backups: FC = () => {
 	// A Record of ID and error messages.
 	const [applyBackupErrors, setApplyBackupErrors] = useState<Record<string, string>>();
 	const [applyBackupLoadings, setApplyBackupLoadings] = useState<Record<string, boolean>>();
+	const [backupScheduleConfigurationPreset, setBackupScheduleConfigurationPreset] =
+		useState<BackupScheduleConfigurationPreset>();
 
 	const backupApplyHandler = useCallback(
 		async (backup: { id: string }) => {
@@ -152,10 +184,36 @@ const Backups: FC = () => {
 						<Paragraph style={{ textAlign: "center" }}>{"Skonfiguruj harmongram"}</Paragraph>
 
 						<DialogButton buttonContent={<Paragraph fontSize={1.5}>{"Konfiguruj"}</Paragraph>}>
-							<Flex className={styles["schedule-configuration-container"]}>
+							<Flex direction={"column"} align={"center"} className={styles["schedule-configuration-container"]}>
 								<Paragraph style={{ textAlign: "center" }} fontSize={1.75}>
 									{"Konfiguracja harmonogramu tworzenia kopii zapasowych"}
 								</Paragraph>
+
+								<RadioGroup
+									formName={"schedule-configuration-radio"}
+									defaultValue={backupScheduleConfigurationPreset?.value}
+									onChange={(value) => {
+										const preset = backupScheduleConfigurationPresets.find((one) => one.value === value);
+
+										if (!preset) return;
+
+										setBackupScheduleConfigurationPreset(preset);
+									}}
+								>
+									{backupScheduleConfigurationPresets.map((preset, index) => (
+										<RadioGroupItem value={preset.value} key={`schedule-configuration-radio-item-${index}`}>
+											<Paragraph variant={"secondary"} fontSize={1.5} style={{ textWrap: "nowrap" }}>
+												{preset.text}
+											</Paragraph>
+										</RadioGroupItem>
+									))}
+								</RadioGroup>
+
+								<Button>
+									<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
+										{"Podtwierdź"}
+									</Paragraph>
+								</Button>
 							</Flex>
 						</DialogButton>
 					</BackupsForm>

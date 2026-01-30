@@ -4,3 +4,4 @@ export * from "./FormInput";
 export * from "./ListItem";
 export * from "./List";
 export * from "./Dialog";
+export * from "./RadioGroup";

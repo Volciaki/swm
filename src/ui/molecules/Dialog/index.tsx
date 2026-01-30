@@ -14,7 +14,7 @@ const StandardChildrenContainer: FC<StandardChildrenContainerProps> = ({ childre
 		{children}
 
 		<Button onClick={() => setIsOpen(false)}>
-			<Paragraph>{"Anuluj"}</Paragraph>
+			<Paragraph fontSize={1.5}>{"Anuluj"}</Paragraph>
 		</Button>
 	</Flex>
 );
