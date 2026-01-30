@@ -26,6 +26,7 @@ const ReportsForm: FC<ReportsFormProps> = ({ children, style }) => (
 
 const Reports: FC = () => {
 	// Jak będziesz robił backend to najlepiej zacznij od tego przycisku 'GenerateReportButton' (@/ui/template)
+	// Dałem w commicie 1/2 gdyż nie mam konkretnego planu jak zrobić te takie powiadomienie - tobie zostawię ten temat na razie
 	return (
 		<FullHeight>
 			<Flex direction={"column"} align={"center"} className={styles["container"]}>
