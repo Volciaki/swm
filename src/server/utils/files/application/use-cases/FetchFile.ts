@@ -26,7 +26,7 @@ export class FetchFile {
 			...optionsUnsafe,
 		};
 
-		if (!currentUser?.isAdmin && !options.skipAuthentication) throw new UnauthorizedError();
+		if (!currentUser && !options.skipAuthentication) throw new UnauthorizedError();
 
 		const file = await this.fileHelper.getByIdStringOrThrow(dto.id);
 		const buffer = await this.fileManager.fetchFile(file);

@@ -1,4 +1,4 @@
-import { useCallback, useState, type FC } from "react";
+import { useCallback, useState } from "react";
 import { Button, FormError, Loading, Paragraph } from "@/ui/atoms";
 import type { TRPCMutation } from "@/ui/types";
 import type { APIError } from "@/ui/utils";
@@ -21,12 +21,11 @@ export const GenerateReportButton = <T extends TRPCMutation = TRPCMutation>({
 	const onClickHandler = useCallback(async () => {
 		setIsLoading(true);
 
-		await mutation.mutateAsync(undefined, {
+		mutation.mutate(undefined, {
 			onError: (e) => defaultErrorHandler(e as APIError, (message) => setError(message)),
 			onSuccess: (data) => onSuccess(data),
+			onSettled: () => setIsLoading(false),
 		});
-
-		setIsLoading(false);
 	}, [mutation, onSuccess]);
 
 	return (

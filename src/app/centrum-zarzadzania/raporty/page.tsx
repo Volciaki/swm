@@ -1,12 +1,13 @@
 "use client";
 
-import { type ReactNode, type FC, useCallback } from "react";
+import { type ReactNode, type FC, useCallback, useState, useEffect, useRef } from "react";
 import { GenerateReportButton } from "@/ui/templates";
 import { PageHeader } from "@/ui/molecules";
 import { Flex, FullHeight, Paragraph } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import commonStyles from "@/styles/common.module.scss";
 import type { FileReferenceDTO } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
+import { downloadBase64 } from "@/ui/utils/base64/download";
 
 type ReportsFormProps = {
 	children: ReactNode;
@@ -35,16 +36,36 @@ const GenerateReportForm: FC<ReportsFormProps> = ({ children, text, description 
 );
 
 const Reports: FC = () => {
+	const [fileReferenceId, setFileReferenceId] = useState<string | null>(null);
+	const fileNameRef = useRef<string | null>(null);
+
 	const generateFullStorageShowcase = apiClient.reports.generateFullStorageShowcase.useMutation();
 	const generateTemperatureExceededDetails = apiClient.reports.generateTemperatureExceededDetails.useMutation();
 	const generateCloseToExpirationAssortment = apiClient.reports.generateCloseToExpirationAssortment.useMutation();
+	const fetchReportFileByReferenceId = apiClient.reports.fetchReportFileByReferenceId.useQuery(
+		{
+			fileReferenceId: fileReferenceId ?? "",
+		},
+		{ enabled: fileReferenceId !== null }
+	);
 
-	const openUrlByFileDTO = useCallback((data: FileReferenceDTO | undefined) => {
-		if (!data) return;
-		if (!data.visibility.publicUrl) return;
+	const onReportGenerateSuccess = useCallback(
+		(data: (typeof generateFullStorageShowcase)["data"], filename: string) => {
+			if (!data) return;
 
-		window.open(data.visibility.publicUrl);
-	}, []);
+			fileNameRef.current = filename;
+			setFileReferenceId(data.file.id);
+		},
+		[]
+	);
+
+	useEffect(() => {
+		if (!fetchReportFileByReferenceId.data) return;
+		if (!fileNameRef.current) return;
+
+		const base64 = fetchReportFileByReferenceId.data.base64;
+		downloadBase64(`data:application/pdf;base64,${base64}`, fileNameRef.current);
+	}, [fetchReportFileByReferenceId.data]);
 
 	return (
 		<FullHeight>
@@ -56,19 +77,19 @@ const Reports: FC = () => {
 						text={"Raport o pełnej inwentaryzacji magazynu"}
 						description={"Pełna inwentaryzacja magazynu"}
 					>
-						<GenerateReportButton<typeof generateFullStorageShowcase>
+						<GenerateReportButton
 							mutation={generateFullStorageShowcase}
-							onSuccess={(data) => openUrlByFileDTO(data?.file)}
+							onSuccess={(data) => onReportGenerateSuccess(data, "raport-inwentaryzacji-systemu.pdf")}
 						/>
 					</GenerateReportForm>
 
 					<GenerateReportForm
 						text={"Raport o zbliżającym się końcu ważności"}
-						description={"Wszystkie wydarzenia związane z przekroczeniem temperatury regału lub asortymentu"}
+						description={"Informacje na temat asortymentu, którego data ważności niedługo zostanie przekroczona"}
 					>
 						<GenerateReportButton
 							mutation={generateCloseToExpirationAssortment}
-							onSuccess={(data) => openUrlByFileDTO(data?.file)}
+							onSuccess={(data) => onReportGenerateSuccess(data, "raport-asortymentu-bliskiego-do-konca-waznosci.pdf")}
 						/>
 					</GenerateReportForm>
 
@@ -78,7 +99,7 @@ const Reports: FC = () => {
 					>
 						<GenerateReportButton
 							mutation={generateTemperatureExceededDetails}
-							onSuccess={(data) => openUrlByFileDTO(data?.file)}
+							onSuccess={(data) => onReportGenerateSuccess(data, "raport-przekroczonych-temperatur.pdf")}
 						/>
 					</GenerateReportForm>
 				</Flex>
