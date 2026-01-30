@@ -1461,6 +1461,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/papaparse@npm:^5":
+  version: 5.5.2
+  resolution: "@types/papaparse@npm:5.5.2"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/27b097b6f8f204b20ade1f2cbf4798eb38caa5fbfa3180fd0faa5e3f9aea371c1786ae180d56f3287556463eefe3100c953e316ea6ee99d7ae1d04111cfc9e50
+  languageName: node
+  linkType: hard
+
 "@types/pdfkit@npm:^0.17.4":
   version: 0.17.4
   resolution: "@types/pdfkit@npm:0.17.4"
@@ -5133,6 +5142,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"papaparse@npm:^5.5.3":
+  version: 5.5.3
+  resolution: "papaparse@npm:5.5.3"
+  checksum: 10c0/623aae6a35703308fd5a39d616fb3837231ebc70697346355ea508154d3f24df75b6554b736afc1924192205518a5db14e75f5e1cf35d154326050a37cdd9447
+  languageName: node
+  linkType: hard
+
 "parent-module@npm:^1.0.0":
   version: 1.0.1
   resolution: "parent-module@npm:1.0.1"
@@ -5438,6 +5454,7 @@ __metadata:
     "@types/mime-types": "npm:^3"
     "@types/node": "npm:^20"
     "@types/nodemailer": "npm:^7.0.4"
+    "@types/papaparse": "npm:^5"
     "@types/pdfkit": "npm:^0.17.4"
     "@types/pg": "npm:^8"
     "@types/qrcode": "npm:^1"
@@ -5468,6 +5485,7 @@ __metadata:
     next: "npm:16.1.1"
     node-cron: "npm:^4.2.1"
     nodemailer: "npm:^7.0.12"
+    papaparse: "npm:^5.5.3"
     pdfkit: "npm:^0.17.2"
     pg: "npm:^8.16.3"
     prettier: "npm:^3.8.1"

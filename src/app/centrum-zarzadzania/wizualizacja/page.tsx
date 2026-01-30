@@ -3,8 +3,8 @@
 import { type FC } from "react";
 import { Button, Flex, FullHeight, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { List, ListItem, PageHeader } from "@/ui/molecules";
-import commonStyles from "@/styles/common.module.scss";
 import { apiClient } from "@/ui/providers";
+import commonStyles from "@/styles/common.module.scss";
 
 const Visualisation: FC = () => {
 	const shelves = apiClient.storage.getAllShelves.useQuery();
