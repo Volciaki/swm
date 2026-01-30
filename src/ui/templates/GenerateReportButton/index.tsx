@@ -5,7 +5,7 @@ export type GenerateReportButtonProps = {
 	buttonName: string;
 };
 
-export const GenerateReportButton: FC<GenerateReportButtonProps> = ({buttonName}) => {
+export const GenerateReportButton: FC<GenerateReportButtonProps> = ({ buttonName }) => {
 	// Tutaj pole do popisu dla khenziiegoo
 	// Taka sugestia dla cb żebyś zrobił switcha() dla buttonName żeby to później fajnie śmigało razem a nie osobno instancje
 
