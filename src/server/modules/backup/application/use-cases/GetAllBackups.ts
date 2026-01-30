@@ -4,6 +4,7 @@ import type { GetFile } from "@/server/utils/files/application/use-cases/GetFile
 import { FileReferenceMapper } from "@/server/utils/files/infrastructure/mappers/FileReferenceMapper";
 import type { BackupRepository } from "../../domain/repositories/BackupRepository";
 import { BackupMapper } from "../../infrastructure/mappers/BackupMapper";
+import type { BackupDTO } from "../dto/shared/BackupDTO";
 
 export type GetAllBackupsOptions = {
 	skipAuthentication?: boolean;
@@ -15,9 +16,9 @@ export class GetAllBackups {
 		private readonly getFile: GetFile
 	) {}
 
-	async execute(optionsUnsafe?: GetAllBackupsOptions, currentUser?: UserDTO) {
+	async execute(optionsUnsafe?: GetAllBackupsOptions, currentUser?: UserDTO): Promise<BackupDTO[]> {
 		const options: GetAllBackupsOptions = {
-			skipAuthentication: true,
+			skipAuthentication: false,
 			...optionsUnsafe,
 		};
 

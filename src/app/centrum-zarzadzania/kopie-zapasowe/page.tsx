@@ -1,6 +1,71 @@
-import { type FC } from "react";
-import { Paragraph } from "@/ui/atoms";
+"use client";
 
-const Backups: FC = () => <Paragraph>{"kopie zapasowe"}</Paragraph>;
+import { type ReactNode, type FC, useState } from "react";
+import { BackupsList, ConfigureBackupSchedule, TakeBackupButton } from "@/ui/templates";
+import { PageHeader } from "@/ui/molecules";
+import { Flex, FullHeight, Paragraph } from "@/ui/atoms";
+import type { CustomStyles } from "@/ui/types";
+import commonStyles from "@/styles/common.module.scss";
+import styles from "@/styles/backup.module.scss";
+
+type BackupsFormProps = {
+	children: ReactNode;
+	style?: CustomStyles["style"];
+};
+
+const BackupsForm: FC<BackupsFormProps> = ({ children, style }) => (
+	<Flex
+		direction={"column"}
+		align={"center"}
+		style={{ gap: "1rem", height: "fit-content", ...style }}
+		className={commonStyles["form-container"]}
+	>
+		{children}
+	</Flex>
+);
+
+const Backups: FC = () => {
+	const [isBackupTakePending, setIsBackupTakePending] = useState(false);
+	const [isBackupApplyPending, setIsBackupApplyPending] = useState(false);
+
+	const backupActionsRunning = isBackupTakePending || isBackupApplyPending;
+
+	return (
+		<FullHeight>
+			<Flex direction={"column"} align={"center"} className={styles["container"]}>
+				<PageHeader
+					title={"Kopie zapasowe"}
+					description={
+						"Twórz, przywracaj oraz konfiguruj harmonogram kopii zapasowych. Każda kopia zapasowa zawiera w sobie aktualny stan magazynu."
+					}
+				/>
+
+				<Flex direction={"row"} style={{ gap: "1rem" }} fullWidth>
+					<BackupsForm style={{ width: "25%" }}>
+						<Paragraph style={{ textAlign: "center" }}>{"Wykonaj ręcznie"}</Paragraph>
+
+						<TakeBackupButton
+							setIsBackupTakePending={setIsBackupTakePending}
+							backupActionsRunning={backupActionsRunning}
+						/>
+					</BackupsForm>
+
+					<BackupsForm style={{ width: "50%" }}>
+						<BackupsList
+							setIsBackupApplyPending={setIsBackupApplyPending}
+							backupActionsRunning={backupActionsRunning}
+						/>
+					</BackupsForm>
+
+					<BackupsForm style={{ width: "25%" }}>
+						<Paragraph style={{ textAlign: "center" }}>{"Skonfiguruj harmongram"}</Paragraph>
+
+						<ConfigureBackupSchedule />
+					</BackupsForm>
+				</Flex>
+			</Flex>
+		</FullHeight>
+	);
+};
 
 export default Backups;

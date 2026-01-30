@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { PageHeader, FormInput } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Paragraph, Separator, Loading } from "@/ui/atoms";
 import { apiClient, useAuthData } from "@/ui/providers";
-import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { defaultErrorHandler } from "@/ui/utils";
 import type { UseStateSetter } from "@/ui/types";
 
 type LoginFormBody = {
@@ -35,12 +35,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 
 			if ("authenticationId" in data) onAuthenticationId(data.authenticationId);
 		},
-		onError: async (error) => {
-			if (!error?.data) return;
-
-			const errorMessage = getPolishErrorMessageByMetadata(error.data.metadata);
-			setError(errorMessage);
-		},
+		onError: (e) => defaultErrorHandler(e, (errorMessage) => setError(errorMessage)),
 	});
 
 	const formSubmitHandler = useCallback(

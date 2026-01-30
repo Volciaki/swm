@@ -6,3 +6,4 @@ export * from "./UserCard";
 export * from "./UserForm";
 export * from "./ResetPasswordForm";
 export * from "./ResetPasswordEmailForm";
+export * from "./DialogButton";

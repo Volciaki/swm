@@ -8,3 +8,4 @@ export * from "./Separator";
 export * from "./Loading";
 export * from "./FullHeight";
 export * from "./Switch";
+export * from "./RadioGroupItem";

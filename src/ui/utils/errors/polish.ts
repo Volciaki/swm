@@ -19,7 +19,7 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return "Nie znaleziono asortymentu.";
 	},
 	[ErrorName.UNAUTHORIZED]: () => {
-		return "Nie posiadasz wystarczającej ilości persmisji aby wykonać tej akcji.";
+		return "Nie posiadasz wystarczających persmisji, aby wykonać tę akcję.";
 	},
 	[ErrorName.INVALID_BACKUP]: () => {
 		return "Wybrana kopia zapasowa jest nieprawidłowa. Mogło dojść do uszkodzenia danych, czym prędzej przywróć inną kopie.";

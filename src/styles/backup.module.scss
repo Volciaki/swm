@@ -1,0 +1,6 @@
+@use "." as *;
+
+.container {
+    gap: 2rem !important;
+    width: $content-width;
+}

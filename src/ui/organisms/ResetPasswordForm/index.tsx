@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { FormInput, PageHeader } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
-import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { defaultErrorHandler } from "@/ui/utils";
 import styles from "./index.module.scss";
 
 type PasswordResetFormBody = {
@@ -26,12 +26,7 @@ export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId
 	const [error, setError] = useState<string | undefined>();
 	const passwordReset = apiClient.identity.passwordReset.useMutation({
 		onSuccess: () => onPasswordReset(),
-		onError: (e) => {
-			if (!e.data?.metadata) return;
-
-			const errorMessage = getPolishErrorMessageByMetadata(e.data?.metadata);
-			setError(errorMessage);
-		},
+		onError: (e) => defaultErrorHandler(e, (errorMessage) => setError(errorMessage)),
 	});
 
 	const formSubmitHandler = useCallback(

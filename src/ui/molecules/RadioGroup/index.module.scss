@@ -1,0 +1,9 @@
+@use "@/styles" as *;
+
+.container {
+    padding: $padding;
+    border: solid calc($border-size * 0.75) $primary;
+    border-radius: $border-radius;
+    gap: calc($gap / 2) !important;
+    width: fit-content;
+}
