@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, type FC, type ReactNode } from "react";
 import { Dialog } from "@/ui/molecules";
 import { Button, type ButtonProps } from "@/ui/atoms";

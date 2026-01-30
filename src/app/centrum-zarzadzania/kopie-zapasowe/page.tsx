@@ -43,6 +43,16 @@ const backupScheduleConfigurationPresets: Array<{ text: string; value: string; f
 
 type BackupScheduleConfigurationPreset = (typeof backupScheduleConfigurationPresets)[number];
 
+const findPresetByAmountOfSeconds = (seconds?: number): BackupScheduleConfigurationPreset | undefined | null => {
+	if (seconds === undefined) return undefined;
+
+	const preset = backupScheduleConfigurationPresets.find((one) => one.frequencySeconds === seconds);
+
+	if (!preset) return null;
+
+	return preset;
+};
+
 type BackupsFormProps = {
 	children: ReactNode;
 	style?: CustomStyles["style"];
@@ -71,13 +81,23 @@ const Backups: FC = () => {
 		// TODO: show a toast here?
 		onSuccess: () => {},
 	});
+	const getBackupSettings = apiClient.backups.getBackupSettings.useQuery();
+	const setBackupSettings = apiClient.backups.setBackupSettings.useMutation({
+		onError: (e) => defaultErrorHandler(e, (errorMessage) => setModifyBackupSettingsError(errorMessage)),
+	});
 	const backups = apiClient.backups.getAll.useQuery();
+
 	const [takeBackupError, setTakeBackupError] = useState<string | undefined>();
-	// A Record of ID and error messages.
+	// A Record of IDs and error messages.
 	const [applyBackupErrors, setApplyBackupErrors] = useState<Record<string, string>>();
 	const [applyBackupLoadings, setApplyBackupLoadings] = useState<Record<string, boolean>>();
-	const [backupScheduleConfigurationPreset, setBackupScheduleConfigurationPreset] =
-		useState<BackupScheduleConfigurationPreset>();
+	const [userScheduleConfigurationPreset, setUserScheduleConfigurationPreset] = useState<
+		BackupScheduleConfigurationPreset | undefined
+	>();
+	const [modifyBackupSettingsError, setModifyBackupSettingsError] = useState<string | undefined>();
+
+	const scheduleConfigurationPreset =
+		userScheduleConfigurationPreset ?? findPresetByAmountOfSeconds(getBackupSettings.data?.takeBackupsEverySeconds);
 
 	const backupApplyHandler = useCallback(
 		async (backup: { id: string }) => {
@@ -112,8 +132,16 @@ const Backups: FC = () => {
 			setApplyBackupErrorById(backup, "");
 			setBackupLoadingById(backup, false);
 		},
-		[applyBackupById]
+		[applyBackupById, setApplyBackupErrors, setApplyBackupLoadings]
 	);
+
+	const backupSettingsUpdateHandler = useCallback(() => {
+		const currentPreset = scheduleConfigurationPreset;
+
+		if (!currentPreset) return;
+
+		setBackupSettings.mutate({ takeBackupsEverySeconds: currentPreset.frequencySeconds });
+	}, [scheduleConfigurationPreset, setBackupSettings]);
 
 	return (
 		<FullHeight>
@@ -189,31 +217,39 @@ const Backups: FC = () => {
 									{"Konfiguracja harmonogramu tworzenia kopii zapasowych"}
 								</Paragraph>
 
-								<RadioGroup
-									formName={"schedule-configuration-radio"}
-									defaultValue={backupScheduleConfigurationPreset?.value}
-									onChange={(value) => {
-										const preset = backupScheduleConfigurationPresets.find((one) => one.value === value);
+								{scheduleConfigurationPreset === undefined ? (
+									<Loading />
+								) : (
+									<RadioGroup
+										formName={"schedule-configuration-radio"}
+										defaultValue={scheduleConfigurationPreset === null ? undefined : scheduleConfigurationPreset.value}
+										onChange={(value) => {
+											const preset = backupScheduleConfigurationPresets.find((one) => one.value === value);
 
-										if (!preset) return;
+											if (!preset) return;
 
-										setBackupScheduleConfigurationPreset(preset);
-									}}
-								>
-									{backupScheduleConfigurationPresets.map((preset, index) => (
-										<RadioGroupItem value={preset.value} key={`schedule-configuration-radio-item-${index}`}>
-											<Paragraph variant={"secondary"} fontSize={1.5} style={{ textWrap: "nowrap" }}>
-												{preset.text}
-											</Paragraph>
-										</RadioGroupItem>
-									))}
-								</RadioGroup>
+											setUserScheduleConfigurationPreset(preset);
+										}}
+									>
+										{backupScheduleConfigurationPresets.map((preset, index) => (
+											<RadioGroupItem value={preset.value} key={`schedule-configuration-radio-item-${index}`}>
+												<Paragraph variant={"secondary"} fontSize={1.5} style={{ textWrap: "nowrap" }}>
+													{preset.text}
+												</Paragraph>
+											</RadioGroupItem>
+										))}
+									</RadioGroup>
+								)}
 
-								<Button>
+								<Button onClick={() => backupSettingsUpdateHandler()}>
 									<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
 										{"Podtwierdź"}
 									</Paragraph>
 								</Button>
+
+								{modifyBackupSettingsError && <FormError>{modifyBackupSettingsError}</FormError>}
+
+								{setBackupSettings.isPending && <Loading />}
 							</Flex>
 						</DialogButton>
 					</BackupsForm>
