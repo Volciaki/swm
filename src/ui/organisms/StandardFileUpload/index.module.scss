@@ -1,0 +1,19 @@
+@use "@/styles" as *;
+
+.upload-field {
+    border: solid calc($border-size * 0.75) $text-darkened;
+    border-radius: $border-radius;
+    padding: calc($padding * 2);
+    transition: $transition;
+    border-style: dashed;
+    cursor: pointer;
+
+    &:hover, &.uploaded {
+        border-color: $primary;
+    }
+}
+
+.clickable-text {
+    text-decoration: underline;
+    color: $primary;
+}

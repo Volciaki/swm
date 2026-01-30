@@ -1,8 +1,9 @@
 "use client";
 
 import { type FC } from "react";
-import { Button, Flex, FullHeight, Loading, Paragraph, Separator } from "@/ui/atoms";
+import { DialogButton, StandardFileUpload } from "@/ui/organisms";
 import { List, ListItem, PageHeader } from "@/ui/molecules";
+import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import commonStyles from "@/styles/common.module.scss";
 
@@ -24,11 +25,17 @@ const Visualisation: FC = () => {
 						<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 							<Paragraph fontSize={1.75}>{"Importuj regały z pliku CSV"}</Paragraph>
 
-							<Button>
-								<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
-									{"Importuj"}
-								</Paragraph>
-							</Button>
+							<DialogButton
+								buttonContent={
+									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+										{"Importuj"}
+									</Paragraph>
+								}
+							>
+								<Paragraph fontSize={1.5}>{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}</Paragraph>
+
+								<StandardFileUpload />
+							</DialogButton>
 						</Flex>
 
 						<Separator direction={"vertical"} />
@@ -36,11 +43,13 @@ const Visualisation: FC = () => {
 						<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 							<Paragraph fontSize={1.75}>{"Ręcznie dodaj nowy regał"}</Paragraph>
 
-							<Button>
-								<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
-									{"Dodaj"}
-								</Paragraph>
-							</Button>
+							<Link href={"/centrum-zarzadzania/wizualizacja/regaly/nowy"}>
+								<Button>
+									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+										{"Dodaj"}
+									</Paragraph>
+								</Button>
+							</Link>
 						</Flex>
 					</Flex>
 
@@ -74,12 +83,17 @@ const Visualisation: FC = () => {
 											</Flex>
 
 											<Flex direction={"row"} align={"center"} style={{ gap: "1rem" }}>
-												<Button>
-													<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
-												</Button>
-												<Button>
-													<Paragraph fontSize={1.5}>{"Asortyment"}</Paragraph>
-												</Button>
+												<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/edytuj`}>
+													<Button>
+														<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
+													</Button>
+												</Link>
+
+												<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/wyswietl`}>
+													<Button>
+														<Paragraph fontSize={1.5}>{"Asortyment"}</Paragraph>
+													</Button>
+												</Link>
 											</Flex>
 										</Flex>
 									</ListItem>
