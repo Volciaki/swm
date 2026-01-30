@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { Button, Flex, Paragraph, Separator } from "@/ui/atoms";
+import { Button, Flex, Paragraph } from "@/ui/atoms";
 import { ListItem } from "@/ui/molecules";
 
 export type NotificationCardProps = {

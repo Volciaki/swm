@@ -43,7 +43,7 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return "Podane hasło jest nieprawidłowe.";
 	},
 	[ErrorName.WRONG_TWO_FACTOR_AUTHENTICATION_VALUE]: (metadata) => {
-		return "Podany kod do weryfikacji dwuetapowej jest niepoprawny. Prosimy spróbować ponownie.";
+		return "Podany kod weryfikacji dwuetapowej jest niepoprawny. Spróbuj ponownie.";
 	},
 	[ErrorName.INVALID_AUTHENTICATION_TOKEN]: (metadata) => {
 		return "Twoje ciasteczko autoryzacji jest nieprawidłowe. Wyczyść pamięć przeglądarki oraz zaloguj się ponownie.";
