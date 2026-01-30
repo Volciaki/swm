@@ -44,7 +44,7 @@ const ManagementCenter: FC = () => (
 					href={"kopie-zapasowe"}
 				/>
 
-				<ManagementCenterCard text={"raporty"} description={"generuj raporty i przeglądaj raporty"} href={"raporty"} />
+				<ManagementCenterCard text={"Raporty"} description={"generuj raporty i przeglądaj raporty"} href={"raporty"} />
 			</div>
 		</Flex>
 	</FullHeight>
