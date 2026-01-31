@@ -1,14 +1,82 @@
 "use client";
 
-import { type FC } from "react";
+import Papa from "papaparse";
+import { useCallback, useState, type FC } from "react";
 import { DialogButton, StandardFileUpload } from "@/ui/organisms";
 import { List, ListItem, PageHeader } from "@/ui/molecules";
-import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link } from "@/ui/atoms";
+import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link, FormError } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import commonStyles from "@/styles/common.module.scss";
+import { defaultErrorHandler } from "@/ui/utils";
+
+type CSVShelf = {
+	Oznaczenie: string;
+	M: number;
+	N: number;
+	TempMin: number;
+	TempMax: number;
+	MaxWagaKg: number;
+	MaxSzerokoscMm: number;
+	MaxWysokoscMm: number;
+	MaxGlebokoscMm: number;
+	Komentarz: string;
+};
 
 const Visualisation: FC = () => {
+	const apiUtils = apiClient.useUtils();
+	const importShelves = apiClient.storage.importShelves.useMutation({
+		onError: (e) => defaultErrorHandler(e, (message) => setImportShelvesError(message)),
+		onSuccess: () => {
+			apiUtils.storage.invalidate();
+		},
+	});
 	const shelves = apiClient.storage.getAllShelves.useQuery();
+	const [fileUploadError, setFileUploadError] = useState<string | undefined>();
+	const [file, setFile] = useState<File | undefined>();
+	const [importShelvesError, setImportShelvesError] = useState<string | undefined>();
+
+	const importShelvesSubmitHandler = useCallback(async () => {
+		if (!file) return;
+
+		const text = await file.text();
+		const result = Papa.parse<CSVShelf>(text, {
+			header: true,
+			skipEmptyLines: true,
+			delimiter: ";",
+			dynamicTyping: {
+				M: true,
+				N: true,
+				TempMin: true,
+				TempMax: true,
+				MaxWagaKg: true,
+				MaxSzerokoscMm: true,
+				MaxWysokoscMm: true,
+				MaxGlebokoscMm: true,
+			},
+		});
+
+		importShelves.mutate({
+			shelves: result.data.map((row) => ({
+				cellsShape: {
+					rows: row.M ?? 1,
+					columns: row.N ?? 1,
+				},
+				comment: row.Komentarz ?? "",
+				maxWeightKg: row.MaxWagaKg ?? 1,
+				name: row.Oznaczenie ?? "",
+				temperatureRange: {
+					maximalCelsius: row.TempMax ?? 1,
+					minimalCelsius: row.TempMin ?? 0,
+				},
+				maxAssortmentSize: {
+					heightMillimeters: row.MaxWysokoscMm ?? 10,
+					lengthMillimeters: row.MaxGlebokoscMm ?? 10,
+					widthMillimeters: row.MaxSzerokoscMm ?? 10,
+				},
+				supportsHazardous: true,
+			})),
+		});
+	}, [file, importShelves]);
 
 	return (
 		<FullHeight>
@@ -34,7 +102,27 @@ const Visualisation: FC = () => {
 							>
 								<Paragraph fontSize={1.5}>{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}</Paragraph>
 
-								<StandardFileUpload />
+								<StandardFileUpload
+									accept={"text/csv"}
+									onError={(error) => setFileUploadError(error)}
+									maxSizeBytes={1024 * 1024}
+									onUpload={(data) => {
+										setFile(data);
+										setFileUploadError(undefined);
+									}}
+								/>
+
+								{fileUploadError && <FormError>{fileUploadError}</FormError>}
+
+								{file && <Paragraph fontSize={1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
+
+								<Button onClick={() => importShelvesSubmitHandler()} disabled={!file || importShelves.isPending}>
+									<Paragraph fontSize={1.75}>{"Importuj"}</Paragraph>
+								</Button>
+
+								{importShelvesError && <FormError>{importShelvesError}</FormError>}
+
+								{importShelves.isPending && <Loading />}
 							</DialogButton>
 						</Flex>
 

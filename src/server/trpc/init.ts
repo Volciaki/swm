@@ -67,8 +67,8 @@ const t = initTRPC.context<APIContext>().create({
 	errorFormatter: (options) => {
 		const { shape, error } = options;
 
-		const appError = error as TRPCErrorWithMetadata;
-		const metadata = appError.getMetadata();
+		let metadata;
+		if ("getMetadata" in error) metadata = (error as TRPCErrorWithMetadata).getMetadata();
 
 		return {
 			...shape,
