@@ -123,8 +123,10 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 	const deleteHandler = useCallback(async () => {
 		if (!shelfId) return;
 
+		setIsLoading(true);
+
 		deleteShelf.mutate({ id: shelfId });
-	}, [deleteShelf, shelfId]);
+	}, [setIsLoading, deleteShelf, shelfId]);
 
 	if (getShelf.isLoading) return <Loading />;
 
@@ -267,7 +269,11 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 				<Separator style={{ marginBlock: "1rem" }} />
 
 				<Flex direction={"row"} justify={"space-around"} fullWidth>
-					<Button onClick={handleSubmit(formSubmitHandler)} disabled={!formState.isValid} style={{ width: "30%" }}>
+					<Button
+						onClick={handleSubmit(formSubmitHandler)}
+						disabled={!formState.isValid || isLoading}
+						style={{ width: "30%" }}
+					>
 						<Paragraph>{"Podtwierdź"}</Paragraph>
 					</Button>
 
