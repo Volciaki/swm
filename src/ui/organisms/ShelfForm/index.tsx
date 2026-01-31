@@ -8,12 +8,6 @@ import { FormInput } from "@/ui/molecules";
 import { floatOnlyValidator, integerOnlyValidator } from "@/ui/utils";
 import commonStyles from "../../../styles/common.module.scss";
 
-const commonParagraphStyles: CSSProperties = {
-	width: "100%",
-	textAlign: "center",
-	fontSize: "1.75rem",
-};
-
 type ShelfFormData = {
 	name: string;
 	comment: string;
@@ -31,7 +25,6 @@ export type ShelfFormProps = {
 	shelfData?: ShelfFormData & { id?: string };
 };
 
-// TODO: refactor
 export const ShelfForm: FC<ShelfFormProps> = ({ shelfData }) => {
 	const { register, formState, handleSubmit } = useForm<ShelfFormData>({
 		mode: "onChange",
