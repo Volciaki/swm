@@ -35,7 +35,8 @@ const tasks: Task[] = [
 const AUTHENTICATION_PASSPHRASE =
 	process.env.SCHEDULE_AUTHENTICATION_PASSPHRASE || "development-schedule-authentication-passphrase";
 
-const API_BASE_URL = "http://localhost:3000/api/trpc";
+const PORT = process.env.PORT || "3000";
+const API_BASE_URL = `http://localhost:${PORT}/api/trpc`;
 const TRIGGER_ENDPOINT_PATH = "schedule.startTaskByName";
 
 const triggerTaskByName = async (name: string) => {
