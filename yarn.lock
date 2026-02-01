@@ -1461,6 +1461,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/papaparse@npm:^5":
+  version: 5.5.2
+  resolution: "@types/papaparse@npm:5.5.2"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/27b097b6f8f204b20ade1f2cbf4798eb38caa5fbfa3180fd0faa5e3f9aea371c1786ae180d56f3287556463eefe3100c953e316ea6ee99d7ae1d04111cfc9e50
+  languageName: node
+  linkType: hard
+
 "@types/pdfkit@npm:^0.17.4":
   version: 0.17.4
   resolution: "@types/pdfkit@npm:0.17.4"
@@ -5133,6 +5142,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"papaparse@npm:^5.5.3":
+  version: 5.5.3
+  resolution: "papaparse@npm:5.5.3"
+  checksum: 10c0/623aae6a35703308fd5a39d616fb3837231ebc70697346355ea508154d3f24df75b6554b736afc1924192205518a5db14e75f5e1cf35d154326050a37cdd9447
+  languageName: node
+  linkType: hard
+
 "parent-module@npm:^1.0.0":
   version: 1.0.1
   resolution: "parent-module@npm:1.0.1"
@@ -5438,6 +5454,7 @@ __metadata:
     "@types/mime-types": "npm:^3"
     "@types/node": "npm:^20"
     "@types/nodemailer": "npm:^7.0.4"
+    "@types/papaparse": "npm:^5"
     "@types/pdfkit": "npm:^0.17.4"
     "@types/pg": "npm:^8"
     "@types/qrcode": "npm:^1"
@@ -5468,6 +5485,7 @@ __metadata:
     next: "npm:16.1.1"
     node-cron: "npm:^4.2.1"
     nodemailer: "npm:^7.0.12"
+    papaparse: "npm:^5.5.3"
     pdfkit: "npm:^0.17.2"
     pg: "npm:^8.16.3"
     prettier: "npm:^3.8.1"
@@ -5475,6 +5493,7 @@ __metadata:
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
     react-hook-form: "npm:^7.71.1"
+    react-zoom-pan-pinch: "npm:^3.7.0"
     reflect-metadata: "npm:^0.2.2"
     sass: "npm:^1.97.1"
     server-only: "npm:^0.0.1"
@@ -5588,6 +5607,16 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 10c0/33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
+  languageName: node
+  linkType: hard
+
+"react-zoom-pan-pinch@npm:^3.7.0":
+  version: 3.7.0
+  resolution: "react-zoom-pan-pinch@npm:3.7.0"
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
+  checksum: 10c0/96889849800a953128fe7f9e42bed0d5cbc48d03024995b136f5e972146236688efb24d7381d8e6f09598f5512b4897d2420f62d828a665fdf24b745b7d55911
   languageName: node
   linkType: hard
 

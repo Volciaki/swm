@@ -21,8 +21,8 @@ const ManagementCenterCard: FC<ManagementCenterCardProps> = ({ text, description
 );
 
 const ManagementCenter: FC = () => (
-	<FullHeight>
-		<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
+	<FullHeight style={{ width: "100%" }}>
+		<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 			<PageHeader title={"Centrum Zarządzania"} description={"Stąd znawigujesz do większości funkcji magazynu."} />
 
 			<div className={styles["container"]}>
@@ -44,7 +44,7 @@ const ManagementCenter: FC = () => (
 					href={"kopie-zapasowe"}
 				/>
 
-				<ManagementCenterCard text={"raporty"} description={"generuj raporty i przeglądaj raporty"} href={"raporty"} />
+				<ManagementCenterCard text={"Raporty"} description={"generuj raporty i przeglądaj raporty"} href={"raporty"} />
 			</div>
 		</Flex>
 	</FullHeight>

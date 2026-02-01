@@ -1,0 +1,5 @@
+@use "." as *;
+
+.container {
+    max-height: calc(100vh - $navigation-height-desktop - $gap * 2);
+}
