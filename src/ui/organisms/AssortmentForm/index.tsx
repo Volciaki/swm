@@ -271,7 +271,7 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ shelfId, cellId, assor
 						disabled={!formState.isValid || isLoading}
 						style={{ width: "30%" }}
 					>
-						<Paragraph>{"Podtwierdź"}</Paragraph>
+						<Paragraph>{"Potwierdź"}</Paragraph>
 					</Button>
 
 					{existing && (

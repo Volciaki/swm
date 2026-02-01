@@ -279,7 +279,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 						disabled={!formState.isValid || isLoading}
 						style={{ width: "30%" }}
 					>
-						<Paragraph>{"Podtwierdź"}</Paragraph>
+						<Paragraph>{"Potwierdź"}</Paragraph>
 					</Button>
 
 					{existing && (

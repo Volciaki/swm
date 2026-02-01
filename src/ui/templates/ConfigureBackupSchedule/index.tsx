@@ -101,7 +101,7 @@ export const ConfigureBackupSchedule: FC = () => {
 
 				<Button onClick={() => backupSettingsUpdateHandler()}>
 					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
-						{"Podtwierdź"}
+						{"Potwierdź"}
 					</Paragraph>
 				</Button>
 
