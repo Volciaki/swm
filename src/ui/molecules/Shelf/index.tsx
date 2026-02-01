@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode, FC } from "react";
+import { type ReactNode, type MouseEvent, type PointerEvent, type FC, useRef } from "react";
 import { clsx } from "clsx";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Link from "next/link";
@@ -8,14 +8,47 @@ import type { FullShelfDTO } from "@/server/modules/storage/application/dto/shar
 import { Flex, Paragraph } from "@/ui/atoms";
 import styles from "./index.module.scss";
 
+// If our cursor has moved more than this amount of pixels, our user is most likely scrolling, and we shouldn't trigger the links.
+const PANNING_DEADZONE = 10;
+
 type ZoomableProps = {
 	children: ReactNode;
 };
 
 const Zoomable: FC<ZoomableProps> = ({ children }) => {
+	const cursorStartY = useRef(0);
+	const cursorStartX = useRef(0);
+	const cursorMoved = useRef(false);
+
+	const onPointerDown = (e: PointerEvent) => {
+		cursorStartY.current = e.clientY;
+		cursorStartX.current = e.clientX;
+
+		cursorMoved.current = false;
+	};
+
+	const onPointerMove = (e: PointerEvent) => {
+		const changeX = Math.abs(e.clientX - cursorStartX.current);
+		const changeY = Math.abs(e.clientY - cursorStartY.current);
+		const change = changeX + changeY;
+
+		if (change > PANNING_DEADZONE) cursorMoved.current = true;
+	};
+
+	const onClickCapture = (e: MouseEvent) => {
+		if (!cursorMoved.current) return;
+
+		e.preventDefault();
+		e.stopPropagation();
+	};
+
 	return (
 		<TransformWrapper initialScale={1} minScale={0.3} maxScale={3} centerOnInit>
-			<TransformComponent wrapperClass={styles["zoomable-container"]}>{children}</TransformComponent>
+			<TransformComponent wrapperClass={styles["zoomable-container"]}>
+				<div onPointerDown={onPointerDown} onPointerMove={onPointerMove} onClickCapture={onClickCapture}>
+					{children}
+				</div>
+			</TransformComponent>
 		</TransformWrapper>
 	);
 };
