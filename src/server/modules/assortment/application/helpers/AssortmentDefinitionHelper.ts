@@ -75,8 +75,6 @@ export class DefaultAssortmentDefinitionHelper implements AssortmentDefinitionHe
 		deleteQRCodeByPath: DeleteQRCodeByPath,
 		deleteImageByPath: DeleteProductImageByPathFunction
 	) {
-		// TODO: Delete all assortment instances here.
-
 		await this.assortmentDefinitionRepository.delete(definition);
 		await deleteQRCodeByPath(definition.qrCode.path);
 

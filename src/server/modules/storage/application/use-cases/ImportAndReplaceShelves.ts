@@ -41,6 +41,7 @@ export class ImportAndReplaceShelves {
 						})
 					).base64
 					: null;
+
 				return {
 					...assortment,
 					imageContentBase64,

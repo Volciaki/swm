@@ -8,6 +8,6 @@ export const assortmentDTOToAssortmentVO = (dto: AssortmentDTO): AssortmentVO =>
 	};
 };
 
-export const assortmentsDTOToAssortmentsVO = (dtos: AssortmentDTO[]): AssortmentVO[] => {
+export const assortmentDTOsToAssortmentsVOs = (dtos: AssortmentDTO[]): AssortmentVO[] => {
 	return dtos.map((dto) => assortmentDTOToAssortmentVO(dto));
 };

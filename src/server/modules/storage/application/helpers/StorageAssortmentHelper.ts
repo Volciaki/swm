@@ -4,12 +4,15 @@ import type { GetShelf } from "@/server/modules/warehouse/application/use-cases/
 import type { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
 import type { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { UUID } from "@/server/utils";
+import type { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
+import type { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
 import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
 import type { ShelfDTO } from "../dto/shared/ShelfDTO";
 import { CellAlreadyTakenError } from "../errors/CellAlreadyTakenError";
 import type { TakeDownAssortmentDTO } from "../dto/TakeDownAssortmentDTO";
 import type { PutUpAssortmentDTO } from "../dto/PutUpAssortmentDTO";
 import type { PutUpAssortmentResponseDTO } from "../dto/PutUpAssortmentResponseDTO";
+import { assortmentDTOsToAssortmentsVOs, assortmentDTOToAssortmentVO } from "../utils/AssortmentDTOToAssortmentVO";
 
 export interface StorageAssortmentHelper {
 	putUpAssortment(dto: PutUpAssortmentDTO): Promise<PutUpAssortmentResponseDTO>;
@@ -29,44 +32,47 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 
 	async putUpAssortment(dto: PutUpAssortmentDTO) {
 		let assortments;
+		let assortmentContext;
 
 		assortments = await this.getAllAssortment.execute();
-		const shelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext: assortments });
+		assortmentContext = assortmentDTOsToAssortmentsVOs(assortments);
+		const shelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext });
+
 		const cellId = UUID.fromString(dto.cellId);
 		const cellToUpdate = shelf.cells.flat().find((cell) => cell.id === cellId.value);
 		if (cellToUpdate?.assortment !== null && cellToUpdate?.assortment !== undefined)
 			throw new CellAlreadyTakenError({ id: cellId.value });
 
-		const assortment = await this.createAssortment.execute(
-			{
-				...dto.assortment,
-				cellId: dto.cellId,
-				shelfId: dto.shelfId,
-			},
-			currentUser
-		);
+		const assortment = await this.createAssortment.execute({
+			definitionId: dto.assortmentDefinitionId,
+			cellId: dto.cellId,
+			shelfId: dto.shelfId,
+		});
+
 		assortments = await this.getAllAssortment.execute();
+		assortmentContext = assortmentDTOsToAssortmentsVOs(assortments);
+
 		try {
 			await this.fillCell.execute(
 				{
 					shelf: {
 						id: dto.shelfId,
-						assortmentContext: assortments,
+						assortmentContext,
 					},
 					cellId: dto.cellId,
-					assortment,
+					assortment: assortmentDTOToAssortmentVO(assortment),
 				},
-				{ skipAuthentication: true },
+				{ skipAuthentication: true }
 			);
 		} catch (error) {
-			// TODO: ...
-			await this.deleteAssortment.execute(assortment, currentUser);
+			await this.deleteAssortment.execute(assortment);
 
 			throw error;
 		}
 
 		assortments = await this.getAllAssortment.execute();
-		const newShelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext: assortments });
+		assortmentContext = assortmentDTOsToAssortmentsVOs(assortments);
+		const newShelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext });
 		return {
 			shelf: newShelf,
 			newAssortment: assortment,
@@ -75,8 +81,12 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 
 	async takeDownAssortment(dto: TakeDownAssortmentDTO) {
 		const assortment = await this.getAssortment.execute({ id: dto.id });
+
 		const assortments = await this.getAllAssortment.execute();
-		const shelf = await this.getShelf.execute({ id: assortment.shelfId, assortmentContext: assortments });
+		const shelf = await this.getShelf.execute({
+			id: assortment.shelfId,
+			assortmentContext: assortmentDTOsToAssortmentsVOs(assortments),
+		});
 
 		const cellToUpdate = shelf.cells.flat().find((cell) => cell.id === assortment.cellId);
 
@@ -85,15 +95,14 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		if (cellToUpdate.assortment === null) return shelf;
 
 		cellToUpdate.assortment = null;
-		// TODO: ...
-		await this.deleteAssortment.execute(assortment, currentUser);
+		await this.deleteAssortment.execute(assortment);
 		const newAssortments = await this.getAllAssortment.execute();
 		return await this.emptyCell.execute(
 			{
 				cellId: cellToUpdate.id,
 				shelf: {
 					id: cellToUpdate.shelfId,
-					assortmentContext: newAssortments,
+					assortmentContext: assortmentDTOsToAssortmentsVOs(newAssortments),
 				},
 			},
 			{ skipAuthentication: true }
