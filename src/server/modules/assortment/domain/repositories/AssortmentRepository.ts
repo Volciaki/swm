@@ -1,8 +1,6 @@
 import type { UUID } from "@/server/utils";
 import type { Assortment } from "../entities/Assortment";
-import type { AssortmentDefinition } from "../entities/AssortmentDefinition";
-
-export type DefinitionContextByIdGetter = (id: UUID) => Promise<AssortmentDefinition>;
+import type { DefinitionContextByIdGetter } from "../../application/helpers/AssortmentHelper";
 
 export interface AssortmentRepository {
 	create(assortment: Assortment): Promise<void>;

@@ -1,9 +1,7 @@
 import { z } from "zod";
 import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 
-export const createAssortmentDTOSchema = z.object({
-	cellId: z.string(),
-	shelfId: z.string(),
+export const createAssortmentDefinitionDTOSchema = z.object({
 	name: z.string(),
 	temperatureRange: temperatureRangeDTOSchema,
 	weightKg: z.number(),
@@ -14,4 +12,4 @@ export const createAssortmentDTOSchema = z.object({
 	imageContentBase64: z.string().nullable(),
 });
 
-export type CreateAssortmentDTO = z.infer<typeof createAssortmentDTOSchema>;
+export type CreateAssortmentDefinitionDTO = z.infer<typeof createAssortmentDefinitionDTOSchema>;

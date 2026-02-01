@@ -49,7 +49,7 @@ export class LogBuilder {
 	}
 
 	public onlyInDevelopmentEnvironment(): this {
-		if (environment.type === EnvironmentType.DEVELOPMENT) this.printable = false;
+		if (environment.type !== EnvironmentType.DEVELOPMENT) this.printable = false;
 		return this;
 	}
 
