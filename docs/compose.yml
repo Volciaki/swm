@@ -53,6 +53,7 @@ services:
       - minio:minio
     environment:
       NODE_ENV: production
+      API_URL: http://app:3000
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_USERNAME: <database-user>
