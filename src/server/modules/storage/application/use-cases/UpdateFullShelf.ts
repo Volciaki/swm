@@ -4,6 +4,7 @@ import type { GetShelf } from "@/server/modules/warehouse/application/use-cases/
 import type { UserDTO } from "@/server/utils";
 import { UnauthorizedError } from "@/server/utils";
 import type { UpdateFullShelfDTO } from "../dto/UpdateFullShelf";
+import { assortmentDTOsToAssortmentsVOs } from "../utils/AssortmentDTOToAssortmentVO";
 
 export class UpdateFullShelf {
 	constructor(
@@ -16,16 +17,17 @@ export class UpdateFullShelf {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
 		const assortments = await this.getAllAssortmentAction.execute();
+		const assortmentContext = assortmentDTOsToAssortmentsVOs(assortments);
 		const shelf = await this.getShelf.execute({
 			id: dto.shelfId,
-			assortmentContext: assortments,
+			assortmentContext,
 		});
 
 		return await this.updateShelfAction.execute(
 			{
 				shelf: {
 					id: dto.shelfId,
-					assortmentContext: assortments,
+					assortmentContext,
 				},
 				newData: {
 					...dto.newData,

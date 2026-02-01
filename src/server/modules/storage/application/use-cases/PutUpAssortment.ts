@@ -9,6 +9,6 @@ export class PutUpAssortment {
 	async execute(dto: PutUpAssortmentDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-		return await this.storageHelper.putUpAssortmentByDTO(dto, currentUser);
+		return await this.storageHelper.putUpAssortment(dto);
 	}
 }

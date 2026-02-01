@@ -9,6 +9,6 @@ export class TakeDownAssortment {
 	async execute(dto: TakeDownAssortmentDTO, currentUser?: UserDTO) {
 		if (!currentUser?.isAdmin) throw new UnauthorizedError();
 
-		return await this.storageHelper.takeDownAssortmentByDTO(dto, currentUser);
+		return await this.storageHelper.takeDownAssortment(dto);
 	}
 }
