@@ -6,7 +6,12 @@ import { clsx } from "clsx";
 import { useRouter } from "next/navigation";
 import { Button, Flex, FormError, Loading, Paragraph, Separator } from "@/ui/atoms";
 import type { APIError } from "@/ui/utils";
-import { defaultErrorHandler, floatOnlyValidator, integerOnlyValidator } from "@/ui/utils";
+import {
+	defaultErrorHandler,
+	floatOnlyValidator,
+	getPolishErrorMessageByMetadata,
+	integerOnlyValidator,
+} from "@/ui/utils";
 import { apiClient } from "@/ui/providers";
 import { FormFields } from "../FormFields";
 import commonStyles from "../../../styles/common.module.scss";
@@ -132,7 +137,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 
 	return (
 		<>
-			{getShelf.error && <FormError>{getShelf.error.message}</FormError>}
+			{getShelf.error && <FormError>{getPolishErrorMessageByMetadata(getShelf.error.data?.metadata)}</FormError>}
 
 			<Flex
 				className={clsx([commonStyles["form-container"], commonStyles["secondary"]])}
@@ -177,7 +182,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 													value: 1,
 													message: "Regał nie może posiadać mniej niż jednego rzędu.",
 												},
-												validate: (v) =>
+												validate: (v: string | number) =>
 													integerOnlyValidator(v.toString(), "Ilość rzędów regału musi być liczbą całkowitą."),
 											},
 											{
@@ -188,7 +193,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 													value: 1,
 													message: "Regał nie może posiadać mniej niż jednej kolumny.",
 												},
-												validate: (v) =>
+												validate: (v: string | number) =>
 													integerOnlyValidator(v.toString(), "Ilość kolumn regału musi być liczbą całkowitą."),
 											},
 										],

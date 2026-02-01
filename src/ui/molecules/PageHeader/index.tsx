@@ -9,7 +9,7 @@ export type PageHeaderProps = {
 
 export const PageHeader: FC<PageHeaderProps> = ({ title, description, wrapDescription = true }) => (
 	<Flex direction={"column"} style={{ gap: "1rem" }} fullWidth>
-		<Paragraph style={{ textAlign: "center" }} fontSize={3}>
+		<Paragraph style={{ textAlign: "center" }} fontSize={3} ellipsisOverflow>
 			{title}
 		</Paragraph>
 

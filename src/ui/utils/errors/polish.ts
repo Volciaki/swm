@@ -3,8 +3,8 @@ import { ErrorName } from "@/server/utils/errors/type";
 import type { ErrorMessageMapper } from "./type";
 
 export const getPolishErrorMessageByMetadata = <T extends ErrorName = ErrorName>(
-	metadata: BaseErrorMetadata<T>
-): string => polishErrorMessages[metadata.name](metadata.value);
+	metadata?: BaseErrorMetadata<T>
+): string => (metadata === undefined ? "" : polishErrorMessages[metadata.name](metadata.value));
 
 const polishErrorMessages: ErrorMessageMapper = {
 	[ErrorName.ALREADY_LOGGED_IN]: () => {
