@@ -10,7 +10,7 @@ export class Assortment {
 		private _id: UUID,
 		private _cellId: UUID,
 		private _shelfId: UUID,
-		private _assortmentDefinition: AssortmentDefinition,
+		private _definition: AssortmentDefinition,
 		private _storedAt: Date,
 		private _hasExpired: boolean,
 		private _hasExpiredNotification: NotificationVO | null,
@@ -28,6 +28,9 @@ export class Assortment {
 	}
 	get shelfId() {
 		return this._shelfId;
+	}
+	get definition() {
+		return this._definition;
 	}
 	get storedAt() {
 		return this._storedAt;
@@ -54,7 +57,7 @@ export class Assortment {
 
 	private getExpirationDetails(): { hasExpired: boolean; isCloseToExpiration: boolean } {
 		const currentTimestamp = new Date().getTime();
-		const expirationTimeststamp = this.storedAt.getTime() + this._assortmentDefinition.expiresAfter.milliseconds.value;
+		const expirationTimeststamp = this.storedAt.getTime() + this._definition.expiresAfter.milliseconds.value;
 
 		const timeDifferenceMilliseconds = expirationTimeststamp - currentTimestamp;
 
