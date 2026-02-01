@@ -75,7 +75,7 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellSize = 12.5 }) => {
 				{shelfData.cells.map((row, y) =>
 					row.map((cell, x) => (
 						<Link
-							href={`/centrum-zarzadzania/wizualizacja/regaly/${shelfData.id}/asortymenty/${cell.assortment ? `${cell.assortment.id}/edytuj` : "nowy"}`}
+							href={`/centrum-zarzadzania/wizualizacja/regaly/${shelfData.id}/asortymenty/${cell.assortment ? `${cell.assortment.id}/edytuj` : `nowy/${cell.id}`}`}
 							key={`cell-x-${x}-y-${y}`}
 							style={{ textDecoration: "none" }}
 						>

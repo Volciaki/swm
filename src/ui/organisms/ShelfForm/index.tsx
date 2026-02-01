@@ -253,14 +253,14 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 							name: "Zakres temperatur regału w stopniach Celsjusza",
 							inputs: [
 								{
-									placeholder: "temperatura minimalna [°C]",
+									placeholder: "Temperatura minimalna [°C]",
 									formKey: "minTemperatureCelsius",
 									required: "Podanie minimalnej temperatury regału jest wymagane.",
 									validate: (v) =>
 										floatOnlyValidator(v.toString(), "Minimalna temperatura regału musi być liczbą dziesiętną."),
 								},
 								{
-									placeholder: "temperatura maksymalna [°C]",
+									placeholder: "Temperatura maksymalna [°C]",
 									formKey: "maxTemperatureCelsius",
 									required: "Podanie maksymalnej temperatury regału jest wymagane.",
 									validate: (v) =>
