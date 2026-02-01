@@ -1,0 +1,16 @@
+@use "@/styles" as *;
+
+.zoomable-container {
+    max-width: $content-width;
+    flex: 1;
+}
+
+.cell-container {
+    background-color: $background-lightened;
+    padding: $padding;
+    overflow: hidden;
+
+    &.has-assortment {
+        background-color: $secondary;
+    }
+}

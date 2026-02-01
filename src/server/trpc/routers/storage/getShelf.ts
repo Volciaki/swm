@@ -1,4 +1,4 @@
-import type { ShelfDTO } from "@/server/modules/warehouse/application/dto/shared/ShelfDTO";
+import type { FullShelfDTO } from "@/server/modules/storage/application/dto/shared/FullShelfDTOSchema";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { GetFullShelf } from "@/server/modules/storage/application/use-cases/GetFullShelf";
@@ -6,7 +6,7 @@ import { getFullShelfDTOSchema } from "@/server/modules/storage/application/dto/
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
-export const getShelf = procedure.input(getFullShelfDTOSchema).query<ShelfDTO>(async ({ input, ctx }) => {
+export const getShelf = procedure.input(getFullShelfDTOSchema).query<FullShelfDTO>(async ({ input, ctx }) => {
 	const services = getServices(ctx);
 	const presets = getPresets(services);
 

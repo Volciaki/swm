@@ -3,9 +3,10 @@
 import type { FC } from "react";
 import { useParams } from "next/navigation";
 import { FullHeight, Flex, Loading, FormError } from "@/ui/atoms";
-import { PageHeader } from "@/ui/molecules";
+import { PageHeader, Shelf } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import styles from "@/styles/view-shelf.module.scss";
 
 const ViewShelf: FC = () => {
 	const params = useParams();
@@ -15,8 +16,8 @@ const ViewShelf: FC = () => {
 	);
 
 	return (
-		<FullHeight>
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
+		<FullHeight style={{ maxWidth: "100%" }}>
+			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]} fullWidth>
 				{getShelf.isLoading && <Loading />}
 
 				{getShelf.data && (
@@ -28,7 +29,7 @@ const ViewShelf: FC = () => {
 							}
 						/>
 
-						<Shelf />
+						<Shelf shelfData={getShelf.data} />
 					</>
 				)}
 
