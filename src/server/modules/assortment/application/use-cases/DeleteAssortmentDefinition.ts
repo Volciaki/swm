@@ -8,6 +8,7 @@ import type { AssortmentDefinitionHelper } from "../helpers/AssortmentDefinition
 export type DeleteAssortmentDefinitionOptions = {
 	deleteQRCodeByPath: DeleteQRCodeByPath;
 	deleteProductImageByPath: DeleteProductImageByPathFunction;
+	skipAuthentication?: boolean;
 };
 
 export class DeleteAssortmentDefinition {
@@ -16,8 +17,17 @@ export class DeleteAssortmentDefinition {
 		private readonly assortmentFileHelper: AssortmentFileHelper
 	) {}
 
-	async execute(dto: DeleteAssortmentDefinitionDTO, options: DeleteAssortmentDefinitionOptions, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(
+		dto: DeleteAssortmentDefinitionDTO,
+		optionsUnsafe: DeleteAssortmentDefinitionOptions,
+		currentUser?: UserDTO
+	) {
+		const options: DeleteAssortmentDefinitionOptions = {
+			skipAuthentication: false,
+			...optionsUnsafe,
+		};
+
+		if (!currentUser?.isAdmin && !options.skipAuthentication) throw new UnauthorizedError();
 
 		const { deleteQRCodeByPath, deleteProductImageByPath } = options;
 		const assortment = await this.assortmentDefinitionHelper.getByIdStringOrThrow(

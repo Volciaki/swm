@@ -1,0 +1,29 @@
+import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import type { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
+import { getFullShelfResponseDTOSchema, type GetFullShelfResponseDTO } from "../dto/GetFullShelfResponseDTO";
+import { assortmentsDTOToAssortmentsVO } from "../utils/AssortmentDTOToAssortmentVO";
+
+export interface StorageShelfHelper {
+	getByIdStringOrThrow(id: string): Promise<GetFullShelfResponseDTO>;
+}
+
+export class DefaultStorageAssortmentHelper implements StorageShelfHelper {
+	constructor(
+		private readonly getAllAssortment: GetAllAssortment,
+		private readonly getShelf: GetShelf
+	) {}
+
+	async getByIdStringOrThrow(id: string) {
+		const assortments = await this.getAllAssortment.execute();
+		const assortmentContext = assortmentsDTOToAssortmentsVO(assortments);
+		const shelf = await this.getShelf.execute({
+			id,
+			assortmentContext,
+		});
+
+		// This is safe to do. `warehouse` module's `getShelf` returns the shelf with fully saturated cells.
+		// It's just that they're typed as `warehouse`'s `AssortmentVO`, which only includes some necessary fields for validation.
+		const fullShelf = getFullShelfResponseDTOSchema.parse(shelf);
+		return fullShelf;
+	}
+}

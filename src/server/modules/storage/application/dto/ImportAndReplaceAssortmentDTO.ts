@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { createAssortmentDTOSchema } from "./shared/CreateAssortmentDTO";
+import { createAssortmentDefinitionDTOSchema } from "./CreateAssortmentDefinitionDTO";
 
-export const importAndReplaceAssortmentDTOSchema = z.object({
-	assortment: createAssortmentDTOSchema.array(),
+export const importAndReplaceAssortmentDefinitionsDTOSchema = z.object({
+	definitions: createAssortmentDefinitionDTOSchema.array(),
 });
 
-export type ImportAndReplaceAssortmentDTO = z.infer<typeof importAndReplaceAssortmentDTOSchema>;
+export type ImportAndReplaceAssortmentDefinitionsDTO = z.infer<typeof importAndReplaceAssortmentDefinitionsDTOSchema>;

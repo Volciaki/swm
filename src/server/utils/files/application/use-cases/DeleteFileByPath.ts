@@ -5,14 +5,23 @@ import type { FileHelper } from "../helpers/FileHelper";
 import type { DeleteFileByPathDTO } from "../dto/DeleteFileByPathDTO";
 import { FileMetadataMapper } from "../../infrastructure/mappers/FileMetadataMapper";
 
+export type DeleteFileByPathOptions = {
+	skipAuthentication?: boolean;
+};
+
 export class DeleteFileByPath {
 	constructor(
 		private readonly fileHelper: FileHelper,
 		private readonly fileManager: FileManager
 	) {}
 
-	async execute(dto: DeleteFileByPathDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(dto: DeleteFileByPathDTO, optionsUnsafe: DeleteFileByPathOptions, currentUser?: UserDTO) {
+		const options: DeleteFileByPathOptions = {
+			skipAuthentication: false,
+			...optionsUnsafe,
+		};
+
+		if (!currentUser?.isAdmin && !options.skipAuthentication) throw new UnauthorizedError();
 
 		const metadata = FileMetadataMapper.fromDTO({
 			storageType: this.fileManager.getStorageType(),
