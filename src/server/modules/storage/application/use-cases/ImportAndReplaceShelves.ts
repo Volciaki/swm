@@ -4,13 +4,12 @@ import type { ImportShelves } from "@/server/modules/warehouse/application/use-c
 import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import type { CreateShelf } from "@/server/modules/warehouse/application/use-cases/CreateShelf";
 import type { UserDTO } from "@/server/utils";
-import { UnauthorizedError } from "@/server/utils";
+import { UnauthorizedError, assortmentDTOsToAssortmentVOs } from "@/server/utils";
 import type { ImportAndReplaceShelvesDTO } from "../dto/ImportAndReplaceShelvesDTO";
 import type { CreateShelfDTO } from "../dto/shared/CreateShelfDTO";
 import type { ShelfDTO } from "../dto/shared/ShelfDTO";
 import type { AssortmentDTO } from "../dto/shared/AssortmentDTO";
 import type { StorageAssortmentHelper } from "../helpers/StorageAssortmentHelper";
-import { assortmentDTOsToAssortmentsVOs } from "../utils/AssortmentDTOToAssortmentVO";
 
 export class ImportAndReplaceShelves {
 	constructor(
@@ -59,7 +58,7 @@ export class ImportAndReplaceShelves {
 	private async deleteShelves(shelves: ShelfDTO[], assortments: AssortmentDTO[], currentUser: UserDTO) {
 		for (const shelf of shelves) {
 			await this.deleteShelf.execute(
-				{ id: shelf.id, assortmentContext: assortmentDTOsToAssortmentsVOs(assortments) },
+				{ id: shelf.id, assortmentContext: assortmentDTOsToAssortmentVOs(assortments) },
 				currentUser,
 				{
 					enforceMinimalAmountOfShelves: false,

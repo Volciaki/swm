@@ -13,8 +13,13 @@ export const generateFullStorageShowcase = procedure.mutation<ReportDTO>(async (
 	const assortmentRepository = services.repositories.assortment.db;
 	const fileHelper = presets.fileHelper.default;
 	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
+	const assortmentDefinitionHelper = presets.assortmentDefinitionHelper.default;
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
+	);
 
-	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
+	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 	const getAllShelves = new GetAllShelves(shelfRepository);
 
 	const fullStorageShowcaseReportGenerator = services.utils.fullStorageShowcaseReportGenerator.default.get(

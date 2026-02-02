@@ -22,9 +22,14 @@ export const getDefaultUpdateShelfTemperaturesPreset = (ctx: GetServicesContext)
 	const shelfThermometer = services.utils.shelfThermometer.random;
 	const uuidManager = services.utils.uuidManager.default;
 	const shelfHelper = presets.shelfHelper.default;
+	const assortmentDefinitionHelper = presets.assortmentDefinitionHelper.default;
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
+	);
 
 	const getAllShelves = new GetAllShelves(shelfRepository);
-	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
+	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 	const updateShelf = new UpdateShelf(shelfHelper, shelfRepository);
 	const storeTemperatureReading = new StoreTemperatureReading(
 		shelfHelper,

@@ -143,4 +143,7 @@ const polishErrorMessages: ErrorMessageMapper = {
 	[ErrorName.NEGATIVE_WEIGHT]: (metadata) => {
 		return `Waga nie może być ujemna. Otrzymano: ${metadata.grams}.`;
 	},
+	[ErrorName.ASSORTMENT_DEFINITION_NOT_FOUND]: (metadata) => {
+		return "Ta definicja asortymentu nie istnieje.";
+	},
 };

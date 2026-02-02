@@ -11,8 +11,13 @@ export const generateCloseToExpirationAssortment = procedure.mutation<ReportDTO>
 	const assortmentRepository = services.repositories.assortment.db;
 	const fileHelper = presets.fileHelper.default;
 	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
+	const assortmentDefinitionHelper = presets.assortmentDefinitionHelper.default;
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
+	);
 
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 
 	const closeToExpirationAssortmenrReportGenerator =
 		services.utils.closeToExpirationAssortmentReportGenerator.default.get(getAllAssortmentAction);

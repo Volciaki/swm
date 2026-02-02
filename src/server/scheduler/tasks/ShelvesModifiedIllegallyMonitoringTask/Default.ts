@@ -17,8 +17,13 @@ export const getDefaultShelvesModifiedIllegallyMonitoring = (ctx: GetServicesCon
 	const shelfHelper = presets.shelfHelper.default;
 	const fileHelper = presets.fileHelper.default;
 	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
+	const assortmentDefinitionHelper = presets.assortmentDefinitionHelper.default;
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
+	);
 
-	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
+	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 	const getShelves = new GetAllShelves(shelfRepository);
 	const createNotification = new CreateNotification(uuidManager, notificationRepository);
 	const refreshShelfLegalWeight = new RefreshShelfLegalWeight(shelfHelper, shelfRepository);

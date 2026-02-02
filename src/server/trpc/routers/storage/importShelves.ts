@@ -5,9 +5,7 @@ import { DeleteShelf } from "@/server/modules/warehouse/application/use-cases/De
 import { ImportShelves } from "@/server/modules/warehouse/application/use-cases/ImportShelves";
 import { CreateShelf } from "@/server/modules/warehouse/application/use-cases/CreateShelf";
 import { ImportAndReplaceShelves } from "@/server/modules/storage/application/use-cases/ImportAndReplaceShelves";
-import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { importAndReplaceShelvesDTOSchema } from "@/server/modules/storage/application/dto/ImportAndReplaceShelvesDTO";
-import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
@@ -23,14 +21,17 @@ export const importShelves = procedure
 		const shelfHelper = presets.shelfHelper.default;
 		const fileHelper = presets.fileHelper.default;
 		const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
-		const fileManager = presets.fileManager.default.get(S3FileStorageBucket.ASSORTMENT_IMAGES);
+		const assortmentDefinitionHelper = presets.assortmentDefinitionHelper.default;
+		const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+			assortmentDefinitionHelper,
+			assortmentFileHelper
+		);
 
 		const getAllShelvesAction = new GetAllShelves(shelfRepository);
-		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
+		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 		const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
 		const importShelvesAction = new ImportShelves(shelfHelper);
 		const createShelfAction = new CreateShelf(shelfHelper);
-		const fetchFile = new FetchFile(fileHelper, fileManager);
 
 		const storageAssortmentHelper = presets.storageAssortmentHelper.default;
 
@@ -40,8 +41,7 @@ export const importShelves = procedure
 			deleteShelfAction,
 			createShelfAction,
 			importShelvesAction,
-			storageAssortmentHelper,
-			fetchFile
+			storageAssortmentHelper
 		);
 		return await action.execute(input, ctx.user ?? undefined);
 	});

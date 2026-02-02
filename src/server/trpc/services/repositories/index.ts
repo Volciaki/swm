@@ -10,6 +10,7 @@ import { getTemperatureReadingRepositories } from "./TemperatureReading";
 import { getReportRepositories } from "./Report";
 import { getBackupRepositories } from "./Backup";
 import { getBackupSettingsRepositories } from "./BackupSettings";
+import { getAssortmentDefinitionRepositories } from "./AssortmentDefinition";
 
 export const getRepositories = (ctx: GetServicesContext) => {
 	return {
@@ -23,5 +24,6 @@ export const getRepositories = (ctx: GetServicesContext) => {
 		report: getReportRepositories(ctx),
 		backup: getBackupRepositories(ctx),
 		backupSettings: getBackupSettingsRepositories(ctx),
+		assortmentDefinition: getAssortmentDefinitionRepositories(ctx),
 	};
 };

@@ -6,10 +6,6 @@ import type { DeleteAssortment } from "@/server/modules/assortment/application/u
 import type { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import type { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
 import type { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
-import type { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/GenerateQRCode";
-import type { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
-import type { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
-import type { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
 import type { GetServicesContext } from "../../context";
 
 export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
@@ -21,13 +17,7 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 			deleteAssortment: DeleteAssortment,
 			getShelf: GetShelf,
 			fillCell: FillCell,
-			emptyCell: EmptyCell,
-			generateQRCode: GenerateQRCode,
-			uploadFileProductImage: UploadFile,
-			uploadFileQRCode: UploadFile,
-			deleteFileProductImage: DeleteFileByPath,
-			deleteFileQRCode: DeleteFileByPath,
-			fetchFileProductImage: FetchFile
+			emptyCell: EmptyCell
 		) =>
 			new DefaultStorageAssortmentHelper(
 				getAllAssortment,
@@ -36,13 +26,7 @@ export const getDefaultStorageAssortmentHelper = (ctx: GetServicesContext) => {
 				deleteAssortment,
 				getShelf,
 				fillCell,
-				emptyCell,
-				generateQRCode,
-				uploadFileProductImage,
-				uploadFileQRCode,
-				deleteFileProductImage,
-				deleteFileQRCode,
-				fetchFileProductImage
+				emptyCell
 			),
 	};
 };

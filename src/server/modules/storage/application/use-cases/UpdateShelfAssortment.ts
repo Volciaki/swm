@@ -1,4 +1,4 @@
-// TODO: add `UpdateShelfAssortmentDefinition`
+// TODO: add `UpdateAssortmentDefinition`
 
 // import type { UserDTO } from "@/server/utils";
 // import { UnauthorizedError, UUID } from "@/server/utils";

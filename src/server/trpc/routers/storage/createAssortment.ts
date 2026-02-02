@@ -1,17 +1,17 @@
-import { PutUpAssortment } from "@/server/modules/storage/application/use-cases/PutUpAssortment";
-import type { PutUpAssortmentResponseDTO } from "@/server/modules/storage/application/dto/PutUpAssortmentResponseDTO";
-import { putUpAssortmentDTOSchema } from "@/server/modules/storage/application/dto/PutUpAssortmentDTO";
+import { createAssortmentDefinitionDTOSchema } from "@/server/modules/storage/application/dto/CreateAssortmentDefinitionDTO";
+import type { AssortmentDefinitionDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDefinitionDTO";
+import { CreateFullAssortmentDefinition } from "@/server/modules/storage/application/use-cases/CreateFullAssortmentDefinition";
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
 export const createAssortment = procedure
-	.input(putUpAssortmentDTOSchema)
-	.mutation<PutUpAssortmentResponseDTO>(async ({ input, ctx }) => {
+	.input(createAssortmentDefinitionDTOSchema)
+	.mutation<AssortmentDefinitionDTO>(async ({ input, ctx }) => {
 		const services = getServices(ctx);
 		const presets = getPresets(services);
 
-		const storageAssortmentHelper = presets.storageAssortmentHelper.default;
+		const storageAssortmentDefinitionHelper = presets.storageAssortmentDefinitionHelper.default;
 
-		const action = new PutUpAssortment(storageAssortmentHelper);
-		return await action.execute(input, ctx.user ?? undefined);
+		const action = new CreateFullAssortmentDefinition(storageAssortmentDefinitionHelper);
+		return await action.execute(input);
 	});

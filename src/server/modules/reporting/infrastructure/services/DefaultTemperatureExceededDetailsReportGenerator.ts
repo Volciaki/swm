@@ -6,6 +6,7 @@ import type { ShelfVO } from "../../domain/vo/ShelfVO";
 import { ReportType } from "../../domain/entities/Report";
 import type { ReportTemperatureExceededData } from "./BaseReportGenerator/Default/utils";
 import { DefaultBaseReportGenerator } from "./BaseReportGenerator/Default";
+import { assortmentDTOsToAssortmentVOs } from "@/server/utils";
 
 type FullShelf = ShelfVO & {
 	temperatureReadings: TemperatureReadingVO[];
@@ -25,7 +26,8 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 	}
 
 	private async getData() {
-		const assortmentContext = await this.getAllAssortment.execute();
+		const allAssortments = await this.getAllAssortment.execute();
+		const assortmentContext = assortmentDTOsToAssortmentVOs(allAssortments);
 		const shelves = await this.getShelves.execute({ assortmentContext });
 		const fullShelves: FullShelf[] = [];
 

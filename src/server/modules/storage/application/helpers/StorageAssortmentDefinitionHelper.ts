@@ -15,8 +15,7 @@ import type { GetAssortmentDefinition } from "@/server/modules/assortment/applic
 import type { CreateAssortmentDefinition } from "@/server/modules/assortment/application/use-cases/CreateAssortmentDefinition";
 import type { GetAllAssortmentDefinitions } from "@/server/modules/assortment/application/use-cases/GetAllAssortmentDefinitions";
 import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
-import type { AssortmentDTO } from "../dto/shared/AssortmentDTO";
-import type { ImportAndReplaceAssortmentDefinitionsDTO } from "../dto/ImportAndReplaceAssortmentDTO";
+import type { ImportAndReplaceAssortmentDefinitionsDTO } from "../dto/ImportAndReplaceAssortmentDefinitionsDTO";
 import type { AssortmentDefinitionDTO } from "../dto/shared/AssortmentDefinitionDTO";
 import type { DeleteAssortmentDefinitionDTO } from "../dto/DeleteAssortmentDefinitionDTO";
 import type { CreateAssortmentDefinitionDTO } from "../dto/CreateAssortmentDefinitionDTO";
@@ -27,7 +26,9 @@ type SupportedFileLocation = S3FileStorageBucket.ASSORTMENT_IMAGES | S3FileStora
 export interface StorageAssortmentDefinitionHelper {
 	deleteAssortmentDefinitionByDTO(dto: DeleteAssortmentDefinitionDTO): Promise<void>;
 	createAssortmentDefinitionByDTO(dto: CreateAssortmentDefinitionDTO): Promise<AssortmentDefinitionDTO>;
-	importAndReplaceAssortmentDefinitions(dto: ImportAndReplaceAssortmentDefinitionsDTO): Promise<AssortmentDTO[]>;
+	importAndReplaceAssortmentDefinitions(
+		dto: ImportAndReplaceAssortmentDefinitionsDTO
+	): Promise<AssortmentDefinitionDTO[]>;
 }
 
 export class DefaultStorageAssortmentDefinitionHelper implements StorageAssortmentDefinitionHelper {
@@ -94,9 +95,14 @@ export class DefaultStorageAssortmentDefinitionHelper implements StorageAssortme
 	}
 
 	private async createAssortmentDefinitionByDTOs(dtos: CreateAssortmentDefinitionDTO[]) {
+		const definitions = [];
+
 		for (const dto of dtos) {
-			await this.createAssortmentDefinitionByDTO(dto);
+			const definition = await this.createAssortmentDefinitionByDTO(dto);
+			definitions.push(definition);
 		}
+
+		return definitions;
 	}
 
 	async deleteAssortmentDefinitionByDTO(dto: DeleteAssortmentDefinitionDTO) {
@@ -150,8 +156,7 @@ export class DefaultStorageAssortmentDefinitionHelper implements StorageAssortme
 
 		try {
 			await this.deleteAssortmentDefinitionByDTOs(currentDefinitions);
-			await this.createAssortmentDefinitionByDTOs(dto.definitions);
-			return await this.getAllAssortment.execute();
+			return await this.createAssortmentDefinitionByDTOs(dto.definitions);
 		} catch (error) {
 			// Attempt to rollback the changes if an error occurred.
 			const newDefinitions = await this.getAllAssortmentDefinitions.execute();

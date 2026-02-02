@@ -3,7 +3,7 @@ import type { GetAllAssortment } from "@/server/modules/assortment/application/u
 import type { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import type { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
 import type { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
-import { UUID } from "@/server/utils";
+import { UUID, assortmentDTOsToAssortmentVOs, assortmentDTOToAssortmentVO } from "@/server/utils";
 import type { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
 import type { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
 import { AssortmentNoCellError } from "../errors/AssortmentNoCellError";
@@ -12,7 +12,6 @@ import { CellAlreadyTakenError } from "../errors/CellAlreadyTakenError";
 import type { TakeDownAssortmentDTO } from "../dto/TakeDownAssortmentDTO";
 import type { PutUpAssortmentDTO } from "../dto/PutUpAssortmentDTO";
 import type { PutUpAssortmentResponseDTO } from "../dto/PutUpAssortmentResponseDTO";
-import { assortmentDTOsToAssortmentsVOs, assortmentDTOToAssortmentVO } from "../utils/AssortmentDTOToAssortmentVO";
 
 export interface StorageAssortmentHelper {
 	putUpAssortment(dto: PutUpAssortmentDTO): Promise<PutUpAssortmentResponseDTO>;
@@ -35,7 +34,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		let assortmentContext;
 
 		assortments = await this.getAllAssortment.execute();
-		assortmentContext = assortmentDTOsToAssortmentsVOs(assortments);
+		assortmentContext = assortmentDTOsToAssortmentVOs(assortments);
 		const shelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext });
 
 		const cellId = UUID.fromString(dto.cellId);
@@ -50,7 +49,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		});
 
 		assortments = await this.getAllAssortment.execute();
-		assortmentContext = assortmentDTOsToAssortmentsVOs(assortments);
+		assortmentContext = assortmentDTOsToAssortmentVOs(assortments);
 
 		try {
 			await this.fillCell.execute(
@@ -71,7 +70,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		}
 
 		assortments = await this.getAllAssortment.execute();
-		assortmentContext = assortmentDTOsToAssortmentsVOs(assortments);
+		assortmentContext = assortmentDTOsToAssortmentVOs(assortments);
 		const newShelf = await this.getShelf.execute({ id: dto.shelfId, assortmentContext });
 		return {
 			shelf: newShelf,
@@ -85,7 +84,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		const assortments = await this.getAllAssortment.execute();
 		const shelf = await this.getShelf.execute({
 			id: assortment.shelfId,
-			assortmentContext: assortmentDTOsToAssortmentsVOs(assortments),
+			assortmentContext: assortmentDTOsToAssortmentVOs(assortments),
 		});
 
 		const cellToUpdate = shelf.cells.flat().find((cell) => cell.id === assortment.cellId);
@@ -102,7 +101,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 				cellId: cellToUpdate.id,
 				shelf: {
 					id: cellToUpdate.shelfId,
-					assortmentContext: assortmentDTOsToAssortmentsVOs(newAssortments),
+					assortmentContext: assortmentDTOsToAssortmentVOs(newAssortments),
 				},
 			},
 			{ skipAuthentication: true }

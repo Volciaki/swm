@@ -54,14 +54,12 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ shelfId, cellId, assor
 				router.push(`/centrum-zarzadzania/wizualizacja/regaly/${getAssortment.data.shelfId}/wyswietl`);
 		},
 	});
-	const updateAssortment = apiClient.storage.updateAssortment.useMutation(sharedMutationOptions);
+	// const updateAssortment = apiClient.storage.updateAssortment.useMutation(sharedMutationOptions);
 	const createAssortment = apiClient.storage.createAssortment.useMutation({
 		...sharedMutationOptions,
 		onSuccess: (data) => {
 			sharedMutationOptions.onSuccess();
-			router.push(
-				`/centrum-zarzadzania/wizualizacja/regaly/${data.shelf.id}/asortymenty/${data.newAssortment.id}/edytuj`
-			);
+			router.push("/centrum-zarzadzania/wizualizacja/asortymenty");
 		},
 	});
 
@@ -70,15 +68,15 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ shelfId, cellId, assor
 
 		const data = getAssortment.data;
 		const v: AssortmentFormData = {
-			name: data.name,
-			comment: data.comment,
-			expiresAfterDays: data.expiresAfterSeconds / 60 / 60 / 24,
-			heightMillimeters: data.size.heightMillimeters,
-			widthMillimeters: data.size.widthMillimeters,
-			lengthMillimeters: data.size.lengthMillimeters,
-			minTemperatureCelsius: data.temperatureRange.minimalCelsius,
-			maxTemperatureCelsius: data.temperatureRange.maximalCelsius,
-			weightKg: data.weightKg,
+			name: data.definition.name,
+			comment: data.definition.comment,
+			expiresAfterDays: data.definition.expiresAfterSeconds / 60 / 60 / 24,
+			heightMillimeters: data.definition.size.heightMillimeters,
+			widthMillimeters: data.definition.size.widthMillimeters,
+			lengthMillimeters: data.definition.size.lengthMillimeters,
+			minTemperatureCelsius: data.definition.temperatureRange.minimalCelsius,
+			maxTemperatureCelsius: data.definition.temperatureRange.maximalCelsius,
+			weightKg: data.definition.weightKg,
 			// TODO: ...
 			imageBase64: undefined,
 			isHazardous: false,
@@ -115,20 +113,21 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ shelfId, cellId, assor
 				isHazardous: false,
 			};
 
-			if (assortmentId) {
-				updateAssortment.mutate({
-					id: assortmentId,
-					newData,
-				});
-			} else {
-				createAssortment.mutate({
-					shelfId,
-					cellId,
-					assortment: newData,
-				});
-			}
+			// if (assortmentId) {
+			// 	updateAssortment.mutate({
+			// 		id: assortmentId,
+			// 		newData,
+			// 	});
+			// } else {
+			// 	createAssortment.mutate({
+			// 		shelfId,
+			// 		cellId,
+			// 		assortment: newData,
+			// 	});
+			// }
+			createAssortment.mutate(newData);
 		},
-		[setIsLoading, shelfId, cellId, assortmentId, updateAssortment, createAssortment]
+		[setIsLoading, shelfId, cellId, assortmentId /*, updateAssortment*/, createAssortment]
 	);
 
 	const deleteHandler = useCallback(async () => {

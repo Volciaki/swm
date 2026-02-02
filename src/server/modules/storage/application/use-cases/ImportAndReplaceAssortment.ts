@@ -1,7 +1,7 @@
 import type { UserDTO } from "@/server/utils";
 import { UnauthorizedError } from "@/server/utils";
 import type { StorageAssortmentDefinitionHelper } from "../helpers/StorageAssortmentDefinitionHelper";
-import type { ImportAndReplaceAssortmentDefinitionsDTO } from "../dto/ImportAndReplaceAssortmentDTO";
+import type { ImportAndReplaceAssortmentDefinitionsDTO } from "../dto/ImportAndReplaceAssortmentDefinitionsDTO";
 
 export class ImportAndReplaceAssortmentDefinitions {
 	constructor(private readonly storageAssortmentDefinitionsHelper: StorageAssortmentDefinitionHelper) {}

@@ -15,12 +15,20 @@ export const getDefaultUpcomingExpiryMonitoring = (ctx: GetServicesContext) => {
 	const fileHelper = presets.fileHelper.default;
 	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
 	const assortmentHelper = presets.assortmentHelper.default;
+	const assortmentDefinitionHelper = presets.assortmentDefinitionHelper.default;
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
+	);
 
 	const createNotification = new CreateNotification(uuidManager, notificationRepository);
-	const getCloseToExpirationAssortment = new GetCloseToExpirationAssortment(assortmentRepository, assortmentFileHelper);
+	const getCloseToExpirationAssortment = new GetCloseToExpirationAssortment(
+		assortmentRepository,
+		assortmentDefinitionUtilities
+	);
 	const setAssortmentExpiredNotification = new SetAssortmentCloseToExpirationNotification(
 		assortmentHelper,
-		assortmentFileHelper,
+		assortmentDefinitionUtilities,
 		assortmentRepository
 	);
 

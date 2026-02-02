@@ -16,8 +16,13 @@ export const generateTemperatureExceededDetails = procedure.mutation<ReportDTO>(
 	const shelfRepository = services.repositories.shelf.db;
 	const shelfHelper = presets.shelfHelper.default;
 	const temperatureReadingRepository = services.repositories.temperatureReading.db;
+	const assortmentDefinitionHelper = presets.assortmentDefinitionHelper.default;
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
+	);
 
-	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
+	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 	const getAllShelves = new GetAllShelves(shelfRepository);
 	const getShelfTemperatureReadings = new GetShelfTemperatureReadings(shelfHelper, temperatureReadingRepository);
 

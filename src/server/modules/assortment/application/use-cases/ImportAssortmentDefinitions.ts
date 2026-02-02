@@ -1,7 +1,7 @@
 import type { UserDTO } from "@/server/utils";
 import { UnauthorizedError } from "@/server/utils";
 import type { Base64UploadFunction, QRCodeGetter } from "../helpers/AssortmentHelper";
-import type { ImportAssortmentDefinitionsDTO } from "../dto/ImportAssortmentDTO";
+import type { ImportAssortmentDefinitionsDTO } from "../dto/ImportAssortmentDefinitionsDTO";
 import type { AssortmentDefinitionHelper } from "../helpers/AssortmentDefinitionHelper";
 import { AssortmentDefinitionMapper } from "../../infrastructure/mappers/AssortmentDefinitionMapper";
 

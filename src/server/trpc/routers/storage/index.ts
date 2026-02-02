@@ -8,10 +8,8 @@ import { deleteShelf } from "./deleteShelf";
 import { createAssortment } from "./createAssortment";
 import { importAssortment } from "./importAssortment";
 import { getAssortment } from "./getAssortment";
-import { updateAssortment } from "./updateAssortment";
+// import { updateAssortment } from "./updateAssortment";
 import { deleteAssortment } from "./deleteAssortment";
-import { createAssortmentCopy } from "./createAssortmentCopy";
-import { deleteAssortmentCopy } from "./deleteAssortmentCopy";
 import { getAllShelves } from "./getAllShelves";
 
 export const storageRouter = createRouter({
@@ -21,11 +19,9 @@ export const storageRouter = createRouter({
 	updateShelf,
 	deleteShelf,
 	createAssortment,
-	createAssortmentCopy,
 	importAssortment,
 	getAssortment,
-	updateAssortment,
+	// updateAssortment,
 	deleteAssortment,
-	deleteAssortmentCopy,
 	getAllShelves,
 });

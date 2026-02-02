@@ -25,7 +25,7 @@ export class UpcomingExpiryMonitoringTask implements SchedulerTask {
 			const notification = await this.createNotification.execute({
 				type: NotificationType.REMINDER,
 				title: "Przypomnienie o zbliżającym się terminie ważności asortymentu",
-				message: `Asortyment "${assortment.name}" (przyjęty ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}) zbliża się do końca swojego terminu ważności. Jeśli nie zostanie on zdjęty ze stanu w najbliższym czasie, może stać się nie niezdatny do użytku; w takim przypadku system wyślę kolejne powiadomienie.`,
+				message: `Asortyment "${assortment.definition.name}" (przyjęty ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}) zbliża się do końca swojego terminu ważności. Jeśli nie zostanie on zdjęty ze stanu w najbliższym czasie, może stać się nie niezdatny do użytku; w takim przypadku system wyślę kolejne powiadomienie.`,
 			});
 			await this.setAssortmentCloseToExpirationNotification.execute({
 				id: assortment.id,

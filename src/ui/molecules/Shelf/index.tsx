@@ -89,11 +89,11 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellSize = 12.5 }) => {
 								{cell.assortment ? (
 									<>
 										<Paragraph fontSize={1.5} style={{ maxWidth: "100%" }} ellipsisOverflow>
-											{cell.assortment.name}
+											{cell.assortment.definition.name}
 										</Paragraph>
 
 										<Paragraph fontSize={1.25} variant={"secondary"} style={{ maxWidth: "100%" }} ellipsisOverflow>
-											{cell.assortment.comment}
+											{cell.assortment.definition.comment}
 										</Paragraph>
 									</>
 								) : (

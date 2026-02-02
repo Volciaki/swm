@@ -1,5 +1,6 @@
 import type { SchedulerTask } from "@/server/scheduler/task";
 import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { assortmentDTOsToAssortmentVOs } from "@/server/utils";
 import type { StoreTemperatureReading } from "../../application/use-cases/StoreTemperatureReading";
 import type { GetAllShelves } from "../../application/use-cases/GetAllShelves";
 import type { ShelfThermometer } from "../../domain/services/ShelfThermometer";
@@ -21,7 +22,8 @@ export class UpdateShelfTemperaturesTask implements SchedulerTask {
 
 	async execute() {
 		const shelfDTOs = await this.getAllShelves.execute();
-		const assortmentContext = await this.getAllAssortment.execute();
+		const assortments = await this.getAllAssortment.execute();
+		const assortmentContext = assortmentDTOsToAssortmentVOs(assortments);
 
 		for (const shelfDTO of shelfDTOs) {
 			const shelf = ShelfMapper.fromShelfDTOToShelf(shelfDTO);
