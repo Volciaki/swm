@@ -12,7 +12,6 @@ import { CellAlreadyTakenError } from "../errors/CellAlreadyTakenError";
 import type { TakeDownAssortmentDTO } from "../dto/TakeDownAssortmentDTO";
 import type { PutUpAssortmentDTO } from "../dto/PutUpAssortmentDTO";
 import type { PutUpAssortmentResponseDTO } from "../dto/PutUpAssortmentResponseDTO";
-import { logger } from "@/server/logger";
 
 export interface StorageAssortmentHelper {
 	putUpAssortment(dto: PutUpAssortmentDTO): Promise<PutUpAssortmentResponseDTO>;
@@ -51,8 +50,6 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 
 		assortments = await this.getAllAssortment.execute();
 		assortmentContext = assortmentDTOsToAssortmentVOs(assortments);
-
-		logger.debug("hello???");
 
 		try {
 			await this.fillCell.execute(
