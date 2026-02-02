@@ -8,13 +8,23 @@ import { AssortmentDefinitionMapper } from "../../infrastructure/mappers/Assortm
 export type CreateAssortmentDefinitionOptions = {
 	getQRCode: QRCodeGetter;
 	addAssortmentImageByBase64: Base64UploadFunction;
+	skipAuthentication?: boolean;
 };
 
 export class CreateAssortmentDefinition {
 	constructor(private readonly assortmentDefinitionHelper: AssortmentDefinitionHelper) {}
 
-	async execute(dto: CreateAssortmentDefinitionDTO, options: CreateAssortmentDefinitionOptions, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(
+		dto: CreateAssortmentDefinitionDTO,
+		optionsUnsafe: CreateAssortmentDefinitionOptions,
+		currentUser?: UserDTO
+	) {
+		const options: CreateAssortmentDefinitionOptions = {
+			skipAuthentication: false,
+			...optionsUnsafe,
+		};
+
+		if (!currentUser?.isAdmin && !options.skipAuthentication) throw new UnauthorizedError();
 
 		const { getQRCode, addAssortmentImageByBase64 } = options;
 		const assortmentDefinition = await this.assortmentDefinitionHelper.createByDTO(

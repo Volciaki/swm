@@ -131,6 +131,7 @@ export class DefaultStorageAssortmentDefinitionHelper implements StorageAssortme
 			getQRCode: async (id) => await this.getQRCodeBase64ById(id),
 			addAssortmentImageByBase64: async (path, base64) =>
 				await this.uploadImageByBase64(S3FileStorageBucket.ASSORTMENT_IMAGES, path, base64),
+			skipAuthentication: true,
 		});
 	}
 

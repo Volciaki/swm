@@ -13,5 +13,5 @@ export const createAssortment = procedure
 		const storageAssortmentDefinitionHelper = presets.storageAssortmentDefinitionHelper.default;
 
 		const action = new CreateFullAssortmentDefinition(storageAssortmentDefinitionHelper);
-		return await action.execute(input);
+		return await action.execute(input, ctx.user ?? undefined);
 	});
