@@ -14,6 +14,7 @@ import { getAllShelves } from "./getAllShelves";
 import { putUpAssortment } from "./putUpAssortment";
 import { takeDownAssortment } from "./takeDownAssortment";
 import { takeDownOldestAssortmentByDefinition } from "./takeDownOldestAssortmentByDefinition";
+import { getNextAssortmentToBeTakenDownByDefinition } from "./getNextAssortmentToBeTakenDownByDefinition";
 
 export const storageRouter = createRouter({
 	createShelf,
@@ -30,4 +31,5 @@ export const storageRouter = createRouter({
 	putUpAssortment,
 	takeDownAssortment,
 	takeDownOldestAssortmentByDefinition,
+	getNextAssortmentToBeTakenDownByDefinition,
 });

@@ -33,8 +33,7 @@ export class UpdateFullShelf {
 					currentTemperatureCelsius: shelf.currentTemperatureCelsius,
 				},
 			},
-			undefined,
-			currentUser
+			{ skipAuthentication: true }
 		);
 	}
 }
