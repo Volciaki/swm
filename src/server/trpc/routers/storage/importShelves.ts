@@ -17,6 +17,7 @@ export const importShelves = procedure
 
 		const shelfRepository = services.repositories.shelf.db;
 		const assortmentRepository = services.repositories.assortment.db;
+		const temperatureReadingRepository = services.repositories.temperatureReading.db;
 
 		const shelfHelper = presets.shelfHelper.default;
 		const fileHelper = presets.fileHelper.default;
@@ -29,7 +30,7 @@ export const importShelves = procedure
 
 		const getAllShelvesAction = new GetAllShelves(shelfRepository);
 		const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
-		const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository);
+		const deleteShelfAction = new DeleteShelf(shelfHelper, shelfRepository, temperatureReadingRepository);
 		const importShelvesAction = new ImportShelves(shelfHelper);
 		const createShelfAction = new CreateShelf(shelfHelper);
 

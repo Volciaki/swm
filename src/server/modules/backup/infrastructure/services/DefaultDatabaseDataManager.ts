@@ -9,6 +9,7 @@ import { NoBackupUtilitiesError } from "../errors/NoBackupUtilitiesError";
 // Make sure that this stays in sync with whatever `FileStorageDataManager` is dumping.
 const TABLES_TO_INCLUDE = [
 	"assortments",
+	"assortment_definitions",
 	"cells",
 	"file_references",
 	"notifications",
