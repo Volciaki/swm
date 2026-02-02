@@ -6,6 +6,6 @@ import type { GetServicesContext } from "../../context";
 export const getDefaultAssortmentDefinitionUtilities = (ctx: GetServicesContext) => {
 	return {
 		get: (assortmentDefinitionHelper: AssortmentDefinitionHelper, assortmentFileHelper: AssortmentFileHelper) =>
-			new DefaultAssortmentDefinitionUtilities(assortmentDefinitionHelper, assortmentFileHelper)
+			new DefaultAssortmentDefinitionUtilities(assortmentDefinitionHelper, assortmentFileHelper),
 	};
 };

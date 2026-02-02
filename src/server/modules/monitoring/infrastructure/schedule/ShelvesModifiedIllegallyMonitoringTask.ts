@@ -2,9 +2,9 @@ import type { GetAllShelves } from "@/server/modules/warehouse/application/use-c
 import type { SchedulerTask } from "@/server/scheduler/task";
 import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import type { RefreshShelfLegalWeight } from "@/server/modules/warehouse/application/use-cases/RefreshShelfLegalWeight";
+import { assortmentDTOsToAssortmentVOs } from "@/server/utils";
 import type { CreateNotification } from "../../application/use-cases/CreateNotification";
 import { NotificationType } from "../../domain/entities/Notification";
-import { assortmentDTOsToAssortmentVOs } from "@/server/utils";
 
 // Sends a warning notification if any of the shelves have been tampered with.
 export class ShelvesModifiedIllegallyMonitoringTask implements SchedulerTask {

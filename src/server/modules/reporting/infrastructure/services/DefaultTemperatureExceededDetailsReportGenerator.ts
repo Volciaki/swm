@@ -1,12 +1,12 @@
 import type { GetShelfTemperatureReadings } from "@/server/modules/warehouse/application/use-cases/GetShelfTemperatureReading";
 import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import type { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
+import { assortmentDTOsToAssortmentVOs } from "@/server/utils";
 import type { TemperatureReadingVO } from "../../domain/vo/TemperatureReadingVO";
 import type { ShelfVO } from "../../domain/vo/ShelfVO";
 import { ReportType } from "../../domain/entities/Report";
 import type { ReportTemperatureExceededData } from "./BaseReportGenerator/Default/utils";
 import { DefaultBaseReportGenerator } from "./BaseReportGenerator/Default";
-import { assortmentDTOsToAssortmentVOs } from "@/server/utils";
 
 type FullShelf = ShelfVO & {
 	temperatureReadings: TemperatureReadingVO[];
