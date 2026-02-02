@@ -17,6 +17,7 @@ import { getFileStorageDataManagerServices } from "./FileStorageDataManager";
 import { getDatabaseDataManagerServices } from "./DatabaseDataManager";
 import { getEncryptionManagerServices } from "./EncryptionManager";
 import { getAssortmentDefinitionUtilitiesServices } from "./AssortmentDefinitionUtilities";
+import { getFIFOQueueManagerServices } from "./FIFOQueueManager";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -37,5 +38,6 @@ export const getUtils = (ctx: GetServicesContext) => {
 		databaseDataManager: getDatabaseDataManagerServices(ctx),
 		encryptionManager: getEncryptionManagerServices(ctx),
 		assortmentDefinition: getAssortmentDefinitionUtilitiesServices(ctx),
+		fifoQueueManager: getFIFOQueueManagerServices(ctx),
 	};
 };

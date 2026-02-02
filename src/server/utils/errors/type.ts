@@ -48,6 +48,7 @@ export enum ErrorName {
 	INVALID_TEMPERATURE = "InvalidTemperatureValue",
 	NEGATIVE_WEIGHT = "NegativeWeight",
 	ASSORTMENT_DEFINITION_NOT_FOUND = "AssortmentDefinitionNotFound",
+	NO_ASSORTMENT_TO_TAKE_DOWN = "NoAssortmentToTakeDown",
 }
 
 export type FullErrorName = `${ErrorName}Error`;
@@ -121,5 +122,6 @@ export type ErrorMetadataValue = {
         Error extends ErrorName.INVALID_TEMPERATURE ? { celsius: string } :
         Error extends ErrorName.NEGATIVE_WEIGHT ? { grams: number } :
         Error extends ErrorName.ASSORTMENT_DEFINITION_NOT_FOUND ? { id: string } :
+        Error extends ErrorName.NO_ASSORTMENT_TO_TAKE_DOWN ? { definitionId: string } :
         never;
 };
