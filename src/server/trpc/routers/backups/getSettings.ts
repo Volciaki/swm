@@ -3,7 +3,7 @@ import { GetBackupSettings } from "@/server/modules/backup/application/use-cases
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
-export const getBackupSettings = procedure.query<BackupSettingsDTO>(async ({ ctx }) => {
+export const getSettings = procedure.query<BackupSettingsDTO>(async ({ ctx }) => {
 	const services = getServices(ctx);
 	const presets = getPresets(services);
 

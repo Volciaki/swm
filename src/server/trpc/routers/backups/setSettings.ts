@@ -3,7 +3,7 @@ import { SetBackupSettings } from "@/server/modules/backup/application/use-cases
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
-export const setBackupSettings = procedure.input(setBackupSettingsDTOSchema).mutation(async ({ input, ctx }) => {
+export const setSettings = procedure.input(setBackupSettingsDTOSchema).mutation(async ({ input, ctx }) => {
 	const services = getServices(ctx);
 	const presets = getPresets(services);
 

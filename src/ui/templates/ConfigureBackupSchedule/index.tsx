@@ -47,8 +47,8 @@ const findPresetByAmountOfSeconds = (seconds?: number): BackupScheduleConfigurat
 };
 
 export const ConfigureBackupSchedule: FC = () => {
-	const getBackupSettings = apiClient.backups.getBackupSettings.useQuery();
-	const setBackupSettings = apiClient.backups.setBackupSettings.useMutation({
+	const getBackupSettings = apiClient.backups.getSettings.useQuery();
+	const setBackupSettings = apiClient.backups.setSettings.useMutation({
 		onError: (e) => defaultErrorHandler(e, (errorMessage) => setModifyBackupSettingsError(errorMessage)),
 	});
 

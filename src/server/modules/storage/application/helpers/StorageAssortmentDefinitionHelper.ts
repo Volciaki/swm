@@ -106,7 +106,7 @@ export class DefaultStorageAssortmentDefinitionHelper implements StorageAssortme
 	}
 
 	async deleteAssortmentDefinitionByDTO(dto: DeleteAssortmentDefinitionDTO) {
-		const definition = await this.getAssortmentDefinition.execute({ id: dto.id });
+		const definition = await this.getAssortmentDefinition.execute({ id: dto.id }, { skipAuthentication: true });
 
 		const assortments = await this.getAllAssortment.execute();
 		const thisDefinitionAssortments = assortments.filter((a) => a.definition.id === definition.id);
