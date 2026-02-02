@@ -14,6 +14,7 @@ export type UpdateAssortmentDefinitionOptions = {
 	deleteProductImageByPath: DeleteProductImageByPathFunction;
 	addAssortmentImageByBase64: Base64UploadFunction;
 	fetchAssortmentImage: FileFetcher;
+	skipAuthentication?: boolean;
 };
 
 const handleImageUpdate = async (
@@ -38,8 +39,17 @@ export class UpdateAssortmentDefinition {
 		private readonly assortmentFileHelper: AssortmentFileHelper
 	) {}
 
-	async execute(dto: UpdateAssortmentDefinitionDTO, options: UpdateAssortmentDefinitionOptions, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(
+		dto: UpdateAssortmentDefinitionDTO,
+		optionsUnsafe: UpdateAssortmentDefinitionOptions,
+		currentUser?: UserDTO
+	) {
+		const options: UpdateAssortmentDefinitionOptions = {
+			skipAuthentication: false,
+			...optionsUnsafe,
+		};
+
+		if (!currentUser?.isAdmin && !options.skipAuthentication) throw new UnauthorizedError();
 
 		const { fetchAssortmentImage } = options;
 
