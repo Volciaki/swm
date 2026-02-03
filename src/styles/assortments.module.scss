@@ -1,0 +1,5 @@
+@use "." as *;
+
+.qr-code-scan-container {
+    max-width: $content-width;
+}

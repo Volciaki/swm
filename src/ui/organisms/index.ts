@@ -12,3 +12,4 @@ export * from "./StandardFileUpload";
 export * from "./ShelfForm";
 export * from "./FormFields";
 export * from "./AssortmentForm";
+export * from "./VisualisationAction";

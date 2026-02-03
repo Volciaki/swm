@@ -2,7 +2,7 @@
 
 import Papa from "papaparse";
 import { useCallback, useState, type FC } from "react";
-import { DialogButton, StandardFileUpload } from "@/ui/organisms";
+import { DialogButton, StandardFileUpload, VisualisationAction } from "@/ui/organisms";
 import { List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link, FormError } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
@@ -90,9 +90,7 @@ const Visualisation: FC = () => {
 
 				<Flex direction={"column"} className={commonStyles["form-container"]} fullWidth>
 					<Flex direction={"row"} fullWidth>
-						<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
-							<Paragraph fontSize={1.75}>{"Importuj regały z pliku CSV"}</Paragraph>
-
+						<VisualisationAction title={"Importuj regały z pliku CSV"}>
 							<DialogButton
 								buttonContent={
 									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
@@ -124,13 +122,11 @@ const Visualisation: FC = () => {
 
 								{importShelves.isPending && <Loading />}
 							</DialogButton>
-						</Flex>
+						</VisualisationAction>
 
 						<Separator direction={"vertical"} />
 
-						<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
-							<Paragraph fontSize={1.75}>{"Ręcznie dodaj nowy regał"}</Paragraph>
-
+						<VisualisationAction title={"Ręcznie dodaj nowy regał"}>
 							<Link href={"/centrum-zarzadzania/wizualizacja/regaly/nowy"}>
 								<Button>
 									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
@@ -138,7 +134,19 @@ const Visualisation: FC = () => {
 									</Paragraph>
 								</Button>
 							</Link>
-						</Flex>
+						</VisualisationAction>
+
+						<Separator direction={"vertical"} />
+
+						<VisualisationAction title={"Zobacz zdefiniowane asortymenty"}>
+							<Link href={"/centrum-zarzadzania/wizualizacja/asortymenty"}>
+								<Button>
+									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+										{"Asortymenty"}
+									</Paragraph>
+								</Button>
+							</Link>
+						</VisualisationAction>
 					</Flex>
 
 					<Separator />
@@ -147,6 +155,12 @@ const Visualisation: FC = () => {
 						<Paragraph>{"Lista regałów"}</Paragraph>
 
 						{shelves.isLoading && <Loading />}
+
+						{shelves.data && shelves.data.length === 0 && (
+							<Paragraph fontSize={1.75} variant={"secondary"}>
+								{"brak regałów!"}
+							</Paragraph>
+						)}
 
 						<List>
 							{shelves.data &&
