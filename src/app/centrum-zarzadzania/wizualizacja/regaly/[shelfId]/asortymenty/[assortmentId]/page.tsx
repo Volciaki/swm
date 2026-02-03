@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, type FC } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, FullHeight, Loading, Paragraph } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
@@ -9,6 +9,7 @@ import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 import { AssortmentCard, DialogButton } from "@/ui/organisms";
 
 const Assortment: FC = () => {
+	const router = useRouter();
 	const params = useParams();
 
 	const assortment = apiClient.storage.getAssortmentInstance.useQuery(
@@ -18,10 +19,11 @@ const Assortment: FC = () => {
 	const takeDownAssortment = apiClient.storage.takeDownAssortment.useMutation();
 
 	const takeDownAssortmentHandler = useCallback(() => {
-		if (!params.assortmentId) return;
+		if (!assortment.data) return;
 
-		takeDownAssortment.mutate({ id: params.assortmentId as string });
-	}, [takeDownAssortment, params.assortmentId]);
+		takeDownAssortment.mutate({ id: assortment.data.id });
+		router.push(`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/wyswietl`);
+	}, [assortment.data, takeDownAssortment, router]);
 
 	return (
 		<FullHeight style={{ width: "100%" }}>

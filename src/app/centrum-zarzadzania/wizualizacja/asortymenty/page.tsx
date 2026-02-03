@@ -81,7 +81,7 @@ const AssortmentsVisualisation: FC = () => {
 	}, [file, importAssortment]);
 
 	return (
-		<FullHeight>
+		<FullHeight style={{ maxWidth: "100%" }}>
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader
 					title={"Asortymenty"}
@@ -174,14 +174,20 @@ const AssortmentsVisualisation: FC = () => {
 							{allAssortments.data &&
 								allAssortments.data.map((assortment, index) => (
 									<ListItem clickable={false} key={`assortment-${index}`}>
-										<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
+										<Flex
+											direction={"row"}
+											align={"center"}
+											justify={"space-between"}
+											style={{ gap: "1rem" }}
+											fullWidth
+										>
 											<Flex
 												direction={"row"}
 												align={"center"}
 												justify={"center"}
-												style={{ width: "fit-content", height: "100%", gap: "1rem" }}
+												style={{ height: "100%", gap: "1rem", minWidth: 0 }}
 											>
-												<Paragraph fontSize={1.5} ellipsisOverflow>
+												<Paragraph fontSize={1.5} style={{ minWidth: "10%" }} ellipsisOverflow>
 													{assortment.name}
 												</Paragraph>
 

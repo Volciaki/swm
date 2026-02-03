@@ -36,7 +36,7 @@ export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 				<Paragraph fontSize={1.5}>{`Waga: ${assortment.definition.weightKg}kg`}</Paragraph>
 
 				<Paragraph fontSize={1.5}>
-					{`Termin ważności: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp + assortment.definition.expiresAfterSeconds * 1000))}kg`}
+					{`Termin ważności: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp + assortment.definition.expiresAfterSeconds * 1000))}`}
 				</Paragraph>
 
 				<Paragraph fontSize={1.5}>
@@ -45,13 +45,13 @@ export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 					<br />
 
 					<span style={{ marginLeft: "1rem" }}>
-						{`Minimalna: ${assortment.definition.temperatureRange.minimalCelsius}mm`}
+						{`Minimalna: ${assortment.definition.temperatureRange.minimalCelsius}°C`}
 					</span>
 
 					<br />
 
 					<span style={{ marginLeft: "1rem" }}>
-						{`Maksymalna: ${assortment.definition.temperatureRange.maximalCelsius}mm`}
+						{`Maksymalna: ${assortment.definition.temperatureRange.maximalCelsius}°C`}
 					</span>
 				</Paragraph>
 
