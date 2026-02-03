@@ -25,7 +25,7 @@ export class ExpirationMonitoringTask implements SchedulerTask {
 			const notification = await this.createNotification.execute({
 				type: NotificationType.ALERT,
 				title: "Asortyment przekroczył termin ważności",
-				message: `Asortyment "${assortment.name}" (przyjęty ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}) przekroczył swój termin ważności. Najprawdopodobniej nie będzie już zdatny do użytku.`,
+				message: `Asortyment "${assortment.definition.name}" (przyjęty ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}) przekroczył swój termin ważności. Najprawdopodobniej nie będzie już zdatny do użytku.`,
 			});
 			await this.setAssortmentExpiredNotification.execute({
 				id: assortment.id,

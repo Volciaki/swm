@@ -5,14 +5,23 @@ import type { FillCellDTO } from "../dto/FillCellDTO";
 import type { ShelfHelper } from "../helpers/ShelfHelper";
 import { ShelfMapper } from "../../infrastructure/mappers/ShelfMapper";
 
+export type FillCellOptions = {
+	skipAuthentication?: boolean;
+};
+
 export class FillCell {
 	constructor(
 		private readonly shelfRepository: ShelfRepository,
 		private readonly shelfHelper: ShelfHelper
 	) {}
 
-	async execute(dto: FillCellDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+	async execute(dto: FillCellDTO, optionsUnsafe: FillCellOptions, currentUser?: UserDTO) {
+		const options: FillCellOptions = {
+			skipAuthentication: false,
+			...optionsUnsafe,
+		};
+
+		if (!currentUser?.isAdmin && !options.skipAuthentication) throw new UnauthorizedError();
 
 		const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.shelf.id, dto.shelf.assortmentContext);
 

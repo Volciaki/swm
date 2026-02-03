@@ -1,30 +1,20 @@
-import type { UserDTO } from "@/server/utils";
-import { UnauthorizedError } from "@/server/utils";
+import type { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
 import type { DeleteAssortmentDTO } from "../dto/DeleteAssortmentDTO";
-import type {
-	AssortmentHelper,
-	DeleteProductImageByPathFunction,
-	DeleteQRCodeByPath,
-} from "../helpers/AssortmentHelper";
-import type { AssortmentFileHelper } from "../services/AssortmentFileHelper";
-
-export type DeleteAssortmentOptions = {
-	deleteQRCodeByPath: DeleteQRCodeByPath;
-	deleteProductImageByPath: DeleteProductImageByPathFunction;
-};
+import type { AssortmentHelper } from "../helpers/AssortmentHelper";
+import type { AssortmentDefinitionUtilities } from "../services/AssortmentDefinitionUtilities";
 
 export class DeleteAssortment {
 	constructor(
 		private readonly assortmentHelper: AssortmentHelper,
-		private readonly assortmentFileHelper: AssortmentFileHelper
+		private readonly assortmentRepository: AssortmentRepository,
+		private readonly assortmentDefinitionsUtilities: AssortmentDefinitionUtilities
 	) {}
 
-	async execute(dto: DeleteAssortmentDTO, options: DeleteAssortmentOptions, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
-
-		const { deleteQRCodeByPath, deleteProductImageByPath } = options;
-		const assortment = await this.assortmentHelper.getByIdStringOrThrow(dto.id, this.assortmentFileHelper.fileGetter);
-
-		await this.assortmentHelper.delete(assortment, deleteQRCodeByPath, deleteProductImageByPath);
+	async execute(dto: DeleteAssortmentDTO) {
+		const assortment = await this.assortmentHelper.getByIdStringOrThrow(
+			dto.id,
+			this.assortmentDefinitionsUtilities.definitionGetter
+		);
+		return await this.assortmentRepository.delete(assortment);
 	}
 }

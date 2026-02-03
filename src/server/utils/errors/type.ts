@@ -1,3 +1,6 @@
+// This file contains type definitions for all of our API's errors.
+// Using it the client can safely generate error messages in wanted languages.
+
 // TODO: split this into multiple files.
 export enum ErrorName {
 	USER_NOT_FOUND = "UserNotFound",
@@ -44,6 +47,8 @@ export enum ErrorName {
 	NEGATIVE_NUMBER = "NegativeNumber",
 	INVALID_TEMPERATURE = "InvalidTemperatureValue",
 	NEGATIVE_WEIGHT = "NegativeWeight",
+	ASSORTMENT_DEFINITION_NOT_FOUND = "AssortmentDefinitionNotFound",
+	NO_ASSORTMENT_TO_TAKE_DOWN = "NoAssortmentToTakeDown",
 }
 
 export type FullErrorName = `${ErrorName}Error`;
@@ -116,5 +121,7 @@ export type ErrorMetadataValue = {
         Error extends ErrorName.NEGATIVE_NUMBER ? { value: number } :
         Error extends ErrorName.INVALID_TEMPERATURE ? { celsius: string } :
         Error extends ErrorName.NEGATIVE_WEIGHT ? { grams: number } :
+        Error extends ErrorName.ASSORTMENT_DEFINITION_NOT_FOUND ? { id: string } :
+        Error extends ErrorName.NO_ASSORTMENT_TO_TAKE_DOWN ? { definitionId: string } :
         never;
 };

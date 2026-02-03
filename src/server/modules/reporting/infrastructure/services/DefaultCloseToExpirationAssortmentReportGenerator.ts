@@ -1,4 +1,5 @@
 import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
+import { assortmentDTOsToAssortmentVOs } from "@/server/utils";
 import { ReportType } from "../../domain/entities/Report";
 import { DefaultBaseReportGenerator } from "./BaseReportGenerator/Default";
 
@@ -17,10 +18,10 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 		closeToExpirationAssortment.sort((a, b) => {
 			const now = new Date();
 
-			const aExpiresAt = new Date(a.storedAtTimestamp + a.expiresAfterSeconds * 1000);
+			const aExpiresAt = new Date(a.storedAtTimestamp + a.definition.expiresAfterSeconds * 1000);
 			const aTimeLeft = aExpiresAt.getTime() - now.getTime();
 
-			const bExpiresAt = new Date(b.storedAtTimestamp + b.expiresAfterSeconds * 1000);
+			const bExpiresAt = new Date(b.storedAtTimestamp + b.definition.expiresAfterSeconds * 1000);
 			const bTimeLeft = bExpiresAt.getTime() - now.getTime();
 
 			return aTimeLeft - bTimeLeft;
@@ -58,7 +59,7 @@ export class DefaultCloseToExpirationAssortmentReportGenerator extends DefaultBa
 
 		this.document.y += this.constants.margin;
 
-		await this.utils.assortments(closeToExpirationAssortment);
+		await this.utils.assortments(assortmentDTOsToAssortmentVOs(closeToExpirationAssortment));
 
 		return this.getReturnValue();
 	}

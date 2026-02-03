@@ -1,7 +1,7 @@
 import type { Repository } from "typeorm";
 import { UUID } from "@/server/utils";
-import type { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
 import type { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
+import type { DefinitionContextByIdGetter } from "../../application/helpers/AssortmentHelper";
 import type { DBAssortment } from "../entities/DBAssortment";
 import type { Assortment } from "../../domain/entities/Assortment";
 import { AssortmentMapper } from "../mappers/AssortmentMapper";
@@ -27,25 +27,22 @@ export class DBAssortmentRepository implements AssortmentRepository {
 		await this.db.remove(dbAssortment);
 	}
 
-	async getById(id: UUID, getFileContextById: FileContextByIDGetter) {
+	async getById(id: UUID, getDefinitionContextById: DefinitionContextByIdGetter) {
 		const dbAssortment = await this.db.findOneBy({ id: id.value });
 
 		if (dbAssortment === null) return null;
 
 		return AssortmentMapper.fromDBAssortmentToAssortment(
 			dbAssortment,
-			await getFileContextById(UUID.fromString(dbAssortment.qrCodeFileReferenceId)),
-			dbAssortment.imageFileReferenceId === null
-				? null
-				: await getFileContextById(UUID.fromString(dbAssortment.imageFileReferenceId))
+			await getDefinitionContextById(UUID.fromString(dbAssortment.definitionId))
 		);
 	}
 
-	async getAll(getFileContextById: FileContextByIDGetter) {
+	async getAll(getDefinitionContextById: DefinitionContextByIdGetter) {
 		const dbAssortments = await this.db.find();
 		const assortments = dbAssortments.map(async (dbAssortment) => {
 			const dbAssortmentId = UUID.fromString(dbAssortment.id);
-			return await this.getById(dbAssortmentId, getFileContextById);
+			return await this.getById(dbAssortmentId, getDefinitionContextById);
 		});
 		const assortmentsFetched = await Promise.all(assortments);
 

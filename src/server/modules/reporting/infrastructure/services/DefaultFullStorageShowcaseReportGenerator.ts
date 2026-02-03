@@ -1,5 +1,6 @@
 import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import type { GetAllShelves } from "@/server/modules/warehouse/application/use-cases/GetAllShelves";
+import { assortmentDTOsToAssortmentVOs } from "@/server/utils";
 import { ReportType } from "../../domain/entities/Report";
 import type { ShelfVO } from "../../domain/vo/ShelfVO";
 import { DefaultBaseReportGenerator } from "./BaseReportGenerator/Default";
@@ -17,7 +18,8 @@ export class DefaultFullStorageShowcaseReportGenerator extends DefaultBaseReport
 	}
 
 	private async getData() {
-		const assortmentContext = await this.getAllAssortment.execute();
+		const allAssortments = await this.getAllAssortment.execute();
+		const assortmentContext = assortmentDTOsToAssortmentVOs(allAssortments);
 		const shelves = await this.getShelves.execute({ assortmentContext });
 		const fullShelves: ShelfVO[] = [];
 

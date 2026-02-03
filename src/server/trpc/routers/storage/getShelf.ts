@@ -15,10 +15,17 @@ export const getShelf = procedure.input(getFullShelfDTOSchema).query<FullShelfDT
 	const shelfHelper = presets.shelfHelper.default;
 	const fileHelper = presets.fileHelper.default;
 	const assortmentFileHelper = presets.assortmentFileHelper.default.get(fileHelper);
+	const assortmentDefinitionHelper = presets.assortmentDefinitionHelper.default;
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
+	);
 
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 	const getShelfAction = new GetShelf(shelfHelper);
 
-	const action = new GetFullShelf(getAllAssortmentAction, getShelfAction);
+	const storageShelfHelper = services.helpers.storageShelf.default.get(getAllAssortmentAction, getShelfAction);
+
+	const action = new GetFullShelf(storageShelfHelper);
 	return await action.execute(input);
 });

@@ -16,6 +16,8 @@ import { getTemperatureExceededDetailsReportGeneratorServices } from "./Temperat
 import { getFileStorageDataManagerServices } from "./FileStorageDataManager";
 import { getDatabaseDataManagerServices } from "./DatabaseDataManager";
 import { getEncryptionManagerServices } from "./EncryptionManager";
+import { getAssortmentDefinitionUtilitiesServices } from "./AssortmentDefinitionUtilities";
+import { getFIFOQueueManagerServices } from "./FIFOQueueManager";
 
 export const getUtils = (ctx: GetServicesContext) => {
 	return {
@@ -35,5 +37,7 @@ export const getUtils = (ctx: GetServicesContext) => {
 		fileStorageDataManager: getFileStorageDataManagerServices(ctx),
 		databaseDataManager: getDatabaseDataManagerServices(ctx),
 		encryptionManager: getEncryptionManagerServices(ctx),
+		assortmentDefinition: getAssortmentDefinitionUtilitiesServices(ctx),
+		fifoQueueManager: getFIFOQueueManagerServices(ctx),
 	};
 };

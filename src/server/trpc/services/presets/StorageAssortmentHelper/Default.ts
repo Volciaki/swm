@@ -1,5 +1,4 @@
 import type { StorageAssortmentHelper } from "@/server/modules/storage/application/helpers/StorageAssortmentHelper";
-import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
 import { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
@@ -7,21 +6,16 @@ import { DeleteAssortment } from "@/server/modules/assortment/application/use-ca
 import { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import { FillCell } from "@/server/modules/warehouse/application/use-cases/FillCell";
 import { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
-import { GenerateQRCode } from "@/server/utils/qr-codes/application/use-cases/GenerateQRCode";
-import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
-import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
-import { DeleteFileByPath } from "@/server/utils/files/application/use-cases/DeleteFileByPath";
 import type { Services } from "../../get";
 
 export const getDefaultStorageAssortmentHelperPreset = (services: Services): StorageAssortmentHelper => {
 	const assortmentRepository = services.repositories.assortment.db;
 	const shelfRepository = services.repositories.shelf.db;
 	const uuidManager = services.utils.uuidManager.default;
-	const qrCodeGenerator = services.utils.qrCodeGenerator.default;
 	const fileReferenceRepository = services.repositories.fileReference.db;
 	const shelfThermometer = services.utils.shelfThermometer.random;
-	const encryptionManager = services.utils.encryptionManager.default;
+	const assortmentDefinitionRepository = services.repositories.assortmentDefinition.db;
 
 	const shelfHelper = services.helpers.shelf.default.get(shelfRepository, uuidManager, shelfThermometer);
 	const assortmentHelper = services.helpers.assortment.default.get(assortmentRepository, uuidManager);
@@ -30,34 +24,26 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 	const getFileAction = new GetFile(fileHelper);
 
 	const assortmentFileHelper = services.helpers.assortmentFile.default.get(getFileAction);
-	const qrCodesFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.QR_CODES);
-	const qrCodesFileManager = services.utils.fileManager.default.get(
-		qrCodesFileStorage,
-		fileReferenceRepository,
-		fileHelper,
-		encryptionManager
+	const assortmentDefinitionHelper = services.helpers.assortmentDefinition.default.get(
+		assortmentDefinitionRepository,
+		uuidManager
 	);
-	const assortmentImagesFileStorage = services.utils.fileStorage.s3.get(S3FileStorageBucket.ASSORTMENT_IMAGES);
-	const assortmentImagesFileManager = services.utils.fileManager.default.get(
-		assortmentImagesFileStorage,
-		fileReferenceRepository,
-		fileHelper,
-		encryptionManager
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
 	);
 
-	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
-	const getAssortmentAction = new GetAssortment(assortmentHelper, assortmentFileHelper);
-	const createAssortmentAction = new CreateAssortment(assortmentHelper);
-	const deleteAssortmentAction = new DeleteAssortment(assortmentHelper, assortmentFileHelper);
+	const getAllAssortmentAction = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
+	const getAssortmentAction = new GetAssortment(assortmentHelper, assortmentDefinitionUtilities);
+	const createAssortmentAction = new CreateAssortment(assortmentHelper, assortmentDefinitionUtilities);
+	const deleteAssortmentAction = new DeleteAssortment(
+		assortmentHelper,
+		assortmentRepository,
+		assortmentDefinitionUtilities
+	);
 	const getShelfAction = new GetShelf(shelfHelper);
 	const fillCellAction = new FillCell(shelfRepository, shelfHelper);
 	const emptyCellAction = new EmptyCell(shelfRepository, shelfHelper);
-	const generateQRCodeAction = new GenerateQRCode(qrCodeGenerator);
-	const uploadQRCodeFileAction = new UploadFile(qrCodesFileManager);
-	const uploadAssortmentImageFileAction = new UploadFile(assortmentImagesFileManager);
-	const deleteFileQRCode = new DeleteFileByPath(fileHelper, qrCodesFileManager);
-	const deleteAssortmentImageFileAction = new DeleteFileByPath(fileHelper, assortmentImagesFileManager);
-	const fetchAssortmentImageFileAction = new FetchFile(fileHelper, assortmentImagesFileManager);
 
 	return services.helpers.storageAssortment.default.get(
 		getAllAssortmentAction,
@@ -66,12 +52,6 @@ export const getDefaultStorageAssortmentHelperPreset = (services: Services): Sto
 		deleteAssortmentAction,
 		getShelfAction,
 		fillCellAction,
-		emptyCellAction,
-		generateQRCodeAction,
-		uploadAssortmentImageFileAction,
-		uploadQRCodeFileAction,
-		deleteAssortmentImageFileAction,
-		deleteFileQRCode,
-		fetchAssortmentImageFileAction
+		emptyCellAction
 	);
 };

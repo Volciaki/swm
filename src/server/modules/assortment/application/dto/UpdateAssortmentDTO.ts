@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { dimensionsDTOSchema, temperatureRangeDTOSchema } from "@/server/utils";
 
-export const updateAssortmentDTOSchema = z.object({
+export const updateAssortmentDefinitionDTOSchema = z.object({
 	id: z.string(),
 	newData: z.object({
 		name: z.string(),
@@ -15,4 +15,4 @@ export const updateAssortmentDTOSchema = z.object({
 	}),
 });
 
-export type UpdateAssortmentDTO = z.infer<typeof updateAssortmentDTOSchema>;
+export type UpdateAssortmentDefinitionDTO = z.infer<typeof updateAssortmentDefinitionDTOSchema>;

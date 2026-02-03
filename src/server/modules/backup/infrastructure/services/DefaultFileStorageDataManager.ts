@@ -107,13 +107,13 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 
 		const assortmentImageData = await this.getFilesDumpData<(typeof assortments)[number]>(
 			assortments,
-			(entity) => entity.image?.id ?? null,
+			(entity) => entity.definition.image?.id ?? null,
 			S3FileStorageBucket.ASSORTMENT_IMAGES,
 			this.fetchAssortmentImageFile
 		);
 		const assortmentQRCodeData = await this.getFilesDumpData<(typeof assortments)[number]>(
 			assortments,
-			(entity) => entity.qrCode.id,
+			(entity) => entity.definition.qrCode.id,
 			S3FileStorageBucket.QR_CODES,
 			this.fetchAssortmentQRCodeFile
 		);
@@ -150,8 +150,12 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 		const assortments = await this.getAllAssortment.execute();
 		const reports = await this.getAllReports.execute();
 
-		await this.deleteFiles(assortments, (entity) => entity.image?.id ?? null, this.deleteAssortmentImageFile);
-		await this.deleteFiles(assortments, (entity) => entity.qrCode.id, this.deleteAssortmentQRCodeFile);
+		await this.deleteFiles(
+			assortments,
+			(entity) => entity.definition.image?.id ?? null,
+			this.deleteAssortmentImageFile
+		);
+		await this.deleteFiles(assortments, (entity) => entity.definition.qrCode.id, this.deleteAssortmentQRCodeFile);
 		await this.deleteFiles(reports, (entity) => entity.file.id, this.deleteReportFile);
 
 		await this.uploadFiles(dump.assortments.images, this.uploadAssortmentImageFile, dump.context);

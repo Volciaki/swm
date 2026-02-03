@@ -146,6 +146,120 @@
           },
           "requestVariables": [],
           "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "getSession",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/identity.getSession",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "getUserByEmail",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/identity.getUserByEmail",
+          "params": [
+            {
+              "key": "input",
+              "value": "{ \"email\": \"...\" }",
+              "active": true,
+              "description": ""
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "getUserById",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/identity.getUserById",
+          "params": [
+            {
+              "key": "input",
+              "value": "{ \"id\": \"...\" }",
+              "active": true,
+              "description": ""
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "logout",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/identity.logout",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "updateUser",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/identity.updateUser",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"id\": \"...\",\n  \"newData\": {\n    \"name\": \"...\",\n    \"email\": \"...\",\n    \"passwordRaw\": \"\",\n    \"isAdmin\": false,\n    \"twoFactorAuthenticationEnabled\": false\n  }\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {}
         }
       ],
       "auth": {
@@ -262,7 +376,7 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"shelfId\": \"...\",\n  \"cellId\": \"...\",\n  \"assortment\": {\n    \"name\": \"...\",\n    \"temperatureRange\": {\n      \"minimalCelsius\": -10,\n      \"maximalCelsius\": 40\n    },\n    \"weightKg\": 10,\n    \"size\": {\n      \"widthMillimeters\": 1000,\n      \"heightMillimeters\": 1000,\n      \"lengthMillimeters\": 1000\n    },\n    \"comment\": \"...\",\n    \"expiresAfterSeconds\": 1400,\n    \"isHazardous\": false,\n    \"imageContentBase64\": null\n  }\n}"
+            "body": "{\n  \"name\": \"test assortment\",\n  \"temperatureRange\": {\n    \"minimalCelsius\": -10,\n    \"maximalCelsius\": 40\n  },\n  \"weightKg\": 10,\n  \"size\": {\n    \"widthMillimeters\": 1000,\n    \"heightMillimeters\": 1000,\n    \"lengthMillimeters\": 1000\n  },\n  \"comment\": \"test assortment description\",\n  \"expiresAfterSeconds\": 1400,\n  \"isHazardous\": false,\n  \"imageContentBase64\": null\n}\n"
           },
           "requestVariables": [],
           "responses": {}
@@ -329,7 +443,7 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"id\": \"...\"\n}"
+            "body": "{\n  \"id\": \"80a9cba5-a237-463f-bbc1-43b2ad6eed69\"\n}"
           },
           "requestVariables": [],
           "responses": {}
@@ -349,7 +463,7 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"assortment\": [\n    {\n      \"shelfId\": \"...\",\n      \"cellId\": \"...\",\n      \"name\": \"...\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": -10,\n        \"maximalCelsius\": 40\n      },\n      \"weightKg\": 10,\n      \"size\": {\n        \"widthMillimeters\": 1000,\n        \"heightMillimeters\": 1000,\n        \"lengthMillimeters\": 1000\n      },\n      \"comment\": \"...\",\n      \"expiresAfterSeconds\": 1400,\n      \"isHazardous\": false,\n      \"imageContentBase64\": null\n    },\n    {\n      \"shelfId\": \"...\",\n      \"cellId\": \"...\",\n      \"name\": \"...\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": -10,\n        \"maximalCelsius\": 40\n      },\n      \"weightKg\": 10,\n      \"size\": {\n        \"widthMillimeters\": 1000,\n        \"heightMillimeters\": 1000,\n        \"lengthMillimeters\": 1000\n      },\n      \"comment\": \"...\",\n      \"expiresAfterSeconds\": 1400,\n      \"isHazardous\": false,\n      \"imageContentBase64\": null\n    }\n  ]\n}\n"
+            "body": "{\n  \"definitions\": [\n    {\n      \"name\": \"test shi\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": -10,\n        \"maximalCelsius\": 40\n      },\n      \"weightKg\": 10,\n      \"size\": {\n        \"widthMillimeters\": 1000,\n        \"heightMillimeters\": 1000,\n        \"lengthMillimeters\": 1000\n      },\n      \"comment\": \"...\",\n      \"expiresAfterSeconds\": 1400,\n      \"isHazardous\": false,\n      \"imageContentBase64\": null\n    },\n    {\n      \"name\": \"second test shi\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": -10,\n        \"maximalCelsius\": 40\n      },\n      \"weightKg\": 10,\n      \"size\": {\n        \"widthMillimeters\": 1000,\n        \"heightMillimeters\": 1000,\n        \"lengthMillimeters\": 1000\n      },\n      \"comment\": \"...\",\n      \"expiresAfterSeconds\": 1400,\n      \"isHazardous\": false,\n      \"imageContentBase64\": null\n    }\n  ]\n}\n"
           },
           "requestVariables": [],
           "responses": {}
@@ -369,16 +483,16 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"shelves\": [\n    {\n      \"name\": \"...\",\n      \"comment\": \"...\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": 13.1,\n        \"maximalCelsius\": 43.6\n      },\n      \"maxWeightKg\": 20.1,\n      \"maxAssortmentSize\": {\n        \"widthMillimeters\": 40.2,\n        \"heightMillimeters\": 30.5,\n        \"lengthMillimeters\": 40.9\n      },\n      \"supportsHazardous\": true,\n      \"cellsShape\": {\n        \"rows\": 2,\n        \"columns\": 2\n      }\n    },\n    {\n      \"name\": \"...\",\n      \"comment\": \"...\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": 13.1,\n        \"maximalCelsius\": 43.6\n      },\n      \"maxWeightKg\": 20.1,\n      \"maxAssortmentSize\": {\n        \"widthMillimeters\": 40.2,\n        \"heightMillimeters\": 30.5,\n        \"lengthMillimeters\": 40.9\n      },\n      \"supportsHazardous\": true,\n      \"cellsShape\": {\n        \"rows\": 2,\n        \"columns\": 2\n      }\n    },\n  ]\n}\n"
+            "body": "{\n  \"shelves\": [\n    {\n      \"name\": \"first shelf\",\n      \"comment\": \"...\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": 13.1,\n        \"maximalCelsius\": 43.6\n      },\n      \"maxWeightKg\": 20.1,\n      \"maxAssortmentSize\": {\n        \"widthMillimeters\": 40.2,\n        \"heightMillimeters\": 30.5,\n        \"lengthMillimeters\": 40.9\n      },\n      \"supportsHazardous\": true,\n      \"cellsShape\": {\n        \"rows\": 2,\n        \"columns\": 2\n      }\n    },\n    {\n      \"name\": \"second shelf\",\n      \"comment\": \"...\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": 13.1,\n        \"maximalCelsius\": 43.6\n      },\n      \"maxWeightKg\": 20.1,\n      \"maxAssortmentSize\": {\n        \"widthMillimeters\": 40.2,\n        \"heightMillimeters\": 30.5,\n        \"lengthMillimeters\": 40.9\n      },\n      \"supportsHazardous\": true,\n      \"cellsShape\": {\n        \"rows\": 2,\n        \"columns\": 2\n      }\n    }\n  ]\n}\n"
           },
           "requestVariables": [],
           "responses": {}
         },
         {
           "v": "12",
-          "name": "deleteAssortmentCopy",
+          "name": "puUpAssortment",
           "method": "POST",
-          "endpoint": "http://localhost:3000/api/trpc/storage.deleteAssortmentCopy",
+          "endpoint": "http://localhost:3000/api/trpc/storage.putUpAssortment",
           "params": [],
           "headers": [],
           "preRequestScript": "",
@@ -389,16 +503,16 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"id\": \"...\"\n}"
+            "body": "{\n  \"shelfId\": \"145b168b-a375-4735-bbad-11b866edaebc\",\n  \"cellId\": \"93c8615e-79bd-4523-ae22-7b6fedf20b4c\",\n  \"assortmentDefinitionId\": \"f25c5cd4-1401-448e-a2d5-b23685dffdd3\"\n}"
           },
           "requestVariables": [],
           "responses": {}
         },
         {
           "v": "12",
-          "name": "createAssortmentCopy",
+          "name": "takeDownAssortment",
           "method": "POST",
-          "endpoint": "http://localhost:3000/api/trpc/storage.createAssortmentCopy",
+          "endpoint": "http://localhost:3000/api/trpc/storage.takeDownAssortment",
           "params": [],
           "headers": [],
           "preRequestScript": "",
@@ -409,7 +523,74 @@
           },
           "body": {
             "contentType": "application/json",
-            "body": "{\n  \"id\": \"...\"\n}"
+            "body": "{\n  \"id\": \"becf0042-bb9a-48f5-94b4-d2bcb77e86e3\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "takeDownOldestAssortmentByDefinition",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.takeDownOldestAssortmentByDefinition",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"definitionId\": \"...\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "getNextAssortmentToBeTakenDownByDefinition",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/storage.getNextAssortmentToBeTakenDownByDefinition",
+          "params": [
+            {
+              "key": "input",
+              "value": "{ \"definitionId\": \"...\" }",
+              "active": true,
+              "description": ""
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "PutUpAssortmentAutomatically",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/storage.putUpAssortmentAutomatically",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"definitionId\": \"...\"\n}"
           },
           "requestVariables": [],
           "responses": {}
@@ -519,6 +700,33 @@
           },
           "requestVariables": [],
           "responses": {}
+        },
+        {
+          "v": "12",
+          "endpoint": "http://localhost:3000/api/trpc/reports.fetchReportFileByReferenceId",
+          "name": "fetchReportFileByReferenceId",
+          "params": [
+            {
+              "key": "input",
+              "value": "{ \"fileReferenceId\": \"...\" }",
+              "active": true,
+              "description": ""
+            }
+          ],
+          "headers": [],
+          "method": "GET",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
         }
       ],
       "auth": {
@@ -602,6 +810,66 @@
           "body": {
             "contentType": "application/json",
             "body": "{}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "getAll",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/backups.getBackupSettings",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "getSettings",
+          "method": "GET",
+          "endpoint": "http://localhost:3000/api/trpc/backups.getSettings",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "12",
+          "name": "setSettings",
+          "method": "POST",
+          "endpoint": "http://localhost:3000/api/trpc/backups.setSettings",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"takeBackupsEverySeconds\": 3600\n}"
           },
           "requestVariables": [],
           "responses": {}

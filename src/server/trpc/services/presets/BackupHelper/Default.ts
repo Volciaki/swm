@@ -52,8 +52,17 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 	const assortmentRepository = services.repositories.assortment.db;
 	const reportRepository = services.repositories.report.db;
 	const backupRepository = services.repositories.backup.db;
+	const assortmentDefinitionRepository = services.repositories.assortmentDefinition.db;
+	const assortmentDefinitionHelper = services.helpers.assortmentDefinition.default.get(
+		assortmentDefinitionRepository,
+		uuidManager
+	);
+	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
+		assortmentDefinitionHelper,
+		assortmentFileHelper
+	);
 
-	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentFileHelper);
+	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 	const getAllReports = new GetAllReports(reportRepository, getFile);
 	const fetchAssortmentImageFile = new FetchFile(fileHelper, assortmentImageFileManager);
 	const fetchAssortmentQRCodeFile = new FetchFile(fileHelper, qrCodeFileManager);

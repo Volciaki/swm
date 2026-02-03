@@ -1,17 +1,14 @@
-import type { ShelfDTO } from "@/server/modules/warehouse/application/dto/shared/ShelfDTO";
-import { TakeDownAssortment } from "@/server/modules/storage/application/use-cases/TakeDownAssortment";
-import { takeDownAssortmentDTOSchema } from "@/server/modules/storage/application/dto/TakeDownAssortmentDTO";
+import { DeleteFullAssortmentDefinition } from "@/server/modules/storage/application/use-cases/DeleteFullAssortmentDefinition";
+import { deleteAssortmentDTOSchema } from "@/server/modules/assortment/application/dto/DeleteAssortmentDTO";
 import { getPresets, getServices } from "../../services";
 import { procedure } from "../../init";
 
-export const deleteAssortment = procedure
-	.input(takeDownAssortmentDTOSchema)
-	.mutation<ShelfDTO>(async ({ input, ctx }) => {
-		const services = getServices(ctx);
-		const presets = getPresets(services);
+export const deleteAssortment = procedure.input(deleteAssortmentDTOSchema).mutation<void>(async ({ input, ctx }) => {
+	const services = getServices(ctx);
+	const presets = getPresets(services);
 
-		const storageAssortmentHelper = presets.storageAssortmentHelper.default;
+	const storageAssortmentDefinitionHelper = presets.storageAssortmentDefinitionHelper.default;
 
-		const action = new TakeDownAssortment(storageAssortmentHelper);
-		return await action.execute(input, ctx.user ?? undefined);
-	});
+	const action = new DeleteFullAssortmentDefinition(storageAssortmentDefinitionHelper);
+	return await action.execute(input, ctx.user ?? undefined);
+});
