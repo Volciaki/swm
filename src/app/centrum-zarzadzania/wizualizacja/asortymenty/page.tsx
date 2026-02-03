@@ -149,7 +149,7 @@ const AssortmentsVisualisation: FC = () => {
 								<Flex className={styles["qr-code-scan-container"]} align={"center"} fullWidth>
 									<Paragraph fontSize={1.5}>
 										{
-											"Aby automatycznie dodać lub sciągnąć instancje asortymentu ze stanu magazynu, możesz zeskanować jej kod QR tym miejscu. Wybranie typu operacji będzie możliwe po zeskanowaniu kodu QR."
+											"Aby automatycznie dodać lub pobrać instancje asortymentu ze stanu magazynu, możesz zeskanować jej kod QR tym miejscu. Wybranie typu operacji będzie możliwe po zeskanowaniu kodu QR."
 										}
 									</Paragraph>
 								</Flex>

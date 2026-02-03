@@ -4,9 +4,8 @@ import { type FC } from "react";
 import { useParams } from "next/navigation";
 import { PageHeader } from "@/ui/molecules";
 import { Flex, FullHeight } from "@/ui/atoms";
-import { AssortmentForm } from "@/ui/organisms";
 
-const NewAssortment: FC = () => {
+const PutUpAssortment: FC = () => {
 	const params = useParams();
 
 	return (
@@ -14,13 +13,11 @@ const NewAssortment: FC = () => {
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader
 					title={"Wypełnij pole asortymentem"}
-					description={"Wypełnij formularz poniżej aby dodać nowy asortyment."}
+					description={"W celu wypełnienia pola wybierz definicje asortymentu z poniższej listy."}
 				/>
-
-				<AssortmentForm shelfId={params.shelfId as string} cellId={params.cellId as string} />
 			</Flex>
 		</FullHeight>
 	);
 };
 
-export default NewAssortment;
+export default PutUpAssortment;
