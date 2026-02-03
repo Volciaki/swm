@@ -13,3 +13,4 @@ export * from "./ShelfForm";
 export * from "./FormFields";
 export * from "./AssortmentForm";
 export * from "./VisualisationAction";
+export * from "./AssortmentCard";

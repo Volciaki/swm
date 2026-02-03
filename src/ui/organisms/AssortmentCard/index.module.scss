@@ -1,0 +1,19 @@
+@use "@/styles" as *;
+
+.data-container {
+    border: solid calc($border-size * 0.75) $border;
+    border-radius: $border-radius;
+    padding: $padding;
+}
+
+.data-wrapper {
+    background-color: $background-lightened;
+    padding: $padding;
+    border-radius: $border-radius;
+
+    span {
+        display: inline-block;
+        margin-top: 0.5rem;
+        margin-left: 1rem;
+    }
+}
