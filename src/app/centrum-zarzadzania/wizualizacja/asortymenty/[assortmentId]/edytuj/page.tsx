@@ -4,7 +4,7 @@ import { type FC } from "react";
 import { useParams } from "next/navigation";
 import { AssortmentForm } from "@/ui/organisms";
 import { PageHeader } from "@/ui/molecules";
-import { Flex, FullHeight } from "@/ui/atoms";
+import { FullHeight, Flex } from "@/ui/atoms";
 
 const EditAssortment: FC = () => {
 	const params = useParams();
@@ -12,13 +12,9 @@ const EditAssortment: FC = () => {
 	return (
 		<FullHeight style={{ width: "100%" }}>
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
-				<PageHeader title={"Edytuj asortyment"} description={"W celu edycji asortymentu użyj formluarza poniżej."} />
+				<PageHeader title={"Edytuj asortyment"} description={"Usuń asortyment lub zmień jego parametry."} />
 
-				<AssortmentForm
-					shelfId={params.shelfId as string}
-					cellId={params.cellId as string}
-					assortmentId={params.assortmentId as string}
-				/>
+				<AssortmentForm definitionId={params.assortmentId as string} />
 			</Flex>
 		</FullHeight>
 	);

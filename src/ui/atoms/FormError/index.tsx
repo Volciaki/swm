@@ -9,7 +9,7 @@ export const FormError: FC<FormErrorProps> = ({ children }) => {
 	if (!children) return null;
 
 	return (
-		<Paragraph variant={"danger"} fontSize={1.25} style={{ textAlign: "center" }}>
+		<Paragraph variant={"danger"} fontSize={1.25} style={{ textAlign: "center", wordBreak: "break-all" }}>
 			{children}
 		</Paragraph>
 	);

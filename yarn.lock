@@ -1382,6 +1382,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/emscripten@npm:^1.41.5":
+  version: 1.41.5
+  resolution: "@types/emscripten@npm:1.41.5"
+  checksum: 10c0/ae816da716f896434e59df7a71b67c71ae7e85ca067a32aef1616572fc4757459515d42ade6f5b8fd8d69733a9dbd0cf23010fec5b2f41ce52c09501aa350e45
+  languageName: node
+  linkType: hard
+
 "@types/estree@npm:^1.0.6":
   version: 1.0.8
   resolution: "@types/estree@npm:1.0.8"
@@ -1814,6 +1821,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@yudiel/react-qr-scanner@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "@yudiel/react-qr-scanner@npm:2.5.1"
+  dependencies:
+    barcode-detector: "npm:3.0.8"
+    webrtc-adapter: "npm:9.0.3"
+  peerDependencies:
+    react: ^17 || ^18 || ^19
+    react-dom: ^17 || ^18 || ^19
+  checksum: 10c0/2d7b6eae9104bf1147ea78abe3dac2239459900b62c07f4ce10a0f64c1d7980a9abdc3951d88614235ac926a23953cbf4f2176430b417c40c03a78611d3cfc54
+  languageName: node
+  linkType: hard
+
 "@zxing/text-encoding@npm:0.9.0":
   version: 0.9.0
   resolution: "@zxing/text-encoding@npm:0.9.0"
@@ -2104,6 +2124,15 @@ __metadata:
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
   checksum: 10c0/9308baf0a7e4838a82bbfd11e01b1cb0f0cf2893bc1676c27c2a8c0e70cbae1c59120c3268517a8ae7fb6376b4639ef81ca22582611dbee4ed28df945134aaee
+  languageName: node
+  linkType: hard
+
+"barcode-detector@npm:3.0.8":
+  version: 3.0.8
+  resolution: "barcode-detector@npm:3.0.8"
+  dependencies:
+    zxing-wasm: "npm:2.2.4"
+  checksum: 10c0/5103fa7a1f438cf34fbbe5773f14406fd666c5857270a08e59bf81c2b7d24091e7af068b341fa7977211b35bc83ade2fae0fb51f885af00f50a541ca29f9ff8f
   languageName: node
   linkType: hard
 
@@ -5464,6 +5493,7 @@ __metadata:
     "@types/yauzl-promise": "npm:^4"
     "@types/yazl": "npm:^3"
     "@typescript-eslint/eslint-plugin": "npm:^8.53.1"
+    "@yudiel/react-qr-scanner": "npm:^2.5.1"
     babel-plugin-react-compiler: "npm:1.0.0"
     bcryptjs: "npm:^3.0.3"
     chalk: "npm:^5.6.2"
@@ -5886,6 +5916,13 @@ __metadata:
   version: 0.27.0
   resolution: "scheduler@npm:0.27.0"
   checksum: 10c0/4f03048cb05a3c8fddc45813052251eca00688f413a3cee236d984a161da28db28ba71bd11e7a3dd02f7af84ab28d39fb311431d3b3772fed557945beb00c452
+  languageName: node
+  linkType: hard
+
+"sdp@npm:^3.2.0":
+  version: 3.2.1
+  resolution: "sdp@npm:3.2.1"
+  checksum: 10c0/a534d91972d6c26016f0e814d8e0ca4db6ae714d1da58056d3bcf4660137aeddb71d9085a5dd5eb764d5cffca83ab3ee7446cb6eed36411cd1e93d2c929d7d80
   languageName: node
   linkType: hard
 
@@ -6459,6 +6496,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tagged-tag@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "tagged-tag@npm:1.0.0"
+  checksum: 10c0/91d25c9ffb86a91f20522cefb2cbec9b64caa1febe27ad0df52f08993ff60888022d771e868e6416cf2e72dab68449d2139e8709ba009b74c6c7ecd4000048d1
+  languageName: node
+  linkType: hard
+
 "tar@npm:^7.5.4":
   version: 7.5.7
   resolution: "tar@npm:7.5.7"
@@ -6594,6 +6638,15 @@ __metadata:
   dependencies:
     prelude-ls: "npm:^1.2.1"
   checksum: 10c0/7b3fd0ed43891e2080bf0c5c504b418fbb3e5c7b9708d3d015037ba2e6323a28152ec163bcb65212741fa5d2022e3075ac3c76440dbd344c9035f818e8ecee58
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^5.2.0":
+  version: 5.4.3
+  resolution: "type-fest@npm:5.4.3"
+  dependencies:
+    tagged-tag: "npm:^1.0.0"
+  checksum: 10c0/daea168fbd24db08d0a616254d18b8b454f40be48fbe1c546693c367f65b2040a3507c5b0f8e19397633aa93f552dba38c39f8c730696a3eb07cd6fba8380b09
   languageName: node
   linkType: hard
 
@@ -6974,6 +7027,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"webrtc-adapter@npm:9.0.3":
+  version: 9.0.3
+  resolution: "webrtc-adapter@npm:9.0.3"
+  dependencies:
+    sdp: "npm:^3.2.0"
+  checksum: 10c0/bb8c1626cc0e18bd34c03074fc6a541666dbe473c8f063c5d0ea2a3a3a4887f498212a131c936777f660382185f44941476609a50df5f1543015240623375725
+  languageName: node
+  linkType: hard
+
 "which-boxed-primitive@npm:^1.1.0, which-boxed-primitive@npm:^1.1.1":
   version: 1.1.1
   resolution: "which-boxed-primitive@npm:1.1.1"
@@ -7261,5 +7323,17 @@ __metadata:
   version: 4.3.6
   resolution: "zod@npm:4.3.6"
   checksum: 10c0/860d25a81ab41d33aa25f8d0d07b091a04acb426e605f396227a796e9e800c44723ed96d0f53a512b57be3d1520f45bf69c0cb3b378a232a00787a2609625307
+  languageName: node
+  linkType: hard
+
+"zxing-wasm@npm:2.2.4":
+  version: 2.2.4
+  resolution: "zxing-wasm@npm:2.2.4"
+  dependencies:
+    "@types/emscripten": "npm:^1.41.5"
+    type-fest: "npm:^5.2.0"
+  peerDependencies:
+    "@types/emscripten": ">=1.39.6"
+  checksum: 10c0/96562006f629736f1bd41ef6f3ca5ec738a50e422bb99b7ae5e879a33bf4dcb82970afa2cc7427f3ebcc1c03ad391341a1861d02d72da3ebe9e660cdf397d96f
   languageName: node
   linkType: hard

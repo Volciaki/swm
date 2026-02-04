@@ -7,7 +7,7 @@ import { updateShelf } from "./updateShelf";
 import { deleteShelf } from "./deleteShelf";
 import { createAssortment } from "./createAssortment";
 import { importAssortment } from "./importAssortment";
-import { getAssortment } from "./getAssortment";
+import { getAssortmentInstance } from "./getAssortmentInstance";
 import { updateAssortment } from "./updateAssortment";
 import { deleteAssortment } from "./deleteAssortment";
 import { getAllShelves } from "./getAllShelves";
@@ -16,6 +16,8 @@ import { takeDownAssortment } from "./takeDownAssortment";
 import { takeDownOldestAssortmentByDefinition } from "./takeDownOldestAssortmentByDefinition";
 import { getNextAssortmentToBeTakenDownByDefinition } from "./getNextAssortmentToBeTakenDownByDefinition";
 import { putUpAssortmentAutomatically } from "./putUpAssortmentAutomatically";
+import { getAllAssortments } from "./getAllAssortments";
+import { getAssortment } from "./getAssortment";
 
 export const storageRouter = createRouter({
 	createShelf,
@@ -25,7 +27,7 @@ export const storageRouter = createRouter({
 	deleteShelf,
 	createAssortment,
 	importAssortment,
-	getAssortment,
+	getAssortmentInstance,
 	updateAssortment,
 	deleteAssortment,
 	getAllShelves,
@@ -34,4 +36,6 @@ export const storageRouter = createRouter({
 	takeDownOldestAssortmentByDefinition,
 	getNextAssortmentToBeTakenDownByDefinition,
 	putUpAssortmentAutomatically,
+	getAllAssortments,
+	getAssortment,
 });

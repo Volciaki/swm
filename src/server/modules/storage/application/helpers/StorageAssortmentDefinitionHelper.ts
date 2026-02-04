@@ -136,7 +136,7 @@ export class DefaultStorageAssortmentDefinitionHelper implements StorageAssortme
 	}
 
 	async importAndReplaceAssortmentDefinitions(dto: ImportAndReplaceAssortmentDefinitionsDTO) {
-		const currentDefinitions = await this.getAllAssortmentDefinitions.execute();
+		const currentDefinitions = await this.getAllAssortmentDefinitions.execute(undefined, { skipAuthentication: true });
 		const fullCurrentDefinitions = await Promise.all(
 			currentDefinitions.map(async (definition) => {
 				// prettier-ignore
@@ -160,7 +160,7 @@ export class DefaultStorageAssortmentDefinitionHelper implements StorageAssortme
 			return await this.createAssortmentDefinitionByDTOs(dto.definitions);
 		} catch (error) {
 			// Attempt to rollback the changes if an error occurred.
-			const newDefinitions = await this.getAllAssortmentDefinitions.execute();
+			const newDefinitions = await this.getAllAssortmentDefinitions.execute(undefined, { skipAuthentication: true });
 			await this.deleteAssortmentDefinitionByDTOs(newDefinitions);
 			await this.createAssortmentDefinitionByDTOs(fullCurrentDefinitions);
 

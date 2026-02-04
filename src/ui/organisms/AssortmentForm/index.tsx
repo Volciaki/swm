@@ -26,17 +26,15 @@ type AssortmentFormData = {
 };
 
 export type AssortmentFormProps = {
-	shelfId: string;
-	cellId: string;
-	assortmentId?: string;
+	definitionId?: string;
 };
 
-export const AssortmentForm: FC<AssortmentFormProps> = ({ shelfId, cellId, assortmentId }) => {
+export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 	const router = useRouter();
 
 	const apiUtils = apiClient.useUtils();
-	const existing = assortmentId !== undefined;
-	const getAssortment = apiClient.storage.getAssortment.useQuery({ id: assortmentId ?? "" }, { enabled: existing });
+	const existing = definitionId !== undefined;
+	const getAssortment = apiClient.storage.getAssortment.useQuery({ id: definitionId ?? "" }, { enabled: existing });
 	const sharedMutationOptions = {
 		onSuccess: () => {
 			apiUtils.storage.invalidate();
@@ -50,16 +48,15 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ shelfId, cellId, assor
 		onSuccess: () => {
 			sharedMutationOptions.onSuccess();
 
-			if (getAssortment.data)
-				router.push(`/centrum-zarzadzania/wizualizacja/regaly/${getAssortment.data.shelfId}/wyswietl`);
+			if (getAssortment.data) router.push("/centrum-zarzadzania/wizualizacja/asortymenty");
 		},
 	});
-	// const updateAssortment = apiClient.storage.updateAssortment.useMutation(sharedMutationOptions);
+	const updateAssortment = apiClient.storage.updateAssortment.useMutation(sharedMutationOptions);
 	const createAssortment = apiClient.storage.createAssortment.useMutation({
 		...sharedMutationOptions,
 		onSuccess: (data) => {
 			sharedMutationOptions.onSuccess();
-			router.push("/centrum-zarzadzania/wizualizacja/asortymenty");
+			router.push(`/centrum-zarzadzania/wizualizacja/asortymenty/${data.id}/edytuj`);
 		},
 	});
 
@@ -68,15 +65,15 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ shelfId, cellId, assor
 
 		const data = getAssortment.data;
 		const v: AssortmentFormData = {
-			name: data.definition.name,
-			comment: data.definition.comment,
-			expiresAfterDays: data.definition.expiresAfterSeconds / 60 / 60 / 24,
-			heightMillimeters: data.definition.size.heightMillimeters,
-			widthMillimeters: data.definition.size.widthMillimeters,
-			lengthMillimeters: data.definition.size.lengthMillimeters,
-			minTemperatureCelsius: data.definition.temperatureRange.minimalCelsius,
-			maxTemperatureCelsius: data.definition.temperatureRange.maximalCelsius,
-			weightKg: data.definition.weightKg,
+			name: data.name,
+			comment: data.comment,
+			expiresAfterDays: data.expiresAfterSeconds / 60 / 60 / 24,
+			heightMillimeters: data.size.heightMillimeters,
+			widthMillimeters: data.size.widthMillimeters,
+			lengthMillimeters: data.size.lengthMillimeters,
+			minTemperatureCelsius: data.temperatureRange.minimalCelsius,
+			maxTemperatureCelsius: data.temperatureRange.maximalCelsius,
+			weightKg: data.weightKg,
 			// TODO: ...
 			imageBase64: undefined,
 			isHazardous: false,
@@ -113,30 +110,25 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ shelfId, cellId, assor
 				isHazardous: false,
 			};
 
-			// if (assortmentId) {
-			// 	updateAssortment.mutate({
-			// 		id: assortmentId,
-			// 		newData,
-			// 	});
-			// } else {
-			// 	createAssortment.mutate({
-			// 		shelfId,
-			// 		cellId,
-			// 		assortment: newData,
-			// 	});
-			// }
-			createAssortment.mutate(newData);
+			if (definitionId) {
+				updateAssortment.mutate({
+					id: definitionId,
+					newData,
+				});
+			} else {
+				createAssortment.mutate(newData);
+			}
 		},
-		[setIsLoading, shelfId, cellId, assortmentId /*, updateAssortment*/, createAssortment]
+		[setIsLoading, updateAssortment, createAssortment, definitionId]
 	);
 
 	const deleteHandler = useCallback(async () => {
-		if (!assortmentId) return;
+		if (!definitionId) return;
 
 		setIsLoading(true);
 
-		deleteAssortment.mutate({ id: assortmentId });
-	}, [setIsLoading, deleteAssortment, assortmentId]);
+		deleteAssortment.mutate({ id: definitionId });
+	}, [setIsLoading, deleteAssortment, definitionId]);
 
 	if (getAssortment.isLoading) return <Loading />;
 
