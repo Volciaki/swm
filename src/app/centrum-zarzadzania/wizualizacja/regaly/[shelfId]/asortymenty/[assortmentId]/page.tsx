@@ -12,16 +12,21 @@ const Assortment: FC = () => {
 	const router = useRouter();
 	const params = useParams();
 
+	const apiUtils = apiClient.useUtils();
 	const assortment = apiClient.storage.getAssortmentInstance.useQuery(
 		{ id: params.assortmentId as string },
 		{ enabled: params.assortmentId !== undefined }
 	);
-	const takeDownAssortment = apiClient.storage.takeDownAssortment.useMutation();
+	const takeDownAssortment = apiClient.storage.takeDownAssortment.useMutation({
+		onSuccess: () => {
+			apiUtils.storage.getShelf.invalidate();
+		},
+	});
 
-	const takeDownAssortmentHandler = useCallback(() => {
+	const takeDownAssortmentHandler = useCallback(async () => {
 		if (!assortment.data) return;
 
-		takeDownAssortment.mutate({ id: assortment.data.id });
+		await takeDownAssortment.mutateAsync({ id: assortment.data.id });
 		router.push(`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/wyswietl`);
 	}, [assortment.data, takeDownAssortment, router]);
 
