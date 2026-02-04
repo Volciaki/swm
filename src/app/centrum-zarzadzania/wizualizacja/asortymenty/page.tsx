@@ -97,10 +97,13 @@ const AssortmentsVisualisation: FC = () => {
 		});
 	}, [file, importAssortment]);
 
-	const onQRCodeScan = useCallback((value: unknown) => {
-		const parsed = JSON.parse(value as string);
-		setQRCodeScannerValue(parsed);
-	}, []);
+	const onQRCodeScan = useCallback(
+		(value: unknown) => {
+			const parsed = JSON.parse(value as string);
+			setQRCodeScannerValue(parsed);
+		},
+		[setQRCodeScannerValue]
+	);
 
 	const addNewAssortmentByQRCodeValue = useCallback(() => {
 		putUpAssortmentAutomatically.mutate({ definitionId: qrCodeScannerValue ?? "" });
