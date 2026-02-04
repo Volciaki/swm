@@ -8,7 +8,7 @@ import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 import { AssortmentCard, DialogButton } from "@/ui/organisms";
 
-const Assortment: FC = () => {
+const ShelfAssortment: FC = () => {
 	const router = useRouter();
 	const params = useParams();
 
@@ -27,12 +27,12 @@ const Assortment: FC = () => {
 		if (!assortment.data) return;
 
 		await takeDownAssortment.mutateAsync({ id: assortment.data.id });
-		router.push(`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/wyswietl`);
+		router.push(`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/asortymenty`);
 	}, [assortment.data, takeDownAssortment, router]);
 
 	return (
 		<FullHeight style={{ width: "100%" }}>
-			<BackButton fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}/wyswietl`} forceFallback />
+			<BackButton fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}/asortymenty`} forceFallback />
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				{assortment.data && (
@@ -72,4 +72,4 @@ const Assortment: FC = () => {
 	);
 };
 
-export default Assortment;
+export default ShelfAssortment;
