@@ -2,11 +2,12 @@
 
 import Papa from "papaparse";
 import { useCallback, useState, type FC } from "react";
-import { DialogButton, StandardFileUpload, VisualisationAction } from "@/ui/organisms";
+import { DialogButton, QRCodeScanner, StandardFileUpload, VisualisationAction } from "@/ui/organisms";
 import { List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link, FormError } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
-import { defaultErrorHandler } from "@/ui/utils";
+import type { APIError } from "@/ui/utils";
+import { defaultErrorHandler, getPolishErrorMessageByMetadata } from "@/ui/utils";
 import commonStyles from "@/styles/common.module.scss";
 import styles from "@/styles/assortments.module.scss";
 
@@ -33,10 +34,26 @@ const AssortmentsVisualisation: FC = () => {
 			apiUtils.storage.invalidate();
 		},
 	});
+	const sharedMutationOptionsQRCodeActions = {
+		onSuccess: () => {
+			apiUtils.storage.invalidate();
+			setQRCodeActionError(undefined);
+		},
+		onError: (e: APIError) => defaultErrorHandler(e, (errorMessage) => setQRCodeActionError(errorMessage)),
+	};
+	const putUpAssortmentAutomatically = apiClient.storage.putUpAssortmentAutomatically.useMutation(
+		sharedMutationOptionsQRCodeActions
+	);
+	const takeDownOldestAssortmentByDefinition = apiClient.storage.takeDownOldestAssortmentByDefinition.useMutation(
+		sharedMutationOptionsQRCodeActions
+	);
 	const allAssortments = apiClient.storage.getAllAssortments.useQuery();
 	const [fileUploadError, setFileUploadError] = useState<string | undefined>();
 	const [file, setFile] = useState<File | undefined>();
 	const [importAssortmentError, setImportAssortmentError] = useState<string | undefined>();
+	const [qrCodeScannerIsPaused, setQRCodeScannerIsPaused] = useState(true);
+	const [qrCodeScannerValue, setQRCodeScannerValue] = useState<string | undefined>();
+	const [qrCodeActionError, setQRCodeActionError] = useState<string | undefined>();
 
 	const importAssortmentSubmitHandler = useCallback(async () => {
 		if (!file) return;
@@ -79,6 +96,19 @@ const AssortmentsVisualisation: FC = () => {
 			})),
 		});
 	}, [file, importAssortment]);
+
+	const onQRCodeScan = useCallback((value: unknown) => {
+		const parsed = JSON.parse(value as string);
+		setQRCodeScannerValue(parsed);
+	}, []);
+
+	const addNewAssortmentByQRCodeValue = useCallback(() => {
+		putUpAssortmentAutomatically.mutate({ definitionId: qrCodeScannerValue ?? "" });
+	}, [putUpAssortmentAutomatically, qrCodeScannerValue]);
+
+	const takeDownAssortmentByQRCodeValue = useCallback(() => {
+		takeDownOldestAssortmentByDefinition.mutate({ definitionId: qrCodeScannerValue ?? "" });
+	}, [takeDownOldestAssortmentByDefinition, qrCodeScannerValue]);
 
 	return (
 		<FullHeight style={{ maxWidth: "100%" }}>
@@ -145,13 +175,52 @@ const AssortmentsVisualisation: FC = () => {
 										{"Zeskanuj"}
 									</Paragraph>
 								}
+								onClick={() => setQRCodeScannerIsPaused(false)}
 							>
-								<Flex className={styles["qr-code-scan-container"]} align={"center"} fullWidth>
-									<Paragraph fontSize={1.5}>
+								<Flex className={styles["qr-code-scan-container"]} align={"center"} direction={"column"} fullWidth>
+									<Paragraph fontSize={1.75}>{"Skanowanie kodu QR"}</Paragraph>
+
+									<Paragraph fontSize={1.25} variant={"secondary"}>
 										{
 											"Aby automatycznie dodać lub pobrać instancje asortymentu ze stanu magazynu, możesz zeskanować jej kod QR tym miejscu. Wybranie typu operacji będzie możliwe po zeskanowaniu kodu QR."
 										}
 									</Paragraph>
+
+									<QRCodeScanner isPaused={qrCodeScannerIsPaused} onScan={onQRCodeScan} />
+
+									{qrCodeScannerValue && (
+										<>
+											<Paragraph variant={"secondary"} fontSize={1.5}>
+												{"Wybierz, którą akcję podjąć z zeskanowanym asortymentem:"}
+											</Paragraph>
+
+											<Flex direction={"row"} justify={"center"} style={{ gap: "1rem" }} fullWidth>
+												<Button
+													onClick={() => takeDownAssortmentByQRCodeValue()}
+													disabled={
+														takeDownOldestAssortmentByDefinition.isPending || putUpAssortmentAutomatically.isPending
+													}
+												>
+													<Paragraph fontSize={1.5}>{"Zdejmij"}</Paragraph>
+												</Button>
+
+												<Button
+													onClick={() => addNewAssortmentByQRCodeValue()}
+													disabled={
+														takeDownOldestAssortmentByDefinition.isPending || putUpAssortmentAutomatically.isPending
+													}
+												>
+													<Paragraph fontSize={1.5}>{"Dodaj"}</Paragraph>
+												</Button>
+											</Flex>
+										</>
+									)}
+
+									{(takeDownOldestAssortmentByDefinition.isPending || putUpAssortmentAutomatically.isPending) && (
+										<Loading />
+									)}
+
+									{qrCodeActionError && <FormError>{qrCodeActionError}</FormError>}
 								</Flex>
 							</DialogButton>
 						</VisualisationAction>
