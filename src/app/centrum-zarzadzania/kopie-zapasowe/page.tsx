@@ -2,7 +2,7 @@
 
 import { type ReactNode, type FC, useState } from "react";
 import { BackupsList, ConfigureBackupSchedule, TakeBackupButton } from "@/ui/templates";
-import { PageHeader } from "@/ui/molecules";
+import { BackButton, PageHeader } from "@/ui/molecules";
 import { Flex, FullHeight, Paragraph } from "@/ui/atoms";
 import type { CustomStyles } from "@/ui/types";
 import commonStyles from "@/styles/common.module.scss";
@@ -32,6 +32,8 @@ const Backups: FC = () => {
 
 	return (
 		<FullHeight>
+			<BackButton fallback={"/centrum-zarzadzania"} />
+
 			<Flex direction={"column"} align={"center"} className={styles["container"]}>
 				<PageHeader
 					title={"Kopie zapasowe"}

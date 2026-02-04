@@ -1,11 +1,13 @@
 import { type FC } from "react";
 import { UserForm } from "@/ui/organisms";
-import { PageHeader } from "@/ui/molecules";
+import { BackButton, PageHeader } from "@/ui/molecules";
 import { FullHeight, Flex, Separator, Button, Paragraph, Link } from "@/ui/atoms";
 import styles from "@/styles/user.module.scss";
 
 const UsersNew: FC = () => (
 	<FullHeight>
+		<BackButton fallback={"/centrum-zarzadzania/uzytkownicy"} />
+
 		<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 			<PageHeader
 				title={"Dodaj użytkownika"}

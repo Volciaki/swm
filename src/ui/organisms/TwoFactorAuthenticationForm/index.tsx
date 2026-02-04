@@ -2,7 +2,7 @@
 
 import { useCallback, useState, type FC } from "react";
 import { useForm } from "react-hook-form";
-import { FormInput, PageHeader } from "@/ui/molecules";
+import { BackButton, FormInput, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { useAuthData, apiClient } from "@/ui/providers";
 import { defaultErrorHandler } from "@/ui/utils";
@@ -13,9 +13,10 @@ type TwoFactorAuthenticationFormBody = {
 
 export type TwoFactorAuthenticationFormProps = {
 	authenticationId: string;
+	hideSelf: () => void;
 };
 
-export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> = ({ authenticationId }) => {
+export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> = ({ authenticationId, hideSelf }) => {
 	const { refreshAuthData } = useAuthData();
 	const { register, handleSubmit, formState } = useForm<TwoFactorAuthenticationFormBody>({
 		mode: "onChange",
@@ -39,6 +40,10 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 
 	return (
 		<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "fit-content" }}>
+			<div style={{ alignSelf: "start" }}>
+				<BackButton enableDefaultOnClick={false} onClick={() => hideSelf()} />
+			</div>
+
 			<PageHeader
 				title={"Dwuetapowa weryfikacja"}
 				description={"Wpisz kod, który został wysłany na Twój e-mail."}

@@ -2,11 +2,10 @@
 
 import { type ReactNode, type FC, useCallback, useState, useEffect, useRef } from "react";
 import { GenerateReportButton } from "@/ui/templates";
-import { PageHeader } from "@/ui/molecules";
+import { BackButton, PageHeader } from "@/ui/molecules";
 import { Flex, FullHeight, Paragraph } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import commonStyles from "@/styles/common.module.scss";
-import type { FileReferenceDTO } from "@/server/utils/files/application/dto/shared/FileReferenceDTO";
 import { downloadBase64 } from "@/ui/utils/base64/download";
 
 type ReportsFormProps = {
@@ -69,6 +68,8 @@ const Reports: FC = () => {
 
 	return (
 		<FullHeight>
+			<BackButton fallback={"/centrum-zarzadzania"} />
+
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader title={"Raporty"} description={"Automatycznie generuj różne warianty raportów."} />
 

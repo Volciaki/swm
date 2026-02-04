@@ -3,7 +3,7 @@
 import Papa from "papaparse";
 import { useCallback, useState, type FC } from "react";
 import { DialogButton, StandardFileUpload, VisualisationAction } from "@/ui/organisms";
-import { List, ListItem, PageHeader } from "@/ui/molecules";
+import { BackButton, List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link, FormError } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import commonStyles from "@/styles/common.module.scss";
@@ -80,6 +80,8 @@ const Visualisation: FC = () => {
 
 	return (
 		<FullHeight>
+			<BackButton fallback={"/centrum-zarzadzania"} forceFallback />
+
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader
 					title={"Wizualizacja magazynu"}

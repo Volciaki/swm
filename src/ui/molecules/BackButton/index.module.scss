@@ -1,0 +1,17 @@
+@use "@/styles" as *;
+
+.container {
+    position: absolute;
+    left: 1.5rem;
+    top: calc(1.5rem + $navigation-height-desktop);
+}
+
+// Yes, this 15rem is kind of a magic number.
+// It's meant to represent the total width of our component.
+@media (width <= calc($content-width + 15rem)) {
+    .container {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+}
