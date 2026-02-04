@@ -1,8 +1,7 @@
 import { type FC } from "react";
 import { UserForm } from "@/ui/organisms";
 import { BackButton, PageHeader } from "@/ui/molecules";
-import { FullHeight, Flex, Separator, Button, Paragraph, Link } from "@/ui/atoms";
-import styles from "@/styles/user.module.scss";
+import { FullHeight, Flex } from "@/ui/atoms";
 
 const UsersNew: FC = () => (
 	<FullHeight>
@@ -14,17 +13,7 @@ const UsersNew: FC = () => (
 				description={"Używając poniższego formularza możesz dodać nowego użytkownika."}
 			/>
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]}>
-				<UserForm />
-
-				<Separator />
-
-				<Link href={"/centrum-zarzadzania/uzytkownicy"}>
-					<Button>
-						<Paragraph style={{ marginInline: "20px" }}>{"Powrót"}</Paragraph>
-					</Button>
-				</Link>
-			</Flex>
+			<UserForm />
 		</Flex>
 	</FullHeight>
 );

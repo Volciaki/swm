@@ -246,40 +246,42 @@ const AssortmentsVisualisation: FC = () => {
 
 						<List>
 							{allAssortments.data &&
-								allAssortments.data.map((assortment, index) => (
-									<ListItem clickable={false} key={`assortment-${index}`}>
-										<Flex
-											direction={"row"}
-											align={"center"}
-											justify={"space-between"}
-											style={{ gap: "1rem" }}
-											fullWidth
-										>
+								allAssortments.data
+									.sort((a, b) => a.name.trim().localeCompare(b.name.trim()))
+									.map((assortment, index) => (
+										<ListItem clickable={false} key={`assortment-${index}`}>
 											<Flex
 												direction={"row"}
 												align={"center"}
-												justify={"center"}
-												style={{ height: "100%", gap: "1rem", minWidth: 0 }}
+												justify={"space-between"}
+												style={{ gap: "1rem" }}
+												fullWidth
 											>
-												<Paragraph fontSize={1.5} style={{ minWidth: "10%" }} ellipsisOverflow>
-													{assortment.name}
-												</Paragraph>
+												<Flex
+													direction={"row"}
+													align={"center"}
+													justify={"center"}
+													style={{ height: "100%", gap: "1rem", minWidth: 0 }}
+												>
+													<Paragraph fontSize={1.5} style={{ minWidth: "10%" }} ellipsisOverflow>
+														{assortment.name}
+													</Paragraph>
 
-												<Separator direction={"vertical"} style={{ width: "2.5px" }} />
+													<Separator direction={"vertical"} style={{ width: "2.5px" }} />
 
-												<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
-													{assortment.comment}
-												</Paragraph>
+													<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
+														{assortment.comment}
+													</Paragraph>
+												</Flex>
+
+												<Link href={`/centrum-zarzadzania/wizualizacja/asortymenty/${assortment.id}/edytuj`}>
+													<Button>
+														<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
+													</Button>
+												</Link>
 											</Flex>
-
-											<Link href={`/centrum-zarzadzania/wizualizacja/asortymenty/${assortment.id}/edytuj`}>
-												<Button>
-													<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
-												</Button>
-											</Link>
-										</Flex>
-									</ListItem>
-								))}
+										</ListItem>
+									))}
 						</List>
 					</Flex>
 				</Flex>

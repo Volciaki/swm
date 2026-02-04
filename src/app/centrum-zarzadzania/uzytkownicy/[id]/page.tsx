@@ -3,10 +3,9 @@
 import { useParams } from "next/navigation";
 import { UserForm } from "@/ui/organisms";
 import { BackButton, PageHeader } from "@/ui/molecules";
-import { Button, Flex, FullHeight, Paragraph, Separator, Link, Loading } from "@/ui/atoms";
+import { Flex, FullHeight, Paragraph, Loading } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
-import styles from "@/styles/user.module.scss";
 
 const UsersExisting = () => {
 	const params = useParams();
@@ -25,23 +24,13 @@ const UsersExisting = () => {
 					description={"Używając poniższego formularza możesz edytować istniejącego już użytkownika."}
 				/>
 
-				<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]}>
-					{user.data && <UserForm userData={{ ...user.data, password: "" }} />}
+				{user.data && <UserForm userData={{ ...user.data, password: "" }} />}
 
-					{user.isLoading && <Loading />}
+				{user.isLoading && <Loading />}
 
-					{user.isError && user.error.data?.metadata && (
-						<Paragraph variant={"danger"}>{`${getPolishErrorMessageByMetadata(user.error.data?.metadata)}`}</Paragraph>
-					)}
-
-					<Separator />
-
-					<Link href={"/centrum-zarzadzania/uzytkownicy"}>
-						<Button>
-							<Paragraph style={{ marginInline: "20px" }}>{"Powrót"}</Paragraph>
-						</Button>
-					</Link>
-				</Flex>
+				{user.isError && user.error.data?.metadata && (
+					<Paragraph variant={"danger"}>{`${getPolishErrorMessageByMetadata(user.error.data?.metadata)}`}</Paragraph>
+				)}
 			</Flex>
 		</FullHeight>
 	);

@@ -166,42 +166,44 @@ const Visualisation: FC = () => {
 
 						<List>
 							{shelves.data &&
-								shelves.data.map((shelf, index) => (
-									<ListItem clickable={false} key={`shelf-${index}`}>
-										<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
-											<Flex
-												direction={"row"}
-												align={"center"}
-												justify={"center"}
-												style={{ width: "fit-content", height: "100%", gap: "1rem" }}
-											>
-												<Paragraph fontSize={1.5} ellipsisOverflow>
-													{shelf.name}
-												</Paragraph>
+								shelves.data
+									.sort((a, b) => a.name.trim().localeCompare(b.name.trim()))
+									.map((shelf, index) => (
+										<ListItem clickable={false} key={`shelf-${index}`}>
+											<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
+												<Flex
+													direction={"row"}
+													align={"center"}
+													justify={"center"}
+													style={{ width: "fit-content", height: "100%", gap: "1rem" }}
+												>
+													<Paragraph fontSize={1.5} ellipsisOverflow>
+														{shelf.name}
+													</Paragraph>
 
-												<Separator direction={"vertical"} style={{ width: "2.5px" }} />
+													<Separator direction={"vertical"} style={{ width: "2.5px" }} />
 
-												<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
-													{shelf.comment}
-												</Paragraph>
+													<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
+														{shelf.comment}
+													</Paragraph>
+												</Flex>
+
+												<Flex direction={"row"} align={"center"} style={{ gap: "1rem" }}>
+													<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/edytuj`}>
+														<Button>
+															<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
+														</Button>
+													</Link>
+
+													<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/wyswietl`}>
+														<Button>
+															<Paragraph fontSize={1.5}>{"Asortyment"}</Paragraph>
+														</Button>
+													</Link>
+												</Flex>
 											</Flex>
-
-											<Flex direction={"row"} align={"center"} style={{ gap: "1rem" }}>
-												<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/edytuj`}>
-													<Button>
-														<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
-													</Button>
-												</Link>
-
-												<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/wyswietl`}>
-													<Button>
-														<Paragraph fontSize={1.5}>{"Asortyment"}</Paragraph>
-													</Button>
-												</Link>
-											</Flex>
-										</Flex>
-									</ListItem>
-								))}
+										</ListItem>
+									))}
 						</List>
 					</Flex>
 				</Flex>
