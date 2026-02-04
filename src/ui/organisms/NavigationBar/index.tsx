@@ -57,7 +57,7 @@ export const NavigationBar = () => {
 
 				{areUserDetailsShown && authData && (
 					<Flex direction={"column"} className={styles["user-details-container"]}>
-						<Link href={`/centrum-zarzadzania/uzytkownicy/${authData.id}`}>
+						<Link href={`/centrum-zarzadzania/uzytkownicy/${authData.id}/edytuj`}>
 							<Button style={{ width: "100%" }} onClick={() => setAreUserDetailsShown(false)}>
 								<Paragraph fontSize={1.25}>{authData.name}</Paragraph>
 							</Button>

@@ -6,7 +6,7 @@ export * from "./UserForm";
 export * from "./ResetPasswordForm";
 export * from "./ResetPasswordEmailForm";
 export * from "./DialogButton";
-export * from "./UserCard";
+export * from "./UserListItem";
 export * from "./NotificationCard";
 export * from "./StandardFileUpload";
 export * from "./ShelfForm";
