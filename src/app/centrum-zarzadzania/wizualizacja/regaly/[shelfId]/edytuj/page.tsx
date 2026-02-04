@@ -11,7 +11,7 @@ const EditShelf: FC = () => {
 
 	return (
 		<FullHeight style={{ width: "100%" }}>
-			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} />
+			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} forceFallback />
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader

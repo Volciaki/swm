@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { UserForm } from "@/ui/organisms";
-import { PageHeader } from "@/ui/molecules";
+import { BackButton, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FullHeight, Paragraph, Separator, Link, Loading } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
@@ -17,6 +17,8 @@ const UsersExisting = () => {
 
 	return (
 		<FullHeight>
+			<BackButton fallback={"/centrum-zarzadzania/uzytkownicy"} />
+
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader
 					title={"Edytuj użytkownika"}

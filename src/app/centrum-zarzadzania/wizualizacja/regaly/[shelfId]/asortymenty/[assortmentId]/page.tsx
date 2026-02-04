@@ -32,7 +32,7 @@ const Assortment: FC = () => {
 
 	return (
 		<FullHeight style={{ width: "100%" }}>
-			<BackButton fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}`} />
+			<BackButton fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}/wyswietl`} forceFallback />
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				{assortment.data && (

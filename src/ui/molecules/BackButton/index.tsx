@@ -6,20 +6,25 @@ import { Paragraph, Button } from "../../atoms";
 import styles from "./index.module.scss";
 
 export type BackButtonProps = {
-	// Will navigate to this location if there's no more history.
 	fallback: string;
+	forceFallback?: boolean;
 };
 
-export const BackButton: FC<BackButtonProps> = ({ fallback }) => {
+export const BackButton: FC<BackButtonProps> = ({ fallback, forceFallback }) => {
 	const router = useRouter();
 
 	const handleBack = useCallback(() => {
+		if (forceFallback) {
+			router.push(fallback);
+			return;
+		}
+
 		if (window.history.length > 1) {
 			router.back();
 		} else {
 			router.push(fallback);
 		}
-	}, [router, fallback]);
+	}, [router, forceFallback, fallback]);
 
 	return (
 		<Button onClick={() => handleBack()} className={styles["container"]}>

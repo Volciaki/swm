@@ -17,7 +17,7 @@ const ViewShelf: FC = () => {
 
 	return (
 		<FullHeight style={{ maxWidth: "100%" }}>
-			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} />
+			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} forceFallback />
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]} fullWidth>
 				{getShelf.isLoading && <Loading />}

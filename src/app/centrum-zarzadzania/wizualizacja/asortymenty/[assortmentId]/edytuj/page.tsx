@@ -11,7 +11,7 @@ const EditAssortment: FC = () => {
 
 	return (
 		<FullHeight style={{ width: "100%" }}>
-			<BackButton fallback={"/centrum-zarzadzania/wizualizacja/asortymenty"} />
+			<BackButton fallback={"/centrum-zarzadzania/wizualizacja/asortymenty"} forceFallback />
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader title={"Edytuj asortyment"} description={"Usuń asortyment lub zmień jego parametry."} />
