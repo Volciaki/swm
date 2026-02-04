@@ -23,7 +23,7 @@ const ViewShelf: FC = () => {
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				{getShelf.data && (
 					<>
-						<PageHeader title={`Regał ${getShelf.data.name}`} description={"Przeglądaj dane asortymentu."} />
+						<PageHeader title={`Regał ${getShelf.data.name}`} description={"Przeglądaj dane regału."} />
 
 						<ShelfCard shelf={getShelf.data} />
 					</>

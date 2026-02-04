@@ -1,13 +1,23 @@
 "use client";
 
-import { type FC } from "react";
-import { useParams } from "next/navigation";
+import { type FC, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { AssortmentForm } from "@/ui/organisms";
 import { BackButton, PageHeader } from "@/ui/molecules";
 import { FullHeight, Flex } from "@/ui/atoms";
+import { useAuthData } from "@/ui/providers";
 
 const EditAssortment: FC = () => {
+	const { authData } = useAuthData();
+	const router = useRouter();
 	const params = useParams();
+
+	useEffect(() => {
+		if (authData && !authData.isAdmin)
+			router.push(`/centrum-zarzadzania/wizualizacja/asortymenty/${params.assortmentId}/wyswietl`);
+	}, [authData, params.assortmentId, router]);
+
+	if (authData && !authData.isAdmin) return null;
 
 	return (
 		<FullHeight style={{ width: "100%" }}>

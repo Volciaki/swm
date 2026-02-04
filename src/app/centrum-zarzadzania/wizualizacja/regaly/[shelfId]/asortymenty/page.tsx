@@ -26,9 +26,7 @@ const ViewShelf: FC = () => {
 					<>
 						<PageHeader
 							title={`Regał ${getShelf.data.name}`}
-							description={
-								"Przeglądaj stary lub twórz zupełnie nowy asortyment. Wspierana jest również opcja importu asortymentu z pliku CSV."
-							}
+							description={"Przeglądaj stary, zdejmuj, lub przyjmuj zupełnie nowy asortyment."}
 						/>
 
 						<Shelf shelfData={getShelf.data} />

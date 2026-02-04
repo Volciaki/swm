@@ -1,23 +1,27 @@
 import { type FC } from "react";
-import type { AssortmentDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDTO";
 import { formatDateAsHumanReadable } from "@/utils";
 import { Card } from "@/ui/molecules";
 import { Paragraph } from "@/ui/atoms";
+import type { AssortmentDefinitionDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDefinitionDTO";
 import { DialogButton } from "../DialogButton";
 
+type Assortment = AssortmentDefinitionDTO & {
+	storedAtTimestamp?: number;
+};
+
 export type AssortmentCardProps = {
-	assortment: AssortmentDTO;
+	assortment: Assortment;
 };
 
 export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 	<Card
 		additionalActions={
 			<>
-				{assortment.definition.image?.visibility.publicUrl && (
+				{assortment.image?.visibility.publicUrl && (
 					<DialogButton buttonContent={<Paragraph>{"Zobacz zdjęcie"}</Paragraph>}>
 						<img
-							src={assortment.definition.image?.visibility.publicUrl}
-							alt={`Zdjęcie ${assortment.definition.name}`}
+							src={assortment.image?.visibility.publicUrl}
+							alt={`Zdjęcie ${assortment.name}`}
 							style={{ maxWidth: "90vw", aspectRatio: "1/1" }}
 						/>
 					</DialogButton>
@@ -25,52 +29,54 @@ export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 
 				<DialogButton buttonContent={<Paragraph>{"Zobacz kod QR"}</Paragraph>}>
 					<img
-						src={assortment.definition.qrCode.visibility.publicUrl!}
-						alt={`Kod QR ${assortment.definition.name}`}
+						src={assortment.qrCode.visibility.publicUrl!}
+						alt={`Kod QR ${assortment.name}`}
 						style={{ maxWidth: "90vw", aspectRatio: "1/1" }}
 					/>
 				</DialogButton>
 			</>
 		}
 	>
-		<Paragraph>{`Nazwa: ${assortment.definition.name}`}</Paragraph>
+		<Paragraph>{`Nazwa: ${assortment.name}`}</Paragraph>
 
-		<Paragraph>{`Komentarz: ${assortment.definition.comment}`}</Paragraph>
+		<Paragraph>{`Komentarz: ${assortment.comment}`}</Paragraph>
 
 		<Paragraph>
 			{"Wymiary:"}
 
 			<br />
 
-			<span>{`Szerokość: ${assortment.definition.size.widthMillimeters}mm`}</span>
+			<span>{`Szerokość: ${assortment.size.widthMillimeters}mm`}</span>
 
 			<br />
 
-			<span>{`Wysokość: ${assortment.definition.size.heightMillimeters}mm`}</span>
+			<span>{`Wysokość: ${assortment.size.heightMillimeters}mm`}</span>
 
 			<br />
 
-			<span>{`Głębokość: ${assortment.definition.size.lengthMillimeters}mm`}</span>
+			<span>{`Głębokość: ${assortment.size.lengthMillimeters}mm`}</span>
 		</Paragraph>
 
-		<Paragraph>{`Waga: ${assortment.definition.weightKg}kg`}</Paragraph>
+		<Paragraph>{`Waga: ${assortment.weightKg}kg`}</Paragraph>
 
-		<Paragraph>
-			{`Termin ważności: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp + assortment.definition.expiresAfterSeconds * 1000))}`}
-		</Paragraph>
+		{assortment.storedAtTimestamp && (
+			<Paragraph>
+				{`Termin ważności: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000))}`}
+			</Paragraph>
+		)}
 
 		<Paragraph>
 			{"Zakres temperatury:"}
 
 			<br />
 
-			<span>{`Minimalna: ${assortment.definition.temperatureRange.minimalCelsius}°C`}</span>
+			<span>{`Minimalna: ${assortment.temperatureRange.minimalCelsius}°C`}</span>
 
 			<br />
 
-			<span>{`Maksymalna: ${assortment.definition.temperatureRange.maximalCelsius}°C`}</span>
+			<span>{`Maksymalna: ${assortment.temperatureRange.maximalCelsius}°C`}</span>
 		</Paragraph>
 
-		<Paragraph>{`Niebezpieczny: ${assortment.definition.isHazardous ? "Tak" : "Nie"}`}</Paragraph>
+		<Paragraph>{`Niebezpieczny: ${assortment.isHazardous ? "Tak" : "Nie"}`}</Paragraph>
 	</Card>
 );
