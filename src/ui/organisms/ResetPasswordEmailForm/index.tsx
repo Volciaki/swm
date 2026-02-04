@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type FC } from "react";
+import { useCallback, useMemo, useState, type FC } from "react";
 import { useForm } from "react-hook-form";
-import type { UseStateSetter } from "@/ui/types";
 import { apiClient } from "@/ui/providers";
-import { FormInput, PageHeader } from "@/ui/molecules";
+import { BackButton, FormInput, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 
@@ -13,22 +12,26 @@ type ResetPasswordEmailFormBody = {
 };
 
 export type ResetPasswordEmailFormProps = {
-	setEmail: UseStateSetter<string | undefined>;
-	setAuthenticationId: UseStateSetter<string | undefined>;
+	onSuccess: (email: string, authenticationId: string) => void;
+	hideResetPasswordForm: () => void;
 };
 
-export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ setEmail, setAuthenticationId }) => {
+export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ onSuccess, hideResetPasswordForm }) => {
 	const [lastEmail, setLastEmail] = useState<string | undefined>();
+	const apiUtils = apiClient.useUtils();
 	const getUserByEmail = apiClient.identity.getUserByEmail.useQuery(
 		{ email: lastEmail ?? "" },
-		{
-			enabled: lastEmail !== undefined,
-		}
+		{ enabled: lastEmail !== undefined }
 	);
 	const requestPasswordReset = apiClient.identity.requestPasswordReset.useMutation({
 		onSuccess: (data) => {
-			setEmail(getUserByEmail.data?.email);
-			setAuthenticationId(data.authenticationId);
+			const email = getUserByEmail.data?.email;
+			const authenticationId = data.authenticationId;
+
+			if (!email) return;
+
+			apiUtils.identity.getUserByEmail.reset();
+			onSuccess(email, authenticationId);
 		},
 	});
 	const { formState, register, handleSubmit } = useForm<ResetPasswordEmailFormBody>({
@@ -48,18 +51,24 @@ export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ setEma
 	}, [requestPasswordReset.error]);
 	const error = getUserByEmailError ?? requestPasswordResetError;
 
-	const formSubmitHandler = useCallback(async (data: ResetPasswordEmailFormBody) => {
-		setLastEmail(data.email);
-	}, []);
+	const formSubmitHandler = useCallback(
+		async (data: ResetPasswordEmailFormBody) => {
+			setLastEmail(data.email);
+			const user = await getUserByEmail.refetch();
 
-	useEffect(() => {
-		if (!getUserByEmail.data) return;
+			if (!user.data) return;
 
-		requestPasswordReset.mutate({ userId: getUserByEmail.data.id });
-	}, [getUserByEmail.data, requestPasswordReset.mutate]);
+			requestPasswordReset.mutate({ userId: user.data.id });
+		},
+		[getUserByEmail, requestPasswordReset]
+	);
 
 	return (
 		<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "fit-content" }}>
+			<div style={{ alignSelf: "start" }}>
+				<BackButton enableDefaultOnClick={false} onClick={() => hideResetPasswordForm()} />
+			</div>
+
 			<PageHeader
 				title={"Resetowanie hasła"}
 				description={"Podaj e-mail powiązany z twoim kontem."}

@@ -8,7 +8,13 @@ export const LoginFlow: FC = () => {
 	const [authenticationId, setAuthenticationId] = useState<string | undefined>();
 	const [passwordResetFlowShown, setPasswordResetFlowShown] = useState(false);
 
-	if (passwordResetFlowShown) return <PasswordResetFlow onPasswordReset={() => setPasswordResetFlowShown(false)} />;
+	if (passwordResetFlowShown)
+		return (
+			<PasswordResetFlow
+				onPasswordReset={() => setPasswordResetFlowShown(false)}
+				hideSelf={() => setPasswordResetFlowShown(false)}
+			/>
+		);
 
 	return (
 		<>
@@ -19,7 +25,12 @@ export const LoginFlow: FC = () => {
 				/>
 			)}
 
-			{authenticationId && <TwoFactorAuthenticationForm authenticationId={authenticationId} />}
+			{authenticationId && (
+				<TwoFactorAuthenticationForm
+					authenticationId={authenticationId}
+					hideSelf={() => setAuthenticationId(undefined)}
+				/>
+			)}
 		</>
 	);
 };

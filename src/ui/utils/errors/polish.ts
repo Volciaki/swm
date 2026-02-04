@@ -79,7 +79,7 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return `Wybrany regał jest zbyt gorący dla asortymentu. Jego minimalna temperatura to ${metadata.shelfMinimalTemperatureCelsius}, maksymalna temperatura asortymentu natomiast to ${metadata.assortmentMaximalTemperatureCelsius}.`;
 	},
 	[ErrorName.SHELF_TOO_COLD_FOR_ASSORTMENT]: (metadata) => {
-		return `Wybrany regał jest zbyt zimny dla asortymentu. Jego maksymalna temperature to ${metadata.shelfMaximalTemperatureCelsius}, minimalna temperatura asortymentu natomiast to ${metadata.assortmentMinimalTemperatureCelsius}.`;
+		return `Wybrany regał jest zbyt zimny dla asortymentu. Jego maksymalna temperatura to ${metadata.shelfMaximalTemperatureCelsius}, minimalna temperatura asortymentu natomiast to ${metadata.assortmentMinimalTemperatureCelsius}.`;
 	},
 	[ErrorName.ASSORTMENT_TOO_LONG]: (metadata) => {
 		return `Asortyment jest zbyt długi. Posiada on ${metadata.passedLengthMillimeters} gdy maksymalna długość to ${metadata.maxLengthMillimeters}.`;

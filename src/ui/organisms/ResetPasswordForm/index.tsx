@@ -3,7 +3,7 @@
 import { useCallback, useState, type FC } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
-import { FormInput, PageHeader } from "@/ui/molecules";
+import { BackButton, FormInput, PageHeader } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
 import { defaultErrorHandler } from "@/ui/utils";
 import styles from "./index.module.scss";
@@ -17,9 +17,10 @@ type PasswordResetFormBody = {
 export type PasswordResetFormProps = {
 	authenticationId: string;
 	onPasswordReset: () => void;
+	onBack: () => void;
 };
 
-export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId, onPasswordReset }) => {
+export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId, onPasswordReset, onBack }) => {
 	const { formState, register, handleSubmit } = useForm<PasswordResetFormBody>({
 		mode: "onChange",
 	});
@@ -47,6 +48,10 @@ export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId
 
 	return (
 		<Flex direction={"column"} align={"center"} className={styles["container"]}>
+			<div style={{ alignSelf: "start" }}>
+				<BackButton enableDefaultOnClick={false} onClick={() => onBack()} />
+			</div>
+
 			<PageHeader
 				title={"Resetowanie hasła"}
 				description={"Na Twój e-mail wysłany został kod, którego możesz użyc poniżej w celu zresetowania hasła."}
