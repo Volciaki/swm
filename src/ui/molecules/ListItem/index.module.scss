@@ -2,7 +2,7 @@
 
 .container {
     background-color: $background-lightened;
-    border: solid $border-size $border;
+    border: solid calc($border-size * 0.75) $border;
     border-radius: $border-radius;
     padding: $padding;
     transition: $transition;
@@ -10,5 +10,5 @@
 
 .clickable:hover {
     cursor: pointer;
-    box-shadow: 3px 3px 6px $border;
+    box-shadow: 2px 2px 4px $border;
 }

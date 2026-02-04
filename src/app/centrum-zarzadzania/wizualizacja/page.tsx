@@ -5,7 +5,7 @@ import { useCallback, useState, type FC } from "react";
 import { DialogButton, StandardFileUpload, VisualisationAction } from "@/ui/organisms";
 import { BackButton, List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link, FormError } from "@/ui/atoms";
-import { apiClient } from "@/ui/providers";
+import { apiClient, useAuthData } from "@/ui/providers";
 import commonStyles from "@/styles/common.module.scss";
 import { defaultErrorHandler } from "@/ui/utils";
 
@@ -23,6 +23,7 @@ type CSVShelf = {
 };
 
 const Visualisation: FC = () => {
+	const { authData } = useAuthData();
 	const apiUtils = apiClient.useUtils();
 	const importShelves = apiClient.storage.importShelves.useMutation({
 		onError: (e) => defaultErrorHandler(e, (message) => setImportShelvesError(message)),
@@ -92,53 +93,59 @@ const Visualisation: FC = () => {
 
 				<Flex direction={"column"} className={commonStyles["form-container"]} fullWidth>
 					<Flex direction={"row"} fullWidth>
-						<VisualisationAction title={"Importuj regały z pliku CSV"}>
-							<DialogButton
-								buttonContent={
-									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
-										{"Importuj"}
-									</Paragraph>
-								}
-							>
-								<Paragraph fontSize={1.5}>{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}</Paragraph>
+						{authData?.isAdmin && (
+							<>
+								<VisualisationAction title={"Importuj regały z pliku CSV"}>
+									<DialogButton
+										buttonContent={
+											<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+												{"Importuj"}
+											</Paragraph>
+										}
+									>
+										<Paragraph fontSize={1.5}>
+											{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}
+										</Paragraph>
 
-								<StandardFileUpload
-									accept={"text/csv"}
-									onError={(error) => setFileUploadError(error)}
-									maxSizeBytes={1024 * 1024}
-									onUpload={(data) => {
-										setFile(data);
-										setFileUploadError(undefined);
-									}}
-								/>
+										<StandardFileUpload
+											accept={"text/csv"}
+											onError={(error) => setFileUploadError(error)}
+											maxSizeBytes={1024 * 1024}
+											onUpload={(data) => {
+												setFile(data);
+												setFileUploadError(undefined);
+											}}
+										/>
 
-								{fileUploadError && <FormError>{fileUploadError}</FormError>}
+										{fileUploadError && <FormError>{fileUploadError}</FormError>}
 
-								{file && <Paragraph fontSize={1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
+										{file && <Paragraph fontSize={1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
 
-								<Button onClick={() => importShelvesSubmitHandler()} disabled={!file || importShelves.isPending}>
-									<Paragraph fontSize={1.75}>{"Importuj"}</Paragraph>
-								</Button>
+										<Button onClick={() => importShelvesSubmitHandler()} disabled={!file || importShelves.isPending}>
+											<Paragraph fontSize={1.75}>{"Importuj"}</Paragraph>
+										</Button>
 
-								{importShelvesError && <FormError>{importShelvesError}</FormError>}
+										{importShelvesError && <FormError>{importShelvesError}</FormError>}
 
-								{importShelves.isPending && <Loading />}
-							</DialogButton>
-						</VisualisationAction>
+										{importShelves.isPending && <Loading />}
+									</DialogButton>
+								</VisualisationAction>
 
-						<Separator direction={"vertical"} />
+								<Separator direction={"vertical"} />
 
-						<VisualisationAction title={"Ręcznie dodaj nowy regał"}>
-							<Link href={"/centrum-zarzadzania/wizualizacja/regaly/nowy"}>
-								<Button>
-									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
-										{"Dodaj"}
-									</Paragraph>
-								</Button>
-							</Link>
-						</VisualisationAction>
+								<VisualisationAction title={"Ręcznie dodaj nowy regał"}>
+									<Link href={"/centrum-zarzadzania/wizualizacja/regaly/nowy"}>
+										<Button>
+											<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+												{"Dodaj"}
+											</Paragraph>
+										</Button>
+									</Link>
+								</VisualisationAction>
 
-						<Separator direction={"vertical"} />
+								<Separator direction={"vertical"} />
+							</>
+						)}
 
 						<VisualisationAction title={"Zobacz zdefiniowane asortymenty"}>
 							<Link href={"/centrum-zarzadzania/wizualizacja/asortymenty"}>
@@ -166,42 +173,52 @@ const Visualisation: FC = () => {
 
 						<List>
 							{shelves.data &&
-								shelves.data.map((shelf, index) => (
-									<ListItem clickable={false} key={`shelf-${index}`}>
-										<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
-											<Flex
-												direction={"row"}
-												align={"center"}
-												justify={"center"}
-												style={{ width: "fit-content", height: "100%", gap: "1rem" }}
-											>
-												<Paragraph fontSize={1.5} ellipsisOverflow>
-													{shelf.name}
-												</Paragraph>
+								shelves.data
+									.sort((a, b) => a.name.trim().localeCompare(b.name.trim()))
+									.map((shelf, index) => (
+										<ListItem clickable={false} key={`shelf-${index}`}>
+											<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
+												<Flex
+													direction={"row"}
+													align={"center"}
+													justify={"center"}
+													style={{ width: "fit-content", height: "100%", gap: "1rem" }}
+												>
+													<Paragraph fontSize={1.5} ellipsisOverflow>
+														{shelf.name}
+													</Paragraph>
 
-												<Separator direction={"vertical"} style={{ width: "2.5px" }} />
+													<Separator direction={"vertical"} style={{ width: "2.5px" }} />
 
-												<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
-													{shelf.comment}
-												</Paragraph>
+													<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
+														{shelf.comment}
+													</Paragraph>
+												</Flex>
+
+												<Flex direction={"row"} align={"center"} style={{ gap: "1rem" }}>
+													{authData?.isAdmin ? (
+														<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/edytuj`}>
+															<Button>
+																<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
+															</Button>
+														</Link>
+													) : (
+														<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/wyswietl`}>
+															<Button>
+																<Paragraph fontSize={1.5}>{"Wyświetl"}</Paragraph>
+															</Button>
+														</Link>
+													)}
+
+													<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/asortymenty`}>
+														<Button>
+															<Paragraph fontSize={1.5}>{"Asortyment"}</Paragraph>
+														</Button>
+													</Link>
+												</Flex>
 											</Flex>
-
-											<Flex direction={"row"} align={"center"} style={{ gap: "1rem" }}>
-												<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/edytuj`}>
-													<Button>
-														<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
-													</Button>
-												</Link>
-
-												<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/wyswietl`}>
-													<Button>
-														<Paragraph fontSize={1.5}>{"Asortyment"}</Paragraph>
-													</Button>
-												</Link>
-											</Flex>
-										</Flex>
-									</ListItem>
-								))}
+										</ListItem>
+									))}
 						</List>
 					</Flex>
 				</Flex>

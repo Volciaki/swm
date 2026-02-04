@@ -13,7 +13,7 @@ export class UpdateUser {
 	) {}
 
 	async execute(dto: UpdateUserDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+		if (!currentUser?.isAdmin && dto.id !== currentUser?.id) throw new UnauthorizedError();
 
 		const userId = UUID.fromString(dto.id);
 		const user = await this.userRepository.getById(userId);
@@ -24,7 +24,7 @@ export class UpdateUser {
 			dto.newData.passwordRaw === "" ? user.passwordHash : await this.stringHasher.hash(dto.newData.passwordRaw);
 		user.email = Email.fromString(dto.newData.email);
 		user.twoFactorAuthenticationEnabled = dto.newData.twoFactorAuthenticationEnabled;
-		user.isAdmin = dto.newData.isAdmin;
+		user.isAdmin = currentUser.isAdmin ? dto.newData.isAdmin : false;
 		user.name = dto.newData.name;
 
 		await this.userRepository.update(user);

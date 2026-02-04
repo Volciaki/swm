@@ -8,8 +8,8 @@ import styles from "../styles/layout.module.scss";
 import "../styles/global.scss";
 
 export const metadata: Metadata = {
-	title: "Simple Warehouse Management",
-	description: "Simple Warehouse Management (SWM) is a service specializing in managing your storage easily.. simple.",
+	title: "SWM - Simple Warehouse Management",
+	description: "SWM is a service specializing in managing your storage easily.. simple.",
 };
 
 const interFont = ABeeZee({
@@ -30,7 +30,7 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 
 				<main className={styles["content-container"]}>
 					<div className={styles["content-wrapper"]}>
-						<CenteredOnPage>{children}</CenteredOnPage>{" "}
+						<CenteredOnPage>{children}</CenteredOnPage>
 					</div>
 				</main>
 			</body>

@@ -5,7 +5,7 @@ import { useCallback, useState, type FC } from "react";
 import { DialogButton, QRCodeScanner, StandardFileUpload, VisualisationAction } from "@/ui/organisms";
 import { BackButton, List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link, FormError } from "@/ui/atoms";
-import { apiClient } from "@/ui/providers";
+import { apiClient, useAuthData } from "@/ui/providers";
 import type { APIError } from "@/ui/utils";
 import { defaultErrorHandler } from "@/ui/utils";
 import commonStyles from "@/styles/common.module.scss";
@@ -27,6 +27,7 @@ type CSVAssortment = {
 };
 
 const AssortmentsVisualisation: FC = () => {
+	const { authData } = useAuthData();
 	const apiUtils = apiClient.useUtils();
 	const importAssortment = apiClient.storage.importAssortment.useMutation({
 		onError: (e) => defaultErrorHandler(e, (message) => setImportAssortmentError(message)),
@@ -125,53 +126,62 @@ const AssortmentsVisualisation: FC = () => {
 
 				<Flex direction={"column"} className={commonStyles["form-container"]} fullWidth>
 					<Flex direction={"row"} style={{ gap: "1rem" }} fullWidth>
-						<VisualisationAction title={"Importuj asortymenty z pliku CSV"}>
-							<DialogButton
-								buttonContent={
-									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
-										{"Importuj"}
-									</Paragraph>
-								}
-							>
-								<Paragraph fontSize={1.5}>{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}</Paragraph>
+						{authData?.isAdmin && (
+							<>
+								<VisualisationAction title={"Importuj asortymenty z pliku CSV"}>
+									<DialogButton
+										buttonContent={
+											<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+												{"Importuj"}
+											</Paragraph>
+										}
+									>
+										<Paragraph fontSize={1.5}>
+											{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}
+										</Paragraph>
 
-								<StandardFileUpload
-									accept={"text/csv"}
-									onError={(error) => setFileUploadError(error)}
-									maxSizeBytes={1024 * 1024}
-									onUpload={(data) => {
-										setFile(data);
-										setFileUploadError(undefined);
-									}}
-								/>
+										<StandardFileUpload
+											accept={"text/csv"}
+											onError={(error) => setFileUploadError(error)}
+											maxSizeBytes={1024 * 1024}
+											onUpload={(data) => {
+												setFile(data);
+												setFileUploadError(undefined);
+											}}
+										/>
 
-								{fileUploadError && <FormError>{fileUploadError}</FormError>}
+										{fileUploadError && <FormError>{fileUploadError}</FormError>}
 
-								{file && <Paragraph fontSize={1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
+										{file && <Paragraph fontSize={1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
 
-								<Button onClick={() => importAssortmentSubmitHandler()} disabled={!file || importAssortment.isPending}>
-									<Paragraph fontSize={1.75}>{"Importuj"}</Paragraph>
-								</Button>
+										<Button
+											onClick={() => importAssortmentSubmitHandler()}
+											disabled={!file || importAssortment.isPending}
+										>
+											<Paragraph fontSize={1.75}>{"Importuj"}</Paragraph>
+										</Button>
 
-								{importAssortmentError && <FormError>{importAssortmentError}</FormError>}
+										{importAssortmentError && <FormError>{importAssortmentError}</FormError>}
 
-								{importAssortment.isPending && <Loading />}
-							</DialogButton>
-						</VisualisationAction>
+										{importAssortment.isPending && <Loading />}
+									</DialogButton>
+								</VisualisationAction>
 
-						<Separator direction={"vertical"} />
+								<Separator direction={"vertical"} />
 
-						<VisualisationAction title={"Ręcznie dodaj nowy asortyment"}>
-							<Link href={"/centrum-zarzadzania/wizualizacja/asortymenty/nowy"}>
-								<Button>
-									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
-										{"Dodaj"}
-									</Paragraph>
-								</Button>
-							</Link>
-						</VisualisationAction>
+								<VisualisationAction title={"Ręcznie dodaj nowy asortyment"}>
+									<Link href={"/centrum-zarzadzania/wizualizacja/asortymenty/nowy"}>
+										<Button>
+											<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+												{"Dodaj"}
+											</Paragraph>
+										</Button>
+									</Link>
+								</VisualisationAction>
 
-						<Separator direction={"vertical"} />
+								<Separator direction={"vertical"} />
+							</>
+						)}
 
 						<VisualisationAction title={"Zeskanuj kod QR"}>
 							<DialogButton
@@ -246,40 +256,50 @@ const AssortmentsVisualisation: FC = () => {
 
 						<List>
 							{allAssortments.data &&
-								allAssortments.data.map((assortment, index) => (
-									<ListItem clickable={false} key={`assortment-${index}`}>
-										<Flex
-											direction={"row"}
-											align={"center"}
-											justify={"space-between"}
-											style={{ gap: "1rem" }}
-											fullWidth
-										>
+								allAssortments.data
+									.sort((a, b) => a.name.trim().localeCompare(b.name.trim()))
+									.map((assortment, index) => (
+										<ListItem clickable={false} key={`assortment-${index}`}>
 											<Flex
 												direction={"row"}
 												align={"center"}
-												justify={"center"}
-												style={{ height: "100%", gap: "1rem", minWidth: 0 }}
+												justify={"space-between"}
+												style={{ gap: "1rem" }}
+												fullWidth
 											>
-												<Paragraph fontSize={1.5} style={{ minWidth: "10%" }} ellipsisOverflow>
-													{assortment.name}
-												</Paragraph>
+												<Flex
+													direction={"row"}
+													align={"center"}
+													justify={"center"}
+													style={{ height: "100%", gap: "1rem", minWidth: 0 }}
+												>
+													<Paragraph fontSize={1.5} style={{ minWidth: "10%" }} ellipsisOverflow>
+														{assortment.name}
+													</Paragraph>
 
-												<Separator direction={"vertical"} style={{ width: "2.5px" }} />
+													<Separator direction={"vertical"} style={{ width: "2.5px" }} />
 
-												<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
-													{assortment.comment}
-												</Paragraph>
+													<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
+														{assortment.comment}
+													</Paragraph>
+												</Flex>
+
+												{authData?.isAdmin ? (
+													<Link href={`/centrum-zarzadzania/wizualizacja/asortymenty/${assortment.id}/edytuj`}>
+														<Button>
+															<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
+														</Button>
+													</Link>
+												) : (
+													<Link href={`/centrum-zarzadzania/wizualizacja/asortymenty/${assortment.id}/wyswietl`}>
+														<Button>
+															<Paragraph fontSize={1.5}>{"Wyświetl"}</Paragraph>
+														</Button>
+													</Link>
+												)}
 											</Flex>
-
-											<Link href={`/centrum-zarzadzania/wizualizacja/asortymenty/${assortment.id}/edytuj`}>
-												<Button>
-													<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
-												</Button>
-											</Link>
-										</Flex>
-									</ListItem>
-								))}
+										</ListItem>
+									))}
 						</List>
 					</Flex>
 				</Flex>

@@ -1,36 +1,22 @@
 import { type FC } from "react";
-import { Flex, Paragraph, Separator } from "@/ui/atoms";
-import { ListItem } from "@/ui/molecules";
+import type { UserDTO } from "@/server/utils/identity/dto";
+import { Paragraph } from "@/ui/atoms";
+import { Card } from "@/ui/molecules";
 
-type User = {
-	id: string;
-	name: string;
-	email: string;
-	isAdmin: boolean;
-};
+type User = Omit<UserDTO, "passwordHash">;
 
 export type UserCardProps = {
 	user: User;
 };
 
 export const UserCard: FC<UserCardProps> = ({ user }) => (
-	<ListItem clickable>
-		<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
-			<Paragraph>{user.name}</Paragraph>
+	<Card>
+		<Paragraph>{`Nazwa: ${user.name}`}</Paragraph>
 
-			<Flex direction={"row"} align={"center"} gap={10}>
-				<Paragraph variant={"secondary"} fontSize={1.25}>
-					{`Administrator: ${user.isAdmin ? "Tak" : "Nie"}`}
-				</Paragraph>
+		<Paragraph>{`Email: ${user.email}`}</Paragraph>
 
-				<div style={{ height: "1.5rem" }}>
-					<Separator direction={"vertical"} />
-				</div>
+		<Paragraph>{`Administrator: ${user.isAdmin ? "Tak" : "Nie"}`}</Paragraph>
 
-				<Paragraph variant={"secondary"} fontSize={1.25}>
-					{user.email}
-				</Paragraph>
-			</Flex>
-		</Flex>
-	</ListItem>
+		<Paragraph>{`Weryfikacja dwuetapowa: ${user.twoFactorAuthenticationEnabled ? "Tak" : "Nie"}`}</Paragraph>
+	</Card>
 );

@@ -79,32 +79,34 @@ const PutUpAssortment: FC = () => {
 
 				{getAllAssortments.data && (
 					<List>
-						{getAllAssortments.data.map((definition, index) => (
-							<ListItem key={`definition-${index}`}>
-								<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
-									<Flex
-										direction={"row"}
-										align={"center"}
-										justify={"center"}
-										style={{ width: "fit-content", height: "100%", gap: "1rem", minWidth: 0 }}
-									>
-										<Paragraph fontSize={1.5} ellipsisOverflow>
-											{definition.name}
-										</Paragraph>
+						{getAllAssortments.data
+							.sort((a, b) => a.name.trim().localeCompare(b.name.trim()))
+							.map((definition, index) => (
+								<ListItem key={`definition-${index}`}>
+									<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
+										<Flex
+											direction={"row"}
+											align={"center"}
+											justify={"center"}
+											style={{ width: "fit-content", height: "100%", gap: "1rem", minWidth: 0 }}
+										>
+											<Paragraph fontSize={1.5} ellipsisOverflow>
+												{definition.name}
+											</Paragraph>
 
-										<Separator direction={"vertical"} style={{ width: "2.5px" }} />
+											<Separator direction={"vertical"} style={{ width: "2.5px" }} />
 
-										<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
-											{definition.comment}
-										</Paragraph>
+											<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
+												{definition.comment}
+											</Paragraph>
+										</Flex>
+
+										<Button onClick={() => putUpAssortmentHandler(definition.id)} disabled={putUpAssortment.isPending}>
+											<Paragraph fontSize={1.5}>{"Wybierz"}</Paragraph>
+										</Button>
 									</Flex>
-
-									<Button onClick={() => putUpAssortmentHandler(definition.id)} disabled={putUpAssortment.isPending}>
-										<Paragraph fontSize={1.5}>{"Wybierz"}</Paragraph>
-									</Button>
-								</Flex>
-							</ListItem>
-						))}
+								</ListItem>
+							))}
 					</List>
 				)}
 			</Flex>
