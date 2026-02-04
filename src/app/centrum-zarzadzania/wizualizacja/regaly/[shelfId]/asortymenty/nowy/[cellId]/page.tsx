@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, type FC } from "react";
+import { useCallback, useEffect, useState, type FC } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { BackButton, List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, FullHeight, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
-import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { defaultErrorHandler, getPolishErrorMessageByMetadata } from "@/ui/utils";
 
 const PutUpAssortment: FC = () => {
 	const router = useRouter();
@@ -18,10 +18,14 @@ const PutUpAssortment: FC = () => {
 	);
 	const getAllAssortments = apiClient.storage.getAllAssortments.useQuery();
 	const putUpAssortment = apiClient.storage.putUpAssortment.useMutation({
-		onSuccess: () => {
+		onSuccess: (data) => {
+			setPutUpAssortmentError(undefined);
 			apiUtils.storage.invalidate();
+			redirectToCreated(data.newAssortment.shelfId, data.newAssortment.id);
 		},
+		onError: (e) => defaultErrorHandler(e, (message) => setPutUpAssortmentError(message)),
 	});
+	const [putUpAssortmentError, setPutUpAssortmentError] = useState<string | undefined>();
 
 	const thisCell = getShelf.data ? getShelf.data.cells.flat().find((cell) => cell.id === params.cellId) : undefined;
 
@@ -38,14 +42,13 @@ const PutUpAssortment: FC = () => {
 
 			if (!shelfId || !cellId) return;
 
-			const data = await putUpAssortment.mutateAsync({
+			putUpAssortment.mutate({
 				shelfId: shelfId as string,
 				cellId: cellId as string,
 				assortmentDefinitionId,
 			});
-			redirectToCreated(data.newAssortment.shelfId, data.newAssortment.id);
 		},
-		[params, putUpAssortment, redirectToCreated]
+		[params, putUpAssortment]
 	);
 
 	useEffect(() => {
@@ -66,9 +69,7 @@ const PutUpAssortment: FC = () => {
 
 				{putUpAssortment.isPending && <Loading />}
 
-				{putUpAssortment.error && (
-					<FormError>{getPolishErrorMessageByMetadata(putUpAssortment.error.data?.metadata)}</FormError>
-				)}
+				{putUpAssortmentError && !putUpAssortment.isPending && <FormError>{putUpAssortmentError}</FormError>}
 
 				{getAllAssortments.isLoading && <Loading />}
 
