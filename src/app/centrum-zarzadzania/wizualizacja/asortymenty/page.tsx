@@ -3,11 +3,11 @@
 import Papa from "papaparse";
 import { useCallback, useState, type FC } from "react";
 import { DialogButton, QRCodeScanner, StandardFileUpload, VisualisationAction } from "@/ui/organisms";
-import { List, ListItem, PageHeader } from "@/ui/molecules";
+import { BackButton, List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link, FormError } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import type { APIError } from "@/ui/utils";
-import { defaultErrorHandler, getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { defaultErrorHandler } from "@/ui/utils";
 import commonStyles from "@/styles/common.module.scss";
 import styles from "@/styles/assortments.module.scss";
 
@@ -115,6 +115,8 @@ const AssortmentsVisualisation: FC = () => {
 
 	return (
 		<FullHeight style={{ maxWidth: "100%" }}>
+			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} />
+
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader
 					title={"Asortymenty"}

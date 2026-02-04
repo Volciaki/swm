@@ -2,7 +2,7 @@
 
 import { type FC } from "react";
 import { Button, Flex, FullHeight, Paragraph, Link, Separator, Loading } from "@/ui/atoms";
-import { PageHeader, List } from "@/ui/molecules";
+import { PageHeader, List, BackButton } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
 import { UserCard } from "@/ui/organisms";
 
@@ -11,6 +11,8 @@ const Users: FC = () => {
 
 	return (
 		<FullHeight>
+			<BackButton fallback={"/centrum-zarzadzania"} />
+
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
 				<PageHeader
 					title={"Zarządzanie użytkownikami"}

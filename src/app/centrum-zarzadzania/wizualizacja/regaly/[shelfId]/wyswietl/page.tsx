@@ -3,7 +3,7 @@
 import type { FC } from "react";
 import { useParams } from "next/navigation";
 import { FullHeight, Flex, Loading, FormError } from "@/ui/atoms";
-import { PageHeader, Shelf } from "@/ui/molecules";
+import { BackButton, PageHeader, Shelf } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 import styles from "@/styles/view-shelf.module.scss";
@@ -17,6 +17,8 @@ const ViewShelf: FC = () => {
 
 	return (
 		<FullHeight style={{ maxWidth: "100%" }}>
+			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} />
+
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]} fullWidth>
 				{getShelf.isLoading && <Loading />}
 

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, type FC } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { List, ListItem, PageHeader } from "@/ui/molecules";
+import { BackButton, List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, FullHeight, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
@@ -56,6 +56,8 @@ const PutUpAssortment: FC = () => {
 
 	return (
 		<FullHeight style={{ width: "100%" }}>
+			<BackButton fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}`} />
+
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader
 					title={"Wypełnij pole asortymentem"}
