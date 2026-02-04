@@ -7,3 +7,4 @@ export * from "./Dialog";
 export * from "./RadioGroup";
 export * from "./FileUpload";
 export * from "./Shelf";
+export * from "./BackButton";
