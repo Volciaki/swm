@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useMemo, useState, type FC } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { clsx } from "clsx";
 import { useRouter } from "next/navigation";
-import { Button, Flex, FormError, Loading, Paragraph, Separator } from "@/ui/atoms";
+import { Button, Flex, FormError, Loading, Paragraph, Separator, Switch } from "@/ui/atoms";
 import type { APIError } from "@/ui/utils";
 import { defaultErrorHandler, floatOnlyValidator, getPolishErrorMessageByMetadata } from "@/ui/utils";
 import { apiClient } from "@/ui/providers";
@@ -74,9 +74,9 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 			minTemperatureCelsius: data.temperatureRange.minimalCelsius,
 			maxTemperatureCelsius: data.temperatureRange.maximalCelsius,
 			weightKg: data.weightKg,
+			isHazardous: data.isHazardous,
 			// TODO: ...
 			imageBase64: undefined,
-			isHazardous: false,
 		};
 		return v;
 	}, [getAssortment.data]);
@@ -105,9 +105,9 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 				},
 				expiresAfterSeconds: Math.round(Number(data.expiresAfterDays) * 24 * 60 * 60),
 				comment: data.comment,
+				isHazardous: data.isHazardous,
 				// TODO: ...
 				imageContentBase64: null,
-				isHazardous: false,
 			};
 
 			if (definitionId) {
@@ -253,6 +253,25 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 						},
 					]}
 				/>
+
+				<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
+					<Paragraph fontSize={1.75}>{"Niebezpieczny"}</Paragraph>
+
+					<Controller
+						control={control}
+						name={"isHazardous"}
+						defaultValue={values?.isHazardous}
+						render={({ field }) => (
+							<Flex direction={"row"} style={{ gap: "1rem" }} justify={"center"}>
+								<Switch checked={field.value} setChecked={field.onChange} />
+
+								<Paragraph fontSize={1.5} variant={"secondary"}>
+									{"Nie/Tak"}
+								</Paragraph>
+							</Flex>
+						)}
+					/>
+				</Flex>
 
 				<Separator style={{ marginBlock: "1rem" }} />
 
