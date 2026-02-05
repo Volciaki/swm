@@ -3,7 +3,7 @@
 import { useCallback, type FC } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { BackButton, PageHeader } from "@/ui/molecules";
-import { Button, Flex, FormError, FullHeight, Loading, Paragraph } from "@/ui/atoms";
+import { Button, Flex, FormError, FullHeight, Link, Loading, Paragraph } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 import { AssortmentCard, DialogButton } from "@/ui/organisms";
@@ -16,6 +16,10 @@ const ShelfAssortment: FC = () => {
 	const assortment = apiClient.storage.getAssortmentInstance.useQuery(
 		{ id: params.assortmentId as string },
 		{ enabled: params.assortmentId !== undefined }
+	);
+	const nextAssortmentToBeTakenDown = apiClient.storage.getNextAssortmentToBeTakenDownByDefinition.useQuery(
+		{ definitionId: assortment.data?.definition.id ?? "" },
+		{ enabled: assortment.data?.definition.id !== undefined }
 	);
 	const takeDownAssortment = apiClient.storage.takeDownAssortment.useMutation({
 		onSuccess: () => {
@@ -49,6 +53,24 @@ const ShelfAssortment: FC = () => {
 								{"Próbujesz zdjąć asortyment. Ta akcja nie jest odwracalna."}
 							</Paragraph>
 
+							{nextAssortmentToBeTakenDown.data && nextAssortmentToBeTakenDown.data.id !== assortment.data.id && (
+								<Paragraph fontSize={1.25} variant={"warning"} style={{ textAlign: "center" }}>
+									<strong>{"UWAGA"}</strong>
+
+									{
+										" W zasobach magazynu znajduję się instancja tego samego asortymentu, która została przyjęta wcześniej od tej wybranej. O ile pobranie tej przed tamtą nie jest zakazane, zalecane jest sciąganie w pierwszej kolejności najstarszych produktów. Aby znawigować do starszego asortymentu kliknij "
+									}
+
+									<Link
+										href={`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/asortymenty/${nextAssortmentToBeTakenDown.data.id}`}
+									>
+										{"tutaj"}
+									</Link>
+
+									{"."}
+								</Paragraph>
+							)}
+
 							<Button onClick={() => takeDownAssortmentHandler()} disabled={takeDownAssortment.isPending}>
 								<Paragraph fontSize={1.5}>{"Zdejmij"}</Paragraph>
 							</Button>
@@ -68,7 +90,7 @@ const ShelfAssortment: FC = () => {
 
 				{assortment.error && <FormError>{getPolishErrorMessageByMetadata(assortment.error.data?.metadata)}</FormError>}
 
-				{assortment.isLoading && <Loading />}
+				{(assortment.isLoading || nextAssortmentToBeTakenDown.isLoading) && <Loading />}
 			</Flex>
 		</FullHeight>
 	);

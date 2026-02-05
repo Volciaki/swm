@@ -60,9 +60,13 @@ export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 		<Paragraph>{`Waga: ${assortment.weightKg}kg`}</Paragraph>
 
 		{assortment.storedAtTimestamp && (
-			<Paragraph>
-				{`Termin ważności: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000))}`}
-			</Paragraph>
+			<>
+				<Paragraph>{`Data przyjęcia: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}`}</Paragraph>
+
+				<Paragraph>
+					{`Termin ważności: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000))}`}
+				</Paragraph>
+			</>
 		)}
 
 		<Paragraph>
