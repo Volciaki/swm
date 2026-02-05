@@ -34,7 +34,7 @@ export const FormFields = <T extends FieldValues>({ sections, control }: FormFie
 					key={`form-section-${sectionIndex}`}
 					fullWidth
 				>
-					<Paragraph style={{ width: "100%", textAlign: "center", fontSize: "1.75rem" }}>{section.name}</Paragraph>
+					<Paragraph style={{ width: "100%", textAlign: "center" }} fontSize={1.75}>{section.name}</Paragraph>
 
 					<Flex direction={"row"} style={{ gap: "1rem" }} fullWidth>
 						{section.inputs.map(
