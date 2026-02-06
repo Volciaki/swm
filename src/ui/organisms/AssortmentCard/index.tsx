@@ -1,12 +1,13 @@
 import { type FC } from "react";
 import { formatDateAsHumanReadable } from "@/utils";
 import { Card } from "@/ui/molecules";
-import { Paragraph, Image } from "@/ui/atoms";
+import { Paragraph, Image, Flex, Button, Link } from "@/ui/atoms";
 import type { AssortmentDefinitionDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDefinitionDTO";
 import { DialogButton } from "../DialogButton";
 
 type Assortment = AssortmentDefinitionDTO & {
 	storedAtTimestamp?: number;
+	putUpByUserId?: string;
 };
 
 export type AssortmentCardProps = {
@@ -16,25 +17,36 @@ export type AssortmentCardProps = {
 export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 	<Card
 		additionalActions={
-			<>
+			<Flex direction={"row"} style={{ gap: "1rem" }}>
 				{assortment.image?.visibility.publicUrl && (
-					<DialogButton buttonContent={<Paragraph>{"Zobacz zdjęcie"}</Paragraph>}>
+					<DialogButton buttonContent={<Paragraph fontSize={1.75}>{"Zobacz zdjęcie"}</Paragraph>}>
 						<Image
 							src={assortment.image?.visibility.publicUrl}
 							alt={`Zdjęcie ${assortment.name}`}
-							style={{ maxWidth: "90vw", aspectRatio: "1/1" }}
+							style={{ maxHeight: "50vh", aspectRatio: "1/1" }}
 						/>
 					</DialogButton>
 				)}
 
-				<DialogButton buttonContent={<Paragraph>{"Zobacz kod QR"}</Paragraph>}>
+				<DialogButton buttonContent={<Paragraph fontSize={1.75}>{"Zobacz kod QR"}</Paragraph>}>
 					<Image
 						src={assortment.qrCode.visibility.publicUrl!}
 						alt={`Kod QR ${assortment.name}`}
-						style={{ maxWidth: "90vw", aspectRatio: "1/1" }}
+						style={{ maxHeight: "50vh", aspectRatio: "1/1" }}
 					/>
 				</DialogButton>
-			</>
+
+				{assortment.putUpByUserId && (
+					<Link href={`/centrum-zarzadzania/uzytkownicy/${assortment.putUpByUserId}`} newTab>
+						<Button>
+							<Paragraph fontSize={1.75}>
+								{/* TODO: add an arrow facing towards the top right corner */}
+								{"Przyjęty przez"}
+							</Paragraph>
+						</Button>
+					</Link>
+				)}
+			</Flex>
 		}
 	>
 		<Paragraph>{`Nazwa: ${assortment.name}`}</Paragraph>

@@ -101,9 +101,7 @@ const ShelfAssortment: FC = () => {
 							{(takeDownAssortment.isPending || nextAssortmentToBeTakenDown.isLoading) && <Loading />}
 						</DialogButton>
 
-						<AssortmentCard
-							assortment={{ ...assortment.data.definition, storedAtTimestamp: assortment.data.storedAtTimestamp }}
-						/>
+						<AssortmentCard assortment={{ ...assortment.data.definition, ...assortment.data }} />
 					</>
 				)}
 
