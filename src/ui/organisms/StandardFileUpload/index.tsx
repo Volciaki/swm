@@ -2,9 +2,10 @@
 
 import { type FC, useState } from "react";
 import { clsx } from "clsx";
+import { LuUpload } from "react-icons/lu";
 import type { FileUploadProps } from "@/ui/molecules";
 import { FileUpload } from "@/ui/molecules";
-import { Paragraph } from "@/ui/atoms";
+import { Flex, Paragraph } from "@/ui/atoms";
 import styles from "./index.module.scss";
 
 export type StandardFileUploadProps = Omit<FileUploadProps, "children"> & {
@@ -22,17 +23,21 @@ export const StandardFileUpload: FC<StandardFileUploadProps> = ({ onUpload, heig
 				if (onUpload) onUpload(data);
 			}}
 		>
-			<div
+			<Flex
 				className={clsx([styles["upload-field"]], { [styles["uploaded"]]: hasUploaded })}
-				style={{ height: `${height}rem`, width: `${height * 1.75}rem` }}
+				style={{ height: `${height}rem`, width: `${height * 1.75}rem`, gap: "1rem" }}
+				direction={"column"}
+				align={"center"}
 			>
 				<Paragraph fontSize={1.25} variant={"secondary"}>
 					{"Przerzuć plik na te pole, lub go "}
 					<span className={styles["clickable-text"]}>{"wybierz"}</span>
 				</Paragraph>
 
-				{/* TODO: add the upload icon here */}
-			</div>
+				<Flex style={{ height: "100%" }} align={"center"}>
+					<LuUpload color={"#A7A7A7"} size={"5rem"} />
+				</Flex>
+			</Flex>
 		</FileUpload>
 	);
 };

@@ -1,4 +1,5 @@
 import { type FC } from "react";
+import { RiArrowRightUpLine } from "react-icons/ri";
 import { formatDateAsHumanReadable } from "@/utils";
 import { Card } from "@/ui/molecules";
 import { Paragraph, Image, Flex, Button, Link } from "@/ui/atoms";
@@ -39,10 +40,11 @@ export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 				{assortment.putUpByUserId && (
 					<Link href={`/centrum-zarzadzania/uzytkownicy/${assortment.putUpByUserId}`} newTab>
 						<Button>
-							<Paragraph fontSize={1.75}>
-								{/* TODO: add an arrow facing towards the top right corner */}
-								{"Przyjęty przez"}
-							</Paragraph>
+							<Flex direction={"row"} align={"center"} gap={10}>
+								<Paragraph fontSize={1.75}>{"Przyjęty przez"}</Paragraph>
+
+								<RiArrowRightUpLine color={"#FFFFFF"} size={"2rem"} />
+							</Flex>
 						</Button>
 					</Link>
 				)}
