@@ -29,6 +29,7 @@ const Visualisation: FC = () => {
 		onError: (e) => defaultErrorHandler(e, (message) => setImportShelvesError(message)),
 		onSuccess: () => {
 			apiUtils.storage.invalidate();
+			setImportShelvesError(undefined);
 		},
 	});
 	const shelves = apiClient.storage.getAllShelves.useQuery();
@@ -62,17 +63,17 @@ const Visualisation: FC = () => {
 			const parsed = result.data.map((row) => {
 				const generateErrorMessage = (msg: string) => `Plik CSV nie określa ${msg} każdego regału.`;
 
-				if (!row.M) return generateErrorMessage("ilości rzędów (M)");
-				if (!row.N) return generateErrorMessage("ilości kolumn (N)");
-				if (!row.Komentarz)
+				if (row.M === undefined) return generateErrorMessage("ilości rzędów (M)");
+				if (row.N === undefined) return generateErrorMessage("ilości kolumn (N)");
+				if (row.Komentarz === undefined)
 					return `${generateErrorMessage("komentarza")} Dla przejrzystości, wymagane jest jego dodanie.`;
-				if (!row.MaxWagaKg) return generateErrorMessage("maksymalnej wagi");
-				if (!row.Oznaczenie) return generateErrorMessage("oznaczenia");
-				if (!row.TempMax) return generateErrorMessage("maksymalnej temperatury");
-				if (!row.TempMin) return generateErrorMessage("minimalnej temperatury");
-				if (!row.MaxWysokoscMm) return generateErrorMessage("maksymalnej wysokości asortymentu");
-				if (!row.MaxGlebokoscMm) return generateErrorMessage("maksymalnej długości asortymentu");
-				if (!row.MaxSzerokoscMm) return generateErrorMessage("maksymalnej szerokości asortymentu");
+				if (row.MaxWagaKg === undefined) return generateErrorMessage("maksymalnej wagi");
+				if (row.Oznaczenie === undefined) return generateErrorMessage("oznaczenia");
+				if (row.TempMax === undefined) return generateErrorMessage("maksymalnej temperatury");
+				if (row.TempMin === undefined) return generateErrorMessage("minimalnej temperatury");
+				if (row.MaxWysokoscMm === undefined) return generateErrorMessage("maksymalnej wysokości asortymentu");
+				if (row.MaxGlebokoscMm === undefined) return generateErrorMessage("maksymalnej długości asortymentu");
+				if (row.MaxSzerokoscMm === undefined) return generateErrorMessage("maksymalnej szerokości asortymentu");
 
 				return {
 					cellsShape: {

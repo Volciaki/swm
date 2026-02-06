@@ -44,6 +44,7 @@ const AssortmentsVisualisation: FC = () => {
 		onError: (e) => defaultErrorHandler(e, (message) => setImportAssortmentError(message)),
 		onSuccess: () => {
 			apiUtils.storage.invalidate();
+			setImportAssortmentError(undefined);
 		},
 	});
 	const putUpAssortmentAutomatically = apiClient.storage.putUpAssortmentAutomatically.useMutation({
@@ -77,26 +78,54 @@ const AssortmentsVisualisation: FC = () => {
 			},
 		});
 
-		importAssortment.mutate({
-			definitions: result.data.map((row) => ({
-				expiresAfterSeconds: row.TerminWaznosciDni * 24 * 60 * 60,
-				comment: row.Komentarz,
-				isHazardous: row.CzyNiebezpieczny,
-				name: row.Nazwa,
-				weightKg: row.Waga,
-				size: {
-					heightMillimeters: row.WysokoscMm,
-					widthMillimeters: row.SzerokoscMm,
-					lengthMillimeters: row.GlebokoscMm,
-				},
-				temperatureRange: {
-					maximalCelsius: row.TempMax,
-					minimalCelsius: row.TempMin,
-				},
-				// TODO: allow passing in the image in other ways. Perhaps specify and ID to already existing assortment's one?
-				imageContentBase64: null,
-			})),
-		});
+		let assortments;
+		try {
+			// Each item of this `parsed` array is either an error message string, or an Assortment object.
+			const parsed = result.data.map((row) => {
+				const generateErrorMessage = (msg: string) => `Plik CSV nie określa ${msg} każdego asortymentu.`;
+
+				if (row.TerminWaznosciDni === undefined) return generateErrorMessage("terminu ważności");
+				if (row.Komentarz === undefined)
+					return `${generateErrorMessage("komentarza")} Dla przejrzystości, wymagane jest jego dodanie.`;
+				if (row.CzyNiebezpieczny === undefined) return generateErrorMessage("niebezpieczeństwa");
+				if (row.Nazwa === undefined) return generateErrorMessage("nazwy");
+				if (row.Waga === undefined) return generateErrorMessage("wagi");
+				if (row.WysokoscMm === undefined) return generateErrorMessage("wysokości");
+				if (row.SzerokoscMm === undefined) return generateErrorMessage("szerokości");
+				if (row.GlebokoscMm === undefined) return generateErrorMessage("głębokości");
+				if (row.TempMax === undefined) return generateErrorMessage("maksymalnej temperatury");
+				if (row.TempMin === undefined) return generateErrorMessage("minimalnej temperatury");
+
+				return {
+					expiresAfterSeconds: row.TerminWaznosciDni * 24 * 60 * 60,
+					comment: row.Komentarz,
+					isHazardous: row.CzyNiebezpieczny,
+					name: row.Nazwa,
+					weightKg: row.Waga,
+					size: {
+						heightMillimeters: row.WysokoscMm,
+						widthMillimeters: row.SzerokoscMm,
+						lengthMillimeters: row.GlebokoscMm,
+					},
+					temperatureRange: {
+						maximalCelsius: row.TempMax,
+						minimalCelsius: row.TempMin,
+					},
+					// TODO: allow passing in the image in other ways. Perhaps specify and ID to already existing assortment's one?
+					imageContentBase64: null,
+				};
+			});
+			assortments = parsed.map((value) => {
+				if (typeof value === "string") throw new Error(value);
+
+				return value;
+			});
+		} catch (error) {
+			setImportAssortmentError((error as Error).message);
+			return;
+		}
+
+		importAssortment.mutate({ definitions: assortments });
 	}, [file, importAssortment]);
 
 	const onQRCodeScan = useCallback(
