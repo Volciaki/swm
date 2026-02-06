@@ -111,8 +111,7 @@ const AssortmentsVisualisation: FC = () => {
 						maximalCelsius: row.TempMax,
 						minimalCelsius: row.TempMin,
 					},
-					// TODO: allow passing in the image in other ways. Perhaps specify and ID to already existing assortment's one?
-					imageContentBase64: null,
+					assortmentImageFileReferenceId: row.Zdjecie,
 				};
 			});
 			assortments = parsed.map((value) => {
