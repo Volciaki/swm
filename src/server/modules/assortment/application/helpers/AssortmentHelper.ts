@@ -1,7 +1,7 @@
 import type { FileContextByIDGetter } from "@/server/utils/files/domain/types/FileContextByIDGetter";
 import type { FileReference } from "@/server/utils/files/domain/entities/FileReference";
 import type { FetchFileResponseDTO } from "@/server/utils/files/application/dto/FetchFileResponseDTO";
-import type { UUIDManager } from "@/server/utils";
+import type { UserDTO, UUIDManager } from "@/server/utils";
 import { UUID } from "@/server/utils";
 import type { Assortment } from "../../domain/entities/Assortment";
 import type { AssortmentRepository } from "../../domain/repositories/AssortmentRepository";
@@ -23,7 +23,11 @@ export type DeleteProductImageByPathFunction = DeleteFileByPath;
 
 export interface AssortmentHelper {
 	getByIdStringOrThrow(id: string, getDefinitionContextById: DefinitionContextByIdGetter): Promise<Assortment>;
-	createByDTO(dto: CreateAssortmentDTO, getDefinitionContextById: DefinitionContextByIdGetter): Promise<Assortment>;
+	createByDTO(
+		dto: CreateAssortmentDTO,
+		getDefinitionContextById: DefinitionContextByIdGetter,
+		currentUser: UserDTO
+	): Promise<Assortment>;
 	getAll(getDefinitionContextById: DefinitionContextByIdGetter): Promise<Assortment[]>;
 }
 
@@ -44,7 +48,11 @@ export class DefaultAssortmentHelper implements AssortmentHelper {
 		return assortment;
 	}
 
-	async createByDTO(dto: CreateAssortmentDTO, getDefinitionContextById: DefinitionContextByIdGetter) {
+	async createByDTO(
+		dto: CreateAssortmentDTO,
+		getDefinitionContextById: DefinitionContextByIdGetter,
+		currentUser: UserDTO
+	) {
 		const assortmentId = this.uuidManager.generate().value;
 		const assortmentDefinition = await getDefinitionContextById(UUID.fromString(dto.definitionId));
 		const assortment = AssortmentMapper.fromAssortmentDTOToAssortment({
@@ -56,6 +64,7 @@ export class DefaultAssortmentHelper implements AssortmentHelper {
 			hasExpiredNotification: null,
 			isCloseToExpiration: false,
 			isCloseToExpirationNotification: null,
+			putUpByUserId: currentUser.id,
 		});
 		await this.assortmentRepository.create(assortment);
 		return assortment;

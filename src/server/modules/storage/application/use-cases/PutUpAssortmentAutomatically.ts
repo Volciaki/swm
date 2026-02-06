@@ -42,11 +42,14 @@ export class PutUpAssortmentAutomatically {
 			const cell = emptyCells[0];
 
 			try {
-				return await this.storageHelper.putUpAssortment({
-					shelfId: shelf.id,
-					cellId: cell.id,
-					assortmentDefinitionId: definition.id,
-				});
+				return await this.storageHelper.putUpAssortment(
+					{
+						shelfId: shelf.id,
+						cellId: cell.id,
+						assortmentDefinitionId: definition.id,
+					},
+					currentUser
+				);
 			} catch (err) {
 				const error = err as Error;
 				errorDetails.push(`Shelf: ${shelf.id}, Cell: ${cell.id}, Error: ${error.name} - ${error.message}`);

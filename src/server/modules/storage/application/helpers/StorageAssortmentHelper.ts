@@ -3,6 +3,7 @@ import type { GetAllAssortment } from "@/server/modules/assortment/application/u
 import type { GetShelf } from "@/server/modules/warehouse/application/use-cases/GetShelf";
 import type { EmptyCell } from "@/server/modules/warehouse/application/use-cases/EmptyCell";
 import type { GetAssortment } from "@/server/modules/assortment/application/use-cases/GetAssortment";
+import type { UserDTO } from "@/server/utils";
 import { UUID, assortmentDTOsToAssortmentVOs, assortmentDTOToAssortmentVO } from "@/server/utils";
 import type { CreateAssortment } from "@/server/modules/assortment/application/use-cases/CreateAssortment";
 import type { DeleteAssortment } from "@/server/modules/assortment/application/use-cases/DeleteAssortment";
@@ -14,7 +15,7 @@ import type { PutUpAssortmentDTO } from "../dto/PutUpAssortmentDTO";
 import type { PutUpAssortmentResponseDTO } from "../dto/PutUpAssortmentResponseDTO";
 
 export interface StorageAssortmentHelper {
-	putUpAssortment(dto: PutUpAssortmentDTO): Promise<PutUpAssortmentResponseDTO>;
+	putUpAssortment(dto: PutUpAssortmentDTO, currentUser: UserDTO): Promise<PutUpAssortmentResponseDTO>;
 	takeDownAssortment(dto: TakeDownAssortmentDTO): Promise<ShelfDTO>;
 }
 
@@ -29,7 +30,7 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		private readonly emptyCell: EmptyCell
 	) {}
 
-	async putUpAssortment(dto: PutUpAssortmentDTO) {
+	async putUpAssortment(dto: PutUpAssortmentDTO, currentUser: UserDTO) {
 		let assortments;
 		let assortmentContext;
 
@@ -42,11 +43,14 @@ export class DefaultStorageAssortmentHelper implements StorageAssortmentHelper {
 		if (cellToUpdate?.assortment !== null && cellToUpdate?.assortment !== undefined)
 			throw new CellAlreadyTakenError({ id: cellId.value });
 
-		const assortment = await this.createAssortment.execute({
-			definitionId: dto.assortmentDefinitionId,
-			cellId: dto.cellId,
-			shelfId: dto.shelfId,
-		});
+		const assortment = await this.createAssortment.execute(
+			{
+				definitionId: dto.assortmentDefinitionId,
+				cellId: dto.cellId,
+				shelfId: dto.shelfId,
+			},
+			currentUser
+		);
 
 		assortments = await this.getAllAssortment.execute();
 		assortmentContext = assortmentDTOsToAssortmentVOs(assortments);

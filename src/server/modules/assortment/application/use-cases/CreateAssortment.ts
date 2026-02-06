@@ -1,3 +1,4 @@
+import type { UserDTO } from "@/server/utils";
 import type { CreateAssortmentDTO } from "../dto/CreateAssortmentDTO";
 import { AssortmentMapper } from "../../infrastructure/mappers/AssortmentMapper";
 import type { AssortmentHelper } from "../helpers/AssortmentHelper";
@@ -9,10 +10,11 @@ export class CreateAssortment {
 		private readonly assortmentDefinitionUtilities: AssortmentDefinitionUtilities
 	) {}
 
-	async execute(dto: CreateAssortmentDTO) {
+	async execute(dto: CreateAssortmentDTO, currentUser: UserDTO) {
 		const assortment = await this.assortmentHelper.createByDTO(
 			dto,
-			this.assortmentDefinitionUtilities.definitionGetter
+			this.assortmentDefinitionUtilities.definitionGetter,
+			currentUser
 		);
 		return AssortmentMapper.fromAssortmentToAssortmentDTO(assortment);
 	}
