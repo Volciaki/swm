@@ -72,11 +72,11 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellSize = 12.5 }) => {
 					margin: "20rem",
 				}}
 			>
-				{shelfData.cells.map((row, y) =>
-					row.map((cell, x) => (
+				{shelfData.cells.map((row) =>
+					row.map((cell) => (
 						<Link
 							href={`/centrum-zarzadzania/wizualizacja/regaly/${shelfData.id}/asortymenty/${cell.assortment ? `${cell.assortment.id}` : `nowy/${cell.id}`}`}
-							key={`cell-x-${x}-y-${y}`}
+							key={`cell-x-${cell.x}-y-${cell.y}`}
 							style={{ textDecoration: "none" }}
 						>
 							<Flex
@@ -100,7 +100,7 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellSize = 12.5 }) => {
 									<Paragraph fontSize={1.5}>{"Wolne pole"}</Paragraph>
 								)}
 
-								<Paragraph fontSize={1.5}>{x + y * columns + 1}</Paragraph>
+								<Paragraph fontSize={1.5}>{cell.index + 1}</Paragraph>
 							</Flex>
 						</Link>
 					))

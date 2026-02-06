@@ -10,4 +10,13 @@ export class DBCell {
 
 	@Column({ name: "assortment_id", type: "varchar", nullable: true })
 	assortmentId!: string | null;
+
+	@Column()
+	x!: number;
+
+	@Column()
+	y!: number;
+
+	@Column()
+	index!: number;
 }

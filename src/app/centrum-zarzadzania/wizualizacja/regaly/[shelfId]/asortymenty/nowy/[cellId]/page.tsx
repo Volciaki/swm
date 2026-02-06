@@ -77,6 +77,12 @@ const PutUpAssortment: FC = () => {
 					<FormError>{getPolishErrorMessageByMetadata(getAllAssortments.error.data?.metadata)}</FormError>
 				)}
 
+				{getAllAssortments.data && getAllAssortments.data.length === 0 && (
+					<Paragraph fontSize={1.75} variant={"secondary"}>
+						{"brak definicji!"}
+					</Paragraph>
+				)}
+
 				{getAllAssortments.data && (
 					<List>
 						{getAllAssortments.data
