@@ -2,6 +2,7 @@
 
 import { useCallback, useState, type FC } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { FormInput } from "@/ui/molecules";
 import { Flex, Input, Paragraph, Button, Switch, Loading, FormError } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
@@ -34,21 +35,34 @@ export type UserFormProps = {
 
 export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) => {
 	const [error, setError] = useState<string | undefined>();
-	const [data, setData] = useState<UserFormData & { id?: string }>(userData);
-	const userId = data.id;
+	const userId = (userData as UserFormData & { id?: string })?.id;
 
+	const router = useRouter();
 	const apiUtils = apiClient.useUtils();
 	const sharedMutationOptions = {
 		onSuccess: (data: UserDTO | PublicUserDTO) => {
 			updateFormState(data);
+			setError(undefined);
 
 			apiUtils.identity.invalidate();
 		},
 		onError: (e: APIError) => defaultErrorHandler(e, (errorMessage) => setError(errorMessage)),
 	};
-	const createUser = apiClient.identity.createUser.useMutation(sharedMutationOptions);
+	const createUser = apiClient.identity.createUser.useMutation({
+		...sharedMutationOptions,
+		onSuccess: (data) => {
+			sharedMutationOptions.onSuccess(data);
+			router.push(`/centrum-zarzadzania/uzytkownicy/${data.id}/edytuj`);
+		},
+	});
+	const deleteUser = apiClient.identity.deleteUser.useMutation({
+		...sharedMutationOptions,
+		onSuccess: (data) => {
+			sharedMutationOptions.onSuccess(data);
+			router.push("/centrum-zarzadzania/uzytkownicy");
+		},
+	});
 	const updateUser = apiClient.identity.updateUser.useMutation(sharedMutationOptions);
-	const deleteUser = apiClient.identity.deleteUser.useMutation(sharedMutationOptions);
 	const { register, control, formState, handleSubmit, reset } = useForm<UserFormData>({
 		mode: "onChange",
 		values: userData,
@@ -60,7 +74,6 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 	const updateFormState = useCallback(
 		(newData: Omit<UserFormData, "password">) => {
 			const newFormData = { ...newData, password: "" };
-			setData(newFormData);
 			reset(newFormData);
 		},
 		[reset]
@@ -150,7 +163,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 				<Controller
 					control={control}
 					name={"isAdmin"}
-					defaultValue={data.isAdmin}
+					defaultValue={userData.isAdmin}
 					render={({ field }) => (
 						<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
 							<Switch checked={field.value} setChecked={field.onChange} />
@@ -165,7 +178,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 				<Controller
 					control={control}
 					name={"twoFactorAuthenticationEnabled"}
-					defaultValue={data.isAdmin}
+					defaultValue={userData.isAdmin}
 					render={({ field }) => (
 						<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
 							<Switch checked={field.value} setChecked={field.onChange} />

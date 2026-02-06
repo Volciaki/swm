@@ -278,7 +278,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 					<Controller
 						control={control}
 						name={"supportsHazardous"}
-						defaultValue={values?.supportsHazardous}
+						defaultValue={values?.supportsHazardous ?? false}
 						render={({ field }) => (
 							<Flex direction={"row"} style={{ gap: "1rem" }} justify={"center"}>
 								<Switch checked={field.value} setChecked={field.onChange} />

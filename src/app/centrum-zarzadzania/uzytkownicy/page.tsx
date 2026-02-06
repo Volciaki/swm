@@ -41,15 +41,17 @@ const Users: FC = () => {
 
 					<List>
 						{users.data &&
-							users.data.map((user, index) => (
-								<Link
-									href={`uzytkownicy/${user.id}/${user.id === authData?.id ? "edytuj" : authData?.isAdmin ? "edytuj" : "wyswietl"}`}
-									key={`user-${index}`}
-									style={{ textDecoration: "none" }}
-								>
-									<UserListItem user={user} />
-								</Link>
-							))}
+							users.data
+								.sort((a, b) => a.name.trim().localeCompare(b.name.trim()))
+								.map((user, index) => (
+									<Link
+										href={`uzytkownicy/${user.id}/${user.id === authData?.id ? "edytuj" : authData?.isAdmin ? "edytuj" : "wyswietl"}`}
+										key={`user-${index}`}
+										style={{ textDecoration: "none" }}
+									>
+										<UserListItem user={user} />
+									</Link>
+								))}
 					</List>
 				</Flex>
 			</Flex>
