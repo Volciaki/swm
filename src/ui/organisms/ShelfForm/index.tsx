@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useMemo, useState, type FC } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { clsx } from "clsx";
 import { useRouter } from "next/navigation";
-import { Button, Flex, FormError, Loading, Paragraph, Separator } from "@/ui/atoms";
+import { Button, Flex, FormError, Loading, Paragraph, Separator, Switch } from "@/ui/atoms";
 import type { APIError } from "@/ui/utils";
 import {
 	defaultErrorHandler,
@@ -27,6 +27,7 @@ type ShelfFormData = {
 	maxAssortmentLengthMillimeters: number;
 	minTemperatureCelsius: number;
 	maxTemperatureCelsius: number;
+	supportsHazardous: boolean;
 };
 
 export type ShelfFormProps = {
@@ -78,6 +79,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 			maxTemperatureCelsius: data.temperatureRange.maximalCelsius,
 			minTemperatureCelsius: data.temperatureRange.minimalCelsius,
 			maxWeightKg: data.maxWeightKg,
+			supportsHazardous: data.supportsHazardous,
 		};
 		return v;
 	}, [getShelf.data]);
@@ -109,8 +111,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 					rows: Number(data.rows ?? 1),
 					columns: Number(data.columns ?? 1),
 				},
-				// TODO: ...
-				supportsHazardous: true,
+				supportsHazardous: data.supportsHazardous,
 			};
 
 			if (shelfId) {
@@ -270,6 +271,25 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 						},
 					]}
 				/>
+
+				<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
+					<Paragraph fontSize={1.75}>{"Wspiera niebezpieczne"}</Paragraph>
+
+					<Controller
+						control={control}
+						name={"supportsHazardous"}
+						defaultValue={values?.supportsHazardous ?? false}
+						render={({ field }) => (
+							<Flex direction={"row"} style={{ gap: "1rem" }} justify={"center"}>
+								<Switch checked={field.value} setChecked={field.onChange} />
+
+								<Paragraph fontSize={1.5} variant={"secondary"}>
+									{"Nie/Tak"}
+								</Paragraph>
+							</Flex>
+						)}
+					/>
+				</Flex>
 
 				<Separator style={{ marginBlock: "1rem" }} />
 

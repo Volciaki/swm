@@ -26,7 +26,7 @@ const EditUser = () => {
 
 	return (
 		<FullHeight>
-			<BackButton fallback={"/centrum-zarzadzania/uzytkownicy"} />
+			<BackButton fallback={"/centrum-zarzadzania/uzytkownicy"} forceFallback />
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader

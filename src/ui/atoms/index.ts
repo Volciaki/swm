@@ -9,3 +9,4 @@ export * from "./Loading";
 export * from "./FullHeight";
 export * from "./Switch";
 export * from "./RadioGroupItem";
+export * from "./Image";

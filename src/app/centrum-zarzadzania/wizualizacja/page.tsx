@@ -29,6 +29,7 @@ const Visualisation: FC = () => {
 		onError: (e) => defaultErrorHandler(e, (message) => setImportShelvesError(message)),
 		onSuccess: () => {
 			apiUtils.storage.invalidate();
+			setImportShelvesError(undefined);
 		},
 	});
 	const shelves = apiClient.storage.getAllShelves.useQuery();
@@ -56,28 +57,56 @@ const Visualisation: FC = () => {
 			},
 		});
 
-		importShelves.mutate({
-			shelves: result.data.map((row) => ({
-				cellsShape: {
-					rows: row.M ?? 1,
-					columns: row.N ?? 1,
-				},
-				comment: row.Komentarz ?? "",
-				maxWeightKg: row.MaxWagaKg ?? 1,
-				name: row.Oznaczenie ?? "",
-				temperatureRange: {
-					maximalCelsius: row.TempMax ?? 1,
-					minimalCelsius: row.TempMin ?? 0,
-				},
-				maxAssortmentSize: {
-					heightMillimeters: row.MaxWysokoscMm ?? 10,
-					lengthMillimeters: row.MaxGlebokoscMm ?? 10,
-					widthMillimeters: row.MaxSzerokoscMm ?? 10,
-				},
-				supportsHazardous: true,
-			})),
-		});
-	}, [file, importShelves]);
+		let shelves;
+		try {
+			// Each item of this `parsed` array is either an error message string, or a Shelf object.
+			const parsed = result.data.map((row) => {
+				const generateErrorMessage = (msg: string) => `Plik CSV nie określa ${msg} każdego regału.`;
+
+				if (row.M === undefined) return generateErrorMessage("ilości rzędów (M)");
+				if (row.N === undefined) return generateErrorMessage("ilości kolumn (N)");
+				if (row.Komentarz === undefined)
+					return `${generateErrorMessage("komentarza")} Dla przejrzystości, wymagane jest jego dodanie.`;
+				if (row.MaxWagaKg === undefined) return generateErrorMessage("maksymalnej wagi");
+				if (row.Oznaczenie === undefined) return generateErrorMessage("oznaczenia");
+				if (row.TempMax === undefined) return generateErrorMessage("maksymalnej temperatury");
+				if (row.TempMin === undefined) return generateErrorMessage("minimalnej temperatury");
+				if (row.MaxWysokoscMm === undefined) return generateErrorMessage("maksymalnej wysokości asortymentu");
+				if (row.MaxGlebokoscMm === undefined) return generateErrorMessage("maksymalnej długości asortymentu");
+				if (row.MaxSzerokoscMm === undefined) return generateErrorMessage("maksymalnej szerokości asortymentu");
+
+				return {
+					cellsShape: {
+						rows: row.M,
+						columns: row.N,
+					},
+					comment: row.Komentarz,
+					maxWeightKg: row.MaxWagaKg,
+					name: row.Oznaczenie,
+					temperatureRange: {
+						maximalCelsius: row.TempMax,
+						minimalCelsius: row.TempMin,
+					},
+					maxAssortmentSize: {
+						heightMillimeters: row.MaxWysokoscMm,
+						lengthMillimeters: row.MaxGlebokoscMm,
+						widthMillimeters: row.MaxSzerokoscMm,
+					},
+					supportsHazardous: true,
+				};
+			});
+			shelves = parsed.map((value) => {
+				if (typeof value === "string") throw new Error(value);
+
+				return value;
+			});
+		} catch (error) {
+			setImportShelvesError((error as Error).message);
+			return;
+		}
+
+		importShelves.mutate({ shelves });
+	}, [file, importShelves, setImportShelvesError]);
 
 	return (
 		<FullHeight>

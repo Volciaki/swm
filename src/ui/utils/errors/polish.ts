@@ -73,13 +73,13 @@ const polishErrorMessages: ErrorMessageMapper = {
 		return "Regał jest nierówny. Skontaktuj się z administratorem serwisu.";
 	},
 	[ErrorName.ASSORTMENT_IS_HAZARDOUS]: (metadata) => {
-		return "Wybrany regał nie wspiera przechowywania niebezpiecznego asortymentu.";
+		return "Regał nie może przechowywać niebezpiecznego asortymentu.";
 	},
 	[ErrorName.SHELF_TOO_HOT_FOR_ASSORTMENT]: (metadata) => {
-		return `Wybrany regał jest zbyt gorący dla asortymentu. Jego minimalna temperatura to ${metadata.shelfMinimalTemperatureCelsius}, maksymalna temperatura asortymentu natomiast to ${metadata.assortmentMaximalTemperatureCelsius}.`;
+		return `Regał jest zbyt gorący dla asortymentu. Jego minimalna temperatura to ${metadata.shelfMinimalTemperatureCelsius}, maksymalna temperatura asortymentu natomiast to ${metadata.assortmentMaximalTemperatureCelsius}.`;
 	},
 	[ErrorName.SHELF_TOO_COLD_FOR_ASSORTMENT]: (metadata) => {
-		return `Wybrany regał jest zbyt zimny dla asortymentu. Jego maksymalna temperatura to ${metadata.shelfMaximalTemperatureCelsius}, minimalna temperatura asortymentu natomiast to ${metadata.assortmentMinimalTemperatureCelsius}.`;
+		return `Regał jest zbyt zimny dla asortymentu. Jego maksymalna temperatura to ${metadata.shelfMaximalTemperatureCelsius}, minimalna temperatura asortymentu natomiast to ${metadata.assortmentMinimalTemperatureCelsius}.`;
 	},
 	[ErrorName.ASSORTMENT_TOO_LONG]: (metadata) => {
 		return `Asortyment jest zbyt długi. Posiada on ${metadata.passedLengthMillimeters} gdy maksymalna długość to ${metadata.maxLengthMillimeters}.`;
