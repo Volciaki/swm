@@ -65,6 +65,8 @@ export class DefaultShelfHelper implements ShelfHelper {
 			lastRecordedLegalWeightKg: 0,
 			temperatureReadingIds: [],
 			currentTemperatureCelsius: dto.temperatureRange.minimalCelsius,
+			weightReadingIds: [],
+			currentWeightKilograms: 0,
 			hasBeenChangedIllegally: false,
 		});
 

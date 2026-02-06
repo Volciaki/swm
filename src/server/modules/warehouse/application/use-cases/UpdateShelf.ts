@@ -32,6 +32,7 @@ export class UpdateShelf {
 			cells: shelf.cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
 			lastRecordedLegalWeightKg: shelf.lastRecordedLegalWeight.kilograms.value,
 			temperatureReadingIds: shelf.temperatureReadingIds.map((id) => id.value),
+			weightReadingIds: shelf.weightReadingIds.map((id) => id.value),
 			hasBeenChangedIllegally: false,
 		});
 

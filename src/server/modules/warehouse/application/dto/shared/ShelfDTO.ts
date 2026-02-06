@@ -15,6 +15,8 @@ export const shelfDTOSchema = z.object({
 	temperatureReadingIds: z.string().array(),
 	currentTemperatureCelsius: z.number(),
 	hasBeenChangedIllegally: z.boolean(),
+	weightReadingIds: z.string().array(),
+	currentWeightKilograms: z.number(),
 });
 
 export type ShelfDTO = z.infer<typeof shelfDTOSchema>;

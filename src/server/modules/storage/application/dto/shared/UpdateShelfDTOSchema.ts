@@ -6,8 +6,10 @@ export const updateShelfDTOSchema = shelfDTOSchema.omit({
 	cells: true,
 	lastRecordedLegalWeightKg: true,
 	temperatureReadingIds: true,
+	weightReadingIds: true,
 	hasBeenChangedIllegally: true,
 	currentTemperatureCelsius: true,
+	currentWeightKilograms: true,
 });
 
 export type UpdateShelfDTO = z.infer<typeof updateShelfDTOSchema>;

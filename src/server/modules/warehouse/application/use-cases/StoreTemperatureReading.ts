@@ -1,6 +1,6 @@
 import type { UUIDManager } from "@/server/utils";
 import { TemperatureReading } from "../../domain/entities/TemperatureReading";
-import type { StoreTemperatureReadingResponseDTO } from "../dto/StoreTemperatureResponseReadingDTO";
+import type { StoreTemperatureReadingResponseDTO } from "../dto/StoreTemperatureReadingResponseDTO";
 import type { StoreTemperatureReadingDTO } from "../dto/StoreTemperatureReadingDTO";
 import type { ShelfHelper } from "../helpers/ShelfHelper";
 import { TemperatureReadingMapper } from "../../infrastructure/mappers/TemperatureReadingMapper";

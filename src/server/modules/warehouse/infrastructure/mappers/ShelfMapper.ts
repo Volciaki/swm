@@ -24,7 +24,9 @@ export class ShelfMapper {
 			shelfDTO.supportsHazardous,
 			Weight.fromKilograms(shelfDTO.lastRecordedLegalWeightKg),
 			shelfDTO.temperatureReadingIds.map((id) => UUID.fromString(id)),
-			CelsiusDegrees.fromNumber(shelfDTO.currentTemperatureCelsius)
+			CelsiusDegrees.fromNumber(shelfDTO.currentTemperatureCelsius),
+			shelfDTO.weightReadingIds.map((id) => UUID.fromString(id)),
+			Weight.fromKilograms(shelfDTO.currentWeightKilograms)
 		);
 	}
 
@@ -38,6 +40,8 @@ export class ShelfMapper {
 			lastRecordedLegalWeightKg: shelf.lastRecordedLegalWeight.kilograms.value,
 			temperatureReadingIds: shelf.temperatureReadingIds.map((id) => id.value),
 			currentTemperatureCelsius: shelf.currentTemperature.value,
+			weightReadingIds: shelf.weightReadingIds.map((id) => id.value),
+			currentWeightKilograms: shelf.currentWeight.kilograms.value,
 			comment: shelf.comment,
 			name: shelf.name,
 			supportsHazardous: shelf.supportsHazardous,
@@ -59,6 +63,8 @@ export class ShelfMapper {
 			lastRecordedLegalWeight,
 			temperatureReadingIds,
 			currentTemperature,
+			weightReadingIds,
+			currentWeight,
 		} = shelf;
 
 		dbShelf.id = id.value;
@@ -75,6 +81,8 @@ export class ShelfMapper {
 		dbShelf.lastRecordedLegalWeightKg = lastRecordedLegalWeight.kilograms.value;
 		dbShelf.temperatureReadingIds = temperatureReadingIds.map((id) => id.value);
 		dbShelf.currentTemperatureCelsius = currentTemperature.value;
+		dbShelf.weightReadingIds = weightReadingIds.map((id) => id.value);
+		dbShelf.currentWeightKilograms = currentWeight.kilograms.value;
 
 		return dbShelf;
 	}
@@ -98,7 +106,9 @@ export class ShelfMapper {
 			dbShelf.supportsHazardous,
 			Weight.fromKilograms(dbShelf.lastRecordedLegalWeightKg),
 			dbShelf.temperatureReadingIds.map((id) => UUID.fromString(id)),
-			CelsiusDegrees.fromNumber(dbShelf.currentTemperatureCelsius)
+			CelsiusDegrees.fromNumber(dbShelf.currentTemperatureCelsius),
+			dbShelf.weightReadingIds.map((id) => UUID.fromString(id)),
+			Weight.fromKilograms(dbShelf.currentWeightKilograms)
 		);
 	}
 }

@@ -43,4 +43,10 @@ export class DBShelf {
 
 	@Column({ name: "current_temperature_celsius", type: "float" })
 	currentTemperatureCelsius!: number;
+
+	@Column({ name: "weight_reading_ids", type: "varchar", array: true })
+	weightReadingIds!: string[];
+
+	@Column({ name: "current_weight_kilograms", type: "float" })
+	currentWeightKilograms!: number;
 }
