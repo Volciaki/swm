@@ -14,11 +14,7 @@ export class GetShelfTemperatureReadings {
 		const shelf = await this.shelfHelper.getByIdStringOrThrow(dto.id, dto.assortmentContext);
 
 		const temperatureReadings = shelf.temperatureReadingIds.map(
-			async (id) =>
-				await this.temperatureReadingRepository.getById(
-					id,
-					async (uuid) => await this.shelfHelper.getByIdStringOrThrow(uuid.value, dto.assortmentContext)
-				)
+			async (id) => await this.temperatureReadingRepository.getById(id, async () => shelf)
 		);
 		const temperatureReadingsFetched = await Promise.all(temperatureReadings);
 		return temperatureReadingsFetched

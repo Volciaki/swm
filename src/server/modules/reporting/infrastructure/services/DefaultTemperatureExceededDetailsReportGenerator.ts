@@ -29,18 +29,18 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 		const allAssortments = await this.getAllAssortment.execute();
 		const assortmentContext = assortmentDTOsToAssortmentVOs(allAssortments);
 		const shelves = await this.getShelves.execute({ assortmentContext });
-		const fullShelves: FullShelf[] = [];
+		const fullShelves: FullShelf[] = await Promise.all(
+			shelves.map(async (shelf) => {
+				const temperatureReadings = await this.getShelfTemperatureReadings.execute({ id: shelf.id, assortmentContext });
+				const assortments = assortmentContext.filter((assortment) => assortment.shelfId === shelf.id);
 
-		for (const shelf of shelves) {
-			const temperatureReadings = await this.getShelfTemperatureReadings.execute({ id: shelf.id, assortmentContext });
-			const assortments = assortmentContext.filter((assortment) => assortment.shelfId === shelf.id);
-
-			fullShelves.push({
-				...shelf,
-				assortments,
-				temperatureReadings,
-			});
-		}
+				return {
+					...shelf,
+					assortments,
+					temperatureReadings,
+				};
+			})
+		);
 
 		const temperaturesExceeded: ReportTemperatureExceededData[] = [];
 		for (const shelf of fullShelves) {
