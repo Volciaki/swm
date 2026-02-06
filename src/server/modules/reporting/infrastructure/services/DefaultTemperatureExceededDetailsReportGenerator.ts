@@ -69,7 +69,9 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 			}
 		}
 
-		return { temperaturesExceeded };
+		return {
+			temperaturesExceeded: temperaturesExceeded.sort((a, b) => b.details.dateTimestamp - a.details.dateTimestamp),
+		};
 	}
 
 	async generate() {

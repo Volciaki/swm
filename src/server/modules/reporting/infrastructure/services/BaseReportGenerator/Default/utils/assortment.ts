@@ -1,4 +1,3 @@
-import lodash from "lodash";
 import type { AssortmentVO } from "@/server/modules/reporting/domain/vo/AssortmentVO";
 import type { SharedContext } from "./type";
 import { centeredInContainer, dateFormatter, roundNumber, shouldWrapToNewPage } from "./shared";
@@ -10,6 +9,9 @@ export const assortment = async (
 	height = 75,
 	compact = false
 ) => {
+	const rightMostPartOfPage = ctx.document.page.width - ctx.constants.page.margins.right;
+	const qrCodeSize = height + 5;
+
 	const startingX = ctx.document.x;
 	const startingY = ctx.document.y;
 
@@ -43,7 +45,12 @@ export const assortment = async (
 	ctx.document.text(
 		assortment.name,
 		afterIndex,
-		startingY + centeredInContainer(firstSectionHeight, heightOfNameString)
+		startingY + centeredInContainer(firstSectionHeight, heightOfNameString),
+		{
+			height: heightOfNameString,
+			ellipsis: true,
+			lineBreak: false,
+		}
 	);
 
 	const afterName = afterIndex + widthOfNameString + ctx.constants.margin;
@@ -51,12 +58,24 @@ export const assortment = async (
 	let heightOfCommentString = 0;
 	let widthOfCommentString = 0;
 	if (!compact) {
-		const comment = lodash.truncate(assortment.comment, { length: 10 - (index?.length ?? 0) });
-		heightOfCommentString = ctx.document.fontSize(14).heightOfString(comment);
-		widthOfCommentString = ctx.document.widthOfString(comment);
+		const startOfCommentString = afterName + ctx.constants.margin;
+		const endOfCommentString = rightMostPartOfPage - qrCodeSize - ctx.constants.margin - 100;
+
+		heightOfCommentString = ctx.document.fontSize(14).heightOfString(assortment.comment);
+		widthOfCommentString = endOfCommentString - startOfCommentString;
 
 		ctx.document.fillColor(ctx.constants.colors.gray);
-		ctx.document.text(comment, afterName, startingY + centeredInContainer(firstSectionHeight, heightOfCommentString));
+		ctx.document.text(
+			assortment.comment,
+			afterName,
+			startingY + centeredInContainer(firstSectionHeight, heightOfCommentString),
+			{
+				height: heightOfCommentString,
+				width: widthOfCommentString,
+				ellipsis: true,
+				lineBreak: false,
+			}
+		);
 		ctx.document.fillColor(ctx.constants.colors.black);
 	}
 
@@ -71,10 +90,8 @@ export const assortment = async (
 	}`;
 	const heightOfStateString = ctx.document.fontSize(12).heightOfString(assortmentState);
 
-	const rightMostPartOfPage = ctx.document.page.width - ctx.constants.page.margins.right;
-	const qrCodeSize = height;
 	const endOfStateString = rightMostPartOfPage - qrCodeSize - ctx.constants.margin;
-	const startOfStateString = afterComment;
+	const startOfStateString = afterComment - (compact ? ctx.constants.margin : 0);
 
 	const stateStringTotalAvailableWidth = endOfStateString - startOfStateString;
 
@@ -84,7 +101,9 @@ export const assortment = async (
 		startingY + centeredInContainer(firstSectionHeight, heightOfStateString),
 		{
 			width: stateStringTotalAvailableWidth,
-			align: "right",
+			height: heightOfStateString,
+			ellipsis: true,
+			lineBreak: false,
 		}
 	);
 
@@ -130,7 +149,7 @@ export const assortment = async (
 			rightMostPartOfPage - qrCodeSize,
 			// The QR codes have some padding.
 			startingY - 3,
-			{ width: qrCodeSize + 5, height: qrCodeSize + 5 }
+			{ width: qrCodeSize, height: qrCodeSize }
 		);
 
 	ctx.document.x = startingX;
