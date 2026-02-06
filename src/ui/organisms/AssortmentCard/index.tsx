@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { formatDateAsHumanReadable } from "@/utils";
 import { Card } from "@/ui/molecules";
-import { Paragraph } from "@/ui/atoms";
+import { Paragraph, Image } from "@/ui/atoms";
 import type { AssortmentDefinitionDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDefinitionDTO";
 import { DialogButton } from "../DialogButton";
 
@@ -19,7 +19,7 @@ export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 			<>
 				{assortment.image?.visibility.publicUrl && (
 					<DialogButton buttonContent={<Paragraph>{"Zobacz zdjęcie"}</Paragraph>}>
-						<img
+						<Image
 							src={assortment.image?.visibility.publicUrl}
 							alt={`Zdjęcie ${assortment.name}`}
 							style={{ maxWidth: "90vw", aspectRatio: "1/1" }}
@@ -28,7 +28,7 @@ export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
 				)}
 
 				<DialogButton buttonContent={<Paragraph>{"Zobacz kod QR"}</Paragraph>}>
-					<img
+					<Image
 						src={assortment.qrCode.visibility.publicUrl!}
 						alt={`Kod QR ${assortment.name}`}
 						style={{ maxWidth: "90vw", aspectRatio: "1/1" }}
