@@ -56,28 +56,56 @@ const Visualisation: FC = () => {
 			},
 		});
 
-		importShelves.mutate({
-			shelves: result.data.map((row) => ({
-				cellsShape: {
-					rows: row.M ?? 1,
-					columns: row.N ?? 1,
-				},
-				comment: row.Komentarz ?? "",
-				maxWeightKg: row.MaxWagaKg ?? 1,
-				name: row.Oznaczenie ?? "",
-				temperatureRange: {
-					maximalCelsius: row.TempMax ?? 1,
-					minimalCelsius: row.TempMin ?? 0,
-				},
-				maxAssortmentSize: {
-					heightMillimeters: row.MaxWysokoscMm ?? 10,
-					lengthMillimeters: row.MaxGlebokoscMm ?? 10,
-					widthMillimeters: row.MaxSzerokoscMm ?? 10,
-				},
-				supportsHazardous: true,
-			})),
-		});
-	}, [file, importShelves]);
+		let shelves;
+		try {
+			// Each item of this `parsed` array is either an error message string, or a Shelf object.
+			const parsed = result.data.map((row) => {
+				const generateErrorMessage = (msg: string) => `Plik CSV nie określa ${msg} każdego regału.`;
+
+				if (!row.M) return generateErrorMessage("ilości rzędów (M)");
+				if (!row.N) return generateErrorMessage("ilości kolumn (N)");
+				if (!row.Komentarz)
+					return `${generateErrorMessage("komentarza")} Dla przejrzystości, wymagane jest jego dodanie.`;
+				if (!row.MaxWagaKg) return generateErrorMessage("maksymalnej wagi");
+				if (!row.Oznaczenie) return generateErrorMessage("oznaczenia");
+				if (!row.TempMax) return generateErrorMessage("maksymalnej temperatury");
+				if (!row.TempMin) return generateErrorMessage("minimalnej temperatury");
+				if (!row.MaxWysokoscMm) return generateErrorMessage("maksymalnej wysokości asortymentu");
+				if (!row.MaxGlebokoscMm) return generateErrorMessage("maksymalnej długości asortymentu");
+				if (!row.MaxSzerokoscMm) return generateErrorMessage("maksymalnej szerokości asortymentu");
+
+				return {
+					cellsShape: {
+						rows: row.M,
+						columns: row.N,
+					},
+					comment: row.Komentarz,
+					maxWeightKg: row.MaxWagaKg,
+					name: row.Oznaczenie,
+					temperatureRange: {
+						maximalCelsius: row.TempMax,
+						minimalCelsius: row.TempMin,
+					},
+					maxAssortmentSize: {
+						heightMillimeters: row.MaxWysokoscMm,
+						lengthMillimeters: row.MaxGlebokoscMm,
+						widthMillimeters: row.MaxSzerokoscMm,
+					},
+					supportsHazardous: true,
+				};
+			});
+			shelves = parsed.map((value) => {
+				if (typeof value === "string") throw new Error(value);
+
+				return value;
+			});
+		} catch (error) {
+			setImportShelvesError((error as Error).message);
+			return;
+		}
+
+		importShelves.mutate({ shelves });
+	}, [file, importShelves, setImportShelvesError]);
 
 	return (
 		<FullHeight>
