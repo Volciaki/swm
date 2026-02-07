@@ -5,7 +5,7 @@
     border: solid calc($border-size * 0.75) $border;
     border-radius: $border-radius;
     padding: $padding;
-    transition: $transition;
+    transition: all $transition;
 }
 
 .clickable:hover {
