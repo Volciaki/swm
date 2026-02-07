@@ -10,6 +10,7 @@ import { DBReport } from "../modules/reporting/infrastructure/entities/DBReport"
 import { DBBackup } from "../modules/backup/infrastructure/entities/DBBackup";
 import { DBBackupSettings } from "../modules/backup/infrastructure/entities/DBBackupSettings";
 import { DBAssortmentDefinition } from "../modules/assortment/infrastructure/entities/DBAssortmentDefinition";
+import { DBWeightReading } from "../modules/warehouse/infrastructure/entities/DBWeightReading";
 
 export const entities = [
 	DBUser,
@@ -24,4 +25,5 @@ export const entities = [
 	DBBackup,
 	DBBackupSettings,
 	DBAssortmentDefinition,
+	DBWeightReading,
 ];

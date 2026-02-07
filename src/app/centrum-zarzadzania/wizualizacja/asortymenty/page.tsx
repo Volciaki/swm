@@ -41,16 +41,20 @@ const AssortmentsVisualisation: FC = () => {
 	const [qrCodeActionLoading, setQRCodeActionLoading] = useState(false);
 
 	const importAssortment = apiClient.storage.importAssortment.useMutation({
-		onError: (e) => defaultErrorHandler(e, (message) => setImportAssortmentError(message)),
 		onSuccess: () => {
 			apiUtils.storage.invalidate();
 			setImportAssortmentError(undefined);
 		},
+		onError: (e) => defaultErrorHandler(e, (message) => setImportAssortmentError(message)),
 	});
 	const putUpAssortmentAutomatically = apiClient.storage.putUpAssortmentAutomatically.useMutation({
-		onSuccess: () => {
+		onSuccess: (data) => {
 			apiUtils.storage.invalidate();
 			setQRCodeActionError(undefined);
+
+			router.push(
+				`/centrum-zarzadzania/wizualizacja/regaly/${data.newAssortment.shelfId}/asortymenty/${data.newAssortment.id}`
+			);
 		},
 		onError: (e) => defaultErrorHandler(e, (errorMessage) => setQRCodeActionError(errorMessage)),
 	});
@@ -111,8 +115,7 @@ const AssortmentsVisualisation: FC = () => {
 						maximalCelsius: row.TempMax,
 						minimalCelsius: row.TempMin,
 					},
-					// TODO: allow passing in the image in other ways. Perhaps specify and ID to already existing assortment's one?
-					imageContentBase64: null,
+					assortmentImageFileReferenceId: row.Zdjecie,
 				};
 			});
 			assortments = parsed.map((value) => {

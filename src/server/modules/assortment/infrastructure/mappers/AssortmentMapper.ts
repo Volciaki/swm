@@ -20,6 +20,7 @@ export class AssortmentMapper {
 		dbAssortment.hasExpired = assortment.hasExpired;
 		dbAssortment.hasExpiredNotificationId =
 			assortment.hasExpiredNotification === null ? null : assortment.hasExpiredNotification.id;
+		dbAssortment.putUpByUserId = assortment.putUpByUserId.value;
 
 		return dbAssortment;
 	}
@@ -39,7 +40,8 @@ export class AssortmentMapper {
 			dbAssortment.isCloseToExpiration,
 			dbAssortment.isCloseToExpirationNotificationId === null
 				? null
-				: { id: dbAssortment.isCloseToExpirationNotificationId }
+				: { id: dbAssortment.isCloseToExpirationNotificationId },
+			UUID.fromString(dbAssortment.putUpByUserId)
 		);
 	}
 
@@ -58,6 +60,7 @@ export class AssortmentMapper {
 				assortment.isCloseToExpirationNotification === null
 					? null
 					: { id: assortment.isCloseToExpirationNotification.id },
+			putUpByUserId: assortment.putUpByUserId.value,
 		};
 	}
 
@@ -71,7 +74,8 @@ export class AssortmentMapper {
 			assortmentDTO.hasExpired,
 			assortmentDTO.hasExpiredNotification,
 			assortmentDTO.isCloseToExpiration,
-			assortmentDTO.isCloseToExpirationNotification
+			assortmentDTO.isCloseToExpirationNotification,
+			UUID.fromString(assortmentDTO.putUpByUserId)
 		);
 	}
 }

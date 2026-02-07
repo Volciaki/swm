@@ -154,10 +154,26 @@ export class DefaultStorageAssortmentDefinitionHelper implements StorageAssortme
 				return { ...definition, imageContentBase64 };
 			})
 		);
+		const fullCreateDefinitions = dto.definitions.map((definition) => {
+			let imageContentBase64 = null;
+
+			if (definition.assortmentImageFileReferenceId) {
+				const existingDefinition = fullCurrentDefinitions.find(
+					(one) => one.image?.id === definition.assortmentImageFileReferenceId
+				);
+
+				if (existingDefinition) imageContentBase64 = existingDefinition.imageContentBase64;
+			}
+
+			return {
+				...definition,
+				imageContentBase64,
+			};
+		});
 
 		try {
 			await this.deleteAssortmentDefinitionByDTOs(currentDefinitions);
-			return await this.createAssortmentDefinitionByDTOs(dto.definitions);
+			return await this.createAssortmentDefinitionByDTOs(fullCreateDefinitions);
 		} catch (error) {
 			// Attempt to rollback the changes if an error occurred.
 			const newDefinitions = await this.getAllAssortmentDefinitions.execute(undefined, { skipAuthentication: true });

@@ -31,6 +31,7 @@ export class UpdateFullShelf {
 				newData: {
 					...dto.newData,
 					currentTemperatureCelsius: shelf.currentTemperatureCelsius,
+					currentWeightKilograms: shelf.currentWeightKilograms,
 				},
 			},
 			{ skipAuthentication: true }

@@ -16,13 +16,16 @@ const generateCellDTOsForShape = (
 ): CellDTO[][] => {
 	const shelfCellDTOs: CellDTO[][] = [];
 
-	for (let i = 0; i < shape.rows; i++) {
+	for (let y = 0; y < shape.rows; y++) {
 		const row: CellDTO[] = [];
-		for (let j = 0; j < shape.columns; j++) {
+		for (let x = 0; x < shape.columns; x++) {
 			row.push({
 				id: uuidGenerator().value,
 				shelfId: shelfId.value,
 				assortment: null,
+				index: x + y * shape.columns,
+				x,
+				y,
 			});
 		}
 		shelfCellDTOs.push(row);
@@ -62,6 +65,8 @@ export class DefaultShelfHelper implements ShelfHelper {
 			lastRecordedLegalWeightKg: 0,
 			temperatureReadingIds: [],
 			currentTemperatureCelsius: dto.temperatureRange.minimalCelsius,
+			weightReadingIds: [],
+			currentWeightKilograms: 0,
 			hasBeenChangedIllegally: false,
 		});
 

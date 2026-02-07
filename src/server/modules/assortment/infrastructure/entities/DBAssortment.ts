@@ -28,4 +28,7 @@ export class DBAssortment {
 
 	@Column({ name: "is_close_to_expiration_notification_id", type: "varchar", nullable: true })
 	isCloseToExpirationNotificationId!: string | null;
+
+	@Column({ name: "put_up_by_user_id" })
+	putUpByUserId!: string;
 }

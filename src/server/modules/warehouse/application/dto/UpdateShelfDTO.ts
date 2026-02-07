@@ -9,6 +9,7 @@ export const updateShelfDTOSchema = z.object({
 		cells: true,
 		lastRecordedLegalWeightKg: true,
 		temperatureReadingIds: true,
+		weightReadingIds: true,
 		hasBeenChangedIllegally: true,
 	}),
 });

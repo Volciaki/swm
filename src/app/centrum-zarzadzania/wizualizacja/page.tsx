@@ -211,7 +211,7 @@ const Visualisation: FC = () => {
 													direction={"row"}
 													align={"center"}
 													justify={"center"}
-													style={{ width: "fit-content", height: "100%", gap: "1rem" }}
+													style={{ maxWidth: "100%", height: "100%", gap: "1rem", minWidth: 0 }}
 												>
 													<Paragraph fontSize={1.5} ellipsisOverflow>
 														{shelf.name}

@@ -43,7 +43,7 @@ export class ImportAndReplaceShelves {
 				},
 			}));
 			await this.createShelves(createCurrentShelveDTOs, currentUser);
-			await this.createAssortments(currentAssortment);
+			await this.createAssortments(currentAssortment, currentUser);
 
 			throw error;
 		}
@@ -73,13 +73,16 @@ export class ImportAndReplaceShelves {
 		}
 	}
 
-	private async createAssortments(assortments: AssortmentDTO[]) {
+	private async createAssortments(assortments: AssortmentDTO[], currentUser: UserDTO) {
 		for (const assortment of assortments) {
-			await this.storageAssortmentHelper.putUpAssortment({
-				assortmentDefinitionId: assortment.definition.id,
-				cellId: assortment.cellId,
-				shelfId: assortment.shelfId,
-			});
+			await this.storageAssortmentHelper.putUpAssortment(
+				{
+					assortmentDefinitionId: assortment.definition.id,
+					cellId: assortment.cellId,
+					shelfId: assortment.shelfId,
+				},
+				currentUser
+			);
 		}
 	}
 }

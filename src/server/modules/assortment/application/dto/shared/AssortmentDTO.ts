@@ -12,6 +12,7 @@ export const assortmentDTOSchema = z.object({
 	hasExpiredNotification: notificationVOSchema.nullable(),
 	isCloseToExpiration: z.boolean(),
 	isCloseToExpirationNotification: notificationVOSchema.nullable(),
+	putUpByUserId: z.string(),
 });
 
 export type AssortmentDTO = z.infer<typeof assortmentDTOSchema>;

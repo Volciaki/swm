@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type FC } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FC } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { BackButton, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, FullHeight, Link, Loading, Paragraph } from "@/ui/atoms";
@@ -22,22 +22,32 @@ const ShelfAssortment: FC = () => {
 		{ id: params.assortmentId as string },
 		{ enabled: params.assortmentId !== undefined }
 	);
+	const fullShelf = apiClient.storage.getShelf.useQuery(
+		{ id: assortment.data?.shelfId as string },
+		{ enabled: assortment.data?.shelfId !== undefined }
+	);
 	const nextAssortmentToBeTakenDown = apiClient.storage.getNextAssortmentToBeTakenDownByDefinition.useQuery(
 		{ definitionId: assortment.data?.definition.id ?? "" },
 		{ enabled: assortment.data?.definition.id !== undefined }
 	);
 	const takeDownAssortment = apiClient.storage.takeDownAssortment.useMutation({
 		onSuccess: () => {
-			apiUtils.storage.getShelf.invalidate();
+			apiUtils.storage.invalidate();
 		},
 	});
+	const cell = useMemo(() => {
+		if (!fullShelf.data || !assortment.data) return;
+
+		return fullShelf.data.cells.flat().find((cell) => cell.id === assortment.data.cellId);
+	}, [assortment.data, fullShelf.data]);
+	const backURLParameters = cell ? `?x=${cell.x}&y=${cell.y}` : "";
 
 	const takeDownAssortmentHandler = useCallback(async () => {
 		if (!assortment.data) return;
 
 		await takeDownAssortment.mutateAsync({ id: assortment.data.id });
-		router.push(`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/asortymenty`);
-	}, [assortment.data, takeDownAssortment, router]);
+		router.push(`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/asortymenty${backURLParameters}`);
+	}, [assortment.data, takeDownAssortment, router, backURLParameters]);
 
 	useEffect(() => {
 		if (!isDialogButtonReady) return;
@@ -51,7 +61,10 @@ const ShelfAssortment: FC = () => {
 
 	return (
 		<FullHeight style={{ width: "100%" }}>
-			<BackButton fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}/asortymenty`} forceFallback />
+			<BackButton
+				fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}/asortymenty${backURLParameters}`}
+				forceFallback
+			/>
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				{assortment.data && nextAssortmentToBeTakenDown.data !== undefined && (
@@ -101,9 +114,7 @@ const ShelfAssortment: FC = () => {
 							{(takeDownAssortment.isPending || nextAssortmentToBeTakenDown.isLoading) && <Loading />}
 						</DialogButton>
 
-						<AssortmentCard
-							assortment={{ ...assortment.data.definition, storedAtTimestamp: assortment.data.storedAtTimestamp }}
-						/>
+						<AssortmentCard assortment={{ ...assortment.data.definition, ...assortment.data }} />
 					</>
 				)}
 

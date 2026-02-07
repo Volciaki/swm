@@ -2,4 +2,5 @@
 
 .container {
     min-height: calc(100vh - $navigation-height-desktop - ($padding * 2));
+    width: 100%;
 }

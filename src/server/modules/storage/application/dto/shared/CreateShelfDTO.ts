@@ -7,8 +7,10 @@ export const createShelfDTOSchema = shelfDTOSchema
 		cells: true,
 		lastRecordedLegalWeightKg: true,
 		temperatureReadingIds: true,
+		weightReadingIds: true,
 		hasBeenChangedIllegally: true,
 		currentTemperatureCelsius: true,
+		currentWeightKilograms: true,
 	})
 	.extend({
 		cellsShape: z.object({

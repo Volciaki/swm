@@ -32,18 +32,18 @@ export class UpdateShelf {
 			cells: shelf.cells.map((row) => row.map((cell) => CellMapper.fromCellToCellDTO(cell))),
 			lastRecordedLegalWeightKg: shelf.lastRecordedLegalWeight.kilograms.value,
 			temperatureReadingIds: shelf.temperatureReadingIds.map((id) => id.value),
+			weightReadingIds: shelf.weightReadingIds.map((id) => id.value),
 			hasBeenChangedIllegally: false,
 		});
 
-		const { name, comment, maxAssortmentSize, maxWeight, temperatureRange, supportsHazardous, currentTemperature } =
-			newShelf;
-		shelf.name = name;
-		shelf.comment = comment;
-		shelf.maxAssortmentSize = maxAssortmentSize;
-		shelf.maxWeight = maxWeight;
-		shelf.temperatureRange = temperatureRange;
-		shelf.supportsHazardous = supportsHazardous;
-		shelf.currentTemperature = currentTemperature;
+		shelf.name = newShelf.name;
+		shelf.comment = newShelf.comment;
+		shelf.maxAssortmentSize = newShelf.maxAssortmentSize;
+		shelf.maxWeight = newShelf.maxWeight;
+		shelf.temperatureRange = newShelf.temperatureRange;
+		shelf.supportsHazardous = newShelf.supportsHazardous;
+		shelf.currentTemperature = newShelf.currentTemperature;
+		shelf.currentWeight = newShelf.currentWeight;
 		shelf.validate();
 		await this.shelfRepository.update(shelf);
 

@@ -15,7 +15,8 @@ export class Assortment {
 		private _hasExpired: boolean,
 		private _hasExpiredNotification: NotificationVO | null,
 		private _isCloseToExpiration: boolean,
-		private _isCloseToExpirationNotification: NotificationVO | null
+		private _isCloseToExpirationNotification: NotificationVO | null,
+		private _putUpByUserId: UUID
 	) {
 		this.updateExpirationDetails();
 	}
@@ -46,6 +47,10 @@ export class Assortment {
 	}
 	get isCloseToExpirationNotification() {
 		return this._isCloseToExpirationNotification;
+	}
+
+	get putUpByUserId() {
+		return this._putUpByUserId;
 	}
 
 	set isCloseToExpirationNotification(value: NotificationVO | null) {
@@ -82,7 +87,8 @@ export class Assortment {
 		hasExpired: boolean,
 		hasExpiredNotification: NotificationVO | null,
 		isCloseToExpiration: boolean,
-		isCloseToExpirationNotification: NotificationVO | null
+		isCloseToExpirationNotification: NotificationVO | null,
+		putUpByUserId: UUID
 	) {
 		return new Assortment(
 			id,
@@ -93,7 +99,8 @@ export class Assortment {
 			hasExpired,
 			hasExpiredNotification,
 			isCloseToExpiration,
-			isCloseToExpirationNotification
+			isCloseToExpirationNotification,
+			putUpByUserId
 		);
 	}
 }

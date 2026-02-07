@@ -13,6 +13,7 @@ import { ShelfUnevenError } from "../../application/errors/ShelfUnevenError";
 import type { AssortmentVO } from "../vo/AssortmentVO";
 import type { Cell } from "./Cell";
 import type { TemperatureReading } from "./TemperatureReading";
+import type { WeightReading } from "./WeightReading";
 
 export class Shelf {
 	private constructor(
@@ -27,7 +28,9 @@ export class Shelf {
 		private _lastRecordedLegalWeight: Weight,
 		private _temperatureReadingIds: UUID[],
 		private _currentTemperature: CelsiusDegrees,
-		private _hasBeenChangedIllegally: boolean
+		private _hasBeenChangedIllegally: boolean,
+		private _weightReadingIds: UUID[],
+		private _currentWeight: Weight
 	) {}
 
 	get id() {
@@ -66,6 +69,12 @@ export class Shelf {
 	get hasBeenChangedIllegally() {
 		return this._hasBeenChangedIllegally;
 	}
+	get weightReadingIds() {
+		return this._weightReadingIds;
+	}
+	get currentWeight() {
+		return this._currentWeight;
+	}
 
 	set name(value: string) {
 		this._name = value;
@@ -94,6 +103,9 @@ export class Shelf {
 	set hasBeenChangedIllegally(value: boolean) {
 		this._hasBeenChangedIllegally = value;
 	}
+	set currentWeight(value: Weight) {
+		this._currentWeight = value;
+	}
 	private set lastRecordedLegalWeight(value: Weight) {
 		this._lastRecordedLegalWeight = value;
 	}
@@ -109,7 +121,9 @@ export class Shelf {
 		supportsHazardous: boolean,
 		lastRecordedLegalWeight: Weight,
 		temperatureReadingIds: UUID[],
-		currentTemperature: CelsiusDegrees
+		currentTemperature: CelsiusDegrees,
+		weightReadingIds: UUID[],
+		currentWeight: Weight
 	) {
 		const shelf = new Shelf(
 			id,
@@ -123,7 +137,9 @@ export class Shelf {
 			lastRecordedLegalWeight,
 			temperatureReadingIds,
 			currentTemperature,
-			false
+			false,
+			weightReadingIds,
+			currentWeight
 		);
 
 		shelf.validate();
@@ -255,5 +271,9 @@ export class Shelf {
 
 	public addTemperatureReading(temperatureReading: TemperatureReading) {
 		this._temperatureReadingIds.push(temperatureReading.id);
+	}
+
+	public addWeightReading(weightReading: WeightReading) {
+		this._weightReadingIds.push(weightReading.id);
 	}
 }

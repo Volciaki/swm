@@ -13,9 +13,10 @@ const PANNING_DEADZONE = 10;
 
 type ZoomableProps = {
 	children: ReactNode;
+	focusElementId?: string;
 };
 
-const Zoomable: FC<ZoomableProps> = ({ children }) => {
+const Zoomable: FC<ZoomableProps> = ({ children, focusElementId }) => {
 	const cursorStartY = useRef(0);
 	const cursorStartX = useRef(0);
 	const cursorMoved = useRef(false);
@@ -43,7 +44,25 @@ const Zoomable: FC<ZoomableProps> = ({ children }) => {
 	};
 
 	return (
-		<TransformWrapper initialScale={1} minScale={0.3} maxScale={3} centerOnInit>
+		<TransformWrapper
+			initialScale={1}
+			minScale={0.3}
+			maxScale={3}
+			onInit={({ zoomToElement }) => {
+				console.debug(`focusElementId: ${focusElementId}`);
+
+				if (!focusElementId) return;
+
+				const element = document.getElementById(focusElementId);
+
+				if (!element) return;
+
+				setTimeout(() => {
+					zoomToElement(element, 2, 1000, "easeInOutQuad");
+				}, 100);
+			}}
+			centerOnInit
+		>
 			<TransformComponent wrapperClass={styles["zoomable-container"]}>
 				<div onPointerDown={onPointerDown} onPointerMove={onPointerMove} onClickCapture={onClickCapture}>
 					{children}
@@ -55,14 +74,19 @@ const Zoomable: FC<ZoomableProps> = ({ children }) => {
 
 export type ShelfProps = {
 	shelfData: FullShelfDTO;
+	cellToFocus?: {
+		x: number;
+		y: number;
+	};
 	cellSize?: number;
 };
 
-export const Shelf: FC<ShelfProps> = ({ shelfData, cellSize = 12.5 }) => {
+export const Shelf: FC<ShelfProps> = ({ shelfData, cellToFocus, cellSize = 12.5 }) => {
 	const columns = shelfData.cells[0].length;
+	const generateCellId = ({ x, y }: { x: number; y: number }) => `cell-x-${x}-y-${y}`;
 
 	return (
-		<Zoomable>
+		<Zoomable focusElementId={cellToFocus ? generateCellId(cellToFocus) : undefined}>
 			<div
 				style={{
 					display: "grid",
@@ -72,11 +96,12 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellSize = 12.5 }) => {
 					margin: "20rem",
 				}}
 			>
-				{shelfData.cells.map((row, y) =>
-					row.map((cell, x) => (
+				{shelfData.cells.map((row) =>
+					row.map((cell) => (
 						<Link
+							id={generateCellId(cell)}
 							href={`/centrum-zarzadzania/wizualizacja/regaly/${shelfData.id}/asortymenty/${cell.assortment ? `${cell.assortment.id}` : `nowy/${cell.id}`}`}
-							key={`cell-x-${x}-y-${y}`}
+							key={generateCellId(cell)}
 							style={{ textDecoration: "none" }}
 						>
 							<Flex
@@ -100,7 +125,7 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellSize = 12.5 }) => {
 									<Paragraph fontSize={1.5}>{"Wolne pole"}</Paragraph>
 								)}
 
-								<Paragraph fontSize={1.5}>{x + y * columns + 1}</Paragraph>
+								<Paragraph fontSize={1.5}>{cell.index + 1}</Paragraph>
 							</Flex>
 						</Link>
 					))

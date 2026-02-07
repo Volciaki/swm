@@ -5,6 +5,7 @@ import { getUpcomingExpiryMonitoringPresets } from "./UpcomingExpiryMonitoringTa
 import { getShelvesModifiedIllegallyMonitoringPresets } from "./ShelvesModifiedIllegallyMonitoringTask";
 import { getUpdateShelfTemperaturesPresets } from "./UpdateShelfTemperaturesTask";
 import { getRoutinaryBackupCheckPresets } from "./RoutinaryBackupCheckTask";
+import { getUpdateShelfWeightsPresets } from "./UpdateShelfWeightsTask";
 
 const getPresets = (ctx: GetServicesContext) => {
 	return {
@@ -13,6 +14,7 @@ const getPresets = (ctx: GetServicesContext) => {
 		shelvesModifiedIllegallyMonitoringTask: getShelvesModifiedIllegallyMonitoringPresets(ctx),
 		updateShelfTemperaturesTask: getUpdateShelfTemperaturesPresets(ctx),
 		routinaryBackupCheckTask: getRoutinaryBackupCheckPresets(ctx),
+		updateShelfWeightsTask: getUpdateShelfWeightsPresets(ctx),
 	};
 };
 
@@ -24,6 +26,7 @@ export const getSchedulerTasks = (ctx: GetServicesContext) => {
 	const shelvesModifiedIllegallyMonitoringTask = presets.shelvesModifiedIllegallyMonitoringTask.default;
 	const updateShelfTemperaturesTask = presets.updateShelfTemperaturesTask.default;
 	const routinaryBackupCheckTask = presets.routinaryBackupCheckTask.default;
+	const updateShelfWeightsTask = presets.updateShelfWeightsTask.default;
 
 	return [
 		epxirationMonitoring,
@@ -31,5 +34,6 @@ export const getSchedulerTasks = (ctx: GetServicesContext) => {
 		shelvesModifiedIllegallyMonitoringTask,
 		updateShelfTemperaturesTask,
 		routinaryBackupCheckTask,
+		updateShelfWeightsTask,
 	];
 };

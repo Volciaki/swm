@@ -1,7 +1,7 @@
 "use client";
 
-import type { FC } from "react";
-import { useParams } from "next/navigation";
+import { useMemo, type FC } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import { FullHeight, Flex, Loading, FormError } from "@/ui/atoms";
 import { BackButton, PageHeader, Shelf } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
@@ -10,10 +10,24 @@ import styles from "@/styles/view-shelf.module.scss";
 
 const ViewShelf: FC = () => {
 	const params = useParams();
+	const searchParams = useSearchParams();
 	const getShelf = apiClient.storage.getShelf.useQuery(
 		{ id: (params?.shelfId as string) ?? "" },
 		{ enabled: params?.shelfId !== undefined }
 	);
+	const cellToFocus = useMemo(() => {
+		const xString = searchParams.get("x");
+		const yString = searchParams.get("y");
+
+		if (!xString || !yString) return undefined;
+
+		const x = Number.parseInt(xString);
+		const y = Number.parseInt(yString);
+
+		if (Number.isNaN(x) || Number.isNaN(y)) return undefined;
+
+		return { x, y };
+	}, [searchParams]);
 
 	return (
 		<FullHeight style={{ maxWidth: "100%" }}>
@@ -29,7 +43,7 @@ const ViewShelf: FC = () => {
 							description={"Przeglądaj stary, zdejmuj, lub przyjmuj zupełnie nowy asortyment."}
 						/>
 
-						<Shelf shelfData={getShelf.data} />
+						<Shelf shelfData={getShelf.data} cellToFocus={cellToFocus} />
 					</>
 				)}
 

@@ -1,10 +1,11 @@
 import bcrypt from "bcryptjs";
 import type { StringHasher } from "../../application/services/StringHasher";
 
+const SALT_ROUNDS = 12;
+
 export class NodeStringHasher implements StringHasher {
 	async hash(value: string) {
-		const saltRounds = 10;
-		const salt = await bcrypt.genSalt(saltRounds);
+		const salt = await bcrypt.genSalt(SALT_ROUNDS);
 		const hash = await bcrypt.hash(value, salt);
 		return hash;
 	}
