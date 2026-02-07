@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type FC } from "react";
+import { useCallback, useState, type FC } from "react";
+import { useRouter } from "next/navigation";
 import { Button, Flex, FullHeight, Image, Paragraph, Link } from "@/ui/atoms";
 import { useAuthData } from "@/ui/providers";
 import { Block, Dialog } from "@/ui/molecules";
@@ -49,6 +50,16 @@ const homeBlocks: HomeBlockProps[] = [
 const HomeBlock: FC<HomeBlockProps> = ({ title, description, mediaUrl, localPath }) => {
 	const { authData } = useAuthData();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const router = useRouter();
+
+	const clickHandler = useCallback(() => {
+		if (authData === null) {
+			setIsDialogOpen(true);
+			return;
+		}
+
+		router.push(localPath);
+	}, [authData, router, localPath]);
 
 	return (
 		<div className={styles["block"]}>
@@ -65,7 +76,7 @@ const HomeBlock: FC<HomeBlockProps> = ({ title, description, mediaUrl, localPath
 						justifyContent: "space-between",
 						flexDirection: "column",
 					}}
-					onClick={() => setIsDialogOpen(true)}
+					onClick={() => clickHandler()}
 				>
 					<Paragraph>{title}</Paragraph>
 

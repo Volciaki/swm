@@ -12,7 +12,7 @@ const Users: FC = () => {
 
 	return (
 		<FullHeight>
-			<BackButton fallback={"/centrum-zarzadzania"} forceFallback />
+			<BackButton fallback={"/centrum-zarzadzania"} />
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
 				<PageHeader
