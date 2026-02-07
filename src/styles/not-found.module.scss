@@ -1,1 +1,14 @@
 @use "." as *;
+
+.background {
+  background-image: url('https://media.discordapp.net/attachments/1388280170497970277/1469780430214402221/obraz.png?ex=6988e731&is=698795b1&hm=e26d465b24e26f9d767191c1ad91cda49feafa9c0336571ecc6098f2b6f46ecb&=&format=webp&quality=lossless&width=1250&height=321');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: auto 100vh;
+  background-attachment: fixed;
+}
+
+.text {
+  max-width: 50%;
+  text-align: center;
+}
