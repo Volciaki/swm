@@ -24,7 +24,7 @@ const ViewShelf: FC = () => {
 		const x = Number.parseInt(xString);
 		const y = Number.parseInt(yString);
 
-		if (!x || !y) return undefined;
+		if (Number.isNaN(x) || Number.isNaN(y)) return undefined;
 
 		return { x, y };
 	}, [searchParams]);

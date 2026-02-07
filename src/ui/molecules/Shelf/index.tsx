@@ -49,6 +49,8 @@ const Zoomable: FC<ZoomableProps> = ({ children, focusElementId }) => {
 			minScale={0.3}
 			maxScale={3}
 			onInit={({ zoomToElement }) => {
+				console.debug(`focusElementId: ${focusElementId}`);
+
 				if (!focusElementId) return;
 
 				const element = document.getElementById(focusElementId);

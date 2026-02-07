@@ -28,6 +28,7 @@ const PutUpAssortment: FC = () => {
 	const [putUpAssortmentError, setPutUpAssortmentError] = useState<string | undefined>();
 
 	const thisCell = getShelf.data ? getShelf.data.cells.flat().find((cell) => cell.id === params.cellId) : undefined;
+	const backURLParameters = thisCell ? `?x=${thisCell.x}&y=${thisCell.y}` : "";
 
 	const redirectToCreated = useCallback(
 		(shelfId: string, assortmentId: string) => {
@@ -59,7 +60,10 @@ const PutUpAssortment: FC = () => {
 
 	return (
 		<FullHeight style={{ width: "100%" }}>
-			<BackButton fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}`} />
+			<BackButton
+				fallback={`/centrum-zarzadzania/wizualizacja/regaly/${params.shelfId}/asortymenty${backURLParameters}`}
+				forceFallback
+			/>
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader

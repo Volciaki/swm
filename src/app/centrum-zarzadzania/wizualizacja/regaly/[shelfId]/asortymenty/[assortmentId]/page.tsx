@@ -32,7 +32,7 @@ const ShelfAssortment: FC = () => {
 	);
 	const takeDownAssortment = apiClient.storage.takeDownAssortment.useMutation({
 		onSuccess: () => {
-			apiUtils.storage.getShelf.invalidate();
+			apiUtils.storage.invalidate();
 		},
 	});
 	const cell = useMemo(() => {
@@ -46,8 +46,8 @@ const ShelfAssortment: FC = () => {
 		if (!assortment.data) return;
 
 		await takeDownAssortment.mutateAsync({ id: assortment.data.id });
-		router.push(`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/asortymenty`);
-	}, [assortment.data, takeDownAssortment, router]);
+		router.push(`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/asortymenty${backURLParameters}`);
+	}, [assortment.data, takeDownAssortment, router, backURLParameters]);
 
 	useEffect(() => {
 		if (!isDialogButtonReady) return;
