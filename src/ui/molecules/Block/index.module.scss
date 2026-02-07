@@ -1,0 +1,28 @@
+@use "@/styles" as *;
+
+.container {
+    padding: $padding;
+    overflow: hidden;
+    border-radius: $border-radius;
+    transition: all $transition;
+
+    &.primary {
+        background-color: $secondary;
+        border: solid $border-size $secondary;
+
+        &:hover {
+            border: solid $border-size $primary;
+            box-shadow: 2px 2px 4px $primary;
+        }
+    }
+
+    &.secondary {
+        background-color: $background-lightened;
+        border: solid $border-size $background-lightened;
+
+        &:hover {
+            border: solid $border-size $primary;
+            box-shadow: 2px 2px 4px $primary;
+        }
+    }
+}

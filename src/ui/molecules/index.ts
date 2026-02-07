@@ -9,3 +9,4 @@ export * from "./FileUpload";
 export * from "./Shelf";
 export * from "./BackButton";
 export * from "./Card";
+export * from "./Block";

@@ -1,0 +1,26 @@
+@use "." as *;
+
+.blocks-container {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.block {
+    grid-column: span 2;
+    height: 12.5rem;
+
+    // This centers the leftover items (in the last row) horizontally.
+    // See: https://css-irl.info/controlling-leftover-grid-items
+    &:last-child:nth-child(3n - 1) {
+        grid-column-end: -2;
+    }
+
+    &:nth-last-child(2):nth-child(3n + 1) {
+        grid-column-end: 4;
+    }
+
+    &:last-child:nth-child(3n - 2) {
+        grid-column-end: 5;
+    }
+}

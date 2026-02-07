@@ -6,11 +6,8 @@
 }
 
 .cell-container {
-    background-color: $background-lightened;
-    padding: $padding;
-    overflow: hidden;
-
-    &.has-assortment {
-        background-color: $secondary;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

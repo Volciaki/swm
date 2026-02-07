@@ -7,6 +7,7 @@ import Link from "next/link";
 import type { FullShelfDTO } from "@/server/modules/storage/application/dto/shared/FullShelfDTOSchema";
 import { Flex, Paragraph } from "@/ui/atoms";
 import styles from "./index.module.scss";
+import { Block } from "../Block";
 
 // If our cursor has moved more than this amount of pixels, our user is most likely scrolling, and we shouldn't trigger the links.
 const PANNING_DEADZONE = 10;
@@ -104,12 +105,10 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellToFocus, cellSize = 12.5 
 							key={generateCellId(cell)}
 							style={{ textDecoration: "none" }}
 						>
-							<Flex
-								direction={"column"}
-								align={"center"}
-								justify={"center"}
-								className={clsx([styles["cell-container"], { [styles["has-assortment"]]: cell.assortment !== null }])}
+							<Block
 								style={{ width: `${cellSize}rem`, height: `${cellSize * 0.75}rem` }}
+								variant={cell.assortment === null ? "secondary" : "primary"}
+								className={styles["cell-container"]}
 							>
 								{cell.assortment ? (
 									<>
@@ -126,7 +125,7 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellToFocus, cellSize = 12.5 
 								)}
 
 								<Paragraph fontSize={1.5}>{cell.index + 1}</Paragraph>
-							</Flex>
+							</Block>
 						</Link>
 					))
 				)}
