@@ -103,6 +103,9 @@ export class Shelf {
 	set hasBeenChangedIllegally(value: boolean) {
 		this._hasBeenChangedIllegally = value;
 	}
+	set currentWeight(value: Weight) {
+		this._currentWeight = value;
+	}
 	private set lastRecordedLegalWeight(value: Weight) {
 		this._lastRecordedLegalWeight = value;
 	}

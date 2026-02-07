@@ -11,6 +11,7 @@ import { getReportRepositories } from "./Report";
 import { getBackupRepositories } from "./Backup";
 import { getBackupSettingsRepositories } from "./BackupSettings";
 import { getAssortmentDefinitionRepositories } from "./AssortmentDefinition";
+import { getWeightReadingRepositories } from "./WeightReading";
 
 export const getRepositories = (ctx: GetServicesContext) => {
 	return {
@@ -25,5 +26,6 @@ export const getRepositories = (ctx: GetServicesContext) => {
 		backup: getBackupRepositories(ctx),
 		backupSettings: getBackupSettingsRepositories(ctx),
 		assortmentDefinition: getAssortmentDefinitionRepositories(ctx),
+		weightReading: getWeightReadingRepositories(ctx),
 	};
 };

@@ -30,6 +30,10 @@ const tasks: Task[] = [
 		name: "RoutinaryBackupCheckTask",
 		triggerFrequency: everyMinute,
 	},
+	{
+		name: "UpdateShelfWeightsTask",
+		triggerFrequency: everyMinute,
+	},
 ];
 
 const AUTHENTICATION_PASSPHRASE =
