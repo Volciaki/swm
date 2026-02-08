@@ -1,11 +1,10 @@
 "use client";
 
 import { type ReactNode, type MouseEvent, type PointerEvent, type FC, useRef } from "react";
-import { clsx } from "clsx";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Link from "next/link";
 import type { FullShelfDTO } from "@/server/modules/storage/application/dto/shared/FullShelfDTOSchema";
-import { Flex, Paragraph } from "@/ui/atoms";
+import { Paragraph } from "@/ui/atoms";
 import styles from "./index.module.scss";
 import { Block } from "../Block";
 

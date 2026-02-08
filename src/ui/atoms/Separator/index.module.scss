@@ -4,6 +4,12 @@
     color: $border;
     background-color: $border;
     border: solid 1px $border;
+
+    &.secondary {
+        color: $text-darkened;
+        background-color: $text-darkened;
+        border-color: $text-darkened;
+    }
 }
 
 .vertical {

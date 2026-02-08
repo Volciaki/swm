@@ -1,3 +1,5 @@
+"use mobile";
+
 import { useState, useEffect } from "react";
 
 // This should stay in sync with $mobile-width SCSS constant.

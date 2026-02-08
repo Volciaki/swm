@@ -1,8 +1,8 @@
 export type Route = { text: string; href: string };
 
-const home: Route = { text: "Strona główna", href: "/" };
-const notifications: Route = { text: "Powiadomienia", href: "/powiadomienia" };
-const managementCenter: Route = { text: "Centrum zarządzania", href: "/centrum-zarzadzania" };
+const home = { text: "Strona główna", href: "/" } as const;
+const notifications = { text: "Powiadomienia", href: "/powiadomienia" } as const;
+const managementCenter = { text: "Centrum zarządzania", href: "/centrum-zarzadzania" } as const;
 
 export const routes = {
 	unauthenticated: [home],
