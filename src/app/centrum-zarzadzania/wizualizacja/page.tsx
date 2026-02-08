@@ -8,6 +8,7 @@ import { Button, Flex, FullHeight, Loading, Paragraph, Separator, Link, FormErro
 import { apiClient, useAuthData } from "@/ui/providers";
 import commonStyles from "@/styles/common.module.scss";
 import { defaultErrorHandler } from "@/ui/utils";
+import { useMobile } from "@/ui/hooks";
 
 type CSVShelf = {
 	Oznaczenie: string;
@@ -24,6 +25,7 @@ type CSVShelf = {
 
 const Visualisation: FC = () => {
 	const { authData } = useAuthData();
+	const { mobile } = useMobile();
 	const apiUtils = apiClient.useUtils();
 	const importShelves = apiClient.storage.importShelves.useMutation({
 		onError: (e) => defaultErrorHandler(e, (message) => setImportShelvesError(message)),
@@ -112,7 +114,12 @@ const Visualisation: FC = () => {
 		<FullHeight>
 			<BackButton fallback={"/centrum-zarzadzania"} forceFallback />
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
+			<Flex
+				direction={"column"}
+				align={"center"}
+				style={{ gap: "1rem", marginTop: mobile ? "1rem" : undefined }}
+				fullWidth
+			>
 				<PageHeader
 					title={"Wizualizacja magazynu"}
 					description={
@@ -120,19 +127,24 @@ const Visualisation: FC = () => {
 					}
 				/>
 
-				<Flex direction={"column"} className={commonStyles["form-container"]} fullWidth>
-					<Flex direction={"row"} fullWidth>
+				<Flex
+					direction={"column"}
+					className={commonStyles["form-container"]}
+					style={{ border: mobile ? "none" : undefined }}
+					fullWidth
+				>
+					<Flex direction={mobile ? "column" : "row"} style={{ gap: mobile ? "1rem" : undefined }} fullWidth>
 						{authData?.isAdmin && (
 							<>
 								<VisualisationAction title={"Importuj regały z pliku CSV"}>
 									<DialogButton
 										buttonContent={
-											<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+											<Paragraph fontSize={mobile ? 1.25 : 1.5} style={{ marginInline: "20px" }}>
 												{"Importuj"}
 											</Paragraph>
 										}
 									>
-										<Paragraph fontSize={1.5}>
+										<Paragraph fontSize={mobile ? 1.25 : 1.5}>
 											{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}
 										</Paragraph>
 
@@ -144,14 +156,15 @@ const Visualisation: FC = () => {
 												setFile(data);
 												setFileUploadError(undefined);
 											}}
+											height={mobile ? 10 : 15}
 										/>
 
 										{fileUploadError && <FormError>{fileUploadError}</FormError>}
 
-										{file && <Paragraph fontSize={1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
+										{file && <Paragraph fontSize={mobile ? 1.25 : 1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
 
 										<Button onClick={() => importShelvesSubmitHandler()} disabled={!file || importShelves.isPending}>
-											<Paragraph fontSize={1.75}>{"Importuj"}</Paragraph>
+											<Paragraph fontSize={mobile ? 1.25 : 1.75}>{"Importuj"}</Paragraph>
 										</Button>
 
 										{importShelvesError && <FormError>{importShelvesError}</FormError>}
@@ -165,7 +178,7 @@ const Visualisation: FC = () => {
 								<VisualisationAction title={"Ręcznie dodaj nowy regał"}>
 									<Link href={"/centrum-zarzadzania/wizualizacja/regaly/nowy"}>
 										<Button>
-											<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+											<Paragraph fontSize={mobile ? 1.25 : 1.5} style={{ marginInline: "20px" }}>
 												{"Dodaj"}
 											</Paragraph>
 										</Button>
@@ -179,7 +192,7 @@ const Visualisation: FC = () => {
 						<VisualisationAction title={"Zobacz zdefiniowane asortymenty"}>
 							<Link href={"/centrum-zarzadzania/wizualizacja/asortymenty"}>
 								<Button>
-									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+									<Paragraph fontSize={mobile ? 1.25 : 1.5} style={{ marginInline: "20px" }}>
 										{"Asortymenty"}
 									</Paragraph>
 								</Button>
@@ -195,7 +208,7 @@ const Visualisation: FC = () => {
 						{shelves.isLoading && <Loading />}
 
 						{shelves.data && shelves.data.length === 0 && (
-							<Paragraph fontSize={1.75} variant={"secondary"}>
+							<Paragraph fontSize={mobile ? 1.5 : 1.75} variant={"secondary"}>
 								{"brak regałów!"}
 							</Paragraph>
 						)}
@@ -206,42 +219,65 @@ const Visualisation: FC = () => {
 									.sort((a, b) => a.name.trim().localeCompare(b.name.trim()))
 									.map((shelf, index) => (
 										<ListItem clickable={false} key={`shelf-${index}`}>
-											<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
+											<Flex
+												direction={"row"}
+												align={"center"}
+												justify={"space-between"}
+												style={{ gap: "1rem" }}
+												fullWidth
+											>
 												<Flex
-													direction={"row"}
+													direction={mobile ? "column" : "row"}
 													align={"center"}
-													justify={"center"}
-													style={{ maxWidth: "100%", height: "100%", gap: "1rem", minWidth: 0 }}
+													justify={mobile ? undefined : "center"}
+													style={{ maxWidth: "100%", height: "100%", gap: mobile ? "0.5rem" : "1rem", minWidth: 0 }}
 												>
-													<Paragraph fontSize={1.5} ellipsisOverflow>
+													<Paragraph
+														fontSize={mobile ? 1.25 : 1.5}
+														style={{ textAlign: "start", width: mobile ? "100%" : undefined }}
+														ellipsisOverflow
+													>
 														{shelf.name}
 													</Paragraph>
 
-													<Separator direction={"vertical"} style={{ width: "2.5px" }} />
+													<Separator direction={mobile ? "horizontal" : "vertical"} style={{ width: "2.5px" }} />
 
-													<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
-														{shelf.comment}
+													<Paragraph
+														fontSize={mobile ? 1 : 1.25}
+														variant={"secondary"}
+														style={{ maxWidth: "100%", maxHeight: "100%" }}
+													>
+														{shelf.comment.length > 50 ? `${shelf.comment.slice(0, 50)}...` : shelf.comment}
 													</Paragraph>
 												</Flex>
 
-												<Flex direction={"row"} align={"center"} style={{ gap: "1rem" }}>
+												<Flex direction={mobile ? "column" : "row"} align={"center"} style={{ gap: "1rem" }}>
 													{authData?.isAdmin ? (
-														<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/edytuj`}>
-															<Button>
-																<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
+														<Link
+															href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/edytuj`}
+															style={{ width: mobile ? "100%" : undefined }}
+														>
+															<Button style={{ width: mobile ? "100%" : undefined }}>
+																<Paragraph fontSize={mobile ? 1 : 1.5}>{"Edytuj"}</Paragraph>
 															</Button>
 														</Link>
 													) : (
-														<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/wyswietl`}>
-															<Button>
-																<Paragraph fontSize={1.5}>{"Wyświetl"}</Paragraph>
+														<Link
+															href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/wyswietl`}
+															style={{ width: mobile ? "100%" : undefined }}
+														>
+															<Button style={{ width: mobile ? "100%" : undefined }}>
+																<Paragraph fontSize={mobile ? 1 : 1.5}>{"Wyświetl"}</Paragraph>
 															</Button>
 														</Link>
 													)}
 
-													<Link href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/asortymenty`}>
-														<Button>
-															<Paragraph fontSize={1.5}>{"Asortyment"}</Paragraph>
+													<Link
+														href={`/centrum-zarzadzania/wizualizacja/regaly/${shelf.id}/asortymenty`}
+														style={{ width: mobile ? "100%" : undefined }}
+													>
+														<Button style={{ width: mobile ? "100%" : undefined }}>
+															<Paragraph fontSize={mobile ? 1 : 1.5}>{"Asortyment"}</Paragraph>
 														</Button>
 													</Link>
 												</Flex>
