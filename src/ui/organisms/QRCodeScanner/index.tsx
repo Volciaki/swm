@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState, type FC } from "react";
 import { Scanner, useDevices } from "@yudiel/react-qr-scanner";
 import { Paragraph } from "@/ui/atoms";
-import styles from "./index.module.scss";
 import { useMobile } from "@/ui/hooks";
+import styles from "./index.module.scss";
 
 export type QRCodeScannerProps = {
 	onScan?: (value: unknown) => void;

@@ -6,8 +6,8 @@ import { RadioGroup } from "@/ui/molecules";
 import { DialogButton } from "@/ui/organisms";
 import { apiClient } from "@/ui/providers";
 import { defaultErrorHandler } from "@/ui/utils";
-import styles from "./index.module.scss";
 import { useMobile } from "@/ui/hooks";
+import styles from "./index.module.scss";
 
 const backupScheduleConfigurationPresets: Array<{ text: string; value: string; frequencySeconds: number }> = [
 	{
