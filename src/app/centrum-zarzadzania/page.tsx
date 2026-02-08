@@ -1,6 +1,9 @@
+"use client";
+
 import { type FC } from "react";
 import { Button, Flex, FullHeight, Link, Paragraph } from "@/ui/atoms";
 import { PageHeader } from "@/ui/molecules";
+import { useMobile } from "@/ui/hooks";
 import styles from "../../styles/management-center.module.scss";
 
 type ManagementCenterCardProps = {
@@ -9,16 +12,31 @@ type ManagementCenterCardProps = {
 	href: string;
 };
 
-const ManagementCenterCard: FC<ManagementCenterCardProps> = ({ text, description, href }) => (
-	<Link href={`/centrum-zarzadzania/${href}`} style={{ width: "100%", height: "100%" }}>
-		<Button variant={"secondary"} style={{ width: "100%", height: "100%", paddingBlock: "2rem" }}>
-			<Paragraph fontSize={1.5}>{text}</Paragraph>
-			<Paragraph variant={"secondary"} fontSize={1}>
-				{description}
-			</Paragraph>
-		</Button>
-	</Link>
-);
+const ManagementCenterCard: FC<ManagementCenterCardProps> = ({ text, description, href }) => {
+	const { mobile } = useMobile();
+
+	return (
+		<Link href={`/centrum-zarzadzania/${href}`} style={{ width: mobile ? "90%" : "100%", height: "100%" }}>
+			<Button
+				variant={"secondary"}
+				style={{ width: "100%", height: mobile ? "10rem" : "100%", paddingBlock: mobile ? "1rem" : "2rem" }}
+			>
+				<Flex
+					direction={"column"}
+					align={"center"}
+					justify={mobile ? "space-around" : undefined}
+					style={{ height: "100%" }}
+					fullWidth
+				>
+					<Paragraph fontSize={mobile ? 1.75 : 1.5}>{text}</Paragraph>
+					<Paragraph variant={"secondary"} fontSize={mobile ? 1.25 : 1}>
+						{description}
+					</Paragraph>
+				</Flex>
+			</Button>
+		</Link>
+	);
+};
 
 const ManagementCenter: FC = () => (
 	<FullHeight style={{ width: "100%" }}>

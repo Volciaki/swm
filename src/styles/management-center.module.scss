@@ -10,3 +10,15 @@
     border: solid $border-size $border;
     border-radius: $border-radius;
 }
+
+@media (width <= $mobile-width) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 0;
+        border: unset;
+        background-color: unset;
+    }
+}
