@@ -15,7 +15,7 @@ $shadow-size: 3px;
     cursor: pointer;
     border-radius: $border-radius;
     padding: $padding calc($padding * 2);
-    transition: all $transition;
+    transition: background-color $transition, border $transition, box-shadow $transition;
 }
 
 .primary {
