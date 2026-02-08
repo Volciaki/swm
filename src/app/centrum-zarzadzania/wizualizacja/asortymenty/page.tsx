@@ -342,7 +342,7 @@ const AssortmentsVisualisation: FC = () => {
 														{assortment.name}
 													</Paragraph>
 
-													<Separator direction={"horizontal"} style={{ width: "2.5px" }} />
+													<Separator direction={mobile ? "horizontal" : "vertical"} style={{ width: "2.5px" }} />
 
 													<Paragraph
 														fontSize={mobile ? 1 : 1.25}
