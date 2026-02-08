@@ -42,7 +42,7 @@ const GenerateReportForm: FC<ReportsFormProps> = ({ children, text, description 
 const Reports: FC = () => {
 	const [fileReferenceId, setFileReferenceId] = useState<string | null>(null);
 	const fileNameRef = useRef<string | null>(null);
-	const { mobile } = useMobile();
+	const { mobile, mobileDefault } = useMobile();
 
 	const generateFullStorageShowcase = apiClient.reports.generateFullStorageShowcase.useMutation();
 	const generateTemperatureExceededDetails = apiClient.reports.generateTemperatureExceededDetails.useMutation();
@@ -71,6 +71,8 @@ const Reports: FC = () => {
 		const base64 = fetchReportFileByReferenceId.data.base64;
 		downloadBase64(`data:application/pdf;base64,${base64}`, fileNameRef.current);
 	}, [fetchReportFileByReferenceId.data]);
+
+	if (mobileDefault) return;
 
 	return (
 		<FullHeight style={{ display: "flex", flexDirection: "column", gap: mobile ? "1rem" : undefined }}>

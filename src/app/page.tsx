@@ -93,9 +93,11 @@ const HomeBlock: FC<HomeBlockProps> = ({ title, description, mediaUrl, localPath
 
 const Home: FC = () => {
 	const { authData, isLoadingAuthData } = useAuthData();
-	const { mobile } = useMobile();
+	const { mobile, mobileDefault } = useMobile();
 
 	const margin = mobile ? "1rem" : "2rem";
+
+	if (mobileDefault) return null;
 
 	return (
 		<FullHeight>

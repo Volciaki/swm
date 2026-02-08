@@ -28,9 +28,11 @@ const BackupsForm: FC<BackupsFormProps> = ({ children, style }) => (
 const Backups: FC = () => {
 	const [isBackupTakePending, setIsBackupTakePending] = useState(false);
 	const [isBackupApplyPending, setIsBackupApplyPending] = useState(false);
-	const { mobile } = useMobile();
+	const { mobile, mobileDefault } = useMobile();
 
 	const backupActionsRunning = isBackupTakePending || isBackupApplyPending;
+
+	if (mobileDefault) return null;
 
 	return (
 		<FullHeight>
@@ -62,7 +64,7 @@ const Backups: FC = () => {
 					</BackupsForm>
 
 					{mobile && (
-						<BackupsForm style={{ width: mobile ? undefined : "25%" }}>
+						<BackupsForm style={{ width: mobile ? "100%" : "25%" }}>
 							<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 1.75 : 2}>
 								{"Skonfiguruj harmongram"}
 							</Paragraph>
@@ -71,7 +73,7 @@ const Backups: FC = () => {
 						</BackupsForm>
 					)}
 
-					<BackupsForm style={{ width: mobile ? undefined : "50%" }}>
+					<BackupsForm style={{ width: mobile ? "100%" : "50%" }}>
 						<BackupsList
 							setIsBackupApplyPending={setIsBackupApplyPending}
 							backupActionsRunning={backupActionsRunning}
@@ -79,7 +81,7 @@ const Backups: FC = () => {
 					</BackupsForm>
 
 					{!mobile && (
-						<BackupsForm style={{ width: mobile ? undefined : "25%" }}>
+						<BackupsForm style={{ width: mobile ? "100%" : "25%" }}>
 							<Paragraph style={{ textAlign: "center" }}>{"Skonfiguruj harmongram"}</Paragraph>
 
 							<ConfigureBackupSchedule />
