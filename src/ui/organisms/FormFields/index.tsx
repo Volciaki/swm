@@ -3,6 +3,7 @@
 import { Controller, type Control, type FieldValues, type Path } from "react-hook-form";
 import { Paragraph, Flex, Input } from "@/ui/atoms";
 import { FormInput } from "@/ui/molecules";
+import { useMobile } from "@/ui/hooks";
 
 export type FormFieldsProps<T extends FieldValues> = {
 	sections: Array<{
@@ -24,6 +25,8 @@ export type FormFieldsProps<T extends FieldValues> = {
 
 // TODO: use this component in previously created forms.
 export const FormFields = <T extends FieldValues>({ sections, control }: FormFieldsProps<T>) => {
+	const { mobile } = useMobile();
+
 	return (
 		<>
 			{sections.map((section, sectionIndex) => (
@@ -34,7 +37,7 @@ export const FormFields = <T extends FieldValues>({ sections, control }: FormFie
 					key={`form-section-${sectionIndex}`}
 					fullWidth
 				>
-					<Paragraph style={{ width: "100%", textAlign: "center" }} fontSize={1.75}>
+					<Paragraph style={{ width: "100%", textAlign: "center" }} fontSize={mobile ? 1.5 : 1.75}>
 						{section.name}
 					</Paragraph>
 
@@ -49,7 +52,12 @@ export const FormFields = <T extends FieldValues>({ sections, control }: FormFie
 										rules={{ required: input.required, min: input.min, validate: input.validate }}
 										render={({ field, fieldState }) => (
 											<FormInput error={fieldState.error} gap={1}>
-												<Input placeholder={input.placeholder} fontSize={1.5} {...field} value={field?.value ?? ""} />
+												<Input
+													placeholder={input.placeholder}
+													fontSize={mobile ? 1.25 : 1.5}
+													{...field}
+													value={field?.value ?? ""}
+												/>
 											</FormInput>
 										)}
 									/>

@@ -6,9 +6,11 @@ import { Flex, FullHeight } from "@/ui/atoms";
 import { BackButton, PageHeader } from "@/ui/molecules";
 import { ShelfForm } from "@/ui/organisms";
 import { useAuthData } from "@/ui/providers";
+import { useMobile } from "@/ui/hooks";
 
 const EditShelf: FC = () => {
 	const { authData } = useAuthData();
+	const { mobile } = useMobile();
 	const router = useRouter();
 	const params = useParams();
 
@@ -24,7 +26,12 @@ const EditShelf: FC = () => {
 		<FullHeight style={{ width: "100%" }}>
 			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} forceFallback />
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
+			<Flex
+				direction={"column"}
+				align={"center"}
+				style={{ gap: "1rem", marginTop: mobile ? "1rem" : undefined }}
+				fullWidth
+			>
 				<PageHeader
 					title={"Edytowanie regału"}
 					description={"Używając poniższego formularza możesz zmodyfikować dane istniejącego już regału."}
