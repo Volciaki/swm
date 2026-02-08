@@ -6,6 +6,7 @@ import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@
 import { BackButton, FormInput, PageHeader } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
 import { defaultErrorHandler } from "@/ui/utils";
+import { useMobile } from "@/ui/hooks";
 import styles from "./index.module.scss";
 
 type PasswordResetFormBody = {
@@ -29,6 +30,9 @@ export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId
 		onSuccess: () => onPasswordReset(),
 		onError: (e) => defaultErrorHandler(e, (errorMessage) => setError(errorMessage)),
 	});
+	const { mobile } = useMobile();
+
+	const gap = mobile ? "1rem" : "2rem";
 
 	const formSubmitHandler = useCallback(
 		(data: PasswordResetFormBody) => {
@@ -57,12 +61,12 @@ export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId
 				description={"Na Twój e-mail wysłany został kod, którego możesz użyc poniżej w celu zresetowania hasła."}
 			/>
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
+			<Flex direction={"column"} align={"center"} style={{ gap, width: "75%" }}>
 				<FormInput error={formState.errors.authenticationValue}>
 					<Input
 						type={"text"}
 						placeholder={"kod"}
-						fontSize={1.5}
+						fontSize={mobile ? 1.25 : 1.5}
 						{...register("authenticationValue", {
 							required: {
 								value: true,
@@ -76,7 +80,7 @@ export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId
 					<Input
 						type={"password"}
 						placeholder={"nowe hasło"}
-						fontSize={1.5}
+						fontSize={mobile ? 1.25 : 1.5}
 						{...register("newPassword", {
 							required: {
 								value: true,
@@ -90,7 +94,7 @@ export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId
 					<Input
 						type={"password"}
 						placeholder={"nowe hasło (powtórzone)"}
-						fontSize={1.5}
+						fontSize={mobile ? 1.25 : 1.5}
 						{...register("newPasswordRepeated", {
 							required: {
 								value: true,
@@ -107,7 +111,7 @@ export const PasswordResetForm: FC<PasswordResetFormProps> = ({ authenticationId
 					style={{ width: "75%" }}
 					disabled={passwordReset.isPending || !formState.isValid}
 				>
-					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
+					<Paragraph style={{ marginInline: "20px" }} fontSize={mobile ? 1.25 : 1.5}>
 						{"Potwierdź"}
 					</Paragraph>
 				</Button>

@@ -6,3 +6,9 @@
     width: fit-content;
     gap: 2rem !important;
 }
+
+@media (width <= $mobile-width) {
+    .container {
+        gap: 1rem !important;
+    }
+}
