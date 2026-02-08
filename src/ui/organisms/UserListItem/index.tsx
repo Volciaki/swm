@@ -1,6 +1,9 @@
+"use client";
+
 import { type FC } from "react";
 import { Flex, Paragraph, Separator } from "@/ui/atoms";
 import { ListItem } from "@/ui/molecules";
+import { useMobile } from "@/ui/hooks";
 
 type User = {
 	id: string;
@@ -13,24 +16,32 @@ export type UserListItemProps = {
 	user: User;
 };
 
-export const UserListItem: FC<UserListItemProps> = ({ user }) => (
-	<ListItem clickable>
-		<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
-			<Paragraph>{user.name}</Paragraph>
+export const UserListItem: FC<UserListItemProps> = ({ user }) => {
+	const { mobile } = useMobile();
 
-			<Flex direction={"row"} align={"center"} gap={10}>
-				<Paragraph variant={"secondary"} fontSize={1.25}>
-					{`Administrator: ${user.isAdmin ? "Tak" : "Nie"}`}
-				</Paragraph>
+	return (
+		<ListItem clickable>
+			<Flex direction={"row"} align={"center"} justify={"space-between"} style={{ gap: "1rem" }} fullWidth>
+				<Paragraph fontSize={mobile ? 1.5 : 2}>{user.name}</Paragraph>
 
-				<div style={{ height: "1.5rem" }}>
-					<Separator direction={"vertical"} />
-				</div>
+				<Flex direction={"row"} align={"center"} gap={10} style={{ overflow: "hidden" }}>
+					{!mobile && (
+						<>
+							<Paragraph variant={"secondary"} fontSize={1.25}>
+								{`Administrator: ${user.isAdmin ? "Tak" : "Nie"}`}
+							</Paragraph>
 
-				<Paragraph variant={"secondary"} fontSize={1.25}>
-					{user.email}
-				</Paragraph>
+							<div style={{ height: "1.5rem" }}>
+								<Separator direction={"vertical"} />
+							</div>
+						</>
+					)}
+
+					<Paragraph variant={"secondary"} fontSize={1.25} ellipsisOverflow>
+						{user.email}
+					</Paragraph>
+				</Flex>
 			</Flex>
-		</Flex>
-	</ListItem>
-);
+		</ListItem>
+	);
+};

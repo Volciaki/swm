@@ -5,16 +5,18 @@ import { Button, Flex, FullHeight, Paragraph, Link, Separator, Loading } from "@
 import { PageHeader, List, BackButton } from "@/ui/molecules";
 import { apiClient, useAuthData } from "@/ui/providers";
 import { UserListItem } from "@/ui/organisms";
+import { useMobile } from "@/ui/hooks";
 
 const Users: FC = () => {
 	const { authData } = useAuthData();
+	const { mobile } = useMobile();
 	const users = apiClient.identity.listUsers.useQuery();
 
 	return (
 		<FullHeight>
 			<BackButton fallback={"/centrum-zarzadzania"} forceFallback />
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
+			<Flex direction={"column"} align={"center"} style={{ gap: "1rem", marginTop: mobile ? "1rem" : undefined }}>
 				<PageHeader
 					title={authData?.isAdmin ? "Zarządzanie użytkownikami" : "Użytkownicy"}
 					description={
@@ -25,16 +27,16 @@ const Users: FC = () => {
 				/>
 
 				{authData?.isAdmin && (
-					<Link href={"uzytkownicy/nowy"}>
-						<Button>
-							<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+					<Link href={"/centrum-zarzadzania/uzytkownicy/nowy"} style={{ width: mobile ? "100%" : undefined }}>
+						<Button style={{ width: mobile ? "100%" : undefined }}>
+							<Paragraph fontSize={mobile ? 1.25 : 1.5} style={{ marginInline: mobile ? undefined : "20px" }}>
 								{"Dodaj nowego użytkownika"}
 							</Paragraph>
 						</Button>
 					</Link>
 				)}
 
-				<Flex direction={"column"} align={"center"} style={{ width: "75%", gap: "1rem" }}>
+				<Flex direction={"column"} align={"center"} style={{ width: mobile ? "100%" : "75%", gap: "1rem" }}>
 					<Separator />
 
 					{users.isLoading && <Loading />}
