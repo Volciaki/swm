@@ -6,6 +6,7 @@ import { apiClient } from "@/ui/providers";
 import { BackButton, FormInput, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { useMobile } from "@/ui/hooks";
 
 type ResetPasswordEmailFormBody = {
 	email: string;
@@ -50,6 +51,8 @@ export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ onSucc
 		return getPolishErrorMessageByMetadata(requestPasswordReset.error?.data?.metadata);
 	}, [requestPasswordReset.error]);
 	const error = getUserByEmailError ?? requestPasswordResetError;
+	const { mobile } = useMobile();
+	const gap = mobile ? "1rem" : "2rem";
 
 	const formSubmitHandler = useCallback(
 		async (data: ResetPasswordEmailFormBody) => {
@@ -64,7 +67,7 @@ export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ onSucc
 	);
 
 	return (
-		<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "fit-content" }}>
+		<Flex direction={"column"} align={"center"} style={{ gap, width: "fit-content" }}>
 			<div style={{ alignSelf: "start" }}>
 				<BackButton enableDefaultOnClick={false} onClick={() => hideResetPasswordForm()} />
 			</div>
@@ -72,15 +75,15 @@ export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ onSucc
 			<PageHeader
 				title={"Resetowanie hasła"}
 				description={"Podaj e-mail powiązany z twoim kontem."}
-				wrapDescription={false}
+				wrapDescription={mobile ? true : false}
 			/>
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
+			<Flex direction={"column"} align={"center"} style={{ gap, width: "75%", minWidth: 0 }}>
 				<FormInput error={formState.errors.email}>
 					<Input
 						type={"email"}
 						placeholder={"e-mail"}
-						fontSize={1.5}
+						fontSize={mobile ? 1.25 : 1.5}
 						{...register("email", {
 							required: {
 								value: true,
@@ -94,10 +97,10 @@ export const ResetPasswordEmailForm: FC<ResetPasswordEmailFormProps> = ({ onSucc
 
 				<Button
 					onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
-					style={{ width: "75%" }}
+					style={{ width: mobile ? undefined : "75%" }}
 					disabled={loading || !formState.isValid}
 				>
-					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
+					<Paragraph style={{ marginInline: "20px" }} fontSize={mobile ? 1.25 : 1.5}>
 						{"Potwierdź"}
 					</Paragraph>
 				</Button>

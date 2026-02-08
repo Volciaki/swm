@@ -15,7 +15,7 @@ export const PageHeader: FC<PageHeaderProps> = ({ title, description, wrapDescri
 
 	return (
 		<Flex direction={"column"} style={{ gap: "1rem" }} fullWidth>
-			<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 2.5 : 3} ellipsisOverflow>
+			<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 2 : 3}>
 				{title}
 			</Paragraph>
 

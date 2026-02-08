@@ -9,7 +9,7 @@ export type FormInputProps = {
 };
 
 export const FormInput: FC<FormInputProps> = ({ children, error, gap = 2 }) => (
-	<Flex direction={"column"} style={{ gap: `${gap}rem`, minWidth: 0 }} fullWidth>
+	<Flex direction={"column"} style={{ gap: `${gap}rem`, minWidth: 0, flexShrink: 1 }} fullWidth>
 		{children}
 
 		<FormError>{error?.message}</FormError>
