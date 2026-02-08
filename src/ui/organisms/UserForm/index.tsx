@@ -10,6 +10,7 @@ import type { APIError } from "@/ui/utils";
 import { defaultErrorHandler } from "@/ui/utils";
 import type { UserDTO } from "@/server/utils";
 import type { PublicUserDTO } from "@/server/modules/identity/application/dto/shared/PublicUserDTO";
+import { useMobile } from "@/ui/hooks";
 import commonStyles from "../../../styles/common.module.scss";
 import styles from "./index.module.scss";
 
@@ -67,6 +68,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 		mode: "onChange",
 		values: userData,
 	});
+	const { mobile } = useMobile();
 
 	const existing = userId !== undefined;
 	const loading = deleteUser.isPending || createUser.isPending || updateUser.isPending;
@@ -107,7 +109,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 
 	return (
 		<Flex className={commonStyles["form-container"]} direction={"column"} align={"center"} fullWidth>
-			<Paragraph style={{ textAlign: "center" }} fontSize={2.5}>
+			<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 1.75 : 2.5}>
 				{existing ? "Edytuj" : "Dodaj"}
 			</Paragraph>
 
@@ -116,7 +118,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 					<Input
 						placeholder={"nazwa"}
 						type={"text"}
-						fontSize={1.5}
+						fontSize={mobile ? 1.25 : 1.5}
 						{...register("name", {
 							required: {
 								value: true,
@@ -130,7 +132,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 					<Input
 						placeholder={"e-mail"}
 						type={"email"}
-						fontSize={1.5}
+						fontSize={mobile ? 1.25 : 1.5}
 						{...register("email", {
 							required: {
 								value: true,
@@ -144,7 +146,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 					<Input
 						placeholder={`hasło ${existing ? "*" : ""}`}
 						type={"password"}
-						fontSize={1.5}
+						fontSize={mobile ? 1.25 : 1.5}
 						{...register("password", {
 							required: {
 								value: !existing,
@@ -155,7 +157,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 				</FormInput>
 
 				{existing && (
-					<Paragraph variant={"secondary"} fontSize={1.25} style={{ width: "100%" }}>
+					<Paragraph variant={"secondary"} fontSize={mobile ? 1 : 1.25} style={{ width: "100%" }}>
 						{"* Zostaw puste, jeśli nie chcesz zmieniać"}
 					</Paragraph>
 				)}
@@ -166,9 +168,9 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 					defaultValue={userData.isAdmin}
 					render={({ field }) => (
 						<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-							<Switch checked={field.value} setChecked={field.onChange} />
+							<Switch checked={field.value} setChecked={field.onChange} size={mobile ? 1 : 1.5} />
 
-							<Paragraph fontSize={1.5} variant={"secondary"}>
+							<Paragraph fontSize={mobile ? 1.125 : 1.5} variant={"secondary"}>
 								{"Administrator"}
 							</Paragraph>
 						</Flex>
@@ -181,9 +183,9 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 					defaultValue={userData.isAdmin}
 					render={({ field }) => (
 						<Flex direction={"row"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-							<Switch checked={field.value} setChecked={field.onChange} />
+							<Switch checked={field.value} setChecked={field.onChange} size={mobile ? 1 : 1.5} />
 
-							<Paragraph fontSize={1.5} variant={"secondary"} ellipsisOverflow>
+							<Paragraph fontSize={mobile ? 1.125 : 1.5} variant={"secondary"} ellipsisOverflow>
 								{"Weryfikacja dwuetapowa"}
 							</Paragraph>
 						</Flex>
@@ -192,22 +194,22 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 
 				<Flex direction={"row"} align={"center"} justify={"space-around"} fullWidth>
 					<Button
-						style={{ width: !existing ? "auto" : "30%" }}
+						style={{ width: !existing ? "auto" : mobile ? "auto" : "30%" }}
 						onClick={handleSubmit((formBody) => formSubmitHandler(formBody))}
 						disabled={loading || !formState.isValid}
 					>
-						<Paragraph>{"Zapisz"}</Paragraph>
+						<Paragraph fontSize={mobile ? 1.5 : 2}>{"Zapisz"}</Paragraph>
 					</Button>
 
 					{/* TODO: add a dialog confirmation deleting data */}
 					{existing && (
 						<Button
-							style={{ width: "30%" }}
+							style={{ width: mobile ? "auto" : "30%" }}
 							onClick={() => handleDeletion()}
 							disabled={loading || !formState.isValid}
 							danger
 						>
-							<Paragraph>{"Usuń"}</Paragraph>
+							<Paragraph fontSize={mobile ? 1.5 : 2}>{"Usuń"}</Paragraph>
 						</Button>
 					)}
 				</Flex>

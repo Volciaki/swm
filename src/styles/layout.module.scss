@@ -6,7 +6,7 @@
     left: 0;
     height: $navigation-height-desktop;
     width: 100%;
-    z-index: 1;
+    z-index: 20;
     background-color: $background-lightened;
 }
 
@@ -24,4 +24,18 @@
 
 .content-wrapper {
     width: $content-width;
+}
+
+@media (width <= $mobile-width) {
+    .navigation {
+        height: $navigation-height-mobile;
+    }
+
+    .navigation-margin {
+        height: $navigation-height-mobile;
+    }
+
+    .content-wrapper {
+        width: calc(100vw - 2 * $padding);
+    }
 }

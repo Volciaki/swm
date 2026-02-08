@@ -6,6 +6,7 @@ import { BackButton, FormInput, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { useAuthData, apiClient } from "@/ui/providers";
 import { defaultErrorHandler } from "@/ui/utils";
+import { useMobile } from "@/ui/hooks";
 
 type TwoFactorAuthenticationFormBody = {
 	code: string;
@@ -23,6 +24,9 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 		defaultValues: { code: "" },
 	});
 	const [error, setError] = useState("");
+	const { mobile } = useMobile();
+
+	const gap = mobile ? "1rem" : "2rem";
 
 	const twoFactorAuthentication = apiClient.identity.twoFactorAuthentication.useMutation({
 		onSuccess: async (data) => refreshAuthData(),
@@ -39,7 +43,7 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 	);
 
 	return (
-		<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "fit-content" }}>
+		<Flex direction={"column"} align={"center"} style={{ gap, width: "fit-content" }}>
 			<div style={{ alignSelf: "start" }}>
 				<BackButton enableDefaultOnClick={false} onClick={() => hideSelf()} />
 			</div>
@@ -47,15 +51,15 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 			<PageHeader
 				title={"Dwuetapowa weryfikacja"}
 				description={"Wpisz kod, który został wysłany na Twój e-mail."}
-				wrapDescription={false}
+				wrapDescription={mobile ? true : false}
 			/>
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
+			<Flex direction={"column"} align={"center"} style={{ gap, width: "75%" }}>
 				<FormInput error={formState.errors.code}>
 					<Input
 						type="text"
 						placeholder="kod weryfikacyjny"
-						fontSize={1.5}
+						fontSize={mobile ? 1.25 : 1.5}
 						{...register("code", {
 							required: {
 								value: true,
@@ -72,7 +76,7 @@ export const TwoFactorAuthenticationForm: FC<TwoFactorAuthenticationFormProps> =
 					style={{ width: "75%" }}
 					disabled={twoFactorAuthentication.isPending || !formState.isValid}
 				>
-					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
+					<Paragraph style={{ marginInline: "20px" }} fontSize={mobile ? 1.25 : 1.5}>
 						{"Potwierdź"}
 					</Paragraph>
 				</Button>

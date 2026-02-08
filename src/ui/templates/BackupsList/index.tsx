@@ -6,6 +6,7 @@ import { apiClient } from "@/ui/providers";
 import type { APIError } from "@/ui/utils";
 import { defaultErrorHandler } from "@/ui/utils";
 import type { UseStateSetter } from "@/ui/types";
+import { useMobile } from "@/ui/hooks";
 
 export type BackupsListProps = {
 	setIsBackupApplyPending: UseStateSetter<boolean>;
@@ -15,6 +16,7 @@ export type BackupsListProps = {
 export const BackupsList: FC<BackupsListProps> = ({ setIsBackupApplyPending, backupActionsRunning }) => {
 	const applyBackupById = apiClient.backups.applyById.useMutation();
 	const backups = apiClient.backups.getAll.useQuery();
+	const { mobile } = useMobile();
 
 	// A Record of IDs and error messages.
 	const [applyBackupErrors, setApplyBackupErrors] = useState<Record<string, string>>();
@@ -62,7 +64,9 @@ export const BackupsList: FC<BackupsListProps> = ({ setIsBackupApplyPending, bac
 
 	return (
 		<>
-			<Paragraph style={{ textAlign: "center" }}>{"Lista kopii zapasowych"}</Paragraph>
+			<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 1.75 : 2}>
+				{"Lista kopii zapasowych"}
+			</Paragraph>
 
 			<Separator size={2} />
 
@@ -76,10 +80,16 @@ export const BackupsList: FC<BackupsListProps> = ({ setIsBackupApplyPending, bac
 							<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} key={`backup-${index}`} fullWidth>
 								<ListItem>
 									<Flex align={"center"} justify={"space-between"} fullWidth>
-										<Paragraph fontSize={1.75}>{formatDateAsHumanReadable(new Date(backup.dateTimestamp))}</Paragraph>
+										<Paragraph fontSize={mobile ? 1.25 : 1.75}>
+											{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[0]}
+
+											<br />
+
+											{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[1]}
+										</Paragraph>
 
 										<Button onClick={async () => await backupApplyHandler(backup)} disabled={backupActionsRunning}>
-											<Paragraph fontSize={1.5}>{"Przywróć"}</Paragraph>
+											<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Przywróć"}</Paragraph>
 										</Button>
 									</Flex>
 								</ListItem>

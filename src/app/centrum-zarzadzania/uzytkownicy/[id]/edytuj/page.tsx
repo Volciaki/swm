@@ -7,6 +7,7 @@ import { BackButton, PageHeader } from "@/ui/molecules";
 import { Flex, FullHeight, Paragraph, Loading } from "@/ui/atoms";
 import { apiClient, useAuthData } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { useMobile } from "@/ui/hooks";
 
 const EditUser = () => {
 	const { authData } = useAuthData();
@@ -17,6 +18,7 @@ const EditUser = () => {
 		{ enabled: params.id !== undefined }
 	);
 	const notAuthorizedToViewPage = authData && user.data && !authData.isAdmin && user.data.id !== authData.id;
+	const { mobile } = useMobile();
 
 	useEffect(() => {
 		if (notAuthorizedToViewPage) router.push(`/centrum-zarzadzania/uzytkownicy/${params.id}/wyswietl`);
@@ -28,18 +30,29 @@ const EditUser = () => {
 		<FullHeight>
 			<BackButton fallback={"/centrum-zarzadzania/uzytkownicy"} forceFallback />
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
+			<Flex
+				direction={"column"}
+				align={"center"}
+				style={{ gap: "1rem", marginTop: mobile ? "1rem" : undefined }}
+				fullWidth
+			>
 				<PageHeader
 					title={"Edytuj użytkownika"}
 					description={"Używając poniższego formularza możesz edytować istniejącego już użytkownika."}
 				/>
 
-				{user.data && <UserForm userData={{ ...user.data, password: "" }} />}
+				{user.data && (
+					<div style={{ width: mobile ? "100%" : "75%" }}>
+						<UserForm userData={{ ...user.data, password: "" }} />
+					</div>
+				)}
 
 				{user.isLoading && <Loading />}
 
 				{user.isError && user.error.data?.metadata && (
-					<Paragraph variant={"danger"}>{`${getPolishErrorMessageByMetadata(user.error.data?.metadata)}`}</Paragraph>
+					<Paragraph fontSize={mobile ? 1.25 : 2} variant={"danger"}>
+						{`${getPolishErrorMessageByMetadata(user.error.data?.metadata)}`}
+					</Paragraph>
 				)}
 			</Flex>
 		</FullHeight>

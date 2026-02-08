@@ -21,3 +21,9 @@
         font-size: 1.5rem !important;
     }
 }
+
+@media (width <= $mobile-width) {
+    .data-wrapper > p {
+        font-size: 1.25rem !important;
+    }
+}

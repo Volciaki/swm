@@ -3,6 +3,7 @@ import { Button, Paragraph, Loading, FormError } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import { defaultErrorHandler } from "@/ui/utils";
 import type { UseStateSetter } from "@/ui/types";
+import { useMobile } from "@/ui/hooks";
 
 export type TakeBackupButtonProps = {
 	setIsBackupTakePending: UseStateSetter<boolean>;
@@ -22,6 +23,7 @@ export const TakeBackupButton: FC<TakeBackupButtonProps> = ({ setIsBackupTakePen
 		},
 	});
 	const [takeBackupError, setTakeBackupError] = useState<string | undefined>();
+	const { mobile } = useMobile();
 
 	return (
 		<>
@@ -32,7 +34,7 @@ export const TakeBackupButton: FC<TakeBackupButtonProps> = ({ setIsBackupTakePen
 				}}
 				disabled={backupActionsRunning}
 			>
-				<Paragraph fontSize={1.5}>{"Stwórz kopie zapasową"}</Paragraph>
+				<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Stwórz kopie zapasową"}</Paragraph>
 			</Button>
 
 			{takeBackup.isPending && <Loading />}

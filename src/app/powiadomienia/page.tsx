@@ -5,9 +5,11 @@ import { Flex, FullHeight, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { PageHeader, List } from "@/ui/molecules";
 import { NotificationCard } from "@/ui/organisms";
 import { apiClient } from "@/ui/providers";
+import { useMobile } from "@/ui/hooks";
 
 const Notifications: FC = () => {
 	const notifications = apiClient.notifications.getAll.useQuery();
+	const { mobile } = useMobile();
 
 	return (
 		<FullHeight>
@@ -17,12 +19,14 @@ const Notifications: FC = () => {
 					description={"W tej zakładce znajdziesz powiadomienia generowane automatycznie wraz z użytkowaniem magazynu."}
 				/>
 
-				<Flex direction={"column"} align={"center"} style={{ width: "75%", gap: "1rem" }}>
+				<Flex direction={"column"} align={"center"} style={{ width: mobile ? "100%" : "75%", gap: "1rem" }}>
 					<Separator />
 
 					{notifications.isLoading && <Loading />}
 
-					{notifications.data && notifications.data.length === 0 && <Paragraph>{"Brak powiadomień!"}</Paragraph>}
+					{notifications.data && notifications.data.length === 0 && (
+						<Paragraph fontSize={mobile ? 1.75 : 2}>{"Brak powiadomień!"}</Paragraph>
+					)}
 
 					<List>
 						{notifications.data &&

@@ -6,8 +6,10 @@ import { BackButton, List, ListItem, PageHeader } from "@/ui/molecules";
 import { Button, Flex, FormError, FullHeight, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
 import { defaultErrorHandler, getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { useMobile } from "@/ui/hooks";
 
 const PutUpAssortment: FC = () => {
+	const { mobile } = useMobile();
 	const router = useRouter();
 	const params = useParams();
 
@@ -65,7 +67,12 @@ const PutUpAssortment: FC = () => {
 				forceFallback
 			/>
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
+			<Flex
+				direction={"column"}
+				align={"center"}
+				style={{ gap: "1rem", marginTop: mobile ? "1rem" : undefined }}
+				fullWidth
+			>
 				<PageHeader
 					title={"Wypełnij pole asortymentem"}
 					description={"W celu wypełnienia pola wybierz definicje asortymentu z poniższej listy."}
@@ -82,7 +89,7 @@ const PutUpAssortment: FC = () => {
 				)}
 
 				{getAllAssortments.data && getAllAssortments.data.length === 0 && (
-					<Paragraph fontSize={1.75} variant={"secondary"}>
+					<Paragraph fontSize={mobile ? 1.5 : 1.75} variant={"secondary"}>
 						{"brak definicji!"}
 					</Paragraph>
 				)}
@@ -93,26 +100,55 @@ const PutUpAssortment: FC = () => {
 							.sort((a, b) => a.name.trim().localeCompare(b.name.trim()))
 							.map((definition, index) => (
 								<ListItem key={`definition-${index}`}>
-									<Flex direction={"row"} align={"center"} justify={"space-between"} fullWidth>
+									<Flex
+										direction={"row"}
+										align={"center"}
+										justify={"space-between"}
+										style={{ gap: mobile ? "1rem" : undefined }}
+										fullWidth
+									>
 										<Flex
-											direction={"row"}
+											direction={mobile ? "column" : "row"}
 											align={"center"}
 											justify={"center"}
-											style={{ width: "fit-content", height: "100%", gap: "1rem", minWidth: 0 }}
+											style={{
+												width: "fit-content",
+												height: "100%",
+												gap: mobile ? "0.5rem" : "1rem",
+												minWidth: 0,
+												maxWidth: "100%",
+											}}
 										>
-											<Paragraph fontSize={1.5} ellipsisOverflow>
+											<Paragraph
+												fontSize={mobile ? 1.25 : 1.5}
+												style={{
+													maxWidth: mobile ? "100%" : undefined,
+													textAlign: "start",
+													width: mobile ? "100%" : undefined,
+												}}
+												ellipsisOverflow
+											>
 												{definition.name}
 											</Paragraph>
 
-											<Separator direction={"vertical"} style={{ width: "2.5px" }} />
+											<Separator direction={mobile ? "horizontal" : "vertical"} style={{ width: "2.5px" }} />
 
-											<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
+											<Paragraph
+												fontSize={mobile ? 1 : 1.25}
+												variant={"secondary"}
+												style={{
+													maxWidth: mobile ? "100%" : undefined,
+													textAlign: "start",
+													width: mobile ? "100%" : undefined,
+												}}
+												ellipsisOverflow
+											>
 												{definition.comment}
 											</Paragraph>
 										</Flex>
 
 										<Button onClick={() => putUpAssortmentHandler(definition.id)} disabled={putUpAssortment.isPending}>
-											<Paragraph fontSize={1.5}>{"Wybierz"}</Paragraph>
+											<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Wybierz"}</Paragraph>
 										</Button>
 									</Flex>
 								</ListItem>

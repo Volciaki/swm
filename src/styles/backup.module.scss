@@ -4,3 +4,11 @@
     gap: 2rem !important;
     width: $content-width;
 }
+
+@media (width <= $mobile-width) {
+    .container {
+        width: auto;
+        gap: 1rem !important;
+        margin-top: 1rem;
+    }
+}

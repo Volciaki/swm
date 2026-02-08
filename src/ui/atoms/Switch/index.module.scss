@@ -7,7 +7,7 @@ $container-padding: 0.2rem;
     padding: $container-padding;
     box-sizing: content-box;
     position: relative;
-    transition: all $transition;
+    transition: background-color $transition;
 
     &.checked {
         background-color: $primary;
@@ -27,7 +27,7 @@ $container-padding: 0.2rem;
     border-radius: 50%;
     background-color: $text-darkened;
     position: absolute;
-    transition: all $transition;
+    transition: background-color $transition, left $transition, transform $transition;
     left: calc(0% + $container-padding);
 
     &.checked {

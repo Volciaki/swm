@@ -8,6 +8,7 @@ import { Button, Flex, FormError, Loading, Paragraph, Separator, Switch, Image }
 import type { APIError } from "@/ui/utils";
 import { blobToBase64, defaultErrorHandler, floatOnlyValidator, getPolishErrorMessageByMetadata } from "@/ui/utils";
 import { apiClient } from "@/ui/providers";
+import { useMobile } from "@/ui/hooks";
 import { FormFields } from "../FormFields";
 import { ImageUpload } from "../ImageUpload";
 import commonStyles from "../../../styles/common.module.scss";
@@ -32,6 +33,7 @@ export type AssortmentFormProps = {
 
 export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 	const router = useRouter();
+	const { mobile } = useMobile();
 
 	const apiUtils = apiClient.useUtils();
 	const existing = definitionId !== undefined;
@@ -67,7 +69,6 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 		handleSubmit,
 		setValue,
 		reset,
-		getValues,
 		setError: setFormError,
 	} = useForm<AssortmentFormData>({
 		mode: "onChange",
@@ -185,12 +186,12 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 
 			<Flex
 				className={clsx([commonStyles["form-container"], commonStyles["secondary"]])}
-				style={{ width: "75%" }}
+				style={{ width: mobile ? "100%" : "75%" }}
 				direction={"column"}
 				align={"center"}
 			>
 				<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-					<Paragraph fontSize={1.75}>{"Zdjęcie"}</Paragraph>
+					<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Zdjęcie"}</Paragraph>
 
 					{isImageLoading ? (
 						<Loading />
@@ -204,7 +205,7 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 										<Image
 											src={`${getAssortment.data.image.visibility.publicUrl}?key=${imageReloads}`}
 											alt={`Ikona asortymentu ${getAssortment.data?.name}`}
-											style={{ maxWidth: "300px", maxHeight: "300px" }}
+											style={{ maxWidth: `${mobile ? 150 : 300}px`, maxHeight: `${mobile ? 150 : 300}px` }}
 										/>
 									)}
 
@@ -213,8 +214,8 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 										preview={{
 											show: isDirty,
 											altText: `Ikona asortymentu ${getAssortment.data?.name}`,
-											maxHeight: 300,
-											maxWidth: 300,
+											maxHeight: mobile ? 150 : 300,
+											maxWidth: mobile ? 150 : 300,
 										}}
 										onError={(error) => setFormError(name, { message: error })}
 										maxSizeBytes={10 * 1024 * 1024}
@@ -231,9 +232,9 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 										}}
 									>
 										<Button>
-											<Paragraph fontSize={1.5}>{`${!!value ? "Zmień" : "Dodaj"} zdjęcie`}</Paragraph>
+											<Paragraph fontSize={mobile ? 1.25 : 1.5}>{`${!!value ? "Zmień" : "Dodaj"} zdjęcie`}</Paragraph>
 
-											<Paragraph fontSize={1.25} variant={"secondary"}>
+											<Paragraph fontSize={mobile ? 1 : 1.25} variant={"secondary"}>
 												{"Minimalne wymiary: 200x200"}
 
 												<br />
@@ -274,7 +275,7 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 							],
 						},
 						{
-							name: "Wymiary asortymentu podane w milimetrach",
+							name: "Wymiary podane w milimetrach",
 							inputs: [
 								{
 									placeholder: "Szerokość [mm]",
@@ -339,17 +340,17 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 							],
 						},
 						{
-							name: "Zakres temperatur asortymentu w stopniach Celsjusza",
+							name: "Zakres temperatur w stopniach Celsjusza",
 							inputs: [
 								{
-									placeholder: "Temperatura minimalna [°C]",
+									placeholder: "Minimalna temperatura [°C]",
 									formKey: "minTemperatureCelsius",
 									required: "Podanie minimalnej temperatury asortymentu jest wymagane.",
 									validate: (v) =>
 										floatOnlyValidator(v.toString(), "Minimalna temperatura asortymentu musi być liczbą dziesiętną."),
 								},
 								{
-									placeholder: "Temperatura maksymalna [°C]",
+									placeholder: "Maksymalna temperatura [°C]",
 									formKey: "maxTemperatureCelsius",
 									required: "Podanie maksymalnej temperatury asortymentu jest wymagane.",
 									validate: (v) =>
@@ -361,7 +362,7 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 				/>
 
 				<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-					<Paragraph fontSize={1.75}>{"Niebezpieczny"}</Paragraph>
+					<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Niebezpieczny"}</Paragraph>
 
 					<Controller
 						control={control}
@@ -369,9 +370,9 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 						defaultValue={false}
 						render={({ field }) => (
 							<Flex direction={"row"} style={{ gap: "1rem" }} justify={"center"}>
-								<Switch checked={field.value} setChecked={field.onChange} />
+								<Switch checked={field.value} setChecked={field.onChange} size={mobile ? 1.25 : 1.5} />
 
-								<Paragraph fontSize={1.5} variant={"secondary"}>
+								<Paragraph fontSize={mobile ? 1.25 : 1.5} variant={"secondary"}>
 									{"Nie/Tak"}
 								</Paragraph>
 							</Flex>
@@ -379,20 +380,20 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 					/>
 				</Flex>
 
-				<Separator style={{ marginBlock: "1rem" }} />
+				<Separator style={{ marginBlock: `${mobile ? 0.5 : 1}rem` }} />
 
 				<Flex direction={"row"} justify={"space-around"} fullWidth>
 					<Button
 						onClick={handleSubmit(formSubmitHandler)}
 						disabled={!formState.isValid || isLoading}
-						style={{ width: "30%" }}
+						style={{ width: mobile ? undefined : "30%" }}
 					>
-						<Paragraph>{"Potwierdź"}</Paragraph>
+						<Paragraph fontSize={mobile ? 1.5 : 2}>{"Potwierdź"}</Paragraph>
 					</Button>
 
 					{existing && (
-						<Button onClick={() => deleteHandler()} style={{ width: "30%" }} danger>
-							<Paragraph>{"Usuń"}</Paragraph>
+						<Button onClick={() => deleteHandler()} style={{ width: mobile ? undefined : "30%" }} danger>
+							<Paragraph fontSize={mobile ? 1.5 : 2}>{"Usuń"}</Paragraph>
 						</Button>
 					)}
 				</Flex>

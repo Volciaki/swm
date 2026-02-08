@@ -5,8 +5,9 @@ import { GenerateReportButton } from "@/ui/templates";
 import { BackButton, PageHeader } from "@/ui/molecules";
 import { Flex, FullHeight, Paragraph } from "@/ui/atoms";
 import { apiClient } from "@/ui/providers";
+import { downloadBase64 } from "@/ui/utils";
+import { useMobile } from "@/ui/hooks";
 import commonStyles from "@/styles/common.module.scss";
-import { downloadBase64 } from "@/ui/utils/base64/download";
 
 type ReportsFormProps = {
 	children: ReactNode;
@@ -14,29 +15,34 @@ type ReportsFormProps = {
 	description: string;
 };
 
-const GenerateReportForm: FC<ReportsFormProps> = ({ children, text, description }) => (
-	<Flex
-		direction={"column"}
-		align={"center"}
-		style={{ gap: "1rem", height: "fit-content" }}
-		className={commonStyles["form-container"]}
-		fullWidth
-	>
-		<Paragraph style={{ textAlign: "center" }} fontSize={1.5}>
-			{text}
-		</Paragraph>
+const GenerateReportForm: FC<ReportsFormProps> = ({ children, text, description }) => {
+	const { mobile } = useMobile();
 
-		<Paragraph variant="secondary" style={{ textAlign: "center" }} fontSize={1.25}>
-			{description}
-		</Paragraph>
+	return (
+		<Flex
+			direction={"column"}
+			align={"center"}
+			style={{ gap: "1rem", height: "fit-content" }}
+			className={commonStyles["form-container"]}
+			fullWidth
+		>
+			<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 1.25 : 1.5}>
+				{text}
+			</Paragraph>
 
-		{children}
-	</Flex>
-);
+			<Paragraph variant="secondary" style={{ textAlign: "center" }} fontSize={mobile ? 1 : 1.25}>
+				{description}
+			</Paragraph>
+
+			{children}
+		</Flex>
+	);
+};
 
 const Reports: FC = () => {
 	const [fileReferenceId, setFileReferenceId] = useState<string | null>(null);
 	const fileNameRef = useRef<string | null>(null);
+	const { mobile, mobileDefault } = useMobile();
 
 	const generateFullStorageShowcase = apiClient.reports.generateFullStorageShowcase.useMutation();
 	const generateTemperatureExceededDetails = apiClient.reports.generateTemperatureExceededDetails.useMutation();
@@ -66,14 +72,18 @@ const Reports: FC = () => {
 		downloadBase64(`data:application/pdf;base64,${base64}`, fileNameRef.current);
 	}, [fetchReportFileByReferenceId.data]);
 
+	if (mobileDefault) return;
+
 	return (
-		<FullHeight>
-			<BackButton fallback={"/centrum-zarzadzania"} />
+		<FullHeight style={{ display: "flex", flexDirection: "column", gap: mobile ? "1rem" : undefined }}>
+			<div style={{ alignSelf: "left" }}>
+				<BackButton fallback={"/centrum-zarzadzania"} />
+			</div>
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader title={"Raporty"} description={"Automatycznie generuj różne warianty raportów."} />
 
-				<Flex direction={"row"} style={{ gap: "1rem" }} fullWidth>
+				<Flex direction={mobile ? "column" : "row"} style={{ gap: "1rem" }} fullWidth>
 					<GenerateReportForm
 						text={"Raport o pełnej inwentaryzacji magazynu"}
 						description={"Pełna inwentaryzacja magazynu"}

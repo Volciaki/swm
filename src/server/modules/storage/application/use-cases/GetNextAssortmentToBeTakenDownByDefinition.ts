@@ -10,7 +10,7 @@ export class GetNextAssortmentToBeTakenDownByDefinition {
 	) {}
 
 	async execute(dto: GetNextAssortmentToBeTakenDownByDefinitionDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+		if (!currentUser) throw new UnauthorizedError();
 
 		const allAssortments = await this.getAllAssortment.execute();
 		const assortmentsWithPassedDefinition = allAssortments.filter((a) => a.definition.id === dto.definitionId);

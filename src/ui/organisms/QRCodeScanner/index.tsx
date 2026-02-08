@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FC } from "react";
 import { Scanner, useDevices } from "@yudiel/react-qr-scanner";
 import { Paragraph } from "@/ui/atoms";
+import { useMobile } from "@/ui/hooks";
 import styles from "./index.module.scss";
 
 export type QRCodeScannerProps = {
@@ -13,6 +14,7 @@ export type QRCodeScannerProps = {
 };
 
 export const QRCodeScanner: FC<QRCodeScannerProps> = ({ onScan, onError, isPaused = true, size = 15 }) => {
+	const { mobile } = useMobile();
 	const devices = useDevices();
 	const [isCameraReady, setIsCameraReady] = useState(false);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -31,7 +33,7 @@ export const QRCodeScanner: FC<QRCodeScannerProps> = ({ onScan, onError, isPause
 
 	if (devices.length === 0)
 		return (
-			<Paragraph fontSize={1.25} variant={"danger"}>
+			<Paragraph fontSize={mobile ? 1 : 1.25} variant={"danger"}>
 				{
 					"W celu zeskanowania kodu QR twoje urządzenie musi posiadać chociaż jedną kamere. Niestety nie udało się nam wykryć żadnej."
 				}

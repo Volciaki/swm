@@ -13,6 +13,7 @@ import {
 	integerOnlyValidator,
 } from "@/ui/utils";
 import { apiClient } from "@/ui/providers";
+import { useMobile } from "@/ui/hooks";
 import { FormFields } from "../FormFields";
 import commonStyles from "../../../styles/common.module.scss";
 
@@ -37,6 +38,7 @@ export type ShelfFormProps = {
 export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 	const router = useRouter();
 
+	const { mobile } = useMobile();
 	const apiUtils = apiClient.useUtils();
 	const existing = shelfId !== undefined;
 	const getShelf = apiClient.storage.getShelf.useQuery({ id: shelfId ?? "" }, { enabled: existing });
@@ -142,7 +144,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 
 			<Flex
 				className={clsx([commonStyles["form-container"], commonStyles["secondary"]])}
-				style={{ width: "75%" }}
+				style={{ width: mobile ? "100%" : "75%", gap: mobile ? "1rem" : undefined }}
 				direction={"column"}
 				align={"center"}
 			>
@@ -216,7 +218,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 							],
 						},
 						{
-							name: "Maksymalne wymiary asortymentu podane w milimetrach",
+							name: "Maksymalne wymiary w milimetrach",
 							inputs: [
 								{
 									placeholder: "Szerokość [mm]",
@@ -254,14 +256,14 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 							name: "Zakres temperatur regału w stopniach Celsjusza",
 							inputs: [
 								{
-									placeholder: "Temperatura minimalna [°C]",
+									placeholder: "Minimalna temperatura [°C]",
 									formKey: "minTemperatureCelsius",
 									required: "Podanie minimalnej temperatury regału jest wymagane.",
 									validate: (v) =>
 										floatOnlyValidator(v.toString(), "Minimalna temperatura regału musi być liczbą dziesiętną."),
 								},
 								{
-									placeholder: "Temperatura maksymalna [°C]",
+									placeholder: "Maksymalna temperatura [°C]",
 									formKey: "maxTemperatureCelsius",
 									required: "Podanie maksymalnej temperatury regału jest wymagane.",
 									validate: (v) =>
@@ -273,7 +275,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 				/>
 
 				<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-					<Paragraph fontSize={1.75}>{"Wspiera niebezpieczne"}</Paragraph>
+					<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Wspiera niebezpieczne"}</Paragraph>
 
 					<Controller
 						control={control}
@@ -281,9 +283,9 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 						defaultValue={values?.supportsHazardous ?? false}
 						render={({ field }) => (
 							<Flex direction={"row"} style={{ gap: "1rem" }} justify={"center"}>
-								<Switch checked={field.value} setChecked={field.onChange} />
+								<Switch checked={field.value} setChecked={field.onChange} size={mobile ? 1.25 : 1.5} />
 
-								<Paragraph fontSize={1.5} variant={"secondary"}>
+								<Paragraph fontSize={mobile ? 1.25 : 1.5} variant={"secondary"}>
 									{"Nie/Tak"}
 								</Paragraph>
 							</Flex>
@@ -291,20 +293,20 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 					/>
 				</Flex>
 
-				<Separator style={{ marginBlock: "1rem" }} />
+				<Separator style={{ marginBlock: mobile ? "0.5rem" : "1rem" }} />
 
 				<Flex direction={"row"} justify={"space-around"} fullWidth>
 					<Button
 						onClick={handleSubmit(formSubmitHandler)}
 						disabled={!formState.isValid || isLoading}
-						style={{ width: "30%" }}
+						style={{ width: mobile ? undefined : "30%" }}
 					>
-						<Paragraph>{"Potwierdź"}</Paragraph>
+						<Paragraph fontSize={mobile ? 1.5 : 2}>{"Potwierdź"}</Paragraph>
 					</Button>
 
 					{existing && (
-						<Button onClick={() => deleteHandler()} style={{ width: "30%" }} danger>
-							<Paragraph>{"Usuń"}</Paragraph>
+						<Button onClick={() => deleteHandler()} style={{ width: mobile ? undefined : "30%" }} danger>
+							<Paragraph fontSize={mobile ? 1.5 : 2}>{"Usuń"}</Paragraph>
 						</Button>
 					)}
 				</Flex>

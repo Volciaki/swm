@@ -6,6 +6,7 @@ import { LuUpload } from "react-icons/lu";
 import type { FileUploadProps } from "@/ui/molecules";
 import { FileUpload } from "@/ui/molecules";
 import { Flex, Paragraph } from "@/ui/atoms";
+import { useMobile } from "@/ui/hooks";
 import styles from "./index.module.scss";
 
 export type StandardFileUploadProps = Omit<FileUploadProps, "children"> & {
@@ -14,6 +15,7 @@ export type StandardFileUploadProps = Omit<FileUploadProps, "children"> & {
 
 export const StandardFileUpload: FC<StandardFileUploadProps> = ({ onUpload, height = 15, ...props }) => {
 	const [hasUploaded, setHasUploaded] = useState(false);
+	const { mobile } = useMobile();
 
 	return (
 		<FileUpload
@@ -29,13 +31,13 @@ export const StandardFileUpload: FC<StandardFileUploadProps> = ({ onUpload, heig
 				direction={"column"}
 				align={"center"}
 			>
-				<Paragraph fontSize={1.25} variant={"secondary"}>
+				<Paragraph fontSize={mobile ? 1 : 1.25} variant={"secondary"}>
 					{"Przerzuć plik na te pole, lub go "}
 					<span className={styles["clickable-text"]}>{"wybierz"}</span>
 				</Paragraph>
 
 				<Flex style={{ height: "100%" }} align={"center"}>
-					<LuUpload color={"#A7A7A7"} size={"5rem"} />
+					<LuUpload color={"#A7A7A7"} size={`${mobile ? 3 : 7}rem`} />
 				</Flex>
 			</Flex>
 		</FileUpload>

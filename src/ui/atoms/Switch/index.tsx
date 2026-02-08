@@ -16,7 +16,7 @@ export const Switch: FC<SwitchProps> = ({ checked, setChecked, size = 1.5, disab
 	<label
 		className={clsx([styles["container"], { [styles["checked"]]: checked }, { [styles["disabled"]]: disabled }])}
 		style={{
-			width: `${size * SWITCH_WIDTH_TO_SLIDER_RATIO}rem`,
+			minWidth: `${size * SWITCH_WIDTH_TO_SLIDER_RATIO}rem`,
 			height: `${size}rem`,
 			// Yes this is dumb. But simply putting `calc(size * / 2)` results in some pixel fractioning.
 			borderRadius: "9999px",

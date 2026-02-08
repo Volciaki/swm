@@ -11,3 +11,10 @@
     align-items: center;
     justify-content: center;
 }
+
+@media (width <= $mobile-width) {
+    .zoomable-container {
+        max-width: 100%;
+        max-height: 100%;
+    }
+}

@@ -2,6 +2,7 @@
 
 import { useCallback, type FC } from "react";
 import { useRouter } from "next/navigation";
+import { useMobile } from "@/ui/hooks";
 import { Paragraph, Button } from "../../atoms";
 import styles from "./index.module.scss";
 
@@ -14,6 +15,7 @@ export type BackButtonProps = {
 
 export const BackButton: FC<BackButtonProps> = ({ fallback, forceFallback, onClick, enableDefaultOnClick = true }) => {
 	const router = useRouter();
+	const { mobile } = useMobile();
 
 	const handleBack = useCallback(() => {
 		if (!fallback) {
@@ -41,7 +43,7 @@ export const BackButton: FC<BackButtonProps> = ({ fallback, forceFallback, onCli
 			}}
 			className={styles["container"]}
 		>
-			<Paragraph fontSize={1.5}>{"Powrót"}</Paragraph>
+			<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Powrót"}</Paragraph>
 		</Button>
 	);
 };

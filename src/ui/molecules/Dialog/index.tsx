@@ -1,7 +1,10 @@
+"use client";
+
 import type { FC, ReactNode } from "react";
 import { clsx } from "clsx";
 import type { UseStateSetter } from "@/ui/types";
 import { Button, Flex, Paragraph } from "@/ui/atoms";
+import { useMobile } from "@/ui/hooks";
 import styles from "./index.module.scss";
 
 type StandardChildrenContainerProps = {
@@ -9,15 +12,19 @@ type StandardChildrenContainerProps = {
 	setIsOpen: UseStateSetter<boolean>;
 };
 
-const StandardChildrenContainer: FC<StandardChildrenContainerProps> = ({ children, setIsOpen }) => (
-	<Flex direction={"column"} align={"center"} className={styles["standard-children-container"]}>
-		{children}
+const StandardChildrenContainer: FC<StandardChildrenContainerProps> = ({ children, setIsOpen }) => {
+	const { mobile } = useMobile();
 
-		<Button onClick={() => setIsOpen(false)}>
-			<Paragraph fontSize={1.5}>{"Anuluj"}</Paragraph>
-		</Button>
-	</Flex>
-);
+	return (
+		<Flex direction={"column"} align={"center"} className={styles["standard-children-container"]}>
+			{children}
+
+			<Button onClick={() => setIsOpen(false)}>
+				<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Anuluj"}</Paragraph>
+			</Button>
+		</Flex>
+	);
+};
 
 export type DialogProps = {
 	children: ReactNode;

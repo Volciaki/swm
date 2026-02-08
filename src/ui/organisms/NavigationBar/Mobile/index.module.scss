@@ -1,0 +1,55 @@
+@use "@/styles" as *;
+
+.container {
+    display: grid;
+    position: relative;
+    grid-template-columns: 1fr auto 1fr;
+    height: 100%;
+    padding: $padding;
+    align-items: center;
+    align-content: center;
+    z-index: 15;
+    background-color: $background-lightened;
+}
+
+.user-details-container {
+    position: absolute;
+    left: $padding;
+    top: calc($navigation-height-mobile + $padding);
+    background-color: $background-lightened;
+    padding: $padding;
+    border-radius: $border-radius;
+    gap: 0.5rem !important;
+    z-index: 5;
+}
+
+.routes-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    top: $navigation-height-mobile;
+    width: 100%;
+    padding: $padding;
+    // This value was copied from figma.
+    background: linear-gradient(219.95deg, #0A0A0A 22.74%, #262626 65.72%);
+    border-radius: 0 0 calc($border-radius * 5) calc($border-radius * 5);
+    gap: 0.5rem !important;
+    transition: all $transition;
+    transform: translateY(-100%);
+    z-index: 10;
+
+    &.opened {
+        transform: translateY(0);
+    }
+}
+
+.grab-handle {
+    margin-top: 1rem;
+    width: 50%;
+    align-self: center;
+
+    hr {
+      border-width: $border-size-mobile;
+    }
+}
