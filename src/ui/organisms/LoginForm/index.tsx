@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { PageHeader, FormInput } from "@/ui/molecules";
 import { Button, Flex, FormError, Input, Paragraph, Separator, Loading } from "@/ui/atoms";
 import { apiClient, useAuthData } from "@/ui/providers";
+import { useMobile } from "@/ui/hooks";
 import { defaultErrorHandler } from "@/ui/utils";
 import type { UseStateSetter } from "@/ui/types";
 
@@ -25,6 +26,9 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 	});
 	const { refreshAuthData } = useAuthData();
 	const [error, setError] = useState<string | undefined>();
+	const { mobile } = useMobile();
+
+	const gap = mobile ? "1rem" : "2rem";
 
 	const login = apiClient.identity.login.useMutation({
 		onSuccess: async (data) => {
@@ -49,15 +53,19 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 
 	return (
 		<form onSubmit={() => handleSubmit(formSubmitHandler)}>
-			<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "fit-content" }}>
-				<PageHeader title={"Login"} description={"Wypełnij swoje dane logowania poniżej."} wrapDescription={false} />
+			<Flex direction={"column"} align={"center"} style={{ gap, width: "fit-content" }}>
+				<PageHeader
+					title={"Login"}
+					description={"Wypełnij swoje dane logowania poniżej."}
+					wrapDescription={mobile ? true : false}
+				/>
 
-				<Flex direction={"column"} align={"center"} style={{ gap: "2rem", width: "75%" }}>
+				<Flex direction={"column"} align={"center"} style={{ gap, width: "75%" }}>
 					<FormInput error={formState.errors.email}>
 						<Input
 							type={"email"}
 							placeholder={"e-mail"}
-							fontSize={1.5}
+							fontSize={mobile ? 1.25 : 1.5}
 							{...register("email", {
 								required: {
 									value: true,
@@ -71,7 +79,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 						<Input
 							type={"password"}
 							placeholder={"hasło"}
-							fontSize={1.5}
+							fontSize={mobile ? 1.25 : 1.5}
 							{...register("password", {
 								required: {
 									value: true,
@@ -89,7 +97,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 								style={{
 									textDecoration: "underline",
 									width: "100%",
-									textAlign: "right",
+									textAlign: mobile ? "center" : "right",
 								}}
 								fontSize={1}
 							>
@@ -105,7 +113,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onAuthenticationId, setPasswordR
 						style={{ width: "75%" }}
 						disabled={login.isPending || !formState.isValid}
 					>
-						<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
+						<Paragraph style={{ marginInline: mobile ? "10px" : "20px" }} fontSize={mobile ? 1.25 : 1.5}>
 							{"Potwierdź"}
 						</Paragraph>
 					</Button>
