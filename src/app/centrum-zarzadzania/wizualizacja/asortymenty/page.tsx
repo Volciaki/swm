@@ -11,6 +11,7 @@ import type { APIError } from "@/ui/utils";
 import { defaultErrorHandler } from "@/ui/utils";
 import commonStyles from "@/styles/common.module.scss";
 import styles from "@/styles/assortments.module.scss";
+import { useMobile } from "@/ui/hooks";
 
 type CSVAssortment = {
 	Nazwa: string;
@@ -29,6 +30,7 @@ type CSVAssortment = {
 
 const AssortmentsVisualisation: FC = () => {
 	const { authData } = useAuthData();
+	const { mobile } = useMobile();
 	const apiUtils = apiClient.useUtils();
 	const router = useRouter();
 
@@ -170,25 +172,35 @@ const AssortmentsVisualisation: FC = () => {
 		<FullHeight style={{ maxWidth: "100%" }}>
 			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} forceFallback />
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
+			<Flex
+				direction={"column"}
+				align={"center"}
+				style={{ gap: mobile ? "0.5rem" : "1rem", marginTop: mobile ? "1rem" : undefined }}
+				fullWidth
+			>
 				<PageHeader
 					title={"Asortymenty"}
 					description={"Zarządzaj asortymentami. Możesz je tworzyć, aktualizaować, usuwać oraz importować."}
 				/>
 
-				<Flex direction={"column"} className={commonStyles["form-container"]} fullWidth>
-					<Flex direction={"row"} style={{ gap: "1rem" }} fullWidth>
+				<Flex
+					direction={"column"}
+					className={commonStyles["form-container"]}
+					style={{ border: mobile ? "none" : undefined }}
+					fullWidth
+				>
+					<Flex direction={mobile ? "column" : "row"} style={{ gap: "1rem" }} fullWidth>
 						{authData?.isAdmin && (
 							<>
 								<VisualisationAction title={"Importuj asortymenty z pliku CSV"}>
 									<DialogButton
 										buttonContent={
-											<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+											<Paragraph fontSize={mobile ? 1.25 : 1.5} style={{ marginInline: "20px" }}>
 												{"Importuj"}
 											</Paragraph>
 										}
 									>
-										<Paragraph fontSize={1.5}>
+										<Paragraph fontSize={mobile ? 1.25 : 1.5}>
 											{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}
 										</Paragraph>
 
@@ -200,17 +212,18 @@ const AssortmentsVisualisation: FC = () => {
 												setFile(data);
 												setFileUploadError(undefined);
 											}}
+											height={mobile ? 10 : 15}
 										/>
 
 										{fileUploadError && <FormError>{fileUploadError}</FormError>}
 
-										{file && <Paragraph fontSize={1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
+										{file && <Paragraph fontSize={mobile ? 1 : 1.5}>{`Wybrany plik: ${file.name}`}</Paragraph>}
 
 										<Button
 											onClick={() => importAssortmentSubmitHandler()}
 											disabled={!file || importAssortment.isPending}
 										>
-											<Paragraph fontSize={1.75}>{"Importuj"}</Paragraph>
+											<Paragraph fontSize={mobile ? 1.25 : 1.75}>{"Importuj"}</Paragraph>
 										</Button>
 
 										{importAssortmentError && <FormError>{importAssortmentError}</FormError>}
@@ -224,7 +237,7 @@ const AssortmentsVisualisation: FC = () => {
 								<VisualisationAction title={"Ręcznie dodaj nowy asortyment"}>
 									<Link href={"/centrum-zarzadzania/wizualizacja/asortymenty/nowy"}>
 										<Button>
-											<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+											<Paragraph fontSize={mobile ? 1.25 : 1.5} style={{ marginInline: "20px" }}>
 												{"Dodaj"}
 											</Paragraph>
 										</Button>
@@ -238,16 +251,16 @@ const AssortmentsVisualisation: FC = () => {
 						<VisualisationAction title={"Zeskanuj kod QR"}>
 							<DialogButton
 								buttonContent={
-									<Paragraph fontSize={1.5} style={{ marginInline: "20px" }}>
+									<Paragraph fontSize={mobile ? 1.25 : 1.5} style={{ marginInline: "20px" }}>
 										{"Zeskanuj"}
 									</Paragraph>
 								}
 								onClick={() => setQRCodeScannerIsPaused(false)}
 							>
 								<Flex className={styles["qr-code-scan-container"]} align={"center"} direction={"column"} fullWidth>
-									<Paragraph fontSize={1.75}>{"Skanowanie kodu QR"}</Paragraph>
+									<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Skanowanie kodu QR"}</Paragraph>
 
-									<Paragraph fontSize={1.25} variant={"secondary"}>
+									<Paragraph fontSize={mobile ? 1 : 1.25} variant={"secondary"}>
 										{
 											"Aby automatycznie dodać lub pobrać instancje asortymentu ze stanu magazynu, możesz zeskanować jej kod QR tym miejscu. Wybranie typu operacji będzie możliwe po zeskanowaniu kodu QR."
 										}
@@ -257,7 +270,7 @@ const AssortmentsVisualisation: FC = () => {
 
 									{qrCodeScannerValue && (
 										<>
-											<Paragraph variant={"secondary"} fontSize={1.5}>
+											<Paragraph variant={"secondary"} fontSize={mobile ? 1.25 : 1.5}>
 												{"Wybierz, którą akcję podjąć z zeskanowanym asortymentem:"}
 											</Paragraph>
 
@@ -266,11 +279,11 @@ const AssortmentsVisualisation: FC = () => {
 													onClick={() => takeDownAssortmentByQRCodeValue()}
 													disabled={qrCodeActionButtonsDisabled}
 												>
-													<Paragraph fontSize={1.5}>{"Zdejmij"}</Paragraph>
+													<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Zdejmij"}</Paragraph>
 												</Button>
 
 												<Button onClick={() => addNewAssortmentByQRCodeValue()} disabled={qrCodeActionButtonsDisabled}>
-													<Paragraph fontSize={1.5}>{"Dodaj"}</Paragraph>
+													<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Dodaj"}</Paragraph>
 												</Button>
 											</Flex>
 										</>
@@ -287,12 +300,12 @@ const AssortmentsVisualisation: FC = () => {
 					<Separator />
 
 					<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
-						<Paragraph>{"Lista definicji asortymentów"}</Paragraph>
+						<Paragraph fontSize={mobile ? 1.5 : 2}>{"Lista definicji asortymentów"}</Paragraph>
 
 						{allAssortments.isLoading && <Loading />}
 
 						{allAssortments.data && allAssortments.data.length === 0 && (
-							<Paragraph fontSize={1.75} variant={"secondary"}>
+							<Paragraph fontSize={mobile ? 1.25 : 1.75} variant={"secondary"}>
 								{"brak definicji asortymentów!"}
 							</Paragraph>
 						)}
@@ -311,18 +324,36 @@ const AssortmentsVisualisation: FC = () => {
 												fullWidth
 											>
 												<Flex
-													direction={"row"}
+													direction={mobile ? "column" : "row"}
 													align={"center"}
 													justify={"center"}
-													style={{ height: "100%", gap: "1rem", minWidth: 0 }}
+													style={{ height: "100%", gap: mobile ? "0.5rem" : "1rem", minWidth: 0 }}
 												>
-													<Paragraph fontSize={1.5} style={{ minWidth: "10%" }} ellipsisOverflow>
+													<Paragraph
+														fontSize={mobile ? 1.25 : 1.5}
+														style={{
+															minWidth: "10%",
+															maxWidth: mobile ? "100%" : undefined,
+															textAlign: "start",
+															width: mobile ? "100%" : undefined,
+														}}
+														ellipsisOverflow
+													>
 														{assortment.name}
 													</Paragraph>
 
-													<Separator direction={"vertical"} style={{ width: "2.5px" }} />
+													<Separator direction={"horizontal"} style={{ width: "2.5px" }} />
 
-													<Paragraph fontSize={1.25} variant={"secondary"} ellipsisOverflow>
+													<Paragraph
+														fontSize={mobile ? 1 : 1.25}
+														variant={"secondary"}
+														style={{
+															maxWidth: mobile ? "100%" : undefined,
+															textAlign: "start",
+															width: mobile ? "100%" : undefined,
+														}}
+														ellipsisOverflow
+													>
 														{assortment.comment}
 													</Paragraph>
 												</Flex>
@@ -330,13 +361,13 @@ const AssortmentsVisualisation: FC = () => {
 												{authData?.isAdmin ? (
 													<Link href={`/centrum-zarzadzania/wizualizacja/asortymenty/${assortment.id}/edytuj`}>
 														<Button>
-															<Paragraph fontSize={1.5}>{"Edytuj"}</Paragraph>
+															<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Edytuj"}</Paragraph>
 														</Button>
 													</Link>
 												) : (
 													<Link href={`/centrum-zarzadzania/wizualizacja/asortymenty/${assortment.id}/wyswietl`}>
 														<Button>
-															<Paragraph fontSize={1.5}>{"Wyświetl"}</Paragraph>
+															<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Wyświetl"}</Paragraph>
 														</Button>
 													</Link>
 												)}

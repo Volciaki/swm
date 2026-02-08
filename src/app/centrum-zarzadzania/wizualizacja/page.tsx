@@ -178,7 +178,7 @@ const Visualisation: FC = () => {
 								<VisualisationAction title={"Ręcznie dodaj nowy regał"}>
 									<Link href={"/centrum-zarzadzania/wizualizacja/regaly/nowy"}>
 										<Button>
-											<Paragraph fontSize={mobile ? 1.25 : 1.5} style={{ marginInline: "20px" }}>
+											<Paragraph fontSize={mobile ? 1 : 1.5} style={{ marginInline: "20px" }}>
 												{"Dodaj"}
 											</Paragraph>
 										</Button>
