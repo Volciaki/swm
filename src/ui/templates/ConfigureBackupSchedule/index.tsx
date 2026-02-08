@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useState, type FC } from "react";
 import { Paragraph, Flex, Loading, RadioGroupItem, Button, FormError } from "@/ui/atoms";
 import { RadioGroup } from "@/ui/molecules";
@@ -5,6 +7,7 @@ import { DialogButton } from "@/ui/organisms";
 import { apiClient } from "@/ui/providers";
 import { defaultErrorHandler } from "@/ui/utils";
 import styles from "./index.module.scss";
+import { useMobile } from "@/ui/hooks";
 
 const backupScheduleConfigurationPresets: Array<{ text: string; value: string; frequencySeconds: number }> = [
 	{
@@ -60,6 +63,8 @@ export const ConfigureBackupSchedule: FC = () => {
 	const scheduleConfigurationPreset =
 		userScheduleConfigurationPreset ?? findPresetByAmountOfSeconds(getBackupSettings.data?.takeBackupsEverySeconds);
 
+	const { mobile } = useMobile();
+
 	const backupSettingsUpdateHandler = useCallback(() => {
 		const currentPreset = scheduleConfigurationPreset;
 
@@ -69,9 +74,9 @@ export const ConfigureBackupSchedule: FC = () => {
 	}, [scheduleConfigurationPreset, setBackupSettings]);
 
 	return (
-		<DialogButton buttonContent={<Paragraph fontSize={1.5}>{"Konfiguruj"}</Paragraph>}>
+		<DialogButton buttonContent={<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Konfiguruj"}</Paragraph>}>
 			<Flex direction={"column"} align={"center"} className={styles["schedule-configuration-container"]}>
-				<Paragraph style={{ textAlign: "center" }} fontSize={1.75}>
+				<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 1.25 : 1.75}>
 					{"Konfiguracja harmonogramu tworzenia kopii zapasowych"}
 				</Paragraph>
 
@@ -91,7 +96,7 @@ export const ConfigureBackupSchedule: FC = () => {
 					>
 						{backupScheduleConfigurationPresets.map((preset, index) => (
 							<RadioGroupItem value={preset.value} key={`schedule-configuration-radio-item-${index}`}>
-								<Paragraph variant={"secondary"} fontSize={1.5} style={{ textWrap: "nowrap" }}>
+								<Paragraph variant={"secondary"} fontSize={mobile ? 1.25 : 1.5} style={{ textWrap: "nowrap" }}>
 									{preset.text}
 								</Paragraph>
 							</RadioGroupItem>
@@ -100,7 +105,7 @@ export const ConfigureBackupSchedule: FC = () => {
 				)}
 
 				<Button onClick={() => backupSettingsUpdateHandler()}>
-					<Paragraph style={{ marginInline: "20px" }} fontSize={1.5}>
+					<Paragraph style={{ marginInline: "20px" }} fontSize={mobile ? 1.25 : 1.5}>
 						{"Potwierdź"}
 					</Paragraph>
 				</Button>

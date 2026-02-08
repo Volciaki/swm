@@ -7,6 +7,7 @@ import { Flex, FullHeight, Paragraph } from "@/ui/atoms";
 import type { CustomStyles } from "@/ui/types";
 import commonStyles from "@/styles/common.module.scss";
 import styles from "@/styles/backup.module.scss";
+import { useMobile } from "@/ui/hooks";
 
 type BackupsFormProps = {
 	children: ReactNode;
@@ -27,6 +28,7 @@ const BackupsForm: FC<BackupsFormProps> = ({ children, style }) => (
 const Backups: FC = () => {
 	const [isBackupTakePending, setIsBackupTakePending] = useState(false);
 	const [isBackupApplyPending, setIsBackupApplyPending] = useState(false);
+	const { mobile } = useMobile();
 
 	const backupActionsRunning = isBackupTakePending || isBackupApplyPending;
 
@@ -42,9 +44,16 @@ const Backups: FC = () => {
 					}
 				/>
 
-				<Flex direction={"row"} style={{ gap: "1rem" }} fullWidth>
-					<BackupsForm style={{ width: "25%" }}>
-						<Paragraph style={{ textAlign: "center" }}>{"Wykonaj ręcznie"}</Paragraph>
+				<Flex
+					direction={mobile ? "column" : "row"}
+					align={mobile ? "center" : undefined}
+					style={{ gap: "1rem" }}
+					fullWidth
+				>
+					<BackupsForm style={{ width: mobile ? "100%" : "25%" }}>
+						<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 1.75 : 2}>
+							{"Wykonaj ręcznie"}
+						</Paragraph>
 
 						<TakeBackupButton
 							setIsBackupTakePending={setIsBackupTakePending}
@@ -52,18 +61,30 @@ const Backups: FC = () => {
 						/>
 					</BackupsForm>
 
-					<BackupsForm style={{ width: "50%" }}>
+					{mobile && (
+						<BackupsForm style={{ width: mobile ? undefined : "25%" }}>
+							<Paragraph style={{ textAlign: "center" }} fontSize={mobile ? 1.75 : 2}>
+								{"Skonfiguruj harmongram"}
+							</Paragraph>
+
+							<ConfigureBackupSchedule />
+						</BackupsForm>
+					)}
+
+					<BackupsForm style={{ width: mobile ? undefined : "50%" }}>
 						<BackupsList
 							setIsBackupApplyPending={setIsBackupApplyPending}
 							backupActionsRunning={backupActionsRunning}
 						/>
 					</BackupsForm>
 
-					<BackupsForm style={{ width: "25%" }}>
-						<Paragraph style={{ textAlign: "center" }}>{"Skonfiguruj harmongram"}</Paragraph>
+					{!mobile && (
+						<BackupsForm style={{ width: mobile ? undefined : "25%" }}>
+							<Paragraph style={{ textAlign: "center" }}>{"Skonfiguruj harmongram"}</Paragraph>
 
-						<ConfigureBackupSchedule />
-					</BackupsForm>
+							<ConfigureBackupSchedule />
+						</BackupsForm>
+					)}
 				</Flex>
 			</Flex>
 		</FullHeight>
