@@ -103,18 +103,21 @@ const Home: FC = () => {
 		<FullHeight>
 			<Flex direction={"column"} style={{ marginTop: mobile ? undefined : margin, gap: margin }} fullWidth>
 				<Flex direction={mobile ? "column" : "row"} style={{ gap: margin }}>
-					<Flex direction={"column"} align={"center"} style={{ gap: margin }}>
+					<Flex direction={"column"} align={"center"} justify={mobile ? undefined : "center"} style={{ gap: margin }}>
 						<Paragraph fontSize={mobile ? 2 : 2.5} style={{ textAlign: mobile ? "center" : undefined }}>
 							{"Simple Warehouse Management"}
 						</Paragraph>
 
-						<Paragraph fontSize={mobile ? 1.25 : 1.5} variant={"secondary"} style={{ textAlign: "center" }}>
+						<Paragraph fontSize={1.25} variant={"secondary"} style={{ textAlign: mobile ? "center" : undefined }}>
 							{
 								"SWM to system, pozwalający zarządzać twoim magazynem w czasie rzeczywistym między wieloma urządzeniami."
 							}
 						</Paragraph>
 
-						<Link href={isLoadingAuthData ? "#" : authData === null ? "/login" : "/centrum-zarzadzania"}>
+						<Link
+							href={isLoadingAuthData ? "#" : authData === null ? "/login" : "/centrum-zarzadzania"}
+							style={{ width: mobile ? undefined : "100%" }}
+						>
 							<Button variant={"secondary"} style={{ width: mobile ? undefined : "100%", padding: "12.5px" }}>
 								<Paragraph
 									fontSize={mobile ? 1.5 : 1.75}

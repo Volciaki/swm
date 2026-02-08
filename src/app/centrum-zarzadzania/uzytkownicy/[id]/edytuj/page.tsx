@@ -41,7 +41,11 @@ const EditUser = () => {
 					description={"Używając poniższego formularza możesz edytować istniejącego już użytkownika."}
 				/>
 
-				{user.data && <UserForm userData={{ ...user.data, password: "" }} />}
+				{user.data && (
+					<div style={{ width: mobile ? "100%" : "75%" }}>
+						<UserForm userData={{ ...user.data, password: "" }} />
+					</div>
+				)}
 
 				{user.isLoading && <Loading />}
 

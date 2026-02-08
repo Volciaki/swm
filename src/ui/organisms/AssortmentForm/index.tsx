@@ -33,7 +33,7 @@ export type AssortmentFormProps = {
 
 export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 	const router = useRouter();
-	const mobile = useMobile();
+	const { mobile } = useMobile();
 
 	const apiUtils = apiClient.useUtils();
 	const existing = definitionId !== undefined;

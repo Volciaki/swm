@@ -24,7 +24,9 @@ const UsersNew: FC = () => {
 					description={"Używając poniższego formularza możesz dodać nowego użytkownika."}
 				/>
 
-				<UserForm />
+				<div style={{ width: mobile ? "100%" : "75%" }}>
+					<UserForm />
+				</div>
 			</Flex>
 		</FullHeight>
 	);
