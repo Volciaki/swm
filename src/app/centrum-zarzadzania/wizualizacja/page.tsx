@@ -110,7 +110,7 @@ const Visualisation: FC = () => {
 
 	return (
 		<FullHeight>
-			<BackButton fallback={"/centrum-zarzadzania"} />
+			<BackButton fallback={"/centrum-zarzadzania"} forceFallback />
 
 			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
 				<PageHeader
