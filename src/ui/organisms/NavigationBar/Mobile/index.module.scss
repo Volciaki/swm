@@ -24,6 +24,8 @@
 }
 
 .routes-container {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     left: 0;
     top: $navigation-height-mobile;

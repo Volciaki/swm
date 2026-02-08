@@ -39,3 +39,9 @@
     gap: 1rem !important;
     max-width: $content-width;
 }
+
+@media (width <= $mobile-width) {
+    .standard-children-container {
+        max-width: calc(100vw - $padding * 2);
+    }
+}

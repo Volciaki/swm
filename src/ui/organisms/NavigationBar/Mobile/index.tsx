@@ -1,5 +1,5 @@
 import type { ReactNode, FC, CSSProperties, PointerEvent } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { clsx } from "clsx";
 import { RiMenuLine, RiHomeLine } from "react-icons/ri";
 import { LiaUser } from "react-icons/lia";
@@ -74,10 +74,12 @@ const NavigationRoutes: FC<NavigationRoutesProps> = ({ routes, areRoutesShown, s
 	);
 
 	return (
-		<Flex
-			direction={"column"}
+		<div
 			className={clsx([styles["routes-container"], { [styles["opened"]]: areRoutesShown }])}
-			style={{ transform: changeY === 0 ? undefined : `translateY(${changeY}px)` }}
+			style={{ transform: changeY === 0 ? undefined : `translateY(${changeY}px)`, touchAction: "none" }}
+			onPointerMove={onPointerMove}
+			onPointerUp={onPointerUp}
+			onPointerDown={onPointerDown}
 		>
 			{routes.map((route, index) => (
 				<Flex direction={"column"} style={{ gap: "0.5rem" }} key={`route-${index}`}>
@@ -97,15 +99,10 @@ const NavigationRoutes: FC<NavigationRoutesProps> = ({ routes, areRoutesShown, s
 				</Flex>
 			))}
 
-			<div
-				className={styles["grab-handle"]}
-				onPointerMove={onPointerMove}
-				onPointerUp={onPointerUp}
-				onPointerDown={onPointerDown}
-			>
+			<div className={styles["grab-handle"]}>
 				<Separator variant={"secondary"} />
 			</div>
-		</Flex>
+		</div>
 	);
 };
 
