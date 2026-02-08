@@ -8,8 +8,10 @@ import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 import type { DialogButtonHandle } from "@/ui/organisms";
 import { AssortmentCard, DialogButton } from "@/ui/organisms";
+import { useMobile } from "@/ui/hooks";
 
 const ShelfAssortment: FC = () => {
+	const { mobile } = useMobile();
 	const router = useRouter();
 	const params = useParams();
 	const searchParams = useSearchParams();
@@ -66,7 +68,12 @@ const ShelfAssortment: FC = () => {
 				forceFallback
 			/>
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} fullWidth>
+			<Flex
+				direction={"column"}
+				align={"center"}
+				style={{ gap: "1rem", marginTop: mobile ? "1rem" : undefined }}
+				fullWidth
+			>
 				{assortment.data && nextAssortmentToBeTakenDown.data !== undefined && (
 					<>
 						<PageHeader
@@ -75,18 +82,18 @@ const ShelfAssortment: FC = () => {
 						/>
 
 						<DialogButton
-							buttonContent={<Paragraph fontSize={1.75}>{"Zdejmij"}</Paragraph>}
+							buttonContent={<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Zdejmij"}</Paragraph>}
 							ref={dialogButtonRef}
 							onMount={() => setIsDialogButtonReady(true)}
 						>
-							<Paragraph>{"Czy jesteś pewien?"}</Paragraph>
+							<Paragraph fontSize={mobile ? 1.75 : 2}>{"Czy jesteś pewien?"}</Paragraph>
 
-							<Paragraph variant={"secondary"} fontSize={1.5}>
+							<Paragraph variant={"secondary"} fontSize={mobile ? 1.25 : 1.5}>
 								{"Próbujesz zdjąć asortyment. Ta akcja nie jest odwracalna."}
 							</Paragraph>
 
 							{nextAssortmentToBeTakenDown.data.id !== assortment.data.id && (
-								<Paragraph fontSize={1.25} variant={"warning"} style={{ textAlign: "center" }}>
+								<Paragraph fontSize={mobile ? 1 : 1.25} variant={"warning"} style={{ textAlign: "center" }}>
 									<strong>{"UWAGA!"}</strong>
 
 									{
@@ -104,7 +111,7 @@ const ShelfAssortment: FC = () => {
 							)}
 
 							<Button onClick={() => takeDownAssortmentHandler()} disabled={takeDownAssortment.isPending}>
-								<Paragraph fontSize={1.5}>{"Zdejmij"}</Paragraph>
+								<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Zdejmij"}</Paragraph>
 							</Button>
 
 							{takeDownAssortment.error && (

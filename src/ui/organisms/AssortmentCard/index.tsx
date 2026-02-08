@@ -1,9 +1,12 @@
+"use client";
+
 import { type FC } from "react";
 import { RiArrowRightUpLine } from "react-icons/ri";
 import { formatDateAsHumanReadable } from "@/utils";
 import { Card } from "@/ui/molecules";
 import { Paragraph, Image, Flex, Button, Link } from "@/ui/atoms";
 import type { AssortmentDefinitionDTO } from "@/server/modules/assortment/application/dto/shared/AssortmentDefinitionDTO";
+import { useMobile } from "@/ui/hooks";
 import { DialogButton } from "../DialogButton";
 
 type Assortment = AssortmentDefinitionDTO & {
@@ -15,86 +18,90 @@ export type AssortmentCardProps = {
 	assortment: Assortment;
 };
 
-export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => (
-	<Card
-		additionalActions={
-			<Flex direction={"row"} style={{ gap: "1rem" }}>
-				{assortment.image?.visibility.publicUrl && (
-					<DialogButton buttonContent={<Paragraph fontSize={1.75}>{"Zobacz zdjęcie"}</Paragraph>}>
+export const AssortmentCard: FC<AssortmentCardProps> = ({ assortment }) => {
+	const { mobile } = useMobile();
+
+	return (
+		<Card
+			additionalActions={
+				<Flex direction={mobile ? "column" : "row"} style={{ gap: "1rem" }}>
+					{assortment.image?.visibility.publicUrl && (
+						<DialogButton buttonContent={<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Zobacz zdjęcie"}</Paragraph>}>
+							<Image
+								src={assortment.image?.visibility.publicUrl}
+								alt={`Zdjęcie ${assortment.name}`}
+								style={{ maxHeight: "50vh", aspectRatio: "1/1" }}
+							/>
+						</DialogButton>
+					)}
+
+					<DialogButton buttonContent={<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Zobacz kod QR"}</Paragraph>}>
 						<Image
-							src={assortment.image?.visibility.publicUrl}
-							alt={`Zdjęcie ${assortment.name}`}
+							src={assortment.qrCode.visibility.publicUrl!}
+							alt={`Kod QR ${assortment.name}`}
 							style={{ maxHeight: "50vh", aspectRatio: "1/1" }}
 						/>
 					</DialogButton>
-				)}
 
-				<DialogButton buttonContent={<Paragraph fontSize={1.75}>{"Zobacz kod QR"}</Paragraph>}>
-					<Image
-						src={assortment.qrCode.visibility.publicUrl!}
-						alt={`Kod QR ${assortment.name}`}
-						style={{ maxHeight: "50vh", aspectRatio: "1/1" }}
-					/>
-				</DialogButton>
+					{assortment.putUpByUserId && (
+						<Link href={`/centrum-zarzadzania/uzytkownicy/${assortment.putUpByUserId}`} newTab>
+							<Button>
+								<Flex direction={"row"} align={"center"} gap={10}>
+									<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Przyjęty przez"}</Paragraph>
 
-				{assortment.putUpByUserId && (
-					<Link href={`/centrum-zarzadzania/uzytkownicy/${assortment.putUpByUserId}`} newTab>
-						<Button>
-							<Flex direction={"row"} align={"center"} gap={10}>
-								<Paragraph fontSize={1.75}>{"Przyjęty przez"}</Paragraph>
+									<RiArrowRightUpLine color={"#FFFFFF"} size={"2rem"} />
+								</Flex>
+							</Button>
+						</Link>
+					)}
+				</Flex>
+			}
+		>
+			<Paragraph>{`Nazwa: ${assortment.name}`}</Paragraph>
 
-								<RiArrowRightUpLine color={"#FFFFFF"} size={"2rem"} />
-							</Flex>
-						</Button>
-					</Link>
-				)}
-			</Flex>
-		}
-	>
-		<Paragraph>{`Nazwa: ${assortment.name}`}</Paragraph>
+			<Paragraph>{`Komentarz: ${assortment.comment}`}</Paragraph>
 
-		<Paragraph>{`Komentarz: ${assortment.comment}`}</Paragraph>
+			<Paragraph>
+				{"Wymiary:"}
 
-		<Paragraph>
-			{"Wymiary:"}
+				<br />
 
-			<br />
+				<span>{`Szerokość: ${assortment.size.widthMillimeters}mm`}</span>
 
-			<span>{`Szerokość: ${assortment.size.widthMillimeters}mm`}</span>
+				<br />
 
-			<br />
+				<span>{`Wysokość: ${assortment.size.heightMillimeters}mm`}</span>
 
-			<span>{`Wysokość: ${assortment.size.heightMillimeters}mm`}</span>
+				<br />
 
-			<br />
+				<span>{`Głębokość: ${assortment.size.lengthMillimeters}mm`}</span>
+			</Paragraph>
 
-			<span>{`Głębokość: ${assortment.size.lengthMillimeters}mm`}</span>
-		</Paragraph>
+			<Paragraph>{`Waga: ${assortment.weightKg}kg`}</Paragraph>
 
-		<Paragraph>{`Waga: ${assortment.weightKg}kg`}</Paragraph>
+			{assortment.storedAtTimestamp && (
+				<>
+					<Paragraph>{`Data przyjęcia: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}`}</Paragraph>
 
-		{assortment.storedAtTimestamp && (
-			<>
-				<Paragraph>{`Data przyjęcia: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp))}`}</Paragraph>
+					<Paragraph>
+						{`Termin ważności: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000))}`}
+					</Paragraph>
+				</>
+			)}
 
-				<Paragraph>
-					{`Termin ważności: ${formatDateAsHumanReadable(new Date(assortment.storedAtTimestamp + assortment.expiresAfterSeconds * 1000))}`}
-				</Paragraph>
-			</>
-		)}
+			<Paragraph>
+				{"Zakres temperatury:"}
 
-		<Paragraph>
-			{"Zakres temperatury:"}
+				<br />
 
-			<br />
+				<span>{`Minimalna: ${assortment.temperatureRange.minimalCelsius}°C`}</span>
 
-			<span>{`Minimalna: ${assortment.temperatureRange.minimalCelsius}°C`}</span>
+				<br />
 
-			<br />
+				<span>{`Maksymalna: ${assortment.temperatureRange.maximalCelsius}°C`}</span>
+			</Paragraph>
 
-			<span>{`Maksymalna: ${assortment.temperatureRange.maximalCelsius}°C`}</span>
-		</Paragraph>
-
-		<Paragraph>{`Niebezpieczny: ${assortment.isHazardous ? "Tak" : "Nie"}`}</Paragraph>
-	</Card>
-);
+			<Paragraph>{`Niebezpieczny: ${assortment.isHazardous ? "Tak" : "Nie"}`}</Paragraph>
+		</Card>
+	);
+};
