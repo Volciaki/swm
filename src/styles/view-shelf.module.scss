@@ -3,3 +3,11 @@
 .container {
     max-height: calc(100vh - $navigation-height-desktop - $gap * 2);
 }
+
+@media (width <= $mobile-width) {
+    .container {
+        // Those rems here are the height of the back button, which is included into page height on mobile layouts.
+        max-height: calc(100vh - $navigation-height-mobile - $gap * 2 - 1.25rem - 1rem - 2 * $padding - $gap);
+        max-width: calc(100vw - $padding * 2);
+    }
+}

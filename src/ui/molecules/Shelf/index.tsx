@@ -5,6 +5,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Link from "next/link";
 import type { FullShelfDTO } from "@/server/modules/storage/application/dto/shared/FullShelfDTOSchema";
 import { Paragraph } from "@/ui/atoms";
+import { useMobile } from "@/ui/hooks";
 import styles from "./index.module.scss";
 import { Block } from "../Block";
 
@@ -17,6 +18,8 @@ type ZoomableProps = {
 };
 
 const Zoomable: FC<ZoomableProps> = ({ children, focusElementId }) => {
+	const { mobile } = useMobile();
+
 	const cursorStartY = useRef(0);
 	const cursorStartX = useRef(0);
 	const cursorMoved = useRef(false);
@@ -47,7 +50,7 @@ const Zoomable: FC<ZoomableProps> = ({ children, focusElementId }) => {
 		<TransformWrapper
 			initialScale={1}
 			minScale={0.3}
-			maxScale={3}
+			maxScale={mobile ? 1.5 : 3}
 			onInit={({ zoomToElement }) => {
 				if (!focusElementId) return;
 
@@ -56,7 +59,7 @@ const Zoomable: FC<ZoomableProps> = ({ children, focusElementId }) => {
 				if (!element) return;
 
 				setTimeout(() => {
-					zoomToElement(element, 2, 1000, "easeInOutQuad");
+					zoomToElement(element, mobile ? 1.5 : 2, 1000, "easeInOutQuad");
 				}, 100);
 			}}
 			centerOnInit
@@ -80,6 +83,7 @@ export type ShelfProps = {
 };
 
 export const Shelf: FC<ShelfProps> = ({ shelfData, cellToFocus, cellSize = 12.5 }) => {
+	const { mobile } = useMobile();
 	const columns = shelfData.cells[0].length;
 	const generateCellId = ({ x, y }: { x: number; y: number }) => `cell-x-${x}-y-${y}`;
 
@@ -91,7 +95,7 @@ export const Shelf: FC<ShelfProps> = ({ shelfData, cellToFocus, cellSize = 12.5 
 					gridTemplateColumns: `repeat(${columns}, 1fr)`,
 					gap: "2rem",
 					maxWidth: "100%",
-					margin: "20rem",
+					margin: `${mobile ? 10 : 20}rem`,
 				}}
 			>
 				{shelfData.cells.map((row) =>

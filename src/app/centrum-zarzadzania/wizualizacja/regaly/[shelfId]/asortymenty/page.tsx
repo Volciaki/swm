@@ -6,9 +6,11 @@ import { FullHeight, Flex, Loading, FormError } from "@/ui/atoms";
 import { BackButton, PageHeader, Shelf } from "@/ui/molecules";
 import { apiClient } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
+import { useMobile } from "@/ui/hooks";
 import styles from "@/styles/view-shelf.module.scss";
 
 const ViewShelf: FC = () => {
+	const { mobile } = useMobile();
 	const params = useParams();
 	const searchParams = useSearchParams();
 	const getShelf = apiClient.storage.getShelf.useQuery(
@@ -33,7 +35,13 @@ const ViewShelf: FC = () => {
 		<FullHeight style={{ maxWidth: "100%" }}>
 			<BackButton fallback={"/centrum-zarzadzania/wizualizacja"} forceFallback />
 
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }} className={styles["container"]} fullWidth>
+			<Flex
+				direction={"column"}
+				align={"center"}
+				style={{ gap: "1rem", marginTop: mobile ? "1rem" : undefined }}
+				className={styles["container"]}
+				fullWidth
+			>
 				{getShelf.isLoading && <Loading />}
 
 				{getShelf.data && (
