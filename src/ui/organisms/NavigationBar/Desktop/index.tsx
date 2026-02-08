@@ -21,9 +21,11 @@ export const DesktopNavigationBar: FC<DesktopNavigationBarProps> = ({ onLogout, 
 
 	return (
 		<Flex align={"center"} justify={"space-between"} style={{ height: "100%" }} fullWidth>
-			<Paragraph className={styles["text"]} fontSize={3}>
-				{"SWM"}
-			</Paragraph>
+			<Link href={"/"} style={{ textDecoration: "none" }}>
+				<Paragraph className={styles["text"]} fontSize={3}>
+					{"SWM"}
+				</Paragraph>
+			</Link>
 
 			<ul className={styles["links-container"]}>
 				{routes.map((route, index) => (

@@ -143,9 +143,11 @@ export const MobileNavigationBar: FC<MobileNavigationBarProps> = ({ onLogout, ro
 					<LiaUser {...sharedNavigationIconProps} onClick={() => handleUserMenuClick()} />
 				)}
 
-				<Paragraph style={{ marginInline: "auto" }} fontSize={2.5}>
-					{"SWM"}
-				</Paragraph>
+				<Link href={"/"} style={{ textDecoration: "none" }}>
+					<Paragraph style={{ marginInline: "auto" }} fontSize={2.5}>
+						{"SWM"}
+					</Paragraph>
+				</Link>
 
 				<div onClick={() => handleHamburgerClick()} style={{ justifySelf: "end" }}>
 					{areRoutesShown ? (
