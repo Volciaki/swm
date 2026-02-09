@@ -7,7 +7,7 @@ export class TakeDownAssortment {
 	constructor(private readonly storageHelper: StorageAssortmentHelper) {}
 
 	async execute(dto: TakeDownAssortmentDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+		if (!currentUser) throw new UnauthorizedError();
 
 		return await this.storageHelper.takeDownAssortment(dto);
 	}

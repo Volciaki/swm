@@ -22,7 +22,7 @@ export class PutUpAssortmentAutomatically {
 	) {}
 
 	async execute(dto: PutUpAssortmentAutomaticallyDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+		if (!currentUser) throw new UnauthorizedError();
 
 		const definition = await this.getAssortmentDefinition.execute(
 			{ id: dto.definitionId },

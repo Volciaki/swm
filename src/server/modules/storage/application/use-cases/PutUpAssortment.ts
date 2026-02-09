@@ -7,7 +7,7 @@ export class PutUpAssortment {
 	constructor(private readonly storageHelper: StorageAssortmentHelper) {}
 
 	async execute(dto: PutUpAssortmentDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+		if (!currentUser) throw new UnauthorizedError();
 
 		return await this.storageHelper.putUpAssortment(dto, currentUser);
 	}

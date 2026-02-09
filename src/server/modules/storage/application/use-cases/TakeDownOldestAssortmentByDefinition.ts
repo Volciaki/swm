@@ -13,7 +13,7 @@ export class TakeDownOldestAssortmentByDefinition {
 	) {}
 
 	async execute(dto: TakeDownOldestAssortmentByDefinitionDTO, currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+		if (!currentUser) throw new UnauthorizedError();
 
 		const allAssortments = await this.getAllAssortment.execute();
 		const assortmentsWithPassedDefinition = allAssortments.filter((a) => a.definition.id === dto.definitionId);

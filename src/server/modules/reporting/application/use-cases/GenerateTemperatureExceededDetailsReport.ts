@@ -11,7 +11,7 @@ export class GenerateTemperatureExceededDetailsReport {
 	) {}
 
 	async execute(currentUser?: UserDTO) {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+		if (!currentUser) throw new UnauthorizedError();
 
 		const generatedReport = await this.temperatureExceededDetailsReport.generate();
 		const report = await this.reportHelper.createFromGenerated(generatedReport);

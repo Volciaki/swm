@@ -280,7 +280,7 @@ const AssortmentsVisualisation: FC = () => {
 
 									{qrCodeScannerValue && (
 										<>
-											<Paragraph variant={"secondary"} fontSize={mobile ? 1.25 : 1.5}>
+											<Paragraph variant={"secondary"} fontSize={mobile ? 1 : 1.5}>
 												{"Wybierz, którą akcję podjąć z zeskanowanym asortymentem:"}
 											</Paragraph>
 
