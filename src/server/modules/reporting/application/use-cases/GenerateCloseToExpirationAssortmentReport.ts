@@ -12,7 +12,7 @@ export class GenerateCloseToExpirationAssortmentReport {
 	) {}
 
 	async execute(currentUser?: UserDTO): Promise<GenerateCloseToExpirationAssortmentReportResponseDTO> {
-		if (!currentUser?.isAdmin) throw new UnauthorizedError();
+		if (!currentUser) throw new UnauthorizedError();
 
 		const generatedReport = await this.closeToExpirationAssortmenrReportGenerator.generate();
 		const report = await this.reportHelper.createFromGenerated(generatedReport);

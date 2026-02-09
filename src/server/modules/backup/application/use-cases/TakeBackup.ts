@@ -17,7 +17,7 @@ export class TakeBackup {
 			...optionsUnsafe,
 		};
 
-		if (!currentUser?.isAdmin && !options.skipAuthentication) throw new UnauthorizedError();
+		if (!currentUser && !options.skipAuthentication) throw new UnauthorizedError();
 
 		const backup = await this.backupHelper.take();
 		return BackupMapper.fromEntityToDTO(backup);
