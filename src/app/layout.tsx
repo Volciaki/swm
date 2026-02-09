@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { ABeeZee } from "next/font/google";
 import { Providers } from "@/ui/providers";
-import { NavigationBar } from "@/ui/organisms";
+import { NavigationBar, ToastContainer } from "@/ui/organisms";
 import { CenteredOnPage } from "@/ui/molecules";
 import styles from "../styles/layout.module.scss";
 import "../styles/global.scss";
@@ -27,6 +27,8 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 				</nav>
 
 				<div className={styles["navigation-margin"]} />
+
+				<ToastContainer />
 
 				<main className={styles["content-container"]}>
 					<div className={styles["content-wrapper"]}>

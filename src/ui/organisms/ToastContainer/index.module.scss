@@ -1,0 +1,34 @@
+@use "@/styles" as *;
+
+.toast {
+    --toastify-color-progress-light: #{$primary};
+    --toastify-color-progress-bgo: 0.5;
+    --toastify-toast-bd-radius: calc(#{$border-radius} / 4);
+    --toastify-text-color-light: #{$text};
+
+    background-color: $background-lightened;
+    border: solid calc($border-size * 0.75) $border;
+    border-radius: $border-radius;
+}
+
+.close {
+    cursor: pointer;
+    right: $padding;
+    transition: color $transition;
+
+    &:hover {
+        color: $text-darkened;
+    }
+}
+
+.container {
+    top: calc($navigation-height-desktop + $padding);
+    left: $padding;
+}
+
+@media (max-width: $mobile-width) {
+    .container {
+        max-width: calc(100vw - $padding * 2);
+        top: calc($navigation-height-mobile + $padding);
+    }
+}

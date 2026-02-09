@@ -6,7 +6,7 @@ import { Button, Flex, FullHeight, Image, Paragraph, Link } from "@/ui/atoms";
 import { useAuthData } from "@/ui/providers";
 import { Block, Dialog } from "@/ui/molecules";
 import styles from "@/styles/home.module.scss";
-import { useMobile } from "@/ui/hooks";
+import { ToastType, useMobile, useToast } from "@/ui/hooks";
 
 type HomeBlockProps = {
 	title: string;
@@ -92,6 +92,7 @@ const HomeBlock: FC<HomeBlockProps> = ({ title, description, mediaUrl, localPath
 };
 
 const Home: FC = () => {
+	const { toast } = useToast();
 	const { authData, isLoadingAuthData } = useAuthData();
 	const { mobile, mobileDefault } = useMobile();
 
@@ -113,6 +114,10 @@ const Home: FC = () => {
 								"SWM to system, pozwalający zarządzać twoim magazynem w czasie rzeczywistym między wieloma urządzeniami."
 							}
 						</Paragraph>
+
+						<Button onClick={() => toast({ title: "test", message: "test", type: ToastType.SUCCESS })}>
+							<Paragraph>{"toast"}</Paragraph>
+						</Button>
 
 						<Link
 							href={isLoadingAuthData ? "#" : authData === null ? "/login" : "/centrum-zarzadzania"}
