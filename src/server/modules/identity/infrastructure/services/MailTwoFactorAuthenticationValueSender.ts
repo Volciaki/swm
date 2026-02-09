@@ -10,13 +10,16 @@ export class MailTwoFactorAuthenticationValueSender implements TwoFactorAuthenti
 			user.email,
 			"Your 2FA Code - Volciaki Magazyn",
 			`
-                <div style="display: flex; justify-content: center; align-items:center; flex-direction: column; background-color: gray; width: 50%; margin: 0 auto">
-	                <p style="font-size: 2rem; font-family: 'Arial', serif">This is your automatically generated 2FA code:</p>
-	                <hr style="border: none; border-top: 2px solid Black; width:75%">
-	                <p style="font-size: 3rem; font-family: 'Arial'; background-color: Gainsboro; border-radius: 10px; padding: 10px 15px">${authenticationSession.value}</p>
-	                <hr style="border: none; border-top: 2px solid Black; width:75%">
-	                <p style="font-size: 2rem; font-family: 'Arial', serif">You may use it to finish logging in, or reset your password.</p>
-                </div>
+			<table width="50%" cellpadding="0" cellspacing="0" border="0" align="center" style="border-radius:10px; border:5px solid #455D6C; background-color: #A7A7A7;">
+				<tr>
+					<td align="center">
+						<h1 style="font-size:4rem;">Kod dwuetapowej weryfikacji</h1>
+						<p style="font-size:2rem;">Przesylamy kod dwuetapowej weryfikacji</p>
+						<h1 style="padding:4px; width:25%; border-radius:10px; border: 5px solid #455D6C; background-color:#262626; font-size:4rem; color:#FFF;">${authenticationSession.value}</h1>
+						<p style="font-size:2rem;">Prosimy wprowadzic podany kod w odpowiednie pole</p>
+					</td>
+				</tr>
+			</table>
             `,
 			`Your 2FA code is:\n\n${authenticationSession.value}\n\nYou may use it to finish logging in, or reset your password.`
 		);
