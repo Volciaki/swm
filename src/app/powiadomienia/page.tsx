@@ -3,7 +3,7 @@
 import { type FC } from "react";
 import { Flex, FullHeight, Loading, Paragraph, Separator } from "@/ui/atoms";
 import { PageHeader, List } from "@/ui/molecules";
-import { NotificationCard } from "@/ui/organisms";
+import { NotificationCard, Protected } from "@/ui/organisms";
 import { apiClient } from "@/ui/providers";
 import { useMobile } from "@/ui/hooks";
 
@@ -12,31 +12,35 @@ const Notifications: FC = () => {
 	const { mobile } = useMobile();
 
 	return (
-		<FullHeight>
-			<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
-				<PageHeader
-					title={"Powiadomienia"}
-					description={"W tej zakładce znajdziesz powiadomienia generowane automatycznie wraz z użytkowaniem magazynu."}
-				/>
+		<Protected>
+			<FullHeight>
+				<Flex direction={"column"} align={"center"} style={{ gap: "1rem" }}>
+					<PageHeader
+						title={"Powiadomienia"}
+						description={
+							"W tej zakładce znajdziesz powiadomienia generowane automatycznie wraz z użytkowaniem magazynu."
+						}
+					/>
 
-				<Flex direction={"column"} align={"center"} style={{ width: mobile ? "100%" : "75%", gap: "1rem" }}>
-					<Separator />
+					<Flex direction={"column"} align={"center"} style={{ width: mobile ? "100%" : "75%", gap: "1rem" }}>
+						<Separator />
 
-					{notifications.isLoading && <Loading />}
+						{notifications.isLoading && <Loading />}
 
-					{notifications.data && notifications.data.length === 0 && (
-						<Paragraph fontSize={mobile ? 1.75 : 2}>{"Brak powiadomień!"}</Paragraph>
-					)}
+						{notifications.data && notifications.data.length === 0 && (
+							<Paragraph fontSize={mobile ? 1.75 : 2}>{"Brak powiadomień!"}</Paragraph>
+						)}
 
-					<List>
-						{notifications.data &&
-							notifications.data.map((notification, index) => (
-								<NotificationCard notification={notification} key={`notification-${index}`} />
-							))}
-					</List>
+						<List>
+							{notifications.data &&
+								notifications.data.map((notification, index) => (
+									<NotificationCard notification={notification} key={`notification-${index}`} />
+								))}
+						</List>
+					</Flex>
 				</Flex>
-			</Flex>
-		</FullHeight>
+			</FullHeight>
+		</Protected>
 	);
 };
 
