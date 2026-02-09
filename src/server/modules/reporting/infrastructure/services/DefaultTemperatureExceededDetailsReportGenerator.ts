@@ -76,6 +76,8 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 
 	async generate() {
 		const { temperaturesExceeded } = await this.getData();
+		// We need to cap this, as pdfkit is not nearly fast enough to generate thousands of components like we'd want to.
+		const amountOfMostRecentTemperatureExceedsToInclude = 25;
 
 		this.utils.date();
 		this.utils.header("Przekroczone zakresy temperatur");
@@ -83,7 +85,7 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 		this.document
 			.fontSize(12)
 			.text(
-				"W tym raporcie znajduję się lista regałów jak i asortymentów, które w czasie przechowywania przekroczyły swój wyznaczony zakres temperatur.",
+				`W tym raporcie znajduję się lista regałów jak i asortymentów, które w czasie przechowywania przekroczyły swój wyznaczony zakres temperatur. Ukazane zostanie ostatnie ${amountOfMostRecentTemperatureExceedsToInclude} takich przypadków.`,
 				this.document.x,
 				this.document.y + this.constants.margin,
 				{ align: "justify", lineGap: 2 }
@@ -103,7 +105,11 @@ export class DefaultTemperatureExceededDetailsReportGenerator extends DefaultBas
 
 		this.document.y += this.constants.margin;
 
-		await this.utils.temperaturesExceeded(temperaturesExceeded);
+		const portionOfTemperatureExceedsToGenerate = temperaturesExceeded.slice(
+			0,
+			amountOfMostRecentTemperatureExceedsToInclude
+		);
+		await this.utils.temperaturesExceeded(portionOfTemperatureExceedsToGenerate);
 
 		return this.getReturnValue();
 	}
