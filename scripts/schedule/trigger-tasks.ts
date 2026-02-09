@@ -8,16 +8,17 @@ type Task = {
 };
 
 const everyMinute = "* * * * *";
+const every15Minutes = "*/15 * * * *";
 const everyHour = "0 * * * *";
 
 const tasks: Task[] = [
 	{
 		name: "ExpirationMonitoringTask",
-		triggerFrequency: everyMinute,
+		triggerFrequency: every15Minutes,
 	},
 	{
 		name: "UpcomingExpiryMonitoringTask",
-		triggerFrequency: everyMinute,
+		triggerFrequency: every15Minutes,
 	},
 	{
 		name: "ShelvesModifiedIllegallyMonitoringTask",
