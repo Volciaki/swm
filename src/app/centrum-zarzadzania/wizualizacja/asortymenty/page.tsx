@@ -204,6 +204,16 @@ const AssortmentsVisualisation: FC = () => {
 											{"Przesuń plik na pole poniżej lub klknij w nie aby wybrać plik"}
 										</Paragraph>
 
+										<Paragraph variant={"warning"} fontSize={mobile ? 1 : 1.25}>
+											<strong>{"UWAGA!"}</strong>
+
+											{" Pamiętaj, że importowanie "}
+
+											<i>{"nadpisuje"}</i>
+
+											{" dane."}
+										</Paragraph>
+
 										<StandardFileUpload
 											accept={"text/csv"}
 											onError={(error) => setFileUploadError(error)}

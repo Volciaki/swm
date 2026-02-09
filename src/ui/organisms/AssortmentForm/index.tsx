@@ -59,7 +59,7 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 		...sharedMutationOptions,
 		onSuccess: () => {
 			sharedMutationOptions.onSuccess();
-			toast({ title: "Sukces!", message: "Pomyślnie zedytowano asortyment.", type: ToastType.SUCCESS });
+			toast({ title: "Sukces!", message: "Zedytowano asortyment.", type: ToastType.SUCCESS });
 		},
 	});
 	const createAssortment = apiClient.storage.createAssortment.useMutation({
@@ -185,230 +185,226 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 
 	if (getAssortment.isLoading) return <Loading />;
 
+	if (getAssortment.error) <FormError>{getPolishErrorMessageByMetadata(getAssortment.error.data?.metadata)}</FormError>;
+
 	return (
-		<>
-			{getAssortment.error && (
-				<FormError>{getPolishErrorMessageByMetadata(getAssortment.error.data?.metadata)}</FormError>
-			)}
+		<Flex
+			className={clsx([commonStyles["form-container"], commonStyles["secondary"]])}
+			style={{ width: mobile ? "100%" : "75%" }}
+			direction={"column"}
+			align={"center"}
+		>
+			<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
+				<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Zdjęcie"}</Paragraph>
 
-			<Flex
-				className={clsx([commonStyles["form-container"], commonStyles["secondary"]])}
-				style={{ width: mobile ? "100%" : "75%" }}
-				direction={"column"}
-				align={"center"}
-			>
-				<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-					<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Zdjęcie"}</Paragraph>
-
-					{isImageLoading ? (
-						<Loading />
-					) : (
-						<Controller
-							control={control}
-							name={"imageBase64"}
-							render={({ field: { onChange, value, name }, fieldState: { isDirty, error } }) => (
-								<>
-									{getAssortment.data?.image && !isDirty && (
-										<Image
-											src={`${getAssortment.data.image.visibility.publicUrl}?key=${imageReloads}`}
-											alt={`Ikona asortymentu ${getAssortment.data?.name}`}
-											style={{ maxWidth: `${mobile ? 150 : 300}px`, maxHeight: `${mobile ? 150 : 300}px` }}
-										/>
-									)}
-
-									<ImageUpload
-										dimensions={{ aspectRatio: 1, minHeight: 200, minWidth: 200 }}
-										preview={{
-											show: isDirty,
-											altText: `Ikona asortymentu ${getAssortment.data?.name}`,
-											maxHeight: mobile ? 150 : 300,
-											maxWidth: mobile ? 150 : 300,
-										}}
-										onError={(error) => setFormError(name, { message: error })}
-										maxSizeBytes={10 * 1024 * 1024}
-										onUpload={async (blob) => {
-											try {
-												const imageInBase64 = await blobToBase64(blob);
-
-												onChange(imageInBase64);
-
-												setFormError(name, { message: undefined });
-											} catch (error) {
-												setFormError(name, { message: (error as Error).message });
-											}
-										}}
-									>
-										<Button>
-											<Paragraph fontSize={mobile ? 1.25 : 1.5}>{`${!!value ? "Zmień" : "Dodaj"} zdjęcie`}</Paragraph>
-
-											<Paragraph fontSize={mobile ? 1 : 1.25} variant={"secondary"}>
-												{"Minimalne wymiary: 200x200"}
-
-												<br />
-
-												{"Proporcje: 1:1"}
-											</Paragraph>
-										</Button>
-									</ImageUpload>
-
-									<FormError>{error?.message}</FormError>
-								</>
-							)}
-						/>
-					)}
-				</Flex>
-
-				<FormFields
-					control={control}
-					sections={[
-						{
-							name: "Nazwa",
-							inputs: [
-								{
-									placeholder: "Nazwa",
-									formKey: "name",
-									required: "Podanie nazwy nowego asortymentu jest wymagane.",
-								},
-							],
-						},
-						{
-							name: "Komentarz",
-							inputs: [
-								{
-									placeholder: "Komentarz",
-									formKey: "comment",
-									required: "Dla przejrzystości, wymagane jest dodanie komentarza.",
-								},
-							],
-						},
-						{
-							name: "Wymiary podane w milimetrach",
-							inputs: [
-								{
-									placeholder: "Szerokość [mm]",
-									formKey: "widthMillimeters",
-									required: "Podanie szerokości asortymentu jest wymagane.",
-									min: {
-										value: 0,
-										message: "Dystans nie może być ujemny.",
-									},
-									validate: (v) => floatOnlyValidator(v.toString(), "Szerokość musi być liczbą dziesiętną."),
-								},
-								{
-									placeholder: "Wysokość [mm]",
-									formKey: "heightMillimeters",
-									required: "Podanie wysokości asortymentu jest wymagane.",
-									min: {
-										value: 0,
-										message: "Dystans nie może być ujemny.",
-									},
-									validate: (v) => floatOnlyValidator(v.toString(), "Wysokość musi być liczbą dziesiętną."),
-								},
-								{
-									placeholder: "Głębokość [mm]",
-									formKey: "lengthMillimeters",
-									required: "Podanie głębokości asortymentu jest wymagane.",
-									min: {
-										value: 0,
-										message: "Dystans nie może być ujemny.",
-									},
-									validate: (v) => floatOnlyValidator(v.toString(), "Głębokość musi być liczbą dziesiętną."),
-								},
-							],
-						},
-						{
-							name: "Waga w kilogramach",
-							inputs: [
-								{
-									placeholder: "Waga [kg]",
-									formKey: "weightKg",
-									required: "Podanie wagi jest wymagane.",
-									min: {
-										value: 0,
-										message: "Waga nie może być ujemna.",
-									},
-									validate: (v) => floatOnlyValidator(v.toString(), "Waga musi być liczbą dziesiętną."),
-								},
-							],
-						},
-						{
-							name: "Termin ważności w dniach od przyjęcia do magazynu",
-							inputs: [
-								{
-									placeholder: "Ilość dni",
-									formKey: "expiresAfterDays",
-									required: "Podanie terminu ważności jest wymagane.",
-									min: {
-										value: 0,
-										message: "Asortyment nie może być przedawniony w czasie przyjmowania na stan magazynu.",
-									},
-									validate: (v) => floatOnlyValidator(v.toString(), "Termin ważności musi być liczbą dziesiętną."),
-								},
-							],
-						},
-						{
-							name: "Zakres temperatur w stopniach Celsjusza",
-							inputs: [
-								{
-									placeholder: "Minimalna temperatura [°C]",
-									formKey: "minTemperatureCelsius",
-									required: "Podanie minimalnej temperatury asortymentu jest wymagane.",
-									validate: (v) =>
-										floatOnlyValidator(v.toString(), "Minimalna temperatura asortymentu musi być liczbą dziesiętną."),
-								},
-								{
-									placeholder: "Maksymalna temperatura [°C]",
-									formKey: "maxTemperatureCelsius",
-									required: "Podanie maksymalnej temperatury asortymentu jest wymagane.",
-									validate: (v) =>
-										floatOnlyValidator(v.toString(), "Maksymalna temperatura asortymentu musi być liczbą dziesiętną."),
-								},
-							],
-						},
-					]}
-				/>
-
-				<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
-					<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Niebezpieczny"}</Paragraph>
-
+				{isImageLoading ? (
+					<Loading />
+				) : (
 					<Controller
 						control={control}
-						name={"isHazardous"}
-						defaultValue={false}
-						render={({ field }) => (
-							<Flex direction={"row"} style={{ gap: "1rem" }} justify={"center"}>
-								<Switch checked={field.value} setChecked={field.onChange} size={mobile ? 1.25 : 1.5} />
+						name={"imageBase64"}
+						render={({ field: { onChange, value, name }, fieldState: { isDirty, error } }) => (
+							<>
+								{getAssortment.data?.image && !isDirty && (
+									<Image
+										src={`${getAssortment.data.image.visibility.publicUrl}?key=${imageReloads}`}
+										alt={`Ikona asortymentu ${getAssortment.data?.name}`}
+										style={{ maxWidth: `${mobile ? 150 : 300}px`, maxHeight: `${mobile ? 150 : 300}px` }}
+									/>
+								)}
 
-								<Paragraph fontSize={mobile ? 1.25 : 1.5} variant={"secondary"}>
-									{"Nie/Tak"}
-								</Paragraph>
-							</Flex>
+								<ImageUpload
+									dimensions={{ aspectRatio: 1, minHeight: 200, minWidth: 200 }}
+									preview={{
+										show: isDirty,
+										altText: `Ikona asortymentu ${getAssortment.data?.name}`,
+										maxHeight: mobile ? 150 : 300,
+										maxWidth: mobile ? 150 : 300,
+									}}
+									onError={(error) => setFormError(name, { message: error })}
+									maxSizeBytes={10 * 1024 * 1024}
+									onUpload={async (blob) => {
+										try {
+											const imageInBase64 = await blobToBase64(blob);
+
+											onChange(imageInBase64);
+
+											setFormError(name, { message: undefined });
+										} catch (error) {
+											setFormError(name, { message: (error as Error).message });
+										}
+									}}
+								>
+									<Button>
+										<Paragraph fontSize={mobile ? 1.25 : 1.5}>{`${!!value ? "Zmień" : "Dodaj"} zdjęcie`}</Paragraph>
+
+										<Paragraph fontSize={mobile ? 1 : 1.25} variant={"secondary"}>
+											{"Minimalne wymiary: 200x200"}
+
+											<br />
+
+											{"Proporcje: 1:1"}
+										</Paragraph>
+									</Button>
+								</ImageUpload>
+
+								<FormError>{error?.message}</FormError>
+							</>
 						)}
 					/>
-				</Flex>
-
-				<Separator style={{ marginBlock: `${mobile ? 0.5 : 1}rem` }} />
-
-				<Flex direction={"row"} justify={"space-around"} fullWidth>
-					<Button
-						onClick={handleSubmit(formSubmitHandler)}
-						disabled={!formState.isValid || isLoading}
-						style={{ width: mobile ? undefined : "30%" }}
-					>
-						<Paragraph fontSize={mobile ? 1.5 : 2}>{"Potwierdź"}</Paragraph>
-					</Button>
-
-					{existing && (
-						<Button onClick={() => deleteHandler()} style={{ width: mobile ? undefined : "30%" }} danger>
-							<Paragraph fontSize={mobile ? 1.5 : 2}>{"Usuń"}</Paragraph>
-						</Button>
-					)}
-				</Flex>
-
-				{error && <FormError>{error}</FormError>}
-
-				{isLoading && <Loading />}
+				)}
 			</Flex>
-		</>
+
+			<FormFields
+				control={control}
+				sections={[
+					{
+						name: "Nazwa",
+						inputs: [
+							{
+								placeholder: "Nazwa",
+								formKey: "name",
+								required: "Podanie nazwy nowego asortymentu jest wymagane.",
+							},
+						],
+					},
+					{
+						name: "Komentarz",
+						inputs: [
+							{
+								placeholder: "Komentarz",
+								formKey: "comment",
+								required: "Dla przejrzystości, wymagane jest dodanie komentarza.",
+							},
+						],
+					},
+					{
+						name: "Wymiary podane w milimetrach",
+						inputs: [
+							{
+								placeholder: "Szerokość [mm]",
+								formKey: "widthMillimeters",
+								required: "Podanie szerokości asortymentu jest wymagane.",
+								min: {
+									value: 0,
+									message: "Dystans nie może być ujemny.",
+								},
+								validate: (v) => floatOnlyValidator(v.toString(), "Szerokość musi być liczbą dziesiętną."),
+							},
+							{
+								placeholder: "Wysokość [mm]",
+								formKey: "heightMillimeters",
+								required: "Podanie wysokości asortymentu jest wymagane.",
+								min: {
+									value: 0,
+									message: "Dystans nie może być ujemny.",
+								},
+								validate: (v) => floatOnlyValidator(v.toString(), "Wysokość musi być liczbą dziesiętną."),
+							},
+							{
+								placeholder: "Głębokość [mm]",
+								formKey: "lengthMillimeters",
+								required: "Podanie głębokości asortymentu jest wymagane.",
+								min: {
+									value: 0,
+									message: "Dystans nie może być ujemny.",
+								},
+								validate: (v) => floatOnlyValidator(v.toString(), "Głębokość musi być liczbą dziesiętną."),
+							},
+						],
+					},
+					{
+						name: "Waga w kilogramach",
+						inputs: [
+							{
+								placeholder: "Waga [kg]",
+								formKey: "weightKg",
+								required: "Podanie wagi jest wymagane.",
+								min: {
+									value: 0,
+									message: "Waga nie może być ujemna.",
+								},
+								validate: (v) => floatOnlyValidator(v.toString(), "Waga musi być liczbą dziesiętną."),
+							},
+						],
+					},
+					{
+						name: "Termin ważności w dniach od przyjęcia do magazynu",
+						inputs: [
+							{
+								placeholder: "Ilość dni",
+								formKey: "expiresAfterDays",
+								required: "Podanie terminu ważności jest wymagane.",
+								min: {
+									value: 0,
+									message: "Asortyment nie może być przedawniony w czasie przyjmowania na stan magazynu.",
+								},
+								validate: (v) => floatOnlyValidator(v.toString(), "Termin ważności musi być liczbą dziesiętną."),
+							},
+						],
+					},
+					{
+						name: "Zakres temperatur w stopniach Celsjusza",
+						inputs: [
+							{
+								placeholder: "Minimalna temperatura [°C]",
+								formKey: "minTemperatureCelsius",
+								required: "Podanie minimalnej temperatury asortymentu jest wymagane.",
+								validate: (v) =>
+									floatOnlyValidator(v.toString(), "Minimalna temperatura asortymentu musi być liczbą dziesiętną."),
+							},
+							{
+								placeholder: "Maksymalna temperatura [°C]",
+								formKey: "maxTemperatureCelsius",
+								required: "Podanie maksymalnej temperatury asortymentu jest wymagane.",
+								validate: (v) =>
+									floatOnlyValidator(v.toString(), "Maksymalna temperatura asortymentu musi być liczbą dziesiętną."),
+							},
+						],
+					},
+				]}
+			/>
+
+			<Flex direction={"column"} style={{ gap: "1rem" }} align={"center"} fullWidth>
+				<Paragraph fontSize={mobile ? 1.5 : 1.75}>{"Niebezpieczny"}</Paragraph>
+
+				<Controller
+					control={control}
+					name={"isHazardous"}
+					defaultValue={false}
+					render={({ field }) => (
+						<Flex direction={"row"} style={{ gap: "1rem" }} justify={"center"}>
+							<Switch checked={field.value} setChecked={field.onChange} size={mobile ? 1.25 : 1.5} />
+
+							<Paragraph fontSize={mobile ? 1.25 : 1.5} variant={"secondary"}>
+								{"Nie/Tak"}
+							</Paragraph>
+						</Flex>
+					)}
+				/>
+			</Flex>
+
+			<Separator style={{ marginBlock: `${mobile ? 0.5 : 1}rem` }} />
+
+			<Flex direction={"row"} justify={"space-around"} fullWidth>
+				<Button
+					onClick={handleSubmit(formSubmitHandler)}
+					disabled={!formState.isValid || isLoading}
+					style={{ width: mobile ? undefined : "30%" }}
+				>
+					<Paragraph fontSize={mobile ? 1.5 : 2}>{"Potwierdź"}</Paragraph>
+				</Button>
+
+				{existing && (
+					<Button onClick={() => deleteHandler()} style={{ width: mobile ? undefined : "30%" }} danger>
+						<Paragraph fontSize={mobile ? 1.5 : 2}>{"Usuń"}</Paragraph>
+					</Button>
+				)}
+			</Flex>
+
+			{error && <FormError>{error}</FormError>}
+
+			{isLoading && <Loading />}
+		</Flex>
 	);
 };

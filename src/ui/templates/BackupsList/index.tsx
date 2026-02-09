@@ -59,7 +59,7 @@ export const BackupsList: FC<BackupsListProps> = ({ setIsBackupApplyPending, bac
 			setApplyBackupErrorById(backup, "");
 			setBackupLoadingById(backup, false);
 			setIsBackupApplyPending(false);
-			toast({ title: "Sukces!", message: "Pomyślnie zastosowano kopie zapasową.", type: ToastType.SUCCESS });
+			toast({ title: "Sukces!", message: "Zastosowano kopie zapasową.", type: ToastType.SUCCESS });
 		},
 		[applyBackupById, setApplyBackupErrors, setApplyBackupLoadings, setIsBackupApplyPending, toast]
 	);
@@ -83,11 +83,17 @@ export const BackupsList: FC<BackupsListProps> = ({ setIsBackupApplyPending, bac
 								<ListItem>
 									<Flex align={"center"} justify={"space-between"} fullWidth>
 										<Paragraph fontSize={mobile ? 1.25 : 1.75}>
-											{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[0]}
+											{mobile ? (
+												<>
+													{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[0]}
 
-											<br />
+													<br />
 
-											{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[1]}
+													{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[1]}
+												</>
+											) : (
+												<>{formatDateAsHumanReadable(new Date(backup.dateTimestamp))}</>
+											)}
 										</Paragraph>
 
 										<Button onClick={async () => await backupApplyHandler(backup)} disabled={backupActionsRunning}>
