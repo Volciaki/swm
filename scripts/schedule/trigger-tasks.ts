@@ -8,6 +8,7 @@ type Task = {
 };
 
 const everyMinute = "* * * * *";
+const everyHour = "0 * * * *";
 
 const tasks: Task[] = [
 	{
@@ -24,7 +25,7 @@ const tasks: Task[] = [
 	},
 	{
 		name: "UpdateShelfTemperaturesTask",
-		triggerFrequency: everyMinute,
+		triggerFrequency: everyHour,
 	},
 	{
 		name: "RoutinaryBackupCheckTask",
@@ -32,7 +33,7 @@ const tasks: Task[] = [
 	},
 	{
 		name: "UpdateShelfWeightsTask",
-		triggerFrequency: everyMinute,
+		triggerFrequency: everyHour,
 	},
 ];
 
