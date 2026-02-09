@@ -13,6 +13,7 @@ export const deleteShelf = procedure.input(takeDownShelfDTOSchema).mutation<void
 	const assortmentRepository = services.repositories.assortment.db;
 	const shelfRepository = services.repositories.shelf.db;
 	const temperatureReadingRepository = services.repositories.temperatureReading.db;
+	const weightReadingRepository = services.repositories.weightReading.db;
 
 	const shelfHelper = presets.shelfHelper.default;
 	const fileHelper = presets.fileHelper.default;
@@ -27,7 +28,12 @@ export const deleteShelf = procedure.input(takeDownShelfDTOSchema).mutation<void
 
 	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 	const getShelf = new GetShelf(shelfHelper);
-	const deleteShelf = new DeleteShelf(shelfHelper, shelfRepository, temperatureReadingRepository);
+	const deleteShelf = new DeleteShelf(
+		shelfHelper,
+		shelfRepository,
+		temperatureReadingRepository,
+		weightReadingRepository
+	);
 
 	const action = new TakeDownShelf(storageAssortmentHelper, getAllAssortment, getShelf, deleteShelf);
 	return await action.execute(input, ctx.user ?? undefined);
