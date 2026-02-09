@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { ABeeZee } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Providers } from "@/ui/providers";
 import { NavigationBar, ToastContainer } from "@/ui/organisms";
 import { CenteredOnPage } from "@/ui/molecules";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 	description: "SWM is a service specializing in managing your storage easily.. simple.",
 };
 
-const interFont = ABeeZee({
+const interFont = Inter({
 	weight: "400",
 	subsets: ["latin"],
 	display: "swap",
