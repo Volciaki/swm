@@ -1,11 +1,11 @@
 import { S3FileStorageBucket } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
 import type { BackupHelper } from "@/server/modules/backup/application/helpers/BackupHelper";
 import { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
-import { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import { GetAllReports } from "@/server/modules/reporting/application/use-cases/GetAllReports";
 import { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFile";
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
+import { GetAllAssortmentDefinitions } from "@/server/modules/assortment/application/use-cases/GetAllAssortmentDefinitions";
 import type { Services } from "../../get";
 
 export const getDefaultBackupHelperPreset = (services: Services): BackupHelper => {
@@ -49,20 +49,14 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 	const getFile = new GetFile(fileHelper);
 
 	const assortmentFileHelper = services.helpers.assortmentFile.default.get(getFile);
-	const assortmentRepository = services.repositories.assortment.db;
 	const reportRepository = services.repositories.report.db;
 	const backupRepository = services.repositories.backup.db;
 	const assortmentDefinitionRepository = services.repositories.assortmentDefinition.db;
-	const assortmentDefinitionHelper = services.helpers.assortmentDefinition.default.get(
+
+	const getAllAssortmentDefinitions = new GetAllAssortmentDefinitions(
 		assortmentDefinitionRepository,
-		uuidManager
-	);
-	const assortmentDefinitionUtilities = services.utils.assortmentDefinition.default.get(
-		assortmentDefinitionHelper,
 		assortmentFileHelper
 	);
-
-	const getAllAssortment = new GetAllAssortment(assortmentRepository, assortmentDefinitionUtilities);
 	const getAllReports = new GetAllReports(reportRepository, getFile);
 	const fetchAssortmentImageFile = new FetchFile(fileHelper, assortmentImageFileManager);
 	const fetchAssortmentQRCodeFile = new FetchFile(fileHelper, qrCodeFileManager);
@@ -75,7 +69,7 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 	const deleteReportFile = new DeleteFile(fileHelper, reportFileManager);
 
 	const fileStorageDataManager = services.utils.fileStorageDataManager.default.get(
-		getAllAssortment,
+		getAllAssortmentDefinitions,
 		getAllReports,
 		getFile,
 		fetchAssortmentImageFile,

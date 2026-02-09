@@ -10,7 +10,7 @@ import type { APIError } from "@/ui/utils";
 import { defaultErrorHandler } from "@/ui/utils";
 import type { UserDTO } from "@/server/utils";
 import type { PublicUserDTO } from "@/server/modules/identity/application/dto/shared/PublicUserDTO";
-import { useMobile } from "@/ui/hooks";
+import { ToastType, useMobile, useToast } from "@/ui/hooks";
 import commonStyles from "../../../styles/common.module.scss";
 import styles from "./index.module.scss";
 
@@ -38,6 +38,7 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 	const [error, setError] = useState<string | undefined>();
 	const userId = (userData as UserFormData & { id?: string })?.id;
 
+	const { toast } = useToast();
 	const router = useRouter();
 	const apiUtils = apiClient.useUtils();
 	const sharedMutationOptions = {
@@ -63,7 +64,14 @@ export const UserForm: FC<UserFormProps> = ({ userData = defaultUserFormData }) 
 			router.push("/centrum-zarzadzania/uzytkownicy");
 		},
 	});
-	const updateUser = apiClient.identity.updateUser.useMutation(sharedMutationOptions);
+	const updateUser = apiClient.identity.updateUser.useMutation({
+		...sharedMutationOptions,
+		onSuccess: (data) => {
+			sharedMutationOptions.onSuccess(data);
+
+			toast({ title: "Sukces!", message: "Zedytowano użytkownika.", type: ToastType.SUCCESS });
+		},
+	});
 	const { register, control, formState, handleSubmit, reset } = useForm<UserFormData>({
 		mode: "onChange",
 		values: userData,

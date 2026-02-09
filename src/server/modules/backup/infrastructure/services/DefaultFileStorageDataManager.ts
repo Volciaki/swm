@@ -1,8 +1,8 @@
-import type { GetAllAssortment } from "@/server/modules/assortment/application/use-cases/GetAllAssortment";
 import {
 	isFileEncryptedByBucket,
 	S3FileStorageBucket,
 } from "@/server/utils/files/infrastructure/persistence/S3FileStorage";
+import type { GetAllAssortmentDefinitions } from "@/server/modules/assortment/application/use-cases/GetAllAssortmentDefinitions";
 import type { GetAllReports } from "@/server/modules/reporting/application/use-cases/GetAllReports";
 import type { UploadFile } from "@/server/utils/files/application/use-cases/UploadFile";
 import type { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
@@ -18,7 +18,7 @@ import type {
 
 export class DefaultFileStorageDataManager implements FileStorageDataManager {
 	constructor(
-		private readonly getAllAssortment: GetAllAssortment,
+		private readonly getAllAssortmentDefinitions: GetAllAssortmentDefinitions,
 		private readonly getAllReports: GetAllReports,
 		private readonly getFile: GetFile,
 		private readonly fetchAssortmentImageFile: FetchFile,
@@ -102,18 +102,18 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 	}
 
 	async dump() {
-		const assortments = await this.getAllAssortment.execute();
+		const assortments = await this.getAllAssortmentDefinitions.execute(undefined, { skipAuthentication: true });
 		const reports = await this.getAllReports.execute();
 
 		const assortmentImageData = await this.getFilesDumpData<(typeof assortments)[number]>(
 			assortments,
-			(entity) => entity.definition.image?.id ?? null,
+			(entity) => entity.image?.id ?? null,
 			S3FileStorageBucket.ASSORTMENT_IMAGES,
 			this.fetchAssortmentImageFile
 		);
 		const assortmentQRCodeData = await this.getFilesDumpData<(typeof assortments)[number]>(
 			assortments,
-			(entity) => entity.definition.qrCode.id,
+			(entity) => entity.qrCode.id,
 			S3FileStorageBucket.QR_CODES,
 			this.fetchAssortmentQRCodeFile
 		);
@@ -147,15 +147,11 @@ export class DefaultFileStorageDataManager implements FileStorageDataManager {
 	}
 
 	async restore(dump: AccessedFileStorageDataDump) {
-		const assortments = await this.getAllAssortment.execute();
+		const assortments = await this.getAllAssortmentDefinitions.execute(undefined, { skipAuthentication: true });
 		const reports = await this.getAllReports.execute();
 
-		await this.deleteFiles(
-			assortments,
-			(entity) => entity.definition.image?.id ?? null,
-			this.deleteAssortmentImageFile
-		);
-		await this.deleteFiles(assortments, (entity) => entity.definition.qrCode.id, this.deleteAssortmentQRCodeFile);
+		await this.deleteFiles(assortments, (entity) => entity.image?.id ?? null, this.deleteAssortmentImageFile);
+		await this.deleteFiles(assortments, (entity) => entity.qrCode.id, this.deleteAssortmentQRCodeFile);
 		await this.deleteFiles(reports, (entity) => entity.file.id, this.deleteReportFile);
 
 		await this.uploadFiles(dump.assortments.images, this.uploadAssortmentImageFile, dump.context);

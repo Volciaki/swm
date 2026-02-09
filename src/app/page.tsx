@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { Button, Flex, FullHeight, Image, Paragraph, Link } from "@/ui/atoms";
 import { useAuthData } from "@/ui/providers";
 import { Block, Dialog } from "@/ui/molecules";
-import styles from "@/styles/home.module.scss";
 import { useMobile } from "@/ui/hooks";
+import styles from "@/styles/home.module.scss";
 
 type HomeBlockProps = {
 	title: string;

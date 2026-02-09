@@ -16,3 +16,4 @@ export * from "./VisualisationAction";
 export * from "./AssortmentCard";
 export * from "./QRCodeScanner";
 export * from "./ShelfCard";
+export * from "./ToastContainer";

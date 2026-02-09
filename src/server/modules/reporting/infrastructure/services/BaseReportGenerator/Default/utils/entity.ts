@@ -1,5 +1,6 @@
 import type { AssortmentVO } from "@/server/modules/reporting/domain/vo/AssortmentVO";
 import type { ShelfVO } from "@/server/modules/reporting/domain/vo/ShelfVO";
+import { Base64Mapper } from "@/server/utils";
 import type { PDFDocument, ReportGeneratorConstants } from "../type";
 import type { ImageOptions, ReportGeneratorUtils, ReportTemperatureExceededData, SharedContext } from "./type";
 import { formatDate } from "./shared";
@@ -35,9 +36,15 @@ export class DefaultReportGeneratorUtils implements ReportGeneratorUtils {
 
 	async remoteImage(url: string, x?: number, y?: number, options?: ImageOptions) {
 		const response = await fetch(url);
-		const buffer = await response.arrayBuffer();
+		const arrayBuffer = await response.arrayBuffer();
+		const buffer = Buffer.from(arrayBuffer);
 
-		this.document.image(buffer, x, y, options);
+		// We're converting the buffer to base 64 here as pdfkit only caches string values.
+		// See: https://github.com/foliojs/pdfkit/issues/722
+		const base64 = Base64Mapper.fromBuffer(buffer);
+		const base64String = `data:image/png;base64,${base64.value}`;
+
+		this.document.image(base64String, x, y, options);
 	}
 
 	async assortment(assortmentData: AssortmentVO, index: string, height?: number, compact?: boolean) {

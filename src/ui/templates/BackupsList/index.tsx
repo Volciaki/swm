@@ -6,7 +6,7 @@ import { apiClient } from "@/ui/providers";
 import type { APIError } from "@/ui/utils";
 import { defaultErrorHandler } from "@/ui/utils";
 import type { UseStateSetter } from "@/ui/types";
-import { useMobile } from "@/ui/hooks";
+import { ToastType, useMobile, useToast } from "@/ui/hooks";
 
 export type BackupsListProps = {
 	setIsBackupApplyPending: UseStateSetter<boolean>;
@@ -17,6 +17,7 @@ export const BackupsList: FC<BackupsListProps> = ({ setIsBackupApplyPending, bac
 	const applyBackupById = apiClient.backups.applyById.useMutation();
 	const backups = apiClient.backups.getAll.useQuery();
 	const { mobile } = useMobile();
+	const { toast } = useToast();
 
 	// A Record of IDs and error messages.
 	const [applyBackupErrors, setApplyBackupErrors] = useState<Record<string, string>>();
@@ -58,8 +59,9 @@ export const BackupsList: FC<BackupsListProps> = ({ setIsBackupApplyPending, bac
 			setApplyBackupErrorById(backup, "");
 			setBackupLoadingById(backup, false);
 			setIsBackupApplyPending(false);
+			toast({ title: "Sukces!", message: "Zastosowano kopie zapasową.", type: ToastType.SUCCESS });
 		},
-		[applyBackupById, setApplyBackupErrors, setApplyBackupLoadings, setIsBackupApplyPending]
+		[applyBackupById, setApplyBackupErrors, setApplyBackupLoadings, setIsBackupApplyPending, toast]
 	);
 
 	return (
@@ -81,11 +83,17 @@ export const BackupsList: FC<BackupsListProps> = ({ setIsBackupApplyPending, bac
 								<ListItem>
 									<Flex align={"center"} justify={"space-between"} fullWidth>
 										<Paragraph fontSize={mobile ? 1.25 : 1.75}>
-											{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[0]}
+											{mobile ? (
+												<>
+													{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[0]}
 
-											<br />
+													<br />
 
-											{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[1]}
+													{formatDateAsHumanReadable(new Date(backup.dateTimestamp)).split(" - ")[1]}
+												</>
+											) : (
+												<>{formatDateAsHumanReadable(new Date(backup.dateTimestamp))}</>
+											)}
 										</Paragraph>
 
 										<Button onClick={async () => await backupApplyHandler(backup)} disabled={backupActionsRunning}>

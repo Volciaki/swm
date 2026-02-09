@@ -16,6 +16,7 @@ const TABLES_TO_INCLUDE = [
 	"reports",
 	"shelves",
 	"temperature_readings",
+	"weight_readings",
 ];
 
 export const shellCommandAccessible = async (command: string): Promise<boolean> => {

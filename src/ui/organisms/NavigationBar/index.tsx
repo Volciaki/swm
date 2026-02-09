@@ -11,7 +11,7 @@ export const NavigationBar: FC = () => {
 	const { mobile } = useMobile();
 	const { authData, refreshAuthData } = useAuthData();
 	const logout = apiClient.identity.logout.useMutation();
-	const isAuthenticated = authData !== undefined;
+	const isAuthenticated = authData !== null;
 	const routes = useMemo(
 		() => (isAuthenticated ? routeDefinitions.loggedIn : routeDefinitions.unauthenticated),
 		[isAuthenticated]

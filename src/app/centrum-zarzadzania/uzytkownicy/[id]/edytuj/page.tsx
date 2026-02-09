@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { UserForm } from "@/ui/organisms";
 import { BackButton, PageHeader } from "@/ui/molecules";
-import { Flex, FullHeight, Paragraph, Loading } from "@/ui/atoms";
+import { Flex, FullHeight, Loading, FormError } from "@/ui/atoms";
 import { apiClient, useAuthData } from "@/ui/providers";
 import { getPolishErrorMessageByMetadata } from "@/ui/utils";
 import { useMobile } from "@/ui/hooks";
@@ -50,9 +50,7 @@ const EditUser = () => {
 				{user.isLoading && <Loading />}
 
 				{user.isError && user.error.data?.metadata && (
-					<Paragraph fontSize={mobile ? 1.25 : 2} variant={"danger"}>
-						{`${getPolishErrorMessageByMetadata(user.error.data?.metadata)}`}
-					</Paragraph>
+					<FormError>{`${getPolishErrorMessageByMetadata(user.error.data?.metadata)}`}</FormError>
 				)}
 			</Flex>
 		</FullHeight>
