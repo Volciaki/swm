@@ -11,7 +11,7 @@ const ToastContainerCloseButton = ({ closeToast }: CloseButtonProps) => (
 
 export const ToastContainer: FC = () => (
 	<ToastContainerUpstream
-		position={"top-left"}
+		position={"top-right"}
 		autoClose={3000}
 		closeOnClick={false}
 		closeButton={ToastContainerCloseButton}

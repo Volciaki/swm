@@ -15,6 +15,7 @@ const MINIMAL_AMOUNT_OF_SHELVES = 4;
 
 export class DeleteShelf {
 	constructor(
+		// TODO: Delete weight readings here.
 		private readonly shelfHelper: ShelfHelper,
 		private readonly shelfRepository: ShelfRepository,
 		private readonly temperatureReadingRepository: TemperatureReadingRepository

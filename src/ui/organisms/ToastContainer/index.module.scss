@@ -3,17 +3,18 @@
 .toast {
     --toastify-color-progress-light: #{$primary};
     --toastify-color-progress-bgo: 0.5;
-    --toastify-toast-bd-radius: calc(#{$border-radius} / 4);
     --toastify-text-color-light: #{$text};
 
     background-color: $background-lightened;
-    border: solid calc($border-size * 0.75) $border;
     border-radius: $border-radius;
+    width: 25rem;
+    display: flex;
+    gap: 0.5rem;
+    padding: $padding;
 }
 
 .close {
     cursor: pointer;
-    right: $padding;
     transition: color $transition;
 
     &:hover {
@@ -22,13 +23,20 @@
 }
 
 .container {
+    --toastify-z-index: 3;
+
     top: calc($navigation-height-desktop + $padding);
-    left: $padding;
+    right: $padding;
 }
 
 @media (max-width: $mobile-width) {
     .container {
-        max-width: calc(100vw - $padding * 2);
+        width: calc(100vw - $padding * 2);
         top: calc($navigation-height-mobile + $padding);
+    }
+
+    .toast {
+        max-width: calc(100vw - $padding * 2);
+        left: $padding;
     }
 }

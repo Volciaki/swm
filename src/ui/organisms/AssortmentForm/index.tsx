@@ -8,7 +8,7 @@ import { Button, Flex, FormError, Loading, Paragraph, Separator, Switch, Image }
 import type { APIError } from "@/ui/utils";
 import { blobToBase64, defaultErrorHandler, floatOnlyValidator, getPolishErrorMessageByMetadata } from "@/ui/utils";
 import { apiClient } from "@/ui/providers";
-import { useMobile } from "@/ui/hooks";
+import { ToastType, useMobile, useToast } from "@/ui/hooks";
 import { FormFields } from "../FormFields";
 import { ImageUpload } from "../ImageUpload";
 import commonStyles from "../../../styles/common.module.scss";
@@ -34,6 +34,7 @@ export type AssortmentFormProps = {
 export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 	const router = useRouter();
 	const { mobile } = useMobile();
+	const { toast } = useToast();
 
 	const apiUtils = apiClient.useUtils();
 	const existing = definitionId !== undefined;
@@ -54,7 +55,13 @@ export const AssortmentForm: FC<AssortmentFormProps> = ({ definitionId }) => {
 			if (getAssortment.data) router.push("/centrum-zarzadzania/wizualizacja/asortymenty");
 		},
 	});
-	const updateAssortment = apiClient.storage.updateAssortment.useMutation(sharedMutationOptions);
+	const updateAssortment = apiClient.storage.updateAssortment.useMutation({
+		...sharedMutationOptions,
+		onSuccess: () => {
+			sharedMutationOptions.onSuccess();
+			toast({ title: "Sukces!", message: "Pomyślnie zedytowano asortyment.", type: ToastType.SUCCESS });
+		},
+	});
 	const createAssortment = apiClient.storage.createAssortment.useMutation({
 		...sharedMutationOptions,
 		onSuccess: (data) => {

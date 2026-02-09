@@ -52,13 +52,20 @@ const findPresetByAmountOfSeconds = (seconds?: number): BackupScheduleConfigurat
 export const ConfigureBackupSchedule: FC = () => {
 	const getBackupSettings = apiClient.backups.getSettings.useQuery();
 	const setBackupSettings = apiClient.backups.setSettings.useMutation({
-		onError: (e) => defaultErrorHandler(e, (errorMessage) => setModifyBackupSettingsError(errorMessage)),
+		onError: (e) => {
+			defaultErrorHandler(e, (errorMessage) => setModifyBackupSettingsError(errorMessage));
+			setModifyBackupSettingsSuccess(false);
+		},
+		onSuccess: () => {
+			setModifyBackupSettingsSuccess(true);
+		},
 	});
 
 	const [userScheduleConfigurationPreset, setUserScheduleConfigurationPreset] = useState<
 		BackupScheduleConfigurationPreset | undefined
 	>();
 	const [modifyBackupSettingsError, setModifyBackupSettingsError] = useState<string | undefined>();
+	const [modifyBakcupSettingsSuccess, setModifyBackupSettingsSuccess] = useState(false);
 
 	const scheduleConfigurationPreset =
 		userScheduleConfigurationPreset ?? findPresetByAmountOfSeconds(getBackupSettings.data?.takeBackupsEverySeconds);
@@ -109,6 +116,10 @@ export const ConfigureBackupSchedule: FC = () => {
 						{"Potwierdź"}
 					</Paragraph>
 				</Button>
+
+				{modifyBakcupSettingsSuccess && !setBackupSettings.isPending && (
+					<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Sukces!"}</Paragraph>
+				)}
 
 				{modifyBackupSettingsError && <FormError>{modifyBackupSettingsError}</FormError>}
 

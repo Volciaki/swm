@@ -13,7 +13,7 @@ import {
 	integerOnlyValidator,
 } from "@/ui/utils";
 import { apiClient } from "@/ui/providers";
-import { useMobile } from "@/ui/hooks";
+import { ToastType, useMobile, useToast } from "@/ui/hooks";
 import { FormFields } from "../FormFields";
 import commonStyles from "../../../styles/common.module.scss";
 
@@ -39,6 +39,7 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 	const router = useRouter();
 
 	const { mobile } = useMobile();
+	const { toast } = useToast();
 	const apiUtils = apiClient.useUtils();
 	const existing = shelfId !== undefined;
 	const getShelf = apiClient.storage.getShelf.useQuery({ id: shelfId ?? "" }, { enabled: existing });
@@ -57,7 +58,13 @@ export const ShelfForm: FC<ShelfFormProps> = ({ shelfId }) => {
 			router.push("/centrum-zarzadzania/wizualizacja");
 		},
 	});
-	const updateShelf = apiClient.storage.updateShelf.useMutation(sharedMutationOptions);
+	const updateShelf = apiClient.storage.updateShelf.useMutation({
+		...sharedMutationOptions,
+		onSuccess: () => {
+			sharedMutationOptions.onSuccess();
+			toast({ title: "Sukces!", message: "Pomyślnie zedytowano regał!", type: ToastType.SUCCESS });
+		},
+	});
 	const createShelf = apiClient.storage.createShelf.useMutation({
 		...sharedMutationOptions,
 		onSuccess: (data) => {
