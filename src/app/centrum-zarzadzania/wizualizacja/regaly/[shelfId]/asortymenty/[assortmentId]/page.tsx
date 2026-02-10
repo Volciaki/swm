@@ -101,7 +101,7 @@ const ShelfAssortment: FC = () => {
 									}
 
 									<Link
-										href={`/centrum-zarzadzania/wizualizacja/regaly/${assortment.data.shelfId}/asortymenty/${nextAssortmentToBeTakenDown.data.id}`}
+										href={`/centrum-zarzadzania/wizualizacja/regaly/${nextAssortmentToBeTakenDown.data.shelfId}/asortymenty/${nextAssortmentToBeTakenDown.data.id}`}
 									>
 										{"tutaj"}
 									</Link>

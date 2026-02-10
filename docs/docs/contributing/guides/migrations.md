@@ -18,7 +18,7 @@ This will:
 2. Compare it to the one defined in the codebase.
 3. Generate any SQL necessary to modify the current database schema to match the one defined in code.
 
-Here's how a generated migration looks like:
+Here's how a ready migration looks like:
 
 ```ts
 import type { MigrationInterface, QueryRunner } from "typeorm";

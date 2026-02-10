@@ -32,7 +32,7 @@ export const GenerateReportButton = <T extends TRPCMutation = TRPCMutation>({
 
 	return (
 		<>
-			<Button onClick={async () => await onClickHandler()}>
+			<Button onClick={async () => await onClickHandler()} disabled={isLoading}>
 				<Paragraph fontSize={mobile ? 1.25 : 1.5}>{text}</Paragraph>
 			</Button>
 
