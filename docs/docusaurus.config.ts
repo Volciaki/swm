@@ -9,9 +9,8 @@ const config: Config = {
 	future: {
 		v4: true,
 	},
-	url: process.env.URL ?? "https://volciaki.palubiak.eu",
-	// For example `/docs/`.
-	baseUrl: process.env.URL_PREFIX ?? "/",
+	url: "https://volciaki.palubiak.eu",
+	baseUrl: "/",
 	organizationName: "volciaki",
 	projectName: "primus-inter-pares-2026",
 	onBrokenLinks: "throw",
