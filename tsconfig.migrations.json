@@ -1,7 +1,8 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist/migrations"
+    "outDir": "dist/migrations",
+    "types": ["node"]
   },
   "include": [
     "./src/server/database/init.ts"
