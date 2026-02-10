@@ -2,6 +2,9 @@
 
 ## Development Environment
 
+> [!WARNING]  
+> This project was built solely on Linux. Nobody in the team uses Windows, and we couldn't do much to ensure compatibility with non-Unix systems. Please be aware that you might face some issues while trying to get it up and running on other systems.
+
 ### Setup
 
 This project was built with:
@@ -35,9 +38,6 @@ Running the first command will cause the following ports to become responsive:
 - [localhost:3002](http://localhost:3002) - Mail Server UI ([MailHog](https://github.com/mailhog/MailHog)),
 - _localhost:9000_ - Storage Service ([MinIO](https://github.com/minio/minio)),
 - [localhost:3003](http://localhost:3003) - Storage Service UI ([MinIO Console](https://github.com/minio/object-browser)),
+- [localhost:3004](http://localhost:3004) - Documentation ([Docusaurus](https://github.com/facebook/docusaurus)),
 
-I've also left a [Hoppscotch](https://github.com/hoppscotch/hoppscotch) collection in `hoppscotch.json`. You may find it useful if you wish to play around with the API.
-
-For more insights visit our [full documentation](https://volciaki.khenzii.dev/docs).
-
-Have fun! :)
+For more insights please visit the documentation, either running [locally](http://localhost:3004) after finishing above setup, or a [publicly hosted instance](https://volciaki.palubiak.eu/docs).
