@@ -14,6 +14,7 @@ import type { FetchFile } from "@/server/utils/files/application/use-cases/Fetch
 import type { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
 import type { UUIDManager } from "@/server/utils";
 import { UUID, Base64Mapper, Base64 } from "@/server/utils";
+import type { CreateFileReference } from "@/server/utils/files/application/use-cases/CreateFileReference";
 import { Backup } from "../../domain/entities/Backup";
 import type { BackupRepository } from "../../domain/repositories/BackupRepository";
 import type { AccessedFileStorageDataDump, FileStorageDataManager } from "../services/FileStorageDataManager";
@@ -22,10 +23,6 @@ import { BackupNotFoundError } from "../errors/BackupNotFoundError";
 import { InvalidBackupError } from "../errors/InvalidBackupError";
 import type { BackupDTO } from "../dto/shared/BackupDTO";
 import { BackupMapper } from "../../infrastructure/mappers/BackupMapper";
-
-type FullBackup = BackupDTO & {
-	base64: Base64;
-};
 
 type BackupZIPUnpackedContent = {
 	database: DatabaseDataDump;
@@ -50,7 +47,8 @@ export class DefaultBackupHelper implements BackupHelper {
 		private readonly uuidManager: UUIDManager,
 		private readonly backupRepository: BackupRepository,
 		private readonly getFile: GetFile,
-		private readonly fetchBackupFile: FetchFile
+		private readonly fetchBackupFile: FetchFile,
+		private readonly createBackupFileReference: CreateFileReference
 	) {}
 
 	private async fileGetter(id: UUID) {
@@ -58,41 +56,19 @@ export class DefaultBackupHelper implements BackupHelper {
 		return FileReferenceMapper.fromDTOToEntity(dto);
 	}
 
-	private async fetchAllBackups(): Promise<FullBackup[]> {
-		const allBackups = await this.backupRepository.getAll(async (id) => await this.fileGetter(id));
-		const fullBackups = [];
-
-		for (const backup of allBackups) {
-			const { base64: base64String } = await this.fetchBackupFile.execute(
-				{
-					id: backup.file.id.value,
-					metadata: { bucket: S3FileStorageBucket.BACKUPS },
-				},
-				{ skipAuthentication: true }
-			);
-			fullBackups.push({
-				...BackupMapper.fromEntityToDTO(backup),
-				base64: Base64.fromString(base64String),
-			});
-		}
-
-		return fullBackups;
+	private async fetchAllBackups(): Promise<BackupDTO[]> {
+		const backups = await this.backupRepository.getAll(async (id) => await this.fileGetter(id));
+		return backups.map((backup) => BackupMapper.fromEntityToDTO(backup));
 	}
 
-	// The `backups` table is purposefully omitted from database dumps. We do have however to dump `file_references`, as other
+	// The `backups` table is purposefully omitted from database dumps. However, we do have to dump `file_references`, as other
 	// tables depend on it. Due to this, applying a backup can cause the newer ones to stop working. Calling this afterwards fixes it.
-	private async recreateAllBackupFileReferences(backups: FullBackup[]) {
+	private async recreateAllBackupFileReferences(backups: BackupDTO[]) {
 		for (const backup of backups) {
-			await this.uploadBackupFile.execute(
-				{
-					...backup.file,
-					contentBase64: backup.base64.value,
-				},
-				{
-					skipAuthentication: true,
-					predefinedId: UUID.fromString(backup.file.id),
-				}
-			);
+			await this.createBackupFileReference.execute(backup.file, {
+				skipAuthentication: true,
+				predefinedId: UUID.fromString(backup.file.id),
+			});
 		}
 	}
 
@@ -241,8 +217,8 @@ export class DefaultBackupHelper implements BackupHelper {
 		const zip = await openZIPByBuffer(backupBuffer);
 		const backupData = await this.handleReadableZipFile(zip);
 
-		await this.databaseDataManager.restore(backupData.database);
 		await this.fileStorageDataManager.restore(backupData.fileStorageDump);
+		await this.databaseDataManager.restore(backupData.database);
 
 		await this.recreateAllBackupFileReferences(currentBackups);
 	}

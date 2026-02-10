@@ -6,6 +6,7 @@ import { DeleteFile } from "@/server/utils/files/application/use-cases/DeleteFil
 import { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
 import { GetAllAssortmentDefinitions } from "@/server/modules/assortment/application/use-cases/GetAllAssortmentDefinitions";
+import { CreateFileReference } from "@/server/utils/files/application/use-cases/CreateFileReference";
 import type { Services } from "../../get";
 
 export const getDefaultBackupHelperPreset = (services: Services): BackupHelper => {
@@ -85,6 +86,7 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 	const databaseDataManager = services.utils.databaseDataManager.default;
 	const uploadBackupFile = new UploadFile(backupsFileManager);
 	const fetchBackupFile = new FetchFile(fileHelper, backupsFileManager);
+	const createBackupFileReference = new CreateFileReference(backupsFileManager);
 
 	return services.helpers.backup.default.get(
 		fileStorageDataManager,
@@ -93,6 +95,7 @@ export const getDefaultBackupHelperPreset = (services: Services): BackupHelper =
 		uuidManager,
 		backupRepository,
 		getFile,
-		fetchBackupFile
+		fetchBackupFile,
+		createBackupFileReference
 	);
 };

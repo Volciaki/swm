@@ -6,6 +6,7 @@ import type { UploadFile } from "@/server/utils/files/application/use-cases/Uplo
 import type { FetchFile } from "@/server/utils/files/application/use-cases/FetchFile";
 import type { GetFile } from "@/server/utils/files/application/use-cases/GetFile";
 import type { UUIDManager } from "@/server/utils";
+import type { CreateFileReference } from "@/server/utils/files/application/use-cases/CreateFileReference";
 import type { GetServicesContext } from "../../context";
 
 export const getDefaultBackupHelper = (ctx: GetServicesContext) => {
@@ -17,7 +18,8 @@ export const getDefaultBackupHelper = (ctx: GetServicesContext) => {
 			uuidManager: UUIDManager,
 			backupRepository: BackupRepository,
 			getFile: GetFile,
-			fetchBackupFile: FetchFile
+			fetchBackupFile: FetchFile,
+			createBackupFileReference: CreateFileReference
 		) =>
 			new DefaultBackupHelper(
 				fileStorageDataManager,
@@ -26,7 +28,8 @@ export const getDefaultBackupHelper = (ctx: GetServicesContext) => {
 				uuidManager,
 				backupRepository,
 				getFile,
-				fetchBackupFile
+				fetchBackupFile,
+				createBackupFileReference
 			),
 	};
 };
