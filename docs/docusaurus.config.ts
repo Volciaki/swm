@@ -10,7 +10,7 @@ const config: Config = {
 		v4: true,
 	},
 	url: "https://volciaki.palubiak.eu",
-	baseUrl: "/docs/",
+	baseUrl: process.env.NODE_ENV === "development" ? "/" : "/docs/",
 	organizationName: "volciaki",
 	projectName: "primus-inter-pares-2026",
 	onBrokenLinks: "throw",
