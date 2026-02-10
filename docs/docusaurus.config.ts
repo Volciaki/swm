@@ -10,7 +10,7 @@ const config: Config = {
 		v4: true,
 	},
 	url: "https://volciaki.palubiak.eu",
-	baseUrl: "/",
+	baseUrl: "/docs/",
 	organizationName: "volciaki",
 	projectName: "primus-inter-pares-2026",
 	onBrokenLinks: "throw",
