@@ -64,6 +64,9 @@ const config: Config = {
 			style: "dark",
 			copyright: "Created by Volciaki (2026)",
 		},
+		colorMode: {
+			defaultMode: "dark",
+		},
 	} satisfies Preset.ThemeConfig,
 };
 

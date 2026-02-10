@@ -10,10 +10,10 @@ jobs:
     name: Checks
     uses: ./.github/workflows/check.yml
 
-  deployment:
+  app-deployment:
     needs:
       - checks
-    name: 🚀 Deploy
+    name: 🚀 Deploy app
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: Production
+          env: Production - app
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -49,6 +49,60 @@ jobs:
       
       - name: Push Docker image
         run: docker push ghcr.io/volciaki/primus-inter-pares-2026:latest
+
+      # TODO: No deployment webhook yet.
+      # - name: Trigger Deployment Webhook
+      #   run: |
+      #     curl "${{ secrets.DEPLOY_WEBHOOK_URL }}"
+
+      - name: Update Deployment Status
+        uses: bobheadxi/deployments@v1
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          env: ${{ steps.deployment.outputs.env }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
+  docs-deployment:
+    needs:
+      - checks
+    name: 🚀 Deploy documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      # This step creates a new deployment, check them out here:
+      # https://github.com/volciaki/primus-inter-pares-2026/deployments
+      - name: Start Deployment
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: Production - documentation
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Login to Github's Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: yarn docker:docs
+      
+      - name: Push Docker image
+        run: docker push ghcr.io/volciaki/primus-inter-pares-2026/docs:latest
 
       # TODO: No deployment webhook yet.
       # - name: Trigger Deployment Webhook

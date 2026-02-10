@@ -2,7 +2,7 @@
 
 Hello there! You're currently browsing SWM's documentation. This website is meant to serve as an entrypoint for anyone willing to dive deeper into how the project functions, in what ways it's currently hosted, learn its history, and so on.
 
-If you're reading this you've either managed to start up the apps yourself locally (in which case: Congratulations!), or you've reached this page via a hosted instance. If it was the former, we strongly recommend checking out the [Contributing]("/contributing") page. You'll find solutions to many unforeseen gotchas there, which will prove useful if you'll happen to write code. If, on the other hand, you're just looking around, feel free to give [Design]("/design") a read. It goes into details on how the system functions, and could be engaging to study if you're into topics such as Software Design.
+If you're reading this you've either managed to start up the apps yourself locally (in which case: Congratulations!), or you've reached this page via a hosted instance. If it was the former, we strongly recommend checking out the [Contributing](/contributing) page. You'll find solutions to many unforeseen gotchas there, which will prove useful if you'll happen to write code. If, on the other hand, you're just looking around, feel free to give [Design](/design) a read. It goes into details on how the system functions, and could be engaging to study if you're into topics such as Software Design.
 
 ## On SWM
 
