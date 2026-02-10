@@ -4,8 +4,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-	title: "My Site",
-	tagline: "Dinosaurs are cool",
+	title: "SWM Documentation",
 	favicon: "favicon.ico",
 	future: {
 		v4: true,
@@ -44,15 +43,15 @@ const config: Config = {
 			items: [
 				{
 					type: "docSidebar",
-					sidebarId: "tutorialSidebar",
+					sidebarId: "contributingSidebar",
 					position: "left",
-					label: "Tutorial",
+					label: "Contributing",
 				},
 				{
 					type: "docSidebar",
-					sidebarId: "testSidebar",
+					sidebarId: "designSidebar",
 					position: "left",
-					label: "second",
+					label: "Design",
 				},
 				{
 					href: "https://github.com/volciaki/primus-inter-pares-2026",
