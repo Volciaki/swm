@@ -9,7 +9,7 @@ const config: Config = {
 	future: {
 		v4: true,
 	},
-	url: "https://your-docusaurus-site.example.com",
+	url: process.env.URL ?? "https://volciaki.palubiak.eu",
 	// For example `/docs/`.
 	baseUrl: process.env.URL_PREFIX ?? "/",
 	organizationName: "volciaki",
