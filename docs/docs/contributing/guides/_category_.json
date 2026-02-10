@@ -1,0 +1,8 @@
+{
+  "label": "Guides",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Some tips and tricks regarding working on the project. All the things that are not so obvious, yet required to meaningfully contribute, will be added here."
+  }
+}
