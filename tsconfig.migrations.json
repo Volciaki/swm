@@ -6,7 +6,7 @@
   "include": [
     "./src/server/database/init.ts"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "docs"],
   "tsc-alias": {
       "resolveFullPaths": true,
       "verbose": true

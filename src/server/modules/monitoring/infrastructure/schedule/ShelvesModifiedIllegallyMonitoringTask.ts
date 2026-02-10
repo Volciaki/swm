@@ -31,7 +31,7 @@ export class ShelvesModifiedIllegallyMonitoringTask implements SchedulerTask {
 
 			await this.createNotification.execute({
 				type: NotificationType.ALERT,
-				title: "Wykryto nieautoryzowane zdjęcie przedmiotu z magazynu.",
+				title: "Wykryto nieautoryzowane zdjęcie przedmiotu z magazynu",
 				message: `Szafka "${shelf.name}" podczas ostatniej autoryzowanej modyfikacji posiadała łączną wage ${shelf.lastRecordedLegalWeightKg}kg. Teraz jednak, zawarte w niej asortymenty ważą ${totalShelfWeightKg}kg. Świadczy to o tym, że musiało dojść do modyfikacji stanu magazynu, bez powiadomienia o tym systemu, lub awarii niektórych czujników (jeśli takie występują). Te powiadomienie nie zostanie wysłane ponownie, a system od teraz założy, że nowa waga jest legalna. Jeśli utracony przedmiot zostanie przywrócony, powinien on zostać dodany według klasycznych procedur obsługi systemu.`,
 			});
 			await this.refreshShelfLegalWeight.execute({ id: shelf.id, assortmentContext });
