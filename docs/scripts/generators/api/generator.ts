@@ -45,7 +45,7 @@ const getCollection = (): { folders: HoppscotchFolder[] } => {
 	const fileString = fs.readFileSync(filePath, "utf-8");
 	const file = JSON.parse(fileString);
 
-	const folder = file.find((folder: { name: string }) => folder.name === "primus-inter-pares-2026");
+	const folder = file.find((folder: { name: string }) => folder.name === "swm");
 	return { folders: folder.folders };
 };
 

@@ -50,4 +50,4 @@ export class WeightReadings1770429541463 implements MigrationInterface {
 }
 ```
 
-You might have to reformat it (to match ESLint rules), and then import it in [`src/server/database/migrations/index.ts`](https://github.com/Volciaki/primus-inter-pares-2026/blob/master/src/server/database/migrations/index.ts).
+You might have to reformat it (to match ESLint rules), and then import it in [`src/server/database/migrations/index.ts`](https://github.com/Volciaki/swm/blob/master/src/server/database/migrations/index.ts).

@@ -1,5 +1,5 @@
 {
-  "name": "primus-inter-pares-2026",
+  "name": "swm",
   "version": "0.1.0",
   "private": true,
   "workspaces": [
@@ -11,7 +11,7 @@
     "build:app": "next build",
     "build:docs": "yarn workspace docs build",
     "docker": "yarn docker:app && yarn docker:docs",
-    "docker:app": "docker build -t ghcr.io/volciaki/primus-inter-pares-2026:latest .",
+    "docker:app": "docker build -t ghcr.io/volciaki/swm:latest .",
     "docker:docs": "yarn workspace docs docker",
     "start": "concurrently --prefix 'none' 'yarn start:app' 'yarn start:schedule' 'yarn start:docs'",
     "start:app": "node .next/standalone/server.js",

@@ -12,7 +12,7 @@ const config: Config = {
 	url: "https://volciaki.palubiak.eu",
 	baseUrl: process.env.NODE_ENV === "development" ? "/" : "/docs/",
 	organizationName: "volciaki",
-	projectName: "primus-inter-pares-2026",
+	projectName: "swm",
 	onBrokenLinks: "throw",
 	i18n: {
 		defaultLocale: "en",
@@ -65,7 +65,7 @@ const config: Config = {
 					label: "API",
 				},
 				{
-					href: "https://github.com/volciaki/primus-inter-pares-2026",
+					href: "https://github.com/volciaki/swm",
 					label: "GitHub",
 					position: "right",
 				},

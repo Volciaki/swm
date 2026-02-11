@@ -48,7 +48,7 @@ Fill out the data you've previously entered, and press "Send". You'll get a resp
 
 This `authenticationToken` should then later be used in your headers when sending requests. We can configure Hoppscotch to do that by:
 
-1. Right-clicking the "primus-inter-pares" folder in your tree.
+1. Right-clicking the "swm" folder in your tree.
 2. Selecting "properties".
 3. Adding a new header with those fields:
 - Key: `Cookie`,
