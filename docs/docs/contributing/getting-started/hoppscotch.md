@@ -26,7 +26,7 @@ To begin using it you should download Hoppscotch (well, duh) and use the "Import
 
 Our API expects authentication tokens to be defined via a cookie with a name of `$AUTHENTICATION_COOKIE_NAME`. By default that environment variable is set to: `development-authentication-cookie`. If you'd want to use Hoppscotch to access endpoints requiring authentication, please follow below steps.
 
-Assuming that you have already created an user, as instruced in the [previous page](../adding-your-first-user), you should navigate to the `identity.login` request:
+Assuming that you have already created an user, as instruced in the <a href={useBaseUrl("/contributing/getting-started/adding-your-first-user")}>previous page</a>, you should navigate to the `identity.login` request:
 
 <div
   style={{
