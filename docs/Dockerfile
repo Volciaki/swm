@@ -1,11 +1,13 @@
 FROM node:22-alpine3.22 AS base
 
 
-COPY package.json .
+COPY ./docs/package.json yarn.lock .yarnrc.yml .
 
 RUN corepack enable && yarn install --mode=production --immutable
 
-COPY . .
+COPY ./hoppscotch.json .
+
+COPY ./docs .
 
 RUN corepack enable && yarn build
 

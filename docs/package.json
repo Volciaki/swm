@@ -7,7 +7,7 @@
     "build": "./scripts/build.sh",
     "generate:api": "./scripts/generators/api/index.sh",
     "start": "docusaurus serve --port 3004",
-    "docker": "docker build -t ghcr.io/volciaki/primus-inter-pares-2026/docs:latest .",
+    "docker": "docker build -t ghcr.io/volciaki/primus-inter-pares-2026/docs:latest -f Dockerfile ..",
     "typecheck": "tsc"
   },
   "dependencies": {
