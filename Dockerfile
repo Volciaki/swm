@@ -52,7 +52,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ENV SKIP_ENV_VALIDATION true
 ENV NODE_ENV production
 
-RUN corepack enable && yarn build
+RUN corepack enable && yarn build:app
 
 RUN yarn global add typescript@^5 tsc-alias@^1.8.16
 RUN tsc -p tsconfig.migrations.json \
