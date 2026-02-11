@@ -12,5 +12,6 @@ RUN corepack enable && yarn build
 EXPOSE 3004
 
 ENV PATH="./node_modules/.bin:${PATH}"
+ENV NODE_ENV="production"
 
 CMD ["yarn", "start"]
