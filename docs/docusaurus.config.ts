@@ -59,6 +59,12 @@ const config: Config = {
 					label: "Usage",
 				},
 				{
+					type: "docSidebar",
+					sidebarId: "apiSidebar",
+					position: "left",
+					label: "API",
+				},
+				{
 					href: "https://github.com/volciaki/primus-inter-pares-2026",
 					label: "GitHub",
 					position: "right",
