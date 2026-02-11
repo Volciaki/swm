@@ -18,6 +18,7 @@ export const productionEnvironment: Environment = {
 		username: process.env.DATABASE_USERNAME!,
 		password: process.env.DATABASE_PASSWORD!,
 		name: process.env.DATABASE_NAME!,
+		sslEnabled: Boolean(process.env.DATABASE_SSL_ENABLED),
 	},
 	authentication: {
 		secret: process.env.AUTHENTICATION_SECRET!,

@@ -18,6 +18,7 @@ export const developmentEnvironment: Environment = {
 		username: process.env.DATABASE_USERNAME ?? "development-user",
 		password: process.env.DATABASE_PASSWORD ?? "development-password",
 		name: process.env.DATABASE_NAME ?? "db",
+		sslEnabled: Boolean(process.env.DATABASE_SSL_ENABLED ?? false),
 	},
 	authentication: {
 		secret: process.env.AUTHENTICATION_SECRET ?? "development-authentication-secret",

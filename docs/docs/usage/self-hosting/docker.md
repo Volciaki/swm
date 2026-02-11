@@ -70,6 +70,7 @@ services:
       DATABASE_USERNAME: <database-user>
       DATABASE_PASSWORD: <database-password>
       DATABASE_NAME: db
+      DATABASE_SSL_ENABLED: # e.g.: 1 - leave empty if communicating locally.
       AUTHENTICATION_SECRET: <secure-key-1>
       AUTHENTICATION_COOKIE_NAME: volciaki-authentication-cookie
       AUTHENTICATION_COOKIE_EXPIRES_IN: 12h

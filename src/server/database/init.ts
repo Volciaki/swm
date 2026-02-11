@@ -14,6 +14,7 @@ export const appDataSource = new DataSource({
 	username: environment.database.username,
 	password: environment.database.password,
 	database: environment.database.name,
+	ssl: environment.database.sslEnabled,
 	synchronize: environment.type === EnvironmentType.DEVELOPMENT,
 	logging: false,
 	migrations,

@@ -23,6 +23,7 @@ export type Environment = {
 		username: string;
 		password: string;
 		name: string;
+		sslEnabled: boolean;
 	};
 	authentication: {
 		secret: string;
