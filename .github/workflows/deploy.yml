@@ -1,3 +1,4 @@
+# TODO: use a matrix here
 name: "Deployment"
 on:
   push:
@@ -18,7 +19,7 @@ jobs:
 
     steps:
       # This step creates a new deployment, check them out here:
-      # https://github.com/volciaki/primus-inter-pares-2026/deployments
+      # https://github.com/volciaki/swm/deployments
       - name: Start Deployment
         uses: bobheadxi/deployments@v1
         id: deployment
@@ -48,7 +49,7 @@ jobs:
 
       
       - name: Push Docker image
-        run: docker push ghcr.io/volciaki/primus-inter-pares-2026:latest
+        run: docker push ghcr.io/volciaki/swm:latest
 
       # TODO: No deployment webhook yet.
       # - name: Trigger Deployment Webhook
@@ -73,7 +74,7 @@ jobs:
 
     steps:
       # This step creates a new deployment, check them out here:
-      # https://github.com/volciaki/primus-inter-pares-2026/deployments
+      # https://github.com/volciaki/swm/deployments
       - name: Start Deployment
         uses: bobheadxi/deployments@v1
         id: deployment
@@ -102,7 +103,7 @@ jobs:
         run: yarn docker:docs
       
       - name: Push Docker image
-        run: docker push ghcr.io/volciaki/primus-inter-pares-2026/docs:latest
+        run: docker push ghcr.io/volciaki/swm/docs:latest
 
       # TODO: No deployment webhook yet.
       # - name: Trigger Deployment Webhook

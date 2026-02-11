@@ -1,4 +1,8 @@
-<h1 align="center">Primus Inter Pares 2026 - Volciaki</h1>
+<h1 align="center">SWM</h1>
+
+<div align="center">
+  <img src="assets/home.png" alt="Preview of the homepage">
+</div>
 
 ## Development Environment
 

@@ -52,7 +52,7 @@ services:
       - minio-storage:/data
 
   app:
-    image: ghcr.io/volciaki/primus-inter-pares-2026:latest
+    image: ghcr.io/volciaki/swm:latest
     restart: always
     ports:
       - "3000:3000"
