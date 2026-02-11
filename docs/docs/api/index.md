@@ -4,7 +4,7 @@ sidebar_position: 1
 
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-# Introduction
+# Intro
 
 Here you will find signatures of every API route, along with descriptions where deemed necessary.
 
