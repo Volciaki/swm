@@ -97,7 +97,7 @@ const Home: FC = () => {
 
 	const margin = mobile ? "1rem" : "2rem";
 
-	if (mobileDefault) return null;
+	if (mobileDefault || isLoadingAuthData) return null;
 
 	return (
 		<FullHeight>

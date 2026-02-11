@@ -8,8 +8,8 @@ import { DesktopNavigationBar } from "./Desktop";
 import { MobileNavigationBar } from "./Mobile";
 
 export const NavigationBar: FC = () => {
-	const { mobile } = useMobile();
-	const { authData, refreshAuthData } = useAuthData();
+	const { mobile, mobileDefault } = useMobile();
+	const { authData, refreshAuthData, isLoadingAuthData } = useAuthData();
 	const logout = apiClient.identity.logout.useMutation();
 	const isAuthenticated = authData !== null;
 	const routes = useMemo(
@@ -21,6 +21,8 @@ export const NavigationBar: FC = () => {
 		await logout.mutateAsync();
 		refreshAuthData();
 	}, [logout, refreshAuthData]);
+
+	if (mobileDefault || isLoadingAuthData) return null;
 
 	if (mobile) return <MobileNavigationBar onLogout={onLogout} routes={routes} />;
 
