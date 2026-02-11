@@ -13,11 +13,9 @@ export type DesktopNavigationBarProps = {
 };
 
 export const DesktopNavigationBar: FC<DesktopNavigationBarProps> = ({ onLogout, routes }) => {
-	const { authData, isLoadingAuthData } = useAuthData();
+	const { authData } = useAuthData();
 	const [areUserDetailsShown, setAreUserDetailsShown] = useState(false);
 	const isAuthenticated = useMemo(() => authData !== null, [authData]);
-
-	if (isLoadingAuthData) return null;
 
 	return (
 		<Flex align={"center"} justify={"space-between"} style={{ height: "100%" }} fullWidth>

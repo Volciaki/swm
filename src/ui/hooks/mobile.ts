@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 
 // This should stay in sync with $mobile-width SCSS constant.
 const MOBILE_WIDTH = 1300;
@@ -11,7 +11,7 @@ export const useMobile = (customWidth?: number) => {
 	// value (the media query hasn't actually run yet).
 	const [defaultValue, setDefaultValue] = useState(true);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (typeof window === "undefined") return;
 
 		const checkWidthAndUpdateState = () => {

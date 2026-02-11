@@ -1,3 +1,7 @@
-# Design
+---
+sidebar_position: 1
+---
 
-This page will be written later 🔥
+# Intro
+
+This section aims to explain architectural decisions made during development of SWM.

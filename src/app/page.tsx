@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useState, type FC } from "react";
-import { useRouter } from "next/navigation";
+import { useState, type FC } from "react";
 import { Button, Flex, FullHeight, Image, Paragraph, Link } from "@/ui/atoms";
 import { useAuthData } from "@/ui/providers";
 import { Block, Dialog } from "@/ui/molecules";
@@ -52,21 +51,19 @@ const HomeBlock: FC<HomeBlockProps> = ({ title, description, mediaUrl, localPath
 	const { authData } = useAuthData();
 	const { mobile } = useMobile();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const router = useRouter();
-
-	const clickHandler = useCallback(() => {
-		if (authData === null) {
-			setIsDialogOpen(true);
-			return;
-		}
-
-		router.push(localPath);
-	}, [authData, router, localPath]);
 
 	return (
 		<div className={styles["block"]}>
 			<Dialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen}>
 				<video style={{ maxWidth: "100%" }} src={mediaUrl} controls muted />
+
+				{authData && (
+					<Link href={localPath}>
+						<Button variant={"secondary"}>
+							<Paragraph fontSize={mobile ? 1.25 : 1.5}>{"Przejdź do magazynu"}</Paragraph>
+						</Button>
+					</Link>
+				)}
 			</Dialog>
 
 			<Block style={{ cursor: "pointer", height: "100%" }}>
@@ -78,7 +75,7 @@ const HomeBlock: FC<HomeBlockProps> = ({ title, description, mediaUrl, localPath
 						justifyContent: "space-between",
 						flexDirection: "column",
 					}}
-					onClick={() => clickHandler()}
+					onClick={() => setIsDialogOpen(true)}
 				>
 					<Paragraph fontSize={mobile ? 1.75 : 2}>{title}</Paragraph>
 
@@ -97,7 +94,7 @@ const Home: FC = () => {
 
 	const margin = mobile ? "1rem" : "2rem";
 
-	if (mobileDefault) return null;
+	if (mobileDefault || isLoadingAuthData) return null;
 
 	return (
 		<FullHeight>

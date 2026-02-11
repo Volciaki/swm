@@ -5,8 +5,13 @@ import type { FileReferenceRepository } from "./FileReferenceRepository";
 import type { FileStorage, FileStorageType } from "./FileStorage";
 import type { FileHelper } from "../../application/helpers/FileHelper";
 import type { EncryptionManager } from "./EncryptionManager";
+import type { CreateFileReferenceDTO } from "../../application/dto/CreateFileReferenceDTO";
 
 export type UploadFileData = UploadFileDTO & {
+	predefinedId?: UUID;
+};
+
+export type CreateFileReferenceData = CreateFileReferenceDTO & {
 	predefinedId?: UUID;
 };
 
@@ -19,6 +24,7 @@ export abstract class FileManager {
 		protected readonly encryptionManager: EncryptionManager
 	) {}
 
+	abstract createReference(reference: CreateFileReferenceData): Promise<FileReference>;
 	abstract uploadFile(file: UploadFileData): Promise<FileReference>;
 	abstract deleteFile(file: FileReference): Promise<void>;
 	abstract fetchFile(file: FileReference): Promise<Buffer>;

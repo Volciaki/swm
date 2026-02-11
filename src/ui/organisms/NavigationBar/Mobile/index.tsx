@@ -112,7 +112,7 @@ export type MobileNavigationBarProps = {
 };
 
 export const MobileNavigationBar: FC<MobileNavigationBarProps> = ({ onLogout, routes }) => {
-	const { authData, isLoadingAuthData } = useAuthData();
+	const { authData } = useAuthData();
 	const [areUserDetailsShown, setAreUserDetailsShown] = useState(false);
 	const [areRoutesShown, setAreRoutesShown] = useState(false);
 
@@ -125,8 +125,6 @@ export const MobileNavigationBar: FC<MobileNavigationBarProps> = ({ onLogout, ro
 		setAreUserDetailsShown(false);
 		setAreRoutesShown((current) => !current);
 	}, []);
-
-	if (isLoadingAuthData) return null;
 
 	return (
 		<>
