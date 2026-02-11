@@ -21,6 +21,7 @@
     "dev:app": "next dev",
     "dev:schedule": "tsx --env-file .env ./scripts/schedule/trigger-tasks.ts",
     "dev:docs": "yarn workspace docs dev",
+    "docs:generate:api": "yarn workspace docs generate:api",
     "migrations:generate": "./scripts/migrations/generate.sh",
     "migrations:create": "./scripts/migrations/create.sh",
     "database:dump": "docker compose run --rm pgutils pg_dump -h postgres -U development-user db"

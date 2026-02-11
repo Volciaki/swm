@@ -9,7 +9,8 @@ import "../styles/global.scss";
 
 export const metadata: Metadata = {
 	title: "SWM - Simple Warehouse Management",
-	description: "SWM is a service specializing in managing your storage easily.. simple.",
+	description:
+		"SWM to system, pozwalający zarządzać twoim magazynem w czasie rzeczywistym między wieloma urządzeniami.",
 };
 
 const interFont = Inter({

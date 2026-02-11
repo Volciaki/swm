@@ -7905,6 +7905,7 @@ __metadata:
     prism-react-renderer: "npm:^2.3.0"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
+    tsx: "npm:^4.21.0"
     typescript: "npm:~5.6.2"
   languageName: unknown
   linkType: soft

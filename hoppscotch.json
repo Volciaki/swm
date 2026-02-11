@@ -43,7 +43,7 @@
             },
             "body": {
               "contentType": "application/json",
-              "body": "{\n  \"email\": \"...\",\n  \"passwordRaw\": \"...\"\n}\n"
+              "body": "{\n  \"email\": \"...\",\n  \"passwordRaw\": \"...\"\n}"
             },
             "requestVariables": [],
             "responses": {}
@@ -63,7 +63,7 @@
             },
             "body": {
               "contentType": "application/json",
-              "body": "{\n  \"authenticationId\": \"...\",\n  \"value\": \"...\"\n}\n"
+              "body": "{\n  \"authenticationId\": \"...\",\n  \"value\": \"...\"\n}"
             },
             "requestVariables": [],
             "responses": {}
@@ -236,8 +236,8 @@
               "authActive": true
             },
             "body": {
-              "contentType": "application/json",
-              "body": "{}"
+              "contentType": null,
+              "body": null
             },
             "requestVariables": [],
             "responses": {}
@@ -257,7 +257,7 @@
             },
             "body": {
               "contentType": "application/json",
-              "body": "{\n  \"id\": \"...\",\n  \"newData\": {\n    \"name\": \"...\",\n    \"email\": \"...\",\n    \"passwordRaw\": \"\",\n    \"isAdmin\": false,\n    \"twoFactorAuthenticationEnabled\": false\n  }\n}\n"
+              "body": "{\n  \"id\": \"...\",\n  \"newData\": {\n    \"name\": \"...\",\n    \"email\": \"...\",\n    \"passwordRaw\": \"\",\n    \"isAdmin\": false,\n    \"twoFactorAuthenticationEnabled\": false\n  }\n}"
             },
             "requestVariables": [],
             "responses": {}
@@ -464,7 +464,7 @@
             },
             "body": {
               "contentType": "application/json",
-              "body": "{\n  \"definitions\": [\n    {\n      \"name\": \"test shi\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": -10,\n        \"maximalCelsius\": 40\n      },\n      \"weightKg\": 10,\n      \"size\": {\n        \"widthMillimeters\": 1000,\n        \"heightMillimeters\": 1000,\n        \"lengthMillimeters\": 1000\n      },\n      \"comment\": \"...\",\n      \"expiresAfterSeconds\": 1400,\n      \"isHazardous\": false,\n      \"imageContentBase64\": null\n    },\n    {\n      \"name\": \"second test shi\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": -10,\n        \"maximalCelsius\": 40\n      },\n      \"weightKg\": 10,\n      \"size\": {\n        \"widthMillimeters\": 1000,\n        \"heightMillimeters\": 1000,\n        \"lengthMillimeters\": 1000\n      },\n      \"comment\": \"...\",\n      \"expiresAfterSeconds\": 1400,\n      \"isHazardous\": false,\n      \"imageContentBase64\": null\n    }\n  ]\n}\n"
+              "body": "{\n  \"definitions\": [\n    {\n      \"name\": \"test shi\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": -10,\n        \"maximalCelsius\": 40\n      },\n      \"weightKg\": 10,\n      \"size\": {\n        \"widthMillimeters\": 1000,\n        \"heightMillimeters\": 1000,\n        \"lengthMillimeters\": 1000\n      },\n      \"comment\": \"...\",\n      \"expiresAfterSeconds\": 1400,\n      \"isHazardous\": false,\n      \"imageContentBase64\": null\n    },\n    {\n      \"name\": \"second test\",\n      \"temperatureRange\": {\n        \"minimalCelsius\": -10,\n        \"maximalCelsius\": 40\n      },\n      \"weightKg\": 10,\n      \"size\": {\n        \"widthMillimeters\": 1000,\n        \"heightMillimeters\": 1000,\n        \"lengthMillimeters\": 1000\n      },\n      \"comment\": \"...\",\n      \"expiresAfterSeconds\": 1400,\n      \"isHazardous\": false,\n      \"imageContentBase64\": null\n    }\n  ]\n}\n"
             },
             "requestVariables": [],
             "responses": {}
@@ -491,7 +491,7 @@
           },
           {
             "v": "12",
-            "name": "puUpAssortment",
+            "name": "putUpAssortment",
             "method": "POST",
             "endpoint": "http://localhost:3000/api/trpc/storage.putUpAssortment",
             "params": [],
@@ -504,7 +504,7 @@
             },
             "body": {
               "contentType": "application/json",
-              "body": "{\n  \"shelfId\": \"145b168b-a375-4735-bbad-11b866edaebc\",\n  \"cellId\": \"93c8615e-79bd-4523-ae22-7b6fedf20b4c\",\n  \"assortmentDefinitionId\": \"f25c5cd4-1401-448e-a2d5-b23685dffdd3\"\n}"
+              "body": "{\n  \"shelfId\": \"...\",\n  \"cellId\": \"...\",\n  \"assortmentDefinitionId\": \"...\"\n}"
             },
             "requestVariables": [],
             "responses": {}
@@ -524,7 +524,7 @@
             },
             "body": {
               "contentType": "application/json",
-              "body": "{\n  \"id\": \"becf0042-bb9a-48f5-94b4-d2bcb77e86e3\"\n}"
+              "body": "{\n  \"id\": \"...\"\n}"
             },
             "requestVariables": [],
             "responses": {}
@@ -703,8 +703,8 @@
               "authActive": true
             },
             "body": {
-              "contentType": "application/json",
-              "body": "{}"
+              "contentType": null,
+              "body": null
             },
             "requestVariables": [],
             "responses": {}
@@ -723,8 +723,8 @@
               "authActive": true
             },
             "body": {
-              "contentType": "application/json",
-              "body": "{}"
+              "contentType": null,
+              "body": null
             },
             "requestVariables": [],
             "responses": {}
@@ -743,8 +743,8 @@
               "authActive": true
             },
             "body": {
-              "contentType": "application/json",
-              "body": "{}"
+              "contentType": null,
+              "body": null
             },
             "requestVariables": [],
             "responses": {}
@@ -856,8 +856,8 @@
               "authActive": true
             },
             "body": {
-              "contentType": "application/json",
-              "body": "{}"
+              "contentType": null,
+              "body": null
             },
             "requestVariables": [],
             "responses": {}
