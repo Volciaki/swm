@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "docusaurus start --port 3004",
-    "build": "docusaurus build",
+    "build": "./scripts/build.sh",
     "generate:api": "./scripts/generators/api/index.sh",
     "start": "docusaurus serve --port 3004",
     "docker": "docker build -t ghcr.io/volciaki/primus-inter-pares-2026/docs:latest .",
